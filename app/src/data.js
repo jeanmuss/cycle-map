@@ -8,6 +8,9 @@ export const ASSETS = [
 export const MONTH_LABELS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
 export const HALVING_MONTHS = new Set(["2012-11", "2016-07", "2020-05", "2024-04", "2028-04"]);
+// Match the reference table: group years from BTC's first full cycle year, while labeling phases from the known halving-year anchor.
+export const CYCLE_START_YEAR = 2011;
+export const CYCLE_ANCHOR_YEAR = 2024;
 
 export const APP_BASE_URL = import.meta.env.BASE_URL || "/";
 
@@ -33,7 +36,11 @@ const CYCLE_INFO = {
 };
 
 export function cycleForYear(year) {
-  return CYCLE_INFO[((Number(year) - 2024) % 4 + 4) % 4];
+  return CYCLE_INFO[((Number(year) - CYCLE_ANCHOR_YEAR) % 4 + 4) % 4];
+}
+
+export function isCycleGroupStartYear(year) {
+  return ((Number(year) - CYCLE_START_YEAR) % 4 + 4) % 4 === 0;
 }
 
 export function formatPct(value, digits = 1) {
@@ -116,7 +123,7 @@ function annualReturn(months) {
 
 export function buildCycleYears(dataset, assetMaps, asset, metric) {
   const assetRows = dataset.assets?.[asset]?.rows || [];
-  const firstYear = assetRows.length ? Math.max(2011, Number(assetRows[0].monthKey.slice(0, 4))) : new Date().getUTCFullYear();
+  const firstYear = assetRows.length ? Math.max(CYCLE_START_YEAR, Number(assetRows[0].monthKey.slice(0, 4))) : new Date().getUTCFullYear();
   const currentYear = Number(dataset.currentMonthKey?.slice(0, 4)) || new Date().getUTCFullYear();
   const endYear = currentYear + 1;
   const years = [];

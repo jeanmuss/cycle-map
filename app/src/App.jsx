@@ -8,6 +8,7 @@ import {
   formatPct,
   formatPrice,
   freshnessLabel,
+  isCycleGroupStartYear,
   makeAssetMaps,
   monthlyStats,
   routePathname,
@@ -690,7 +691,7 @@ function CycleTable({ years, stats, asset, currentMonthKey, hover, setHover, set
                 <td className={`total-cell ${returnClass(year.totalValue)}`}>{Number.isFinite(year.totalValue) ? formatPct(year.totalValue, 0) : ""}</td>
                 <td className={`cycle-cell ${year.cycle.className}`}>{cycleLabel(year.cycle, t)}</td>
               </tr>
-              {((year.year - 2024) % 4 + 4) % 4 === 0 && index < years.length - 1 ? (
+              {isCycleGroupStartYear(year.year) && index < years.length - 1 ? (
                 <tr className="cycle-gap" aria-hidden="true"><td colSpan="16"></td></tr>
               ) : null}
             </Fragment>
