@@ -32,6 +32,10 @@ jobs:
         run: npm --prefix app ci
       - name: Refresh hourly crypto spot cache
         run: npm --prefix app run update-data
+      - name: Refresh market session cache
+        env:
+          CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
+        run: npm --prefix app run update-market-session
       - name: Build static site for GitHub Pages
         run: npm --prefix app run build:pages
       - uses: actions/configure-pages@v5

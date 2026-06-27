@@ -10,10 +10,18 @@ When implementing from a selected generated mock, treat that image as the source
 
 - Match the reference Bitcoin cycle map: warm off-white canvas, black square grid, compact red/green heat cells, yellow halving markers, and blue time labels.
 - Use semantic HTML tables for both views. Do not replace the tables with canvas, SVG, or a charting dependency.
-- The product has two working views: a four-asset monthly rotation table and a single-asset year-by-month cycle matrix.
+- The crypto cycle page has two working views: a four-asset monthly rotation table and a single-asset year-by-month cycle matrix.
 - Keep all market-data credentials out of the browser. The frontend reads only the cached `public/data/market-monthly.json` artifact.
 - Missing pre-launch history must display as `N/A`; never fabricate historical returns.
 - Keep the page title size identical across rotation and single-asset views.
 - The cycle matrix shows at most the current year plus one future year; distant empty years add noise.
 - Cached monthly rows include `high`, `low`, `highTime`, `lowTime`, `firstExtreme`, and `extremeMovePct`.
 - Directional extreme move is `(second extreme - first extreme) / first extreme`: low-then-high is a positive potential gain; high-then-low is a negative potential loss. It is theoretical and must never be presented as realized performance.
+- The macro context layer lives inside the same app as a separate event/liquidity calendar view. Keep provider credentials out of the browser; generate `public/data/macro-calendar.json` from backend scripts and cache provider observations locally under ignored `tmp/` paths to avoid repeated API calls.
+- FRED observation dates are period/observation dates, not guaranteed release timestamps. Do not label them as release dates until a reviewed release-calendar or manual event source is added.
+- The planned global market rotation page compares crypto, U.S., Korean, and China market sessions. Keep displayed quote units stable across language changes: crypto pairs use USDT except USDT/USD, U.S. assets use USD, Korean assets are converted to USD using the available daily FX rate, and China assets display CNY prices while market-cap fields are still normalized to USD where available.
+- On the planned market rotation page, market cap is always displayed in USD. Index-level market cap may be unavailable and should show `N/A` or an explicit unavailable quality label rather than inferred values.
+- If pre-market or after-hours quotes are unavailable, the planned market rotation page may show the previous regular close, but each affected value must carry a visible quality hint with hover/click detail explaining that the value is a fallback and that a better source can be added later.
+- The planned market rotation page may use OKX/Binance stock or oil contracts as clearly labeled proxy prices when regular equity or commodity feeds are unavailable. Do not label exchange proxy contracts as official NYSE/Nasdaq/CME/ICE prices.
+- CoinMarketCap data, if used for crypto market caps, must be fetched only by backend/local/CI scripts with `CMC_PRO_API_KEY` read from environment or an ignored local env file. Never expose a CMC key through `VITE_*` variables or frontend bundles.
+- Do not use TradingView as a scraped data source. Only use TradingView market data if there is an official API/data agreement that permits the intended public display and caching.

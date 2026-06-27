@@ -20,6 +20,11 @@ export function appUrl(path = "") {
   return `${base}${cleanPath}`;
 }
 
+export function appHashUrl(path = "") {
+  const cleanPath = String(path).replace(/^\/+/, "");
+  return `${appUrl()}#/${cleanPath}`;
+}
+
 export function routePathname(pathname) {
   const path = pathname || "/";
   const basePath = new URL(APP_BASE_URL, "https://cycle-map.local").pathname.replace(/\/$/, "");
@@ -168,11 +173,15 @@ export function monthlyStats(years) {
 export function freshnessLabel(iso, language = "zh") {
   const timestamp = new Date(iso);
   if (Number.isNaN(timestamp.getTime())) {
+    if (language === "en") return "Update time unknown";
+    return "\u66f4\u65b0\u65f6\u95f4\u672a\u77e5";
     return language === "en" ? "Update time unknown" : "更新时间未知";
   }
   const locale = language === "en" ? "en-US" : "zh-CN";
+  const timeZone = language === "en" ? "America/New_York" : "Asia/Shanghai";
+  const zoneLabel = language === "en" ? "ET" : "UTC+8";
   const formatted = new Intl.DateTimeFormat(locale, {
-    timeZone: "UTC",
+    timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -180,5 +189,7 @@ export function freshnessLabel(iso, language = "zh") {
     minute: "2-digit",
     hour12: false,
   }).format(timestamp);
+  if (language === "en") return `Data through ${formatted} ${zoneLabel}`;
+  return `\u6570\u636e\u622a\u81f3 ${formatted} ${zoneLabel}`;
   return language === "en" ? `Data through ${formatted} UTC` : `数据截至 ${formatted} UTC`;
 }

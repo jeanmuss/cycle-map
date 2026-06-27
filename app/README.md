@@ -4,6 +4,8 @@ Interactive return tables for risk assets:
 
 - Crypto cycle map: monthly BTC, ETH, SOL, and HYPE returns.
 - Equity macro map: weekly QQQ/SPY relative strength with FRED macro context from January 20, 2025 onward.
+- Event and liquidity calendar: six-month macro, rates, dollar, volatility, and credit context.
+- Global market clock: crypto, U.S., Korea, and China market-session rotation with prices, market caps where available, and source-quality labels.
 
 The interface follows the visual and technical idea of the original Bitcoin four-year cycle map: semantic HTML tables, CSS heat classes, and JavaScript-driven calculations.
 
@@ -13,7 +15,9 @@ The interface follows the visual and technical idea of the original Bitcoin four
 npm run dev
 npm run build
 npm run update-data
+npm run update-market-session
 npm run update-equity-data
+npm run update-macro-calendar
 ```
 
 ## Data flow
@@ -47,6 +51,28 @@ Hyperliquid's public API exposes the HYPE launch month as a monthly candle but d
 
 Only derived weekly data is cached. API keys, cookies, sessions, raw tick data, and personal data are never written to frontend files.
 
+`scripts/update-market-session-data.mjs` retrieves the fourth-page market-session snapshot and writes `public/data/market-session.json`.
+
+- Crypto prices: OKX public spot tickers for BTC/USDT, BNB/USDT, HYPE/USDT, and USDT/USD.
+- Crypto market caps: CoinMarketCap `quotes/latest`, read with `CMC_PRO_API_KEY` from local environment or deployment secrets.
+- U.S. proxy prices: OKX public equity-swap tickers for TSLA, NVDA, and MSFT when an official U.S. equity feed is not connected.
+- CL proxy: OKX CL index ticker with index component metadata; it is labeled as a proxy, not as an official CME/ICE price.
+- Korea and China rows: session clocks are generated locally; price and market-cap fields remain `N/A` until reviewed sources are connected.
+
+The browser reads only the generated JSON. `CMC_PRO_API_KEY` must never be exposed through `VITE_*` variables or frontend code.
+
+`scripts/update-macro-calendar.py` retrieves the first macro-calendar source set and writes `public/data/macro-calendar.json`.
+
+- Inflation: CPI, core CPI, PPI, core PPI goods, PCE, and core PCE from FRED.
+- Employment and growth: nonfarm payrolls, unemployment, average hourly earnings, initial claims, retail sales, industrial production, real GDP, and consumer sentiment from FRED.
+- Rates and dollar: Fed target range, effective fed funds, 2Y/10Y Treasury yields, 10Y real yield, 10Y breakeven, broad USD index, USD/JPY, USD/CNY, Japan overnight rates, China 3M interbank rates, and FOMC SEP fed funds projections from FRED.
+- Volatility and credit: VIX, investment-grade OAS, high-yield OAS, and St. Louis Fed financial stress index from FRED.
+- Liquidity and balance sheet: M2, Federal Reserve total assets, reserve balances, Treasury General Account, and overnight reverse repo from FRED.
+
+The script caches provider observations under `tmp/macro-cache/fred` before generating the public JSON. `tmp/` is ignored by git, so local reruns avoid repeated API calls without committing provider cache files. By default the provider cache is reused for 18 hours; set `MACRO_CACHE_REFRESH=1` to force a refresh, `MACRO_CALENDAR_MONTHS=6` to adjust the output window, or `MACRO_CACHE_MAX_AGE_HOURS=...` to tune local reuse.
+
+FRED observation dates are retained as economic observation/period dates, not publication timestamps. Forecast values stay `null` until a reviewed forecast source or manual backend input is added. This avoids presenting period dates or unreviewed consensus numbers as release-calendar facts.
+
 For CI or deployment, install Python dependencies with:
 
 ```bash
@@ -61,7 +87,7 @@ GitHub Pages is the preferred static-share path for this repo. `.github/workflow
 
 - every push to `main`
 - manual workflow dispatch
-- an hourly schedule for current spot refreshes
+- an hourly schedule for current spot and market-session refreshes
 
 Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow can still be used for auditable checked-in cache updates on a lower-frequency schedule.
 

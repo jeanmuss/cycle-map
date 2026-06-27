@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   ASSETS,
   HALVING_MONTHS,
+  appHashUrl,
   appUrl,
   buildCycleYears,
   buildRotationRows,
@@ -14,6 +15,270 @@ import {
   routePathname,
   returnClass,
 } from "./data.js";
+
+const DEFAULT_CRYPTO_STATE = {
+  view: "cycle",
+  metric: "absolute",
+  range: "48",
+  asset: "BTC",
+};
+
+const DEFAULT_EQUITY_STATE = {
+  range: "52",
+};
+
+const DEFAULT_MACRO_STATE = {
+  category: "all",
+};
+
+const VALID_CRYPTO_VIEWS = new Set(["rotation", "cycle"]);
+const VALID_CRYPTO_METRICS = new Set(["absolute", "relative"]);
+const VALID_CRYPTO_RANGES = new Set(["12", "24", "48", "all"]);
+const VALID_ASSETS = new Set(ASSETS.map((asset) => asset.symbol));
+const VALID_EQUITY_RANGES = new Set(["26", "52", "all"]);
+const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity"]);
+
+const EQUITY_MARKET_TEXT = {
+  zh: {
+    eyebrow: "EQUITY MARKET MAP",
+    titleAccent: "\u7f8e\u80a1\u5e02\u573a",
+    titleRest: "\u65e5\u5386",
+    subtitle: "\u7528\u65e5\u9891\u4ef7\u683c\u3001\u5229\u7387\u548c\u6ce2\u52a8\u7387\u89c2\u5bdf\u98ce\u9669\u8d44\u4ea7\u7684\u77ed\u671f\u73af\u5883",
+    cache: "\u5e02\u573a\u7f13\u5b58",
+    cacheTooltip: "\u9875\u9762\u53ea\u8bfb\u53d6\u540e\u53f0\u751f\u6210\u7684\u9759\u6001\u7f13\u5b58\u3002\u5f00\u76d8\u671f\u53ef\u7531\u540e\u53f0\u6bcf\u5c0f\u65f6\u5237\u65b0\uff1b\u524d\u7aef\u4e0d\u76f4\u8fde\u884c\u60c5\u6e90\u3002",
+    success: "\u5e02\u573a\u6570\u636e\u5df2\u66f4\u65b0",
+    failure: (count) => `\u6570\u636e\u6e90\u5f02\u5e38\uff1a${count}`,
+    loading: "\u6b63\u5728\u8bfb\u53d6\u672c\u5730\u5e02\u573a\u7f13\u5b58\u2026",
+    unavailable: "\u7f8e\u80a1\u5e02\u573a\u6570\u636e\u672a\u80fd\u52a0\u8f7d",
+    latest: "\u6700\u65b0\u89c2\u6d4b",
+    dow: "DOW",
+    tenYear: "10Y",
+    vix: "VIX",
+    open: "\u5f00",
+    close: "\u6536",
+    macro: "\u5229\u7387 / \u6ce2\u52a8",
+    weekCalendarTitle: "\u672c\u5468\u8be6\u60c5",
+    monthCalendarTitle: "\u6708\u5ea6\u6982\u89c8",
+    currentWeek: "\u672c\u5468",
+    currentMonth: "\u672c\u6708",
+    previousWeek: "\u4e0a\u5468",
+    nextWeek: "\u4e0b\u5468",
+    previousMonth: "\u4e0a\u6708",
+    nextMonth: "\u4e0b\u6708",
+    priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y \u548c VIX \u6765\u81ea FRED\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
+    eventPlaceholder: "\u672c\u9875\u6682\u4e0d\u63a5\u5165\u4e8b\u4ef6\u6ce8\u91ca\u3002",
+  },
+  en: {
+    eyebrow: "EQUITY MARKET MAP",
+    titleAccent: "Equity Market",
+    titleRest: "Calendar",
+    subtitle: "Daily price, rates, and volatility context for short-term risk-asset conditions.",
+    cache: "Market cache",
+    cacheTooltip: "The page reads a generated static cache. During market hours, backend jobs can refresh hourly; the frontend never connects directly to market-data providers.",
+    success: "Market data updated",
+    failure: (count) => `Source issues: ${count}`,
+    loading: "Reading local market cache...",
+    unavailable: "Equity market data could not be loaded",
+    latest: "Latest observation",
+    dow: "DOW",
+    tenYear: "10Y",
+    vix: "VIX",
+    open: "Open",
+    close: "Close",
+    macro: "Rates / volatility",
+    weekCalendarTitle: "This week details",
+    monthCalendarTitle: "Monthly overview",
+    currentWeek: "This week",
+    currentMonth: "This month",
+    previousWeek: "Previous week",
+    nextWeek: "Next week",
+    previousMonth: "Previous",
+    nextMonth: "Next",
+    priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y and VIX use FRED. The frontend reads static cache only.",
+    eventPlaceholder: "No event annotation source is connected for this page yet.",
+  },
+};
+
+function equityCopy(t) {
+  return t.htmlLang === "zh-CN" ? EQUITY_MARKET_TEXT.zh : EQUITY_MARKET_TEXT.en;
+}
+
+const MARKET_CLOCK_TEXT = {
+  zh: {
+    docTitle: "全球市场开市轮动",
+    docDescription: "加密、美股、韩股与中国风险市场的开市状态、价格和市值轮动视图",
+    eyebrow: "GLOBAL MARKET CLOCK",
+    titleAccent: "全球市场",
+    titleRest: "开市轮动",
+    subtitle: "用开市状态、代理价格和数据质量提示感知中美韩与加密风险市场的日内轮动",
+    cache: "市场快照",
+    cacheTooltip: "页面只读取后台生成的 market-session.json。CMC 和交易所 API 只在本地或 CI 脚本中使用，密钥不会进入浏览器。",
+    success: "市场快照已更新",
+    failure: (count) => `数据源提示：${count}`,
+    loading: "正在读取市场快照…",
+    unavailable: "市场轮动数据未能加载",
+    controls: "市场轮动控制",
+    showCrypto: "显示加密",
+    hideCrypto: "隐藏加密",
+    cryptoHidden: "加密市场已隐藏",
+    marketState: "市场状态",
+    assetList: "轮动列表",
+    details: "标的细节",
+    localTime: "本地时间",
+    next: "下一阶段",
+    alwaysOpen: "24小时交易",
+    sourceNote: "价格优先使用公开行情快照；美股和 CL 可使用 OKX 合约/指数代理，旁边会标注数据质量。",
+    status: {
+      open: "盘中",
+      trading: "交易中",
+      premarket: "盘前",
+      afterhours: "盘后",
+      lunch: "午间休市",
+      closed: "休市",
+      soon: "即将开市",
+    },
+    table: {
+      market: "市场",
+      asset: "标的",
+      status: "状态",
+      price: "现价",
+      change: "涨幅",
+      marketCap: "总市值",
+      source: "数据质量",
+      noRows: "暂无可显示标的",
+    },
+    detail: {
+      emptyTitle: "查看数据质量",
+      emptyBody: "点击任意标的，可查看价格来源、更新时间、市值来源和代理价格说明。",
+      selected: "已选标的",
+      pair: "显示单位",
+      priceSource: "价格来源",
+      capSource: "市值来源",
+      updated: "更新时间",
+      components: "指数成分",
+      quality: "提示",
+    },
+    sourcePending: "待接入",
+    notApplicable: "不适用",
+    unavailableValue: "N/A",
+  },
+  en: {
+    docTitle: "Global Market Rotation Clock",
+    docDescription: "Session status, prices, and market caps for crypto, U.S., Korean, and China risk markets.",
+    eyebrow: "GLOBAL MARKET CLOCK",
+    titleAccent: "Global Market",
+    titleRest: "Rotation",
+    subtitle: "Track intraday session rotation across crypto, U.S., Korea, and China risk markets with source-quality hints.",
+    cache: "Market snapshot",
+    cacheTooltip: "The page reads generated market-session.json only. CMC and exchange APIs run in local or CI scripts; credentials never reach the browser.",
+    success: "Market snapshot updated",
+    failure: (count) => `Source notes: ${count}`,
+    loading: "Reading market snapshot...",
+    unavailable: "Market rotation data could not be loaded",
+    controls: "Market rotation controls",
+    showCrypto: "Show crypto",
+    hideCrypto: "Hide crypto",
+    cryptoHidden: "Crypto market hidden",
+    marketState: "Market state",
+    assetList: "Rotation list",
+    details: "Asset detail",
+    localTime: "Local time",
+    next: "Next phase",
+    alwaysOpen: "24/7 trading",
+    sourceNote: "Prices use public market snapshots where available; U.S. equities and CL may use clearly labeled OKX proxy contracts or index prices.",
+    status: {
+      open: "Open",
+      trading: "Trading",
+      premarket: "Pre-market",
+      afterhours: "After-hours",
+      lunch: "Lunch recess",
+      closed: "Closed",
+      soon: "Opening soon",
+    },
+    table: {
+      market: "Market",
+      asset: "Asset",
+      status: "Status",
+      price: "Price",
+      change: "Change",
+      marketCap: "Market cap",
+      source: "Quality",
+      noRows: "No visible assets",
+    },
+    detail: {
+      emptyTitle: "Inspect data quality",
+      emptyBody: "Select any asset to see price source, update time, market-cap source, and proxy-price notes.",
+      selected: "Selected asset",
+      pair: "Display unit",
+      priceSource: "Price source",
+      capSource: "Cap source",
+      updated: "Updated",
+      components: "Index components",
+      quality: "Note",
+    },
+    sourcePending: "Pending",
+    notApplicable: "N/A",
+    unavailableValue: "N/A",
+  },
+};
+
+function marketClockCopy(t) {
+  return t.htmlLang === "zh-CN" ? MARKET_CLOCK_TEXT.zh : MARKET_CLOCK_TEXT.en;
+}
+
+function hashParams() {
+  if (typeof window === "undefined") return new URLSearchParams();
+  const rawHash = window.location.hash.replace(/^#/, "");
+  const queryIndex = rawHash.indexOf("?");
+  return new URLSearchParams(queryIndex >= 0 ? rawHash.slice(queryIndex + 1) : "");
+}
+
+function readCryptoStateFromHash() {
+  const params = hashParams();
+  const view = params.get("view");
+  const metric = params.get("metric");
+  const range = params.get("range");
+  const asset = params.get("asset");
+  return {
+    view: VALID_CRYPTO_VIEWS.has(view) ? view : DEFAULT_CRYPTO_STATE.view,
+    metric: VALID_CRYPTO_METRICS.has(metric) ? metric : DEFAULT_CRYPTO_STATE.metric,
+    range: VALID_CRYPTO_RANGES.has(range) ? range : DEFAULT_CRYPTO_STATE.range,
+    asset: VALID_ASSETS.has(asset) ? asset : DEFAULT_CRYPTO_STATE.asset,
+  };
+}
+
+function readEquityStateFromHash() {
+  const params = hashParams();
+  const range = params.get("range");
+  return {
+    range: VALID_EQUITY_RANGES.has(range) ? range : DEFAULT_EQUITY_STATE.range,
+  };
+}
+
+function readMacroStateFromHash() {
+  const params = hashParams();
+  const category = params.get("category");
+  return {
+    category: VALID_MACRO_CATEGORIES.has(category) ? category : DEFAULT_MACRO_STATE.category,
+  };
+}
+
+function replaceHashState(path, state) {
+  if (typeof window === "undefined") return;
+  const params = new URLSearchParams();
+  Object.entries(state).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") params.set(key, value);
+  });
+  const cleanPath = String(path || "").replace(/^\/+/, "");
+  const query = params.toString();
+  const nextUrl = `${appUrl()}#/${cleanPath}${query ? `?${query}` : ""}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (currentUrl !== nextUrl) window.history.replaceState(null, "", nextUrl);
+}
+
+function optionLabel(options, value) {
+  return options.find((option) => option.value === value)?.label || value;
+}
 
 const TRANSLATIONS = {
   zh: {
@@ -72,11 +337,12 @@ const TRANSLATIONS = {
       dataLoadFailed: "数据加载失败",
     },
     header: {
-      eyebrow: "RISK ASSET CYCLE MAP · UTC",
+      eyebrow: "RISK ASSET CYCLE MAP",
       titleAccent: "风险资产",
       titleRest: "周期与轮动图",
       subtitle: "按月观察 BTC、ETH、SOL、HYPE 的涨跌规律与轮动关系",
       cache: "本地缓存",
+      cacheTooltip: "页面读取的是已保存的静态行情快照；现价和月线由后台定时更新，浏览器不会直接连接交易所或暴露密钥。",
       failure: (count) => `上游异常：${count}`,
       success: "四个来源更新成功",
     },
@@ -86,6 +352,17 @@ const TRANSLATIONS = {
       spot: "现价",
       spotUpdated: "现价刷新",
       spotUnavailable: "现价暂无",
+    },
+    insight: {
+      label: "读图结论",
+      cycleTitle: (asset) => `现在主看 ${asset}`,
+      cycleBody: (asset, pct, extreme) => `${asset} 本月 ${pct}，月内极值变动 ${extreme}。点击历史月份可固定详情。`,
+      rotationTitle: "轮动关系",
+      rotationBody: (leader, ranking) => `最近月份领涨：${leader || "N/A"}。轮动顺序：${ranking || "暂无"}。`,
+      selectedTitle: (symbol, monthKey) => `${symbol} ${monthKey}`,
+      selectedBody: (pct, high, low, extreme) => `收益 ${pct}，高点 ${high}，低点 ${low}，极值变动 ${extreme}。`,
+      shareHint: "当前筛选会写入网址，复制链接即可保留视图。",
+      mobileHint: "手机端点击任意有数据的格子，会固定底部详情卡。",
     },
     visualization: {
       rotationAria: "轮动总览",
@@ -115,6 +392,7 @@ const TRANSLATIONS = {
     detail: {
       title: "查看细节",
       empty: "悬停查看月度信息，点击任一有数据的单元格即可固定详情。",
+      closePinned: "关闭固定详情",
       selectedMonth: "已选月份",
       monthlyReturn: "月度收益",
       relativeBtc: "相对 BTC",
@@ -151,6 +429,8 @@ const TRANSLATIONS = {
     nav: {
       crypto: "加密周期",
       equity: "美股宏观",
+      macro: "\u4e8b\u4ef6\u4e0e\u6d41\u52a8\u6027",
+      marketClock: "开市轮动",
     },
     equity: {
       docTitle: "美股宏观轮动图",
@@ -160,6 +440,7 @@ const TRANSLATIONS = {
       titleRest: "轮动图",
       subtitle: "从特朗普第二任期开始，按周观察 QQQ、SPY、利率与波动率的联动",
       cache: "周度缓存",
+      cacheTooltip: "页面读取的是已保存的静态周度快照；价格和宏观数据由后台定时更新，浏览器不会接触 FRED 密钥。",
       success: "价格与 FRED 更新成功",
       failure: (count) => `数据源异常：${count}`,
       loading: "正在读取本地周度缓存…",
@@ -197,6 +478,96 @@ const TRANSLATIONS = {
       priceSourceNote: "价格来自 AKShare/Sina 美股日线；宏观来自 FRED。前端只读取静态缓存。",
       method: "周收益 =（周收盘 − 周开盘）÷ 周开盘；相对强弱 = QQQ 周收益 − SPY 周收益",
       eventPlaceholder: "事件标注接口已预留，本版暂不自动抓取或人工编辑事件。",
+    },
+    macroCalendar: {
+      docTitle: "\u4e8b\u4ef6\u4e0e\u6d41\u52a8\u6027\u65e5\u5386",
+      docDescription: "\u98ce\u9669\u8d44\u4ea7\u7684\u5b8f\u89c2\u3001\u5229\u7387\u3001\u7f8e\u5143\u3001\u6ce2\u52a8\u7387\u4e0e\u4fe1\u7528\u5229\u5dee\u89c2\u6d4b\u65e5\u5386",
+      eyebrow: "EVENT & LIQUIDITY MAP",
+      titleAccent: "\u4e8b\u4ef6\u4e0e\u6d41\u52a8\u6027",
+      titleRest: "\u65e5\u5386",
+      subtitle: "\u7528\u534a\u5e74\u671f FRED \u89c2\u6d4b\u6570\u636e\u8865\u8db3\u4ef7\u683c\u80cc\u540e\u7684\u901a\u80c0\u3001\u589e\u957f\u3001\u5229\u7387\u4e0e\u98ce\u9669\u504f\u597d\u7ebf\u7d22",
+      cache: "\u5b8f\u89c2\u7f13\u5b58",
+      cacheTooltip: "\u9875\u9762\u53ea\u8bfb\u53d6\u540e\u53f0\u751f\u6210\u7684\u9759\u6001\u5b8f\u89c2\u6570\u636e\u3002FRED API \u5bc6\u94a5\u53ea\u5728\u672c\u5730\u6216 CI \u811a\u672c\u4e2d\u4f7f\u7528\uff0c\u4e0d\u4f1a\u8fdb\u5165\u524d\u7aef\u3002",
+      success: "\u5b8f\u89c2\u6570\u636e\u5df2\u66f4\u65b0",
+      failure: (count) => `\u4e0a\u6e38\u5f02\u5e38\uff1a${count}`,
+      loading: "\u6b63\u5728\u8bfb\u53d6\u672c\u5730\u5b8f\u89c2\u7f13\u5b58\u2026",
+      unavailable: "\u5b8f\u89c2\u65e5\u5386\u6570\u636e\u672a\u80fd\u52a0\u8f7d",
+      controls: "\u5b8f\u89c2\u65e5\u5386\u63a7\u5236",
+      category: "\u7c7b\u522b",
+      all: "\u5168\u90e8",
+      categories: {
+        inflation: "\u901a\u80c0",
+        growth: "\u5c31\u4e1a\u4e0e\u589e\u957f",
+        rates: "\u5229\u7387\u4e0e\u7f8e\u5143",
+        volatility: "\u6ce2\u52a8\u4e0e\u4fe1\u7528",
+      },
+      compactCategories: {
+        inflation: "\u901a\u80c0",
+        growth: "\u589e\u957f",
+        rates: "\u5229\u7387",
+        volatility: "\u6ce2\u52a8",
+        liquidity: "\u6d41\u52a8",
+      },
+      hiddenMonthItems: (count) => `+${count}`,
+      window: "\u6570\u636e\u7a97\u53e3",
+      eventCount: "\u89c2\u6d4b\u4e8b\u4ef6",
+      latestEvent: "\u6700\u65b0\u89c2\u6d4b",
+      noLatest: "N/A",
+      eventsTitle: "\u6307\u6807\u89c2\u6d4b",
+      eventsCaption: "\u534a\u5e74\u671f\u5b8f\u89c2\u6307\u6807\u89c2\u6d4b\u8868",
+      stateTitle: "\u5468\u5ea6\u72b6\u6001\u80cc\u666f",
+      stateCaption: "\u5229\u7387\u3001\u7f8e\u5143\u3001\u6ce2\u52a8\u7387\u548c\u4fe1\u7528\u5229\u5dee\u7684\u5468\u5ea6\u72b6\u6001\u8868",
+      methodology: "\u89c2\u6d4b\u65e5\u4e0d\u7b49\u4e8e\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\uff1b\u9884\u6d4b\u503c\u6682\u7f3a\uff0c\u7b49\u540e\u7eed\u63a5\u5165\u7ecf\u5ba1\u67e5\u7684\u9884\u671f\u6216\u624b\u52a8\u4e8b\u4ef6\u6e90\u3002",
+      date: "\u65e5\u671f",
+      indicator: "\u6307\u6807",
+      actual: "\u5b9e\u9645",
+      previous: "\u524d\u503c",
+      forecast: "\u9884\u6d4b",
+      change: "\u53d8\u5316",
+      yoy: "\u540c\u6bd4",
+      source: "\u6765\u6e90",
+      dateMeaning: "\u65e5\u671f\u542b\u4e49",
+      dailyObservation: "\u65e5\u9891\u89c2\u5bdf",
+      selected: "\u5df2\u9009\u89c2\u6d4b",
+      emptyDetailTitle: "\u67e5\u770b\u5b8f\u89c2\u7ec6\u8282",
+      emptyDetailBody: "\u70b9\u51fb\u4efb\u610f\u89c2\u6d4b\u884c\uff0c\u53ef\u5728\u4e0b\u65b9\u56fa\u5b9a\u5b83\u7684\u524d\u503c\u3001\u5b9e\u9645\u503c\u3001\u53d8\u5316\u548c\u6570\u636e\u542b\u4e49\u3002",
+      observationPeriod: "\u89c2\u6d4b\u671f",
+      projectionYear: "\u9884\u6d4b\u5e74",
+      sepProjection: "SEP \u89c2\u6d4b",
+      week: "\u5468",
+      twoYear: "2Y",
+      tenYear: "10Y",
+      realYield: "\u5b9e\u9645\u5229\u7387",
+      dollar: "\u7f8e\u5143",
+      vix: "VIX",
+      credit: "\u4fe1\u7528",
+      stress: "\u538b\u529b",
+      noRows: "\u6682\u65e0\u5339\u914d\u6570\u636e",
+      sourceNote: "\u5f53\u524d\u4ec5\u4f7f\u7528 FRED \u5b98\u65b9 API \u548c\u672c\u5730\u7f13\u5b58\uff1b\u672a\u4f7f\u7528 yfinance\uff0c\u4e5f\u672a\u63a5\u5165\u672a\u5ba1\u67e5\u7684\u9884\u6d4b\u6216\u65e5\u5386\u6765\u6e90\u3002",
+      environmentTitle: "\u5f53\u524d\u5b8f\u89c2\u73af\u5883",
+      weekCalendarTitle: "\u672c\u5468\u73af\u5883\u5468\u5386",
+      monthCalendarTitle: "\u6708\u5ea6\u6307\u6807\u65e5\u5386",
+      monthDetailTitle: "\u65e5\u671f\u8be6\u60c5",
+      currentWeek: "\u672c\u5468",
+      riskPosture: "\u98ce\u9669\u504f\u597d",
+      pressureHigh: "\u504f\u627f\u538b",
+      pressureMedium: "\u4e2d\u6027\u504f\u7d27",
+      pressureLow: "\u76f8\u5bf9\u53cb\u597d",
+      liquidity: "\u6d41\u52a8\u6027",
+      quarterWindow: "\u5b63\u672b\u7a97\u53e3",
+      monthWindow: "\u6708\u672b\u7a97\u53e3",
+      noData: "\u65e0\u6570\u636e",
+      noIndicators: "\u5f53\u65e5\u65e0\u6307\u6807",
+      clickDateHint: "\u70b9\u51fb\u65e5\u671f\u67e5\u770b\u8be6\u60c5",
+      selectedDate: "\u5df2\u9009\u65e5\u671f",
+      asOf: (date) => `\u622a\u81f3 ${date}`,
+      periodNotice: "\u5f53\u524d\u4f7f\u7528 FRED \u89c2\u6d4b\u671f\u65e5\u671f\u505a\u6f14\u793a\uff0c\u4e0d\u628a\u5b83\u6807\u6ce8\u4e3a\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\u3002",
+      previousMonth: "\u4e0a\u6708",
+      nextMonth: "\u4e0b\u6708",
+      previousWeek: "\u4e0a\u5468",
+      nextWeek: "\u4e0b\u5468",
+      weekdays: ["\u65e5", "\u4e00", "\u4e8c", "\u4e09", "\u56db", "\u4e94", "\u516d"],
+      weekdayNames: ["\u5468\u65e5", "\u5468\u4e00", "\u5468\u4e8c", "\u5468\u4e09", "\u5468\u56db", "\u5468\u4e94", "\u5468\u516d"],
     },
   },
   en: {
@@ -255,11 +626,12 @@ const TRANSLATIONS = {
       dataLoadFailed: "Data loading failed",
     },
     header: {
-      eyebrow: "RISK ASSET CYCLE MAP · UTC",
+      eyebrow: "RISK ASSET CYCLE MAP",
       titleAccent: "Risk Assets",
       titleRest: "Cycle & Rotation Map",
       subtitle: "Track monthly return patterns and rotation across BTC, ETH, SOL, and HYPE",
       cache: "Local cache",
+      cacheTooltip: "The page reads a saved static market snapshot. Scheduled backend jobs refresh prices and monthly data; the browser never connects to exchanges with credentials.",
       failure: (count) => `Upstream issues: ${count}`,
       success: "All four sources updated",
     },
@@ -269,6 +641,17 @@ const TRANSLATIONS = {
       spot: "Spot",
       spotUpdated: "Spot updated",
       spotUnavailable: "Spot unavailable",
+    },
+    insight: {
+      label: "Reading guide",
+      cycleTitle: (asset) => `Currently focused on ${asset}`,
+      cycleBody: (asset, pct, extreme) => `${asset} is ${pct} this month, with an intramonth extreme move of ${extreme}. Click any historical month to pin details.`,
+      rotationTitle: "Rotation view",
+      rotationBody: (leader, ranking) => `Latest monthly leader: ${leader || "N/A"}. Rotation order: ${ranking || "none yet"}.`,
+      selectedTitle: (symbol, monthKey) => `${symbol} ${monthKey}`,
+      selectedBody: (pct, high, low, extreme) => `Return ${pct}, high ${high}, low ${low}, extreme move ${extreme}.`,
+      shareHint: "The current filters are written into the URL, so copied links keep this view.",
+      mobileHint: "On mobile, tap any populated cell to pin the bottom detail card.",
     },
     visualization: {
       rotationAria: "Rotation overview",
@@ -298,6 +681,7 @@ const TRANSLATIONS = {
     detail: {
       title: "Details",
       empty: "Hover for monthly information, or click any populated cell to pin the detail view.",
+      closePinned: "Close pinned detail",
       selectedMonth: "Selected month",
       monthlyReturn: "Monthly return",
       relativeBtc: "Relative to BTC",
@@ -334,6 +718,8 @@ const TRANSLATIONS = {
     nav: {
       crypto: "Crypto cycle",
       equity: "Equity macro",
+      macro: "Events & liquidity",
+      marketClock: "Market clock",
     },
     equity: {
       docTitle: "Equity Macro Rotation Map",
@@ -343,6 +729,7 @@ const TRANSLATIONS = {
       titleRest: "Rotation Map",
       subtitle: "Track QQQ, SPY, rates, and volatility by week from Trump's second term",
       cache: "Weekly cache",
+      cacheTooltip: "The page reads a saved static weekly snapshot. Scheduled backend jobs refresh price and macro data; the browser never receives the FRED key.",
       success: "Prices and FRED updated",
       failure: (count) => `Source issues: ${count}`,
       loading: "Reading local weekly cache…",
@@ -380,6 +767,96 @@ const TRANSLATIONS = {
       priceSourceNote: "Prices use AKShare/Sina U.S. daily data; macro data uses FRED. The frontend reads static cache only.",
       method: "Weekly return = (weekly close − weekly open) ÷ weekly open; relative strength = QQQ weekly return − SPY weekly return",
       eventPlaceholder: "Event annotation fields are reserved; this MVP does not auto-fetch or edit events.",
+    },
+    macroCalendar: {
+      docTitle: "Events & Liquidity Calendar",
+      docDescription: "Macro, rates, dollar, volatility, and credit observations for risk assets",
+      eyebrow: "EVENT & LIQUIDITY MAP",
+      titleAccent: "Events & Liquidity",
+      titleRest: "Calendar",
+      subtitle: "A six-month FRED-backed context layer for inflation, growth, rates, dollar strength, volatility, and credit stress.",
+      cache: "Macro cache",
+      cacheTooltip: "The page reads a generated static macro snapshot. The FRED API key is used only by local or CI scripts and is never sent to the browser.",
+      success: "Macro data updated",
+      failure: (count) => `Source issues: ${count}`,
+      loading: "Reading local macro cache...",
+      unavailable: "Macro calendar data could not be loaded",
+      controls: "Macro calendar controls",
+      category: "Category",
+      all: "All",
+      categories: {
+        inflation: "Inflation",
+        growth: "Employment & growth",
+        rates: "Rates & dollar",
+        volatility: "Volatility & credit",
+      },
+      compactCategories: {
+        inflation: "Infl",
+        growth: "Growth",
+        rates: "Rates",
+        volatility: "Vol",
+        liquidity: "Liq",
+      },
+      hiddenMonthItems: (count) => `+${count}`,
+      window: "Data window",
+      eventCount: "Observations",
+      latestEvent: "Latest observation",
+      noLatest: "N/A",
+      eventsTitle: "Indicator observations",
+      eventsCaption: "Six-month macro indicator observation table",
+      stateTitle: "Weekly state backdrop",
+      stateCaption: "Weekly rates, dollar, volatility, and credit spread state table",
+      methodology: "Observation dates are not release timestamps. Forecasts remain N/A until a reviewed forecast source or manual backend input is added.",
+      date: "Date",
+      indicator: "Indicator",
+      actual: "Actual",
+      previous: "Previous",
+      forecast: "Forecast",
+      change: "Change",
+      yoy: "YoY",
+      source: "Source",
+      dateMeaning: "Date meaning",
+      dailyObservation: "Daily observation",
+      selected: "Selected observation",
+      emptyDetailTitle: "Macro details",
+      emptyDetailBody: "Click any observation row to pin its previous value, actual value, change, and data semantics below.",
+      observationPeriod: "Observation period",
+      projectionYear: "Projection year",
+      sepProjection: "SEP observation",
+      week: "Week",
+      twoYear: "2Y",
+      tenYear: "10Y",
+      realYield: "Real yield",
+      dollar: "Dollar",
+      vix: "VIX",
+      credit: "Credit",
+      stress: "Stress",
+      noRows: "No matching rows",
+      sourceNote: "This version uses only the official FRED API plus local cache. It does not use yfinance or unreviewed forecast/calendar sources.",
+      environmentTitle: "Current macro environment",
+      weekCalendarTitle: "This week calendar",
+      monthCalendarTitle: "Monthly indicator calendar",
+      monthDetailTitle: "Date details",
+      currentWeek: "This week",
+      riskPosture: "Risk posture",
+      pressureHigh: "Pressured",
+      pressureMedium: "Neutral-tight",
+      pressureLow: "Supportive",
+      liquidity: "Liquidity",
+      quarterWindow: "Quarter-end window",
+      monthWindow: "Month-end window",
+      noData: "No data",
+      noIndicators: "No indicators",
+      clickDateHint: "Click a date for details",
+      selectedDate: "Selected date",
+      asOf: (date) => `as of ${date}`,
+      periodNotice: "This demo uses FRED observation-period dates, not confirmed release timestamps.",
+      previousMonth: "Previous",
+      nextMonth: "Next",
+      previousWeek: "Previous week",
+      nextWeek: "Next week",
+      weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      weekdayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     },
   },
 };
@@ -452,11 +929,46 @@ function LanguageToggle({ language, onChange, t }) {
   );
 }
 
+function CacheStatus({ label, tooltip }) {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [pinned, setPinned] = useState(false);
+  const open = hovered || focused || pinned;
+  return (
+    <div
+      className="cache-status"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <button
+        type="button"
+        className="cache-badge"
+        aria-expanded={open}
+        aria-describedby="cache-status-tooltip"
+        onClick={() => setPinned((value) => !value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      >
+        {label}
+      </button>
+      <span
+        id="cache-status-tooltip"
+        role="tooltip"
+        className={`cache-tooltip ${open ? "is-open" : ""}`}
+      >
+        {tooltip}
+      </span>
+    </div>
+  );
+}
+
 function PageNav({ page, t }) {
   return (
     <nav className="page-nav" aria-label="Page">
-      <a className={page === "crypto" ? "is-active" : ""} aria-current={page === "crypto" ? "page" : undefined} href={appUrl()}>{t.nav.crypto}</a>
-      <a className={page === "equity" ? "is-active" : ""} aria-current={page === "equity" ? "page" : undefined} href={appUrl("equity-macro")}>{t.nav.equity}</a>
+      <a className={page === "crypto" ? "is-active" : ""} aria-current={page === "crypto" ? "page" : undefined} href={appHashUrl()}>{t.nav.crypto}</a>
+      <a className={page === "equity" ? "is-active" : ""} aria-current={page === "equity" ? "page" : undefined} href={appHashUrl("equity-macro")}>{t.nav.equity}</a>
+      <a className={page === "macro" ? "is-active" : ""} aria-current={page === "macro" ? "page" : undefined} href={appHashUrl("macro-calendar")}>{t.nav.macro}</a>
+      <a className={page === "marketClock" ? "is-active" : ""} aria-current={page === "marketClock" ? "page" : undefined} href={appHashUrl("market-clock")}>{t.nav.marketClock}</a>
     </nav>
   );
 }
@@ -514,7 +1026,10 @@ function HeatCell({
   };
 
   const activate = () => {
-    if (row) onSelect({ symbol, monthKey, row, value });
+    if (row) {
+      setTooltip(null);
+      onSelect({ symbol, monthKey, row, value });
+    }
   };
 
   return (
@@ -553,11 +1068,9 @@ function LatestStrip({ dataset, onOpenAsset, t }) {
         const row = meta.rows[meta.rows.length - 1];
         const spot = meta.spot;
         const spotPrice = Number.isFinite(Number(spot?.price)) ? Number(spot.price) : row.close;
-        const spotTime = formatUtcTimestamp(spot?.updatedAt);
         const note = [
           row.monthKey,
           row.isClosed ? null : t.latest.inMonth,
-          spotTime ? `${t.latest.spotUpdated} ${spotTime}` : t.latest.spotUnavailable,
         ].filter(Boolean).join(t.separator);
         return (
           <button type="button" key={asset.symbol} onClick={() => onOpenAsset(asset.symbol)}>
@@ -579,11 +1092,9 @@ function AssetSpotSummary({ dataset, symbol, t }) {
   const row = meta.rows[meta.rows.length - 1];
   const spot = meta.spot;
   const spotPrice = Number.isFinite(Number(spot?.price)) ? Number(spot.price) : row.close;
-  const spotTime = formatUtcTimestamp(spot?.updatedAt);
   const note = [
     row.monthKey,
     row.isClosed ? null : t.latest.inMonth,
-    spotTime ? `${t.latest.spotUpdated} ${spotTime}` : t.latest.spotUnavailable,
   ].filter(Boolean).join(t.separator);
 
   return (
@@ -593,6 +1104,86 @@ function AssetSpotSummary({ dataset, symbol, t }) {
       <span className={`latest-return ${row.pct >= 0 ? "positive" : "negative"}`}>{formatPct(row.pct, 2)}</span>
       <small>{note}</small>
     </div>
+  );
+}
+
+function CryptoInsight({ view, metric, range, asset, dataset, rotationRows, selected, t }) {
+  const metricLabel = optionLabel(t.options.metrics, metric);
+  const viewLabel = optionLabel(t.options.views, view);
+  const rangeLabel = view === "rotation" ? optionLabel(t.options.ranges, range) : null;
+  let title = "";
+  let body = "";
+
+  if (selected?.row) {
+    const quote = dataset.assets[selected.symbol]?.quote || "USD";
+    title = t.insight.selectedTitle(selected.symbol, selected.monthKey);
+    body = t.insight.selectedBody(
+      formatPct(selected.value, 2),
+      formatPrice(selected.row.high, quote),
+      formatPrice(selected.row.low, quote),
+      formatPct(selected.row.extremeMovePct, 2),
+    );
+  } else if (view === "rotation") {
+    const latest = rotationRows[0];
+    title = t.insight.rotationTitle;
+    body = t.insight.rotationBody(
+      latest?.leader,
+      latest?.ranking?.map((item, index) => `${index + 1}.${item.symbol}`).join("  "),
+    );
+  } else {
+    const rows = dataset.assets[asset]?.rows || [];
+    const latest = rows.at(-1);
+    title = t.insight.cycleTitle(asset);
+    body = t.insight.cycleBody(
+      asset,
+      formatPct(latest?.pct, 2),
+      formatPct(latest?.extremeMovePct, 2),
+    );
+  }
+
+  return (
+    <section className="insight-card" aria-label={t.insight.label}>
+      <div>
+        <small>{t.insight.label}</small>
+        <strong>{title}</strong>
+        <p>{body}</p>
+      </div>
+      <div className="insight-meta">
+        <span>{viewLabel}</span>
+        <span>{metricLabel}</span>
+        {rangeLabel ? <span>{rangeLabel}</span> : null}
+        <small>{t.insight.shareHint}</small>
+        <small>{t.insight.mobileHint}</small>
+      </div>
+    </section>
+  );
+}
+
+function MobilePinnedDetail({ selected, dataset, metric, onClear, t }) {
+  if (!selected?.row) return null;
+  const quote = dataset.assets[selected.symbol]?.quote || "USD";
+  const extreme = extremeMoveMeta(selected.row, t);
+  const extremeCaption = [extreme.label, extreme.order].filter(Boolean).join(t.separator);
+  return (
+    <aside className="mobile-detail-dock" aria-live="polite">
+      <button type="button" className="dock-close" onClick={onClear} aria-label={t.detail.closePinned}>×</button>
+      <div>
+        <small>{t.detail.selectedMonth}</small>
+        <strong>{selected.symbol}{t.separator}{selected.monthKey}</strong>
+      </div>
+      <div>
+        <small>{metric === "absolute" ? t.detail.monthlyReturn : t.detail.relativeBtc}</small>
+        <strong className={selected.value >= 0 ? "positive" : "negative"}>{formatPct(selected.value, 2)}</strong>
+      </div>
+      <div>
+        <small>{t.detail.high} / {t.detail.low}</small>
+        <strong>{formatPrice(selected.row.high, quote)} / {formatPrice(selected.row.low, quote)}</strong>
+      </div>
+      <div>
+        <small>{extremeCaption}</small>
+        <strong className={extreme.className}>{formatPct(selected.row.extremeMovePct, 2)}</strong>
+      </div>
+    </aside>
   );
 }
 
@@ -828,20 +1419,6 @@ function formatSignedNumber(value, digits = 2) {
   }).format(normalized);
 }
 
-function formatUtcTimestamp(iso) {
-  const timestamp = new Date(iso);
-  if (Number.isNaN(timestamp.getTime())) return null;
-  const formatted = new Intl.DateTimeFormat("en-US", {
-    timeZone: "UTC",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(timestamp);
-  return `${formatted} UTC`;
-}
-
 function formatCompactPrice(value) {
   if (!Number.isFinite(Number(value))) return "N/A";
   return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(Number(value))} USD`;
@@ -860,6 +1437,1100 @@ function latestMacro(week, id) {
 function macroClass(value) {
   if (!Number.isFinite(Number(value)) || Number(value) === 0) return "";
   return Number(value) > 0 ? "positive" : "negative";
+}
+
+function isMacroNumber(value) {
+  return value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+}
+
+function macroMoveClass(value) {
+  if (!isMacroNumber(value) || Number(value) === 0) return "";
+  return Number(value) > 0 ? "macro-up" : "macro-down";
+}
+
+function macroCategoryLabel(category, t) {
+  if (category === "all") return t.macroCalendar.all;
+  if (category === "liquidity") return t.macroCalendar.liquidity;
+  return t.macroCalendar.categories[category] || category;
+}
+
+function compactMacroCategoryLabel(category, t) {
+  return t.macroCalendar.compactCategories?.[category] || macroCategoryLabel(category, t);
+}
+
+function macroDateMeaningLabel(value, t) {
+  if (value === "observation_period" || value === "observation_week") return t.macroCalendar.observationPeriod;
+  if (value === "daily_observation") return t.macroCalendar.dailyObservation;
+  if (value === "projection_year") return t.macroCalendar.projectionYear;
+  if (value === "sep_release_observation") return t.macroCalendar.sepProjection;
+  return value || "N/A";
+}
+
+function formatMacroValue(value, unit) {
+  if (!isMacroNumber(value)) return "N/A";
+  if (unit === "percent" || unit === "percent_spread") return `${formatNumber(value, 2)}%`;
+  if (unit === "thousand_persons") return `${formatNumber(value, 0)}K`;
+  if (unit === "persons") return formatNumber(value, 0);
+  if (unit === "usd_millions") return `$${formatNumber(Number(value) / 1000, 1)}B`;
+  if (unit === "usd_billions" || unit === "usd_billions_chained") return `$${formatNumber(value, 1)}B`;
+  if (unit === "usd_per_hour") return `$${formatNumber(value, 2)}`;
+  return formatNumber(value, unit === "fx" ? 4 : 2);
+}
+
+function formatMacroChange(item) {
+  if (!item) return "N/A";
+  if (isMacroNumber(item.changeBp)) return formatBp(item.changeBp, 0);
+  if (item.unit === "thousand_persons" && isMacroNumber(item.change)) return `${formatSignedNumber(item.change, 0)}K`;
+  if (item.unit === "persons" && isMacroNumber(item.change)) return formatSignedNumber(item.change, 0);
+  if (item.unit === "usd_millions" && isMacroNumber(item.change)) return `$${formatSignedNumber(Number(item.change) / 1000, 1)}B`;
+  if ((item.unit === "usd_billions" || item.unit === "usd_billions_chained") && isMacroNumber(item.change)) return `$${formatSignedNumber(item.change, 1)}B`;
+  if (isMacroNumber(item.pctChange)) return formatPct(item.pctChange, 2);
+  if (isMacroNumber(item.change)) return formatSignedNumber(item.change, 2);
+  return "N/A";
+}
+
+const MACRO_WEEK_ROWS = ["inflation", "growth", "rates", "volatility", "liquidity"];
+
+const MACRO_STATUS_DISPLAY = {
+  DFEDTARU: { category: "rates", label: "Fed upper", mode: "bp" },
+  DFF: { category: "rates", label: "Fed funds", mode: "bp" },
+  DGS2: { category: "rates", label: "2Y", mode: "bp" },
+  DGS10: { category: "rates", label: "10Y", mode: "bp" },
+  DFII10: { category: "rates", label: "Real 10Y", mode: "bp" },
+  T10YIE: { category: "rates", label: "BEI", mode: "bp" },
+  DTWEXBGS: { category: "rates", label: "DXY", mode: "pct" },
+  DEXJPUS: { category: "rates", label: "USD/JPY", mode: "pct" },
+  DEXCHUS: { category: "rates", label: "USD/CNY", mode: "pct" },
+  VIXCLS: { category: "volatility", label: "VIX", mode: "level" },
+  BAMLC0A0CM: { category: "volatility", label: "IG OAS", mode: "bp" },
+  BAMLH0A0HYM2: { category: "volatility", label: "HY OAS", mode: "bp" },
+  STLFSI4: { category: "volatility", label: "Stress", mode: "level" },
+  WALCL: { category: "liquidity", label: "Fed assets", mode: "level" },
+  WRESBAL: { category: "liquidity", label: "Reserves", mode: "level" },
+  WTREGEN: { category: "liquidity", label: "TGA", mode: "level" },
+  RRPONTSYD: { category: "liquidity", label: "RRP", mode: "level" },
+};
+
+const MACRO_CATEGORY_ORDER = ["inflation", "growth", "rates", "volatility", "liquidity"];
+const MONTH_CELL_ITEM_LIMIT = 3;
+
+function utcDateFromKey(dateKey) {
+  const [year, month, day] = String(dateKey).split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+function dateKeyFromUtc(date) {
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+}
+
+function addUtcDays(date, days) {
+  const copy = new Date(date.getTime());
+  copy.setUTCDate(copy.getUTCDate() + days);
+  return copy;
+}
+
+function startOfSundayWeek(dateKey) {
+  const date = utcDateFromKey(dateKey);
+  return addUtcDays(date, -date.getUTCDay());
+}
+
+function weekDaysFor(dateKey) {
+  const start = startOfSundayWeek(dateKey);
+  const todayKey = dateKeyFromUtc(new Date());
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = addUtcDays(start, index);
+    const itemDateKey = dateKeyFromUtc(date);
+    return { date, dateKey: itemDateKey, dayIndex: index, isToday: itemDateKey === todayKey };
+  });
+}
+
+function monthKeyFromDateKey(dateKey) {
+  return String(dateKey || "").slice(0, 7);
+}
+
+function monthGrid(monthKey) {
+  const [year, month] = monthKey.split("-").map(Number);
+  const first = new Date(Date.UTC(year, month - 1, 1));
+  const last = new Date(Date.UTC(year, month, 0));
+  const start = startOfSundayWeek(dateKeyFromUtc(first));
+  const days = [];
+  for (let index = 0; index < 42; index += 1) {
+    const date = addUtcDays(start, index);
+    days.push({
+      date,
+      dateKey: dateKeyFromUtc(date),
+      inMonth: date.getUTCMonth() === first.getUTCMonth(),
+      isToday: dateKeyFromUtc(date) === dateKeyFromUtc(new Date()),
+      dayOfMonth: date.getUTCDate(),
+    });
+    if (index >= 34 && date >= last && date.getUTCDay() === 6) break;
+  }
+  return days;
+}
+
+function shiftMonth(monthKey, delta) {
+  const [year, month] = monthKey.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1 + delta, 1));
+  return monthKeyFromDateKey(dateKeyFromUtc(date));
+}
+
+function monthTitle(monthKey, language) {
+  const date = utcDateFromKey(`${monthKey}-01`);
+  const locale = language === "en" ? "en-US" : "zh-CN";
+  return new Intl.DateTimeFormat(locale, { timeZone: "UTC", year: "numeric", month: "long" }).format(date);
+}
+
+function dayLabel(dateKey) {
+  return String(dateKey).slice(5).replace("-", "/");
+}
+
+function sameOrBefore(a, b) {
+  return String(a) <= String(b);
+}
+
+function findCurrentWeeklyState(dataset) {
+  const endDate = dataset?.window?.endDate;
+  const rows = dataset?.weeklyState || [];
+  return rows.find((row) => row.weekStart <= endDate && row.weekEnd >= endDate)
+    || [...rows].reverse().find((row) => sameOrBefore(row.weekEnd, endDate))
+    || rows.at(-1)
+    || null;
+}
+
+function findWeeklyStateForDate(dataset, dateKey) {
+  const rows = dataset?.weeklyState || [];
+  return rows.find((row) => row.weekStart <= dateKey && row.weekEnd >= dateKey)
+    || rows.find((row) => row.weekStart <= dateKey && row.weekEnd >= dateKeyFromUtc(addUtcDays(utcDateFromKey(dateKey), -1)))
+    || null;
+}
+
+function compactIndicatorLabel(label) {
+  const replacements = [
+    ["Average hourly earnings", "AHE"],
+    ["Initial jobless claims", "Initial claims"],
+    ["Industrial production", "Ind. production"],
+    ["PCE price index", "PCE"],
+    ["Core PPI goods", "Core PPI"],
+    ["Unemployment rate", "Unemployment"],
+    ["Nonfarm payrolls", "NFP"],
+    ["Retail sales", "Retail"],
+    ["Consumer sentiment", "Sentiment"],
+    ["Japan overnight rate", "Japan O/N"],
+    ["China 3M interbank rate", "China 3M"],
+    ["FOMC fed funds median projection", "Dot median"],
+    ["FOMC longer-run fed funds median", "Dot long-run"],
+    ["M2 money stock", "M2"],
+  ];
+  return replacements.reduce((value, [from, to]) => value.replace(from, to), label || "");
+}
+
+function eventWeekText(event) {
+  return `${compactIndicatorLabel(event.label)} ${formatMacroValue(event.actual, event.unit)}`;
+}
+
+function eventMonthText(event) {
+  return compactIndicatorLabel(event.label);
+}
+
+function statusChipText(seriesId, value) {
+  const meta = MACRO_STATUS_DISPLAY[seriesId];
+  if (!meta) return "";
+  const changeText = meta.mode === "pct" && isMacroNumber(value.pctChange)
+    ? formatPct(value.pctChange, 2)
+    : formatMacroChange(value);
+  return `${meta.label} ${changeText}`;
+}
+
+function statusItemsForWeek(week) {
+  if (!week?.values) return [];
+  return Object.entries(week.values)
+    .map(([seriesId, value]) => {
+      const meta = MACRO_STATUS_DISPLAY[seriesId];
+      if (!meta || !value?.observationEnd) return null;
+      return {
+        type: "status",
+        date: value.observationEnd,
+        category: meta.category,
+        label: meta.label,
+        text: statusChipText(seriesId, value),
+        value,
+        seriesId,
+      };
+    })
+    .filter(Boolean);
+}
+
+function statusItemsForDate(dataset, dateKey) {
+  const itemsBySeries = new Map();
+  (dataset?.weeklyState || []).forEach((week) => {
+    statusItemsForWeek(week)
+      .filter((item) => item.date === dateKey)
+      .forEach((item) => {
+        const existing = itemsBySeries.get(item.seriesId);
+        if (!existing || (existing.value?.carriedForward && !item.value?.carriedForward)) {
+          itemsBySeries.set(item.seriesId, item);
+        }
+      });
+  });
+  return [...itemsBySeries.values()].sort((a, b) => {
+    const categoryDiff = MACRO_CATEGORY_ORDER.indexOf(a.category) - MACRO_CATEGORY_ORDER.indexOf(b.category);
+    if (categoryDiff) return categoryDiff;
+    return a.label.localeCompare(b.label);
+  });
+}
+
+function flowItemsForDate(dateKey, t) {
+  const date = utcDateFromKey(dateKey);
+  const endOfMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0));
+  const daysToMonthEnd = Math.round((endOfMonth - date) / 86400000);
+  if (daysToMonthEnd < 0 || daysToMonthEnd > 5) return [];
+  const isQuarterEnd = [2, 5, 8, 11].includes(date.getUTCMonth());
+  return [{
+    type: "flow",
+    date: dateKey,
+    category: "liquidity",
+    label: isQuarterEnd ? t.macroCalendar.quarterWindow : t.macroCalendar.monthWindow,
+    text: isQuarterEnd ? t.macroCalendar.quarterWindow : t.macroCalendar.monthWindow,
+  }];
+}
+
+function eventsByDate(events) {
+  return events.reduce((map, event) => {
+    const list = map.get(event.date) || [];
+    list.push(event);
+    map.set(event.date, list);
+    return map;
+  }, new Map());
+}
+
+function buildWeekCellItems(dateKey, category, eventMap, statusItems, t) {
+  const eventItems = (eventMap.get(dateKey) || [])
+    .filter((event) => event.category === category)
+    .map((event) => ({ type: "event", category, event, text: eventWeekText(event) }));
+  const stateItems = statusItems
+    .filter((item) => item.date === dateKey && item.category === category)
+    .map((item) => ({ ...item, text: item.text }));
+  const flowItems = category === "liquidity" ? flowItemsForDate(dateKey, t) : [];
+  return [...eventItems, ...stateItems, ...flowItems].slice(0, 4);
+}
+
+function buildWeekDayItems(dateKey, eventMap, statusItems, t) {
+  const eventItems = (eventMap.get(dateKey) || []).map((event) => ({
+    type: "event",
+    category: event.category,
+    event,
+    text: eventWeekText(event),
+  }));
+  const stateItems = statusItems
+    .filter((item) => item.date === dateKey)
+    .map((item) => ({ ...item, text: item.text }));
+  return [...eventItems, ...stateItems, ...flowItemsForDate(dateKey, t)];
+}
+
+function statusGroupItemsForDate(dataset, dateKey, t) {
+  const groups = statusItemsForDate(dataset, dateKey).reduce((map, item) => {
+    const existing = map.get(item.category) || {
+      type: "status-group",
+      category: item.category,
+      count: 0,
+    };
+    existing.count += 1;
+    map.set(item.category, existing);
+    return map;
+  }, new Map());
+
+  return [...groups.values()]
+    .sort((a, b) => MACRO_CATEGORY_ORDER.indexOf(a.category) - MACRO_CATEGORY_ORDER.indexOf(b.category))
+    .map((item) => ({
+      ...item,
+      label: `${macroCategoryLabel(item.category, t)} ${item.count}`,
+      text: `${compactMacroCategoryLabel(item.category, t)} ${item.count}`,
+    }));
+}
+
+function monthItemWeight(item) {
+  return item.type === "status-group" ? item.count : 1;
+}
+
+function limitMonthItems(items, t) {
+  if (items.length <= MONTH_CELL_ITEM_LIMIT) return items;
+  const visibleItems = items.slice(0, MONTH_CELL_ITEM_LIMIT - 1);
+  const hiddenCount = items
+    .slice(MONTH_CELL_ITEM_LIMIT - 1)
+    .reduce((sum, item) => sum + monthItemWeight(item), 0);
+  const hiddenText = t.macroCalendar.hiddenMonthItems(hiddenCount);
+  return [
+    ...visibleItems,
+    {
+      type: "overflow",
+      category: "overflow",
+      text: hiddenText,
+      label: hiddenText,
+    },
+  ];
+}
+
+function buildMonthItems(dateKey, dataset, eventMap, t) {
+  const eventItems = (eventMap.get(dateKey) || []).map((event) => ({
+    type: "event",
+    category: event.category,
+    event,
+    text: eventMonthText(event),
+  }));
+  return limitMonthItems([
+    ...eventItems,
+    ...statusGroupItemsForDate(dataset, dateKey, t),
+    ...flowItemsForDate(dateKey, t),
+  ], t);
+}
+
+function buildMonthDetailItems(dateKey, dataset, eventMap, t) {
+  const eventItems = (eventMap.get(dateKey) || []).map((event) => ({
+    type: "event",
+    category: event.category,
+    event,
+    text: eventMonthText(event),
+  }));
+  return [...eventItems, ...statusItemsForDate(dataset, dateKey), ...flowItemsForDate(dateKey, t)];
+}
+
+function pressureSignal(value, mode = "change") {
+  if (value?.carriedForward) return 0;
+  if (!value) return 0;
+  const raw = mode === "pct" && isMacroNumber(value.pctChange)
+    ? value.pctChange
+    : isMacroNumber(value.changeBp)
+      ? value.changeBp
+      : value.change;
+  if (!isMacroNumber(raw) || Math.abs(Number(raw)) < 0.01) return 0;
+  return Number(raw) > 0 ? 1 : -1;
+}
+
+function environmentDeltaText(item, t, mode = "change") {
+  if (item?.carriedForward && item.observationEnd) return t.macroCalendar.asOf(dayLabel(item.observationEnd));
+  if (mode === "pct" && isMacroNumber(item?.pctChange)) return formatPct(item.pctChange, 2);
+  return formatMacroChange(item);
+}
+
+function environmentSummary(week, t) {
+  const values = week?.values || {};
+  const tenYear = values.DGS10;
+  const dollar = values.DTWEXBGS;
+  const vix = values.VIXCLS;
+  const credit = values.BAMLH0A0HYM2;
+  const score = pressureSignal(tenYear)
+    + pressureSignal(dollar, "pct")
+    + pressureSignal(vix)
+    + pressureSignal(credit);
+  const posture = score >= 2 ? t.macroCalendar.pressureHigh : score <= -2 ? t.macroCalendar.pressureLow : t.macroCalendar.pressureMedium;
+  return {
+    posture,
+    score,
+    cards: [
+      { label: t.macroCalendar.riskPosture, value: posture, delta: week?.weekKey || "N/A", className: score >= 2 ? "macro-up" : score <= -2 ? "macro-down" : "" },
+      { label: "10Y", value: formatMacroValue(tenYear?.end, tenYear?.unit), delta: environmentDeltaText(tenYear, t), className: macroMoveClass(tenYear?.changeBp) },
+      { label: "DXY", value: formatMacroValue(dollar?.end, dollar?.unit), delta: environmentDeltaText(dollar, t, "pct"), className: dollar?.carriedForward ? "" : macroMoveClass(dollar?.pctChange) },
+      { label: "VIX / HY", value: `${formatMacroValue(vix?.end, vix?.unit)} / ${formatMacroValue(credit?.end, credit?.unit)}`, delta: `${environmentDeltaText(vix, t)} / ${environmentDeltaText(credit, t)}`, className: macroMoveClass((Number(vix?.change) || 0) + (Number(credit?.changeBp) || 0)) },
+    ],
+  };
+}
+
+function MacroEnvironmentPanel({ dataset, t }) {
+  const currentWeek = findCurrentWeeklyState(dataset);
+  const summary = environmentSummary(currentWeek, t);
+  return (
+    <section className="macro-environment" aria-label={t.macroCalendar.environmentTitle}>
+      <div className="macro-section-heading">
+        <div>
+          <p>{t.macroCalendar.currentWeek}</p>
+          <h2>{t.macroCalendar.environmentTitle}</h2>
+        </div>
+        <span>{currentWeek ? `${currentWeek.weekStart} - ${currentWeek.weekEnd}` : "N/A"}</span>
+      </div>
+      <div className="macro-environment-grid">
+        {summary.cards.map((card) => (
+          <div className="macro-environment-card" key={card.label}>
+            <small>{card.label}</small>
+            <strong className={card.className}>{card.value}</strong>
+            <span className={card.className}>{card.delta}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MacroWeekCalendar({ dataset, t }) {
+  const [visibleWeekDate, setVisibleWeekDate] = useState(dataset.window.endDate);
+  const eventMap = useMemo(() => eventsByDate(dataset.events || []), [dataset]);
+  const days = useMemo(() => weekDaysFor(visibleWeekDate), [visibleWeekDate]);
+  const visibleWeek = useMemo(() => findWeeklyStateForDate(dataset, visibleWeekDate), [dataset, visibleWeekDate]);
+  const statusItems = statusItemsForWeek(visibleWeek);
+  const shiftVisibleWeek = (daysToAdd) => {
+    setVisibleWeekDate((current) => dateKeyFromUtc(addUtcDays(utcDateFromKey(current), daysToAdd)));
+  };
+  return (
+    <section className="visualization macro-calendar-section" aria-label={t.macroCalendar.weekCalendarTitle}>
+      <div className="macro-section-heading">
+        <div>
+          <p>{t.macroCalendar.currentWeek}</p>
+          <h2>{t.macroCalendar.weekCalendarTitle}</h2>
+        </div>
+        <span>{days[0].dateKey} - {days[6].dateKey}</span>
+      </div>
+      <div className="macro-week-carousel">
+        <button type="button" className="macro-week-nav macro-week-prev" onClick={() => shiftVisibleWeek(-7)} aria-label={t.macroCalendar.previousWeek}>
+          <span aria-hidden="true">&lt;</span>
+        </button>
+        <div className="table-shell macro-week-shell">
+          <table className="macro-week-calendar">
+            <caption className="sr-only">{t.macroCalendar.weekCalendarTitle}</caption>
+            <thead>
+              <tr>
+                {days.map((day) => (
+                  <th key={day.dateKey} className={day.isToday ? "is-today" : ""}>
+                    <strong>{t.macroCalendar.weekdayNames[day.dayIndex]}</strong>
+                    <span>{dayLabel(day.dateKey)}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {days.map((day) => {
+                  const items = buildWeekDayItems(day.dateKey, eventMap, statusItems, t);
+                  return (
+                    <td
+                      key={day.dateKey}
+                      className={[
+                        items.length ? "" : "macro-calendar-empty",
+                        day.isToday ? "is-today" : "",
+                      ].filter(Boolean).join(" ")}
+                    >
+                      {items.map((item) => (
+                        <span className={`macro-mini-chip macro-${item.category}`} key={`${item.type}-${item.text}`}>
+                          {item.text}
+                        </span>
+                      ))}
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" className="macro-week-nav macro-week-next" onClick={() => shiftVisibleWeek(7)} aria-label={t.macroCalendar.nextWeek}>
+          <span aria-hidden="true">&gt;</span>
+        </button>
+      </div>
+      <p className="macro-calendar-note">{t.macroCalendar.periodNotice}</p>
+    </section>
+  );
+}
+
+function MacroMonthCalendar({ dataset, selectedDate, setSelectedDate, visibleMonth, setVisibleMonth, language, t }) {
+  const eventMap = useMemo(() => eventsByDate(dataset.events || []), [dataset]);
+  const days = useMemo(() => monthGrid(visibleMonth), [visibleMonth]);
+  const selectedItems = buildMonthDetailItems(selectedDate, dataset, eventMap, t);
+  return (
+    <section className="visualization macro-calendar-section" aria-label={t.macroCalendar.monthCalendarTitle}>
+      <div className="macro-section-heading">
+        <div>
+          <p>{t.macroCalendar.clickDateHint}</p>
+          <h2>{t.macroCalendar.monthCalendarTitle}</h2>
+        </div>
+        <div className="macro-month-controls">
+          <button type="button" onClick={() => setVisibleMonth((month) => shiftMonth(month, -1))}>{t.macroCalendar.previousMonth}</button>
+          <strong>{monthTitle(visibleMonth, language)}</strong>
+          <button type="button" onClick={() => setVisibleMonth((month) => shiftMonth(month, 1))}>{t.macroCalendar.nextMonth}</button>
+        </div>
+      </div>
+      <div className="macro-month-shell">
+        <div className="macro-month-weekdays">
+          {t.macroCalendar.weekdays.map((day) => <span key={day}>{day}</span>)}
+        </div>
+        <div className="macro-month-grid">
+          {days.map((day) => {
+            const items = buildMonthItems(day.dateKey, dataset, eventMap, t);
+            return (
+              <button
+                type="button"
+                key={day.dateKey}
+                className={[
+                  "macro-month-day",
+                  day.inMonth ? "" : "is-muted",
+                  day.dateKey === selectedDate ? "is-selected" : "",
+                  day.isToday ? "is-today" : "",
+                  items.length ? "has-items" : "",
+                ].filter(Boolean).join(" ")}
+                onClick={() => setSelectedDate(day.dateKey)}
+              >
+                <strong>{day.dayOfMonth}</strong>
+                <span className="macro-month-items">
+                  {items.length ? items.map((item) => (
+                    <small className={`macro-month-tag macro-${item.category}`} title={item.label || item.text} key={`${item.type}-${item.text}`}>{item.text}</small>
+                  )) : null}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <MacroDateDetails dateKey={selectedDate} items={selectedItems} t={t} />
+    </section>
+  );
+}
+
+function MacroDateDetails({ dateKey, items, t }) {
+  return (
+    <aside className="macro-date-detail" aria-live="polite">
+      <div className="macro-date-detail-heading">
+        <div>
+          <small>{t.macroCalendar.selectedDate}</small>
+          <strong>{dateKey}</strong>
+        </div>
+        <span>{items.length ? `${items.length} ${t.macroCalendar.eventCount}` : t.macroCalendar.noIndicators}</span>
+      </div>
+      {items.length ? (
+        <div className="macro-date-detail-list">
+          {items.map((item) => item.type === "event" ? (
+            <div className="macro-date-detail-item" key={`${item.event.seriesId}-${item.event.date}`}>
+              <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
+              <strong>{item.event.label}</strong>
+              <dl>
+                <div><dt>{t.macroCalendar.previous}</dt><dd>{formatMacroValue(item.event.previous, item.event.unit)}</dd></div>
+                <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMacroValue(item.event.actual, item.event.unit)}</dd></div>
+                <div><dt>{t.macroCalendar.change}</dt><dd className={macroMoveClass(item.event.change)}>{formatMacroChange(item.event)}</dd></div>
+                <div><dt>{t.macroCalendar.yoy}</dt><dd className={macroMoveClass(item.event.yoyPct)}>{isMacroNumber(item.event.yoyPct) ? formatPct(item.event.yoyPct, 2) : "N/A"}</dd></div>
+              </dl>
+              <small>{macroDateMeaningLabel(item.event.dateMeaning, t)} / {item.event.source}</small>
+            </div>
+          ) : item.type === "status" ? (
+            <div className="macro-date-detail-item" key={`${item.type}-${item.seriesId}-${item.date}`}>
+              <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
+              <strong>{item.value.label || item.label}</strong>
+              <dl>
+                <div><dt>{t.macroCalendar.previous}</dt><dd>{formatMacroValue(item.value.start, item.value.unit)}</dd></div>
+                <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMacroValue(item.value.end, item.value.unit)}</dd></div>
+                <div><dt>{t.macroCalendar.change}</dt><dd className={macroMoveClass(item.value.changeBp ?? item.value.change)}>{formatMacroChange(item.value)}</dd></div>
+                <div><dt>{t.macroCalendar.dateMeaning}</dt><dd>{item.value.observationStart === item.value.observationEnd ? dayLabel(item.value.observationEnd) : `${dayLabel(item.value.observationStart)}-${dayLabel(item.value.observationEnd)}`}</dd></div>
+              </dl>
+              <small>{macroDateMeaningLabel(item.value.dateMeaning, t)} / {item.value.source || item.seriesId}</small>
+            </div>
+          ) : (
+            <div className="macro-date-detail-item" key={`${item.type}-${item.text}`}>
+              <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
+              <strong>{item.label}</strong>
+              <small>{t.macroCalendar.periodNotice}</small>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>{t.macroCalendar.noIndicators}</p>
+      )}
+    </aside>
+  );
+}
+
+function MacroSummaryStrip({ dataset, t }) {
+  return (
+    <div className="latest-strip macro-summary-strip" aria-label={t.macroCalendar.window}>
+      {(dataset.categorySummary || []).map((category) => (
+        <div className="equity-summary-card macro-summary-card" key={category.category}>
+          <span className="ticker">{macroCategoryLabel(category.category, t)}</span>
+          <span className="latest-price">{category.eventCount} {t.macroCalendar.eventCount}</span>
+          <span className="latest-return">{category.latestEventLabel || t.macroCalendar.noLatest}</span>
+          <small>{category.latestEventDate || category.latestStatus?.weekKey || t.macroCalendar.noLatest}</small>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MacroEventsTable({ rows, selected, onSelect, t }) {
+  return (
+    <div className="table-shell macro-events-shell">
+      <table className="data-table macro-events-table">
+        <caption className="sr-only">{t.macroCalendar.eventsCaption}</caption>
+        <thead>
+          <tr>
+            <th className="macro-date-column">{t.macroCalendar.date}</th>
+            <th>{t.macroCalendar.category}</th>
+            <th>{t.macroCalendar.indicator}</th>
+            <th>{t.macroCalendar.actual}</th>
+            <th>{t.macroCalendar.previous}</th>
+            <th>{t.macroCalendar.forecast}</th>
+            <th>{t.macroCalendar.change}</th>
+            <th>{t.macroCalendar.yoy}</th>
+            <th>{t.macroCalendar.source}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.length ? rows.map((event) => (
+            <tr key={`${event.seriesId}-${event.date}-${event.label}`} className={selected === event ? "selected-row" : ""}>
+              <th scope="row">
+                <button type="button" onClick={() => onSelect(event)}>
+                  <strong>{event.date}</strong>
+                  <span>{macroDateMeaningLabel(event.dateMeaning, t)}</span>
+                </button>
+              </th>
+              <td><span className={`macro-pill macro-${event.category}`}>{macroCategoryLabel(event.category, t)}</span></td>
+              <td>
+                <button type="button" className="macro-row-button" onClick={() => onSelect(event)}>
+                  <strong>{event.label}</strong>
+                  <span>{event.seriesId}</span>
+                </button>
+              </td>
+              <td>{formatMacroValue(event.actual, event.unit)}</td>
+              <td>{formatMacroValue(event.previous, event.unit)}</td>
+              <td>{formatMacroValue(event.forecast, event.unit)}</td>
+              <td className={macroMoveClass(event.change)}>{formatMacroChange(event)}</td>
+              <td className={macroMoveClass(event.yoyPct)}>{isMacroNumber(event.yoyPct) ? formatPct(event.yoyPct, 2) : "N/A"}</td>
+              <td className="macro-source-cell">{event.source}</td>
+            </tr>
+          )) : (
+            <tr>
+              <td colSpan="9" className="empty-table-cell">{t.macroCalendar.noRows}</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <div className="table-note">{t.macroCalendar.methodology}</div>
+    </div>
+  );
+}
+
+function MacroStateCell({ row, id, mode = "change", t }) {
+  const item = row.values?.[id];
+  if (!item) return <td className="return-na">N/A</td>;
+  const moveValue = isMacroNumber(item.changeBp) ? item.changeBp : item.change;
+  return (
+    <td>
+      <strong>{formatMacroValue(item.end, item.unit)}</strong>
+      <span className={macroMoveClass(moveValue)}>
+        {item.carriedForward && item.observationEnd
+          ? t.macroCalendar.asOf(dayLabel(item.observationEnd))
+          : mode === "pct" && isMacroNumber(item.pctChange)
+            ? formatPct(item.pctChange, 2)
+            : formatMacroChange(item)}
+      </span>
+    </td>
+  );
+}
+
+function MacroStateTable({ rows, t }) {
+  return (
+    <div className="table-shell macro-state-shell">
+      <table className="data-table macro-state-table">
+        <caption className="sr-only">{t.macroCalendar.stateCaption}</caption>
+        <thead>
+          <tr>
+            <th className="week-column">{t.macroCalendar.week}</th>
+            <th>{t.macroCalendar.twoYear}</th>
+            <th>{t.macroCalendar.tenYear}</th>
+            <th>{t.macroCalendar.realYield}</th>
+            <th>{t.macroCalendar.dollar}</th>
+            <th>{t.macroCalendar.vix}</th>
+            <th>{t.macroCalendar.credit}</th>
+            <th>{t.macroCalendar.stress}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.weekKey}>
+              <th scope="row">
+                <strong>{row.weekKey}</strong>
+                <span>{row.weekStart} - {row.weekEnd}</span>
+              </th>
+              <MacroStateCell row={row} id="DGS2" t={t} />
+              <MacroStateCell row={row} id="DGS10" t={t} />
+              <MacroStateCell row={row} id="DFII10" t={t} />
+              <MacroStateCell row={row} id="DTWEXBGS" mode="pct" t={t} />
+              <MacroStateCell row={row} id="VIXCLS" t={t} />
+              <td>
+                <strong>{formatMacroValue(row.values?.BAMLH0A0HYM2?.end, row.values?.BAMLH0A0HYM2?.unit)}</strong>
+                <span className={macroMoveClass(row.values?.BAMLH0A0HYM2?.changeBp)}>{formatMacroChange(row.values?.BAMLH0A0HYM2)}</span>
+              </td>
+              <MacroStateCell row={row} id="STLFSI4" t={t} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="table-note">{t.macroCalendar.stateCaption}</div>
+    </div>
+  );
+}
+
+function MacroDetailBand({ selected, t }) {
+  if (!selected) {
+    return (
+      <aside className="detail-band detail-empty macro-detail-empty" aria-live="polite">
+        <strong>{t.macroCalendar.emptyDetailTitle}</strong>
+        <span>{t.macroCalendar.emptyDetailBody}</span>
+      </aside>
+    );
+  }
+  return (
+    <aside className="detail-band macro-detail-band" aria-live="polite">
+      <div>
+        <small>{t.macroCalendar.selected}</small>
+        <strong>{selected.label}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.date}</small>
+        <strong>{selected.date}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.category}</small>
+        <strong>{macroCategoryLabel(selected.category, t)}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.actual}</small>
+        <strong>{formatMacroValue(selected.actual, selected.unit)}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.previous}</small>
+        <strong>{formatMacroValue(selected.previous, selected.unit)}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.change}</small>
+        <strong className={macroMoveClass(selected.change)}>{formatMacroChange(selected)}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.yoy}</small>
+        <strong className={macroMoveClass(selected.yoyPct)}>{isMacroNumber(selected.yoyPct) ? formatPct(selected.yoyPct, 2) : "N/A"}</strong>
+      </div>
+      <div>
+        <small>{t.macroCalendar.dateMeaning}</small>
+        <strong>{macroDateMeaningLabel(selected.dateMeaning, t)}</strong>
+      </div>
+      <div className="ranking-line">
+        <small>{t.macroCalendar.source}</small>
+        <strong>{selected.source}</strong>
+      </div>
+    </aside>
+  );
+}
+
+function MacroCalendarPage({ language, setLanguage, t }) {
+  const [dataset, setDataset] = useState(null);
+  const [error, setError] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [visibleMonth, setVisibleMonth] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(appUrl("data/macro-calendar.json"), { signal: controller.signal, cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          const loadError = new Error("data-file");
+          loadError.status = response.status;
+          throw loadError;
+        }
+        return response.json();
+      })
+      .then((loadedDataset) => {
+        setDataset(loadedDataset);
+        setError(null);
+      })
+      .catch((loadError) => {
+        if (loadError.name !== "AbortError") setError({ status: loadError.status, message: loadError.message });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    replaceHashState("macro-calendar", {});
+  }, []);
+
+  const defaultDate = useMemo(() => {
+    if (!dataset) return null;
+    return dataset.window.endDate;
+  }, [dataset]);
+
+  useEffect(() => {
+    if (!dataset) return;
+    setVisibleMonth((current) => current || monthKeyFromDateKey(defaultDate || dataset.window.endDate));
+    setSelectedDate((current) => current || defaultDate || dataset.window.endDate);
+  }, [dataset, defaultDate]);
+
+  if (error) {
+    return <main className="status-page"><h1>{t.macroCalendar.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
+  }
+  if (!dataset) {
+    return <main className="status-page"><p>{t.macroCalendar.loading}</p></main>;
+  }
+
+  return (
+    <main className="app-page macro-page">
+      <header className="app-header">
+        <div className="title-block">
+          <p className="eyebrow">{t.macroCalendar.eyebrow}</p>
+          <h1><span>{t.macroCalendar.titleAccent}</span> {t.macroCalendar.titleRest}</h1>
+          <p>{t.macroCalendar.subtitle}</p>
+          <PageNav page="macro" t={t} />
+        </div>
+        <div className="freshness-block">
+          <LanguageToggle language={language} onChange={setLanguage} t={t} />
+          <CacheStatus label={t.macroCalendar.cache} tooltip={t.macroCalendar.cacheTooltip} />
+          <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
+          <small>{dataset.failures?.length ? t.macroCalendar.failure(dataset.failures.length) : t.macroCalendar.success}</small>
+        </div>
+      </header>
+
+      <MacroEnvironmentPanel dataset={dataset} t={t} />
+      <MacroWeekCalendar dataset={dataset} t={t} />
+      {visibleMonth && selectedDate ? (
+        <MacroMonthCalendar
+          dataset={dataset}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          visibleMonth={visibleMonth}
+          setVisibleMonth={setVisibleMonth}
+          language={language}
+          t={t}
+        />
+      ) : null}
+
+      <footer className="source-footer">
+        <div>
+          <strong>{t.footer.title}</strong>
+          <span>FRED</span>
+          <span>{dataset.cache.providerCachePath}</span>
+          <span>{dataset.sources.manualEvents}</span>
+        </div>
+        <p>{t.macroCalendar.sourceNote}</p>
+      </footer>
+    </main>
+  );
+}
+
+const EQUITY_ASSET_KEYS = ["QQQ", "SPY", "DIA"];
+
+function equityAssetLabel(dataset, symbol, t) {
+  if (symbol === "DIA") return equityCopy(t).dow;
+  return dataset.assets?.[symbol]?.displaySymbol || symbol;
+}
+
+function equityDaysByDate(dataset) {
+  return new Map((dataset?.days || []).map((day) => [day.date, day]));
+}
+
+function latestEquityDate(dataset) {
+  return dataset?.latest?.date || [...(dataset?.days || [])].reverse().find((day) => day.isMarketDay && Object.values(day.assets || {}).some(Boolean))?.date || dataset?.window?.endDate;
+}
+
+function formatEquityPrice(value) {
+  if (!Number.isFinite(Number(value))) return "N/A";
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Number(value));
+}
+
+function formatEquityMacroValue(value, unit) {
+  if (!Number.isFinite(Number(value))) return "N/A";
+  if (unit === "percent") return `${formatNumber(value, 2)}%`;
+  return formatNumber(value, 2);
+}
+
+function formatEquityMacroChange(seriesId, value) {
+  if (!value) return "N/A";
+  if (seriesId === "DGS10") return formatBp(value.changeBp, 0);
+  return formatSignedNumber(value.change, 2);
+}
+
+function equityMoveClass(value) {
+  if (!Number.isFinite(Number(value)) || Number(value) === 0) return "";
+  return Number(value) > 0 ? "positive" : "negative";
+}
+
+function EquityMarketSummary({ dataset, t }) {
+  const copy = equityCopy(t);
+  const latest = dataset.latest || {};
+  const cards = EQUITY_ASSET_KEYS.map((symbol) => {
+    const item = latest.assets?.[symbol];
+    return {
+      key: symbol,
+      label: equityAssetLabel(dataset, symbol, t),
+      value: formatEquityPrice(item?.price ?? item?.close),
+      delta: formatPct(item?.pct, 2),
+      className: equityMoveClass(item?.pct),
+      note: item?.date || latest.date || "N/A",
+    };
+  });
+  const tenYear = latest.macro?.DGS10;
+  const vix = latest.macro?.VIXCLS;
+  return (
+    <div className="latest-strip equity-strip" aria-label={copy.latest}>
+      {cards.slice(0, 2).map((card) => (
+        <div className="equity-summary-card" key={card.key}>
+          <span className="ticker">{card.label}</span>
+          <span className="latest-price">{card.value}</span>
+          <span className={`latest-return ${card.className}`}>{card.delta}</span>
+          <small>{card.note}</small>
+        </div>
+      ))}
+      <div className="equity-summary-card" key={cards[2].key}>
+        <span className="ticker">{cards[2].label}</span>
+        <span className="latest-price">{cards[2].value}</span>
+        <span className={`latest-return ${cards[2].className}`}>{cards[2].delta}</span>
+        <small>{cards[2].note}</small>
+      </div>
+      <div className="equity-summary-card equity-macro-summary">
+        <span className="ticker">{copy.macro}</span>
+        <div className="equity-summary-lines">
+          <span><b>{copy.tenYear}</b><strong>{formatEquityMacroValue(tenYear?.value, "percent")}</strong><em className={macroClass(tenYear?.changeBp)}>{formatEquityMacroChange("DGS10", tenYear)}</em></span>
+          <span><b>{copy.vix}</b><strong>{formatEquityMacroValue(vix?.value, "index")}</strong><em className={macroClass(vix?.change)}>{formatEquityMacroChange("VIXCLS", vix)}</em></span>
+        </div>
+        <small>{latest.date || "N/A"}</small>
+      </div>
+    </div>
+  );
+}
+
+function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate, t }) {
+  const copy = equityCopy(t);
+  const byDate = useMemo(() => equityDaysByDate(dataset), [dataset]);
+  const days = useMemo(() => weekDaysFor(visibleWeekDate), [visibleWeekDate]);
+  const shiftVisibleWeek = (daysToAdd) => {
+    setVisibleWeekDate((current) => dateKeyFromUtc(addUtcDays(utcDateFromKey(current), daysToAdd)));
+  };
+  return (
+    <section className="visualization equity-calendar-section" aria-label={copy.weekCalendarTitle}>
+      <div className="macro-section-heading">
+        <div>
+          <p>{copy.currentWeek}</p>
+          <h2>{copy.weekCalendarTitle}</h2>
+        </div>
+        <span>{days[0].dateKey} - {days[6].dateKey}</span>
+      </div>
+      <div className="macro-week-carousel">
+        <button type="button" className="macro-week-nav macro-week-prev" onClick={() => shiftVisibleWeek(-7)} aria-label={copy.previousWeek}>
+          <span aria-hidden="true">&lt;</span>
+        </button>
+        <div className="table-shell macro-week-shell">
+          <table className="macro-week-calendar equity-week-calendar">
+            <caption className="sr-only">{copy.weekCalendarTitle}</caption>
+            <thead>
+              <tr>
+                {days.map((day) => (
+                  <th key={day.dateKey} className={day.isToday ? "is-today" : ""}>
+                    <strong>{t.macroCalendar.weekdayNames[day.dayIndex]}</strong>
+                    <span>{dayLabel(day.dateKey)}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {days.map((day) => {
+                  const row = byDate.get(day.dateKey);
+                  const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
+                  return (
+                    <td key={day.dateKey} className={[hasData ? "" : "macro-calendar-empty", day.isToday ? "is-today" : ""].filter(Boolean).join(" ")}>
+                      {hasData ? (
+                        <div className="equity-day-detail">
+                          {EQUITY_ASSET_KEYS.map((symbol) => {
+                            const asset = row.assets?.[symbol];
+                            return asset ? (
+                              <span className="equity-day-row" key={symbol}>
+                                <b>{equityAssetLabel(dataset, symbol, t)}</b>
+                                <em>{copy.open} {formatEquityPrice(asset.open)}</em>
+                                <em>{copy.close} {formatEquityPrice(asset.close)}</em>
+                                <strong className={equityMoveClass(asset.pct)}>{formatPct(asset.pct, 2)}</strong>
+                              </span>
+                            ) : null;
+                          })}
+                          {["DGS10", "VIXCLS"].map((seriesId) => {
+                            const item = row.macro?.[seriesId];
+                            const label = seriesId === "DGS10" ? copy.tenYear : copy.vix;
+                            return item ? (
+                              <span className="equity-day-row equity-macro-row" key={seriesId}>
+                                <b>{label}</b>
+                                <em>{formatEquityMacroValue(item.value, dataset.macroSeries?.[seriesId]?.unit)}</em>
+                                <strong className={macroClass(seriesId === "DGS10" ? item.changeBp : item.change)}>{formatEquityMacroChange(seriesId, item)}</strong>
+                              </span>
+                            ) : null;
+                          })}
+                        </div>
+                      ) : null}
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" className="macro-week-nav macro-week-next" onClick={() => shiftVisibleWeek(7)} aria-label={copy.nextWeek}>
+          <span aria-hidden="true">&gt;</span>
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, language, t }) {
+  const copy = equityCopy(t);
+  const byDate = useMemo(() => equityDaysByDate(dataset), [dataset]);
+  const days = useMemo(() => monthGrid(visibleMonth), [visibleMonth]);
+  return (
+    <section className="visualization equity-calendar-section" aria-label={copy.monthCalendarTitle}>
+      <div className="macro-section-heading">
+        <div>
+          <p>{copy.currentMonth}</p>
+          <h2>{copy.monthCalendarTitle}</h2>
+        </div>
+        <div className="macro-month-controls">
+          <button type="button" onClick={() => setVisibleMonth((month) => shiftMonth(month, -1))}>{copy.previousMonth}</button>
+          <strong>{monthTitle(visibleMonth, language)}</strong>
+          <button type="button" onClick={() => setVisibleMonth((month) => shiftMonth(month, 1))}>{copy.nextMonth}</button>
+        </div>
+      </div>
+      <div className="macro-month-shell equity-month-shell">
+        <div className="macro-month-weekdays">
+          {t.macroCalendar.weekdays.map((day) => <span key={day}>{day}</span>)}
+        </div>
+        <div className="macro-month-grid">
+          {days.map((day) => {
+            const row = byDate.get(day.dateKey);
+            const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
+            return (
+              <div
+                key={day.dateKey}
+                className={[
+                  "macro-month-day",
+                  "equity-month-day",
+                  day.inMonth ? "" : "is-muted",
+                  day.isToday ? "is-today" : "",
+                  hasData ? "has-items" : "",
+                ].filter(Boolean).join(" ")}
+              >
+                <strong>{day.dayOfMonth}</strong>
+                <span className="macro-month-items">
+                  {hasData ? EQUITY_ASSET_KEYS.map((symbol) => {
+                    const asset = row.assets?.[symbol];
+                    return asset ? (
+                      <small className={`macro-month-tag equity-month-tag ${equityMoveClass(asset.pct)}`} key={symbol}>
+                        {equityAssetLabel(dataset, symbol, t)} {formatPct(asset.pct, 1)}
+                      </small>
+                    ) : null;
+                  }) : null}
+                  {hasData ? ["DGS10", "VIXCLS"].map((seriesId) => {
+                    const item = row.macro?.[seriesId];
+                    const label = seriesId === "DGS10" ? copy.tenYear : copy.vix;
+                    const move = seriesId === "DGS10" ? item?.changeBp : item?.change;
+                    return item ? (
+                      <small className={`macro-month-tag equity-month-tag ${macroClass(move)}`} key={seriesId}>
+                        {label} {formatEquityMacroChange(seriesId, item)}
+                      </small>
+                    ) : null;
+                  }) : null}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function EquityCell({
@@ -1088,12 +2759,11 @@ function EquityTooltip({ value, t }) {
 }
 
 function EquityMacroPage({ language, setLanguage, t }) {
+  const copy = equityCopy(t);
   const [dataset, setDataset] = useState(null);
   const [error, setError] = useState(null);
-  const [range, setRange] = useState("52");
-  const [hover, setHover] = useState(null);
-  const [tooltip, setTooltip] = useState(null);
-  const [selected, setSelected] = useState(null);
+  const [visibleWeekDate, setVisibleWeekDate] = useState(null);
+  const [visibleMonth, setVisibleMonth] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -1116,65 +2786,514 @@ function EquityMacroPage({ language, setLanguage, t }) {
     return () => controller.abort();
   }, []);
 
-  const rows = useMemo(() => {
-    const allRows = dataset?.weeks || [];
-    return range === "all" ? [...allRows].reverse() : allRows.slice(-Number(range)).reverse();
-  }, [dataset, range]);
+  useEffect(() => {
+    replaceHashState("equity-macro", {});
+  }, []);
+
+  useEffect(() => {
+    if (!dataset) return;
+    const latestDate = latestEquityDate(dataset);
+    setVisibleWeekDate((current) => current || latestDate);
+    setVisibleMonth((current) => current || monthKeyFromDateKey(latestDate));
+  }, [dataset]);
 
   if (error) {
-    return <main className="status-page"><h1>{t.equity.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
+    return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
   }
   if (!dataset) {
-    return <main className="status-page"><p>{t.equity.loading}</p></main>;
+    return <main className="status-page"><p>{copy.loading}</p></main>;
   }
 
   return (
     <main className="app-page equity-page">
       <header className="app-header">
         <div className="title-block">
-          <p className="eyebrow">{t.equity.eyebrow}</p>
-          <h1><span>{t.equity.titleAccent}</span> {t.equity.titleRest}</h1>
-          <p>{t.equity.subtitle}</p>
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h1><span>{copy.titleAccent}</span> {copy.titleRest}</h1>
+          <p>{copy.subtitle}</p>
+          <PageNav page="equity" t={t} />
         </div>
         <div className="freshness-block">
           <LanguageToggle language={language} onChange={setLanguage} t={t} />
-          <PageNav page="equity" t={t} />
-          <span className="cache-badge">{t.equity.cache}</span>
+          <CacheStatus label={copy.cache} tooltip={copy.cacheTooltip} />
           <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
-          <small>{dataset.failures?.length ? t.equity.failure(dataset.failures.length) : t.equity.success}</small>
+          <small>{dataset.failures?.length ? copy.failure(dataset.failures.length) : copy.success}</small>
         </div>
       </header>
 
-      <EquitySummaryStrip dataset={dataset} t={t} />
+      <EquityMarketSummary dataset={dataset} t={t} />
 
-      <section className="control-bar" aria-label={t.equity.controls}>
-        <Segmented label={t.equity.range} options={t.equity.ranges} value={range} onChange={(next) => { setRange(next); setSelected(null); }} compact />
-      </section>
+      {visibleWeekDate ? (
+        <EquityMarketWeekCalendar
+          dataset={dataset}
+          visibleWeekDate={visibleWeekDate}
+          setVisibleWeekDate={setVisibleWeekDate}
+          t={t}
+        />
+      ) : null}
 
-      <section className="visualization" aria-label={t.equity.tableCaption}>
-        <div className="visualization-heading">
-          <div>
-            <p>{t.equity.eyebrow}</p>
-            <h2>{t.equity.visualTitle}</h2>
-          </div>
-          <p className="method-note">{t.equity.method}</p>
-        </div>
-        <EquityTable rows={rows} hover={hover} setHover={setHover} setTooltip={setTooltip} onSelect={setSelected} t={t} />
-      </section>
-
-      <EquityDetailBand selected={selected} dataset={dataset} t={t} />
+      {visibleMonth ? (
+        <EquityMarketMonthCalendar
+          dataset={dataset}
+          visibleMonth={visibleMonth}
+          setVisibleMonth={setVisibleMonth}
+          language={language}
+          t={t}
+        />
+      ) : null}
 
       <footer className="source-footer">
         <div>
           <strong>{t.footer.title}</strong>
-          <span>QQQ / SPY · {dataset.assets.QQQ.sourceLabel}</span>
-          <span>FRED · DGS10 / VIXCLS / DFF</span>
-          <span>{t.equity.eventPlaceholder}</span>
+          <span>QQQ / SPY / DIA · {dataset.assets.QQQ.sourceLabel}</span>
+          <span>FRED · DGS10 / VIXCLS</span>
+          <span>{dataset.sources?.calendar}</span>
+          <span>{copy.eventPlaceholder}</span>
         </div>
-        <p>{t.equity.priceSourceNote}</p>
+        <p>{copy.priceSourceNote}</p>
       </footer>
 
-      <EquityTooltip value={tooltip} t={t} />
+    </main>
+  );
+}
+
+const MARKET_CLOCK_SOON_MINUTES = 60;
+
+function getInitialShowCrypto() {
+  if (typeof window === "undefined") return true;
+  try {
+    return window.localStorage.getItem("cycle-map-hide-crypto") !== "1";
+  } catch {
+    return true;
+  }
+}
+
+function minutesFromTime(value) {
+  const [hour, minute] = String(value || "00:00").split(":").map(Number);
+  return (Number(hour) || 0) * 60 + (Number(minute) || 0);
+}
+
+function zonedClockParts(timeZone, now) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(now).map((part) => [part.type, part.value]),
+  );
+  const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(parts.weekday);
+  return {
+    weekday,
+    minutes: Number(parts.hour) * 60 + Number(parts.minute),
+  };
+}
+
+function isWeekday(weekday) {
+  return weekday >= 1 && weekday <= 5;
+}
+
+function localClockLabel(timeZone, language, now) {
+  const locale = language === "en" ? "en-US" : "zh-CN";
+  return new Intl.DateTimeFormat(locale, {
+    timeZone,
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(now);
+}
+
+function marketStatus(market, now, language, copy) {
+  if (market.stateModel === "always_open") {
+    return {
+      key: "trading",
+      label: copy.status.trading,
+      active: true,
+      sortRank: 0,
+      localTime: copy.alwaysOpen,
+      nextText: copy.alwaysOpen,
+    };
+  }
+
+  const clock = zonedClockParts(market.timezone, now);
+  const localTime = localClockLabel(market.timezone, language, now);
+  const regularOpen = minutesFromTime(market.regularOpen);
+  const regularClose = minutesFromTime(market.regularClose);
+  const isTradingDay = isWeekday(clock.weekday);
+  if (!isTradingDay) {
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen || "N/A" };
+  }
+
+  if (market.stateModel === "premarket_regular_afterhours") {
+    const premarketOpen = minutesFromTime(market.premarketOpen);
+    const afterhoursClose = minutesFromTime(market.afterhoursClose);
+    if (clock.minutes >= premarketOpen && clock.minutes < regularOpen) {
+      return { key: "premarket", label: copy.status.premarket, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+    }
+    if (clock.minutes >= regularOpen && clock.minutes < regularClose) {
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+    }
+    if (clock.minutes >= regularClose && clock.minutes < afterhoursClose) {
+      return { key: "afterhours", label: copy.status.afterhours, active: true, sortRank: 2, localTime, nextText: market.afterhoursClose };
+    }
+    if (clock.minutes < premarketOpen && premarketOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
+      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.premarketOpen };
+    }
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.premarketOpen };
+  }
+
+  if (market.stateModel === "regular_with_lunch") {
+    const lunchStart = minutesFromTime(market.lunchStart);
+    const lunchEnd = minutesFromTime(market.lunchEnd);
+    if (clock.minutes >= regularOpen && clock.minutes < lunchStart) {
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.lunchStart };
+    }
+    if (clock.minutes >= lunchStart && clock.minutes < lunchEnd) {
+      return { key: "lunch", label: copy.status.lunch, active: true, sortRank: 1, localTime, nextText: market.lunchEnd };
+    }
+    if (clock.minutes >= lunchEnd && clock.minutes < regularClose) {
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+    }
+    if (clock.minutes < regularOpen && regularOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
+      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+    }
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen };
+  }
+
+  if (clock.minutes >= regularOpen && clock.minutes < regularClose) {
+    return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+  }
+  if (clock.minutes < regularOpen && regularOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
+    return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+  }
+  return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen };
+}
+
+function marketDisplayName(market, language) {
+  return language === "en" ? market.displayName : market.displayNameZh || market.displayName;
+}
+
+function marketClockStatuses(dataset, now, language, copy) {
+  return Object.fromEntries((dataset?.markets || []).map((market) => [market.id, marketStatus(market, now, language, copy)]));
+}
+
+function marketClockRows(dataset, statuses, showCrypto) {
+  const marketOrder = new Map((dataset?.markets || []).map((market, index) => [market.id, index]));
+  const markets = new Map((dataset?.markets || []).map((market) => [market.id, market]));
+  return (dataset?.assets || [])
+    .filter((asset) => showCrypto || asset.market !== "crypto")
+    .map((asset) => ({
+      asset,
+      market: markets.get(asset.market),
+      status: statuses[asset.market] || { key: "closed", label: "Closed", sortRank: 4 },
+    }))
+    .sort((a, b) => {
+      const aRank = a.asset.market === "crypto" ? 0 : a.status.sortRank;
+      const bRank = b.asset.market === "crypto" ? 0 : b.status.sortRank;
+      if (aRank !== bRank) return aRank - bRank;
+      const marketDiff = (marketOrder.get(a.asset.market) ?? 99) - (marketOrder.get(b.asset.market) ?? 99);
+      if (marketDiff) return marketDiff;
+      return a.asset.symbol.localeCompare(b.asset.symbol);
+    });
+}
+
+function formatClockPrice(asset, copy) {
+  if (asset?.price === null || asset?.price === undefined || asset?.price === "" || !Number.isFinite(Number(asset.price))) return copy.unavailableValue;
+  const value = Number(asset.price);
+  const digits = Math.abs(value) < 1 ? 4 : Math.abs(value) < 100 ? 2 : 2;
+  return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: digits, minimumFractionDigits: value < 1 ? 4 : 0 }).format(value)} ${asset.quote}`;
+}
+
+function formatMarketCapUsd(value, copy) {
+  if (value === null || value === undefined || value === "" || !Number.isFinite(Number(value))) return copy.unavailableValue;
+  const number = Number(value);
+  const units = [
+    [1_000_000_000_000, "T"],
+    [1_000_000_000, "B"],
+    [1_000_000, "M"],
+  ];
+  const unit = units.find(([threshold]) => Math.abs(number) >= threshold);
+  if (!unit) return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(number)} USD`;
+  return `${(number / unit[0]).toFixed(number / unit[0] >= 100 ? 0 : 1)}${unit[1]} USD`;
+}
+
+function marketCapLabel(asset, copy) {
+  if (asset.marketCapStatus === "not_applicable") return copy.notApplicable;
+  return formatMarketCapUsd(asset.marketCapUsd, copy);
+}
+
+function assetDisplayName(asset, language) {
+  return language === "en" ? asset.name : asset.nameZh || asset.name;
+}
+
+function qualityLabel(asset, copy) {
+  if (asset.sourceKind === "pending" || !Number.isFinite(Number(asset.price))) return copy.sourcePending;
+  if (asset.sourceKind === "proxy") return "Proxy";
+  return "OK";
+}
+
+function qualityText(asset) {
+  const notes = [];
+  if (asset.quality) notes.push(asset.quality);
+  if (asset.changeBasis) notes.push(`Change basis: ${asset.changeBasis}.`);
+  if (asset.marketCapStatus === "unavailable") notes.push("Market cap unavailable from the current reviewed source.");
+  if (asset.marketCapStatus === "not_applicable") notes.push("Market cap does not apply to this proxy/index instrument.");
+  return notes.join(" ");
+}
+
+function sourceTimeLabel(iso, language) {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "N/A";
+  return new Intl.DateTimeFormat(language === "en" ? "en-US" : "zh-CN", {
+    timeZone: language === "en" ? "America/New_York" : "Asia/Shanghai",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+}
+
+function MarketClockSummary({ dataset, statuses, language, copy }) {
+  return (
+    <section className="market-clock-summary" aria-label={copy.marketState}>
+      {(dataset.markets || []).map((market) => {
+        const status = statuses[market.id];
+        return (
+          <div className={`market-state-card state-${status?.key || "closed"} market-${market.id}`} key={market.id}>
+            <small>{marketDisplayName(market, language)}</small>
+            <strong>{status?.label || copy.status.closed}</strong>
+            <span>{copy.localTime}: {status?.localTime || "N/A"}</span>
+            <em>{copy.next}: {status?.nextText || "N/A"}</em>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+function MarketClockTable({ rows, selected, onSelect, language, copy }) {
+  return (
+    <div className="table-shell market-clock-shell">
+      <table className="data-table market-clock-table">
+        <caption className="sr-only">{copy.assetList}</caption>
+        <thead>
+          <tr>
+            <th>{copy.table.market}</th>
+            <th>{copy.table.asset}</th>
+            <th>{copy.table.status}</th>
+            <th>{copy.table.price}</th>
+            <th>{copy.table.change}</th>
+            <th>{copy.table.marketCap}</th>
+            <th>{copy.table.source}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.length ? rows.map(({ asset, market, status }) => {
+            const isSelected = selected?.symbol === asset.symbol;
+            return (
+              <tr className={`${isSelected ? "selected-row" : ""} state-${status.key}`} key={asset.symbol}>
+                <th scope="row">
+                  <button type="button" onClick={() => onSelect(asset)}>
+                    <strong>{market ? marketDisplayName(market, language) : asset.market}</strong>
+                    <span>{market?.timezone || "UTC"}</span>
+                  </button>
+                </th>
+                <td>
+                  <button type="button" className="market-asset-button" onClick={() => onSelect(asset)}>
+                    <strong>{asset.symbol}</strong>
+                    <span>{assetDisplayName(asset, language)}</span>
+                  </button>
+                </td>
+                <td><span className={`market-status-pill state-${status.key}`}>{status.label}</span></td>
+                <td>{formatClockPrice(asset, copy)}</td>
+                <td className={Number(asset.changePct) >= 0 ? "positive" : Number(asset.changePct) < 0 ? "negative" : ""}>{formatPct(asset.changePct, 2)}</td>
+                <td>{marketCapLabel(asset, copy)}</td>
+                <td>
+                  <button type="button" className={`quality-badge source-${asset.sourceKind || "available"}`} title={qualityText(asset)} onClick={() => onSelect(asset)}>
+                    {qualityLabel(asset, copy)}
+                  </button>
+                </td>
+              </tr>
+            );
+          }) : (
+            <tr>
+              <td colSpan="7" className="empty-table-cell">{copy.table.noRows}</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <div className="table-note">{copy.sourceNote}</div>
+    </div>
+  );
+}
+
+function MarketClockDetail({ selected, copy, language }) {
+  if (!selected) {
+    return (
+      <aside className="detail-band detail-empty market-clock-detail-empty" aria-live="polite">
+        <strong>{copy.detail.emptyTitle}</strong>
+        <span>{copy.detail.emptyBody}</span>
+      </aside>
+    );
+  }
+  const components = selected.components?.length
+    ? selected.components.map((component) => `${component.exchange} ${component.symbol} ${Number.isFinite(component.weight) ? `${Math.round(component.weight * 100)}%` : ""}`).join(" / ")
+    : "N/A";
+  return (
+    <aside className="detail-band market-clock-detail" aria-live="polite">
+      <div>
+        <small>{copy.detail.selected}</small>
+        <strong>{selected.symbol}</strong>
+      </div>
+      <div>
+        <small>{copy.detail.pair}</small>
+        <strong>{selected.localQuote ? `${selected.localQuote} → ${selected.quote}` : selected.quote}</strong>
+      </div>
+      <div>
+        <small>{copy.table.price}</small>
+        <strong>{formatClockPrice(selected, copy)}</strong>
+      </div>
+      <div>
+        <small>{copy.table.marketCap}</small>
+        <strong>{marketCapLabel(selected, copy)}</strong>
+      </div>
+      <div>
+        <small>{copy.detail.priceSource}</small>
+        <strong>{selected.sourceLabel || "N/A"}</strong>
+      </div>
+      <div>
+        <small>{copy.detail.capSource}</small>
+        <strong>{selected.marketCapSourceLabel || (selected.marketCapStatus === "not_applicable" ? copy.notApplicable : copy.sourcePending)}</strong>
+      </div>
+      <div>
+        <small>{copy.detail.updated}</small>
+        <strong>{sourceTimeLabel(selected.asOf || selected.marketCapAsOf, language)}</strong>
+      </div>
+      <div className="ranking-line">
+        <small>{copy.detail.quality}</small>
+        <strong>{qualityText(selected) || "N/A"}</strong>
+      </div>
+      <div className="ranking-line">
+        <small>{copy.detail.components}</small>
+        <strong>{components}</strong>
+      </div>
+    </aside>
+  );
+}
+
+function MarketClockPage({ language, setLanguage, t }) {
+  const copy = marketClockCopy(t);
+  const [dataset, setDataset] = useState(null);
+  const [error, setError] = useState(null);
+  const [now, setNow] = useState(() => new Date());
+  const [showCrypto, setShowCrypto] = useState(getInitialShowCrypto);
+  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(appUrl("data/market-session.json"), { signal: controller.signal, cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          const loadError = new Error("data-file");
+          loadError.status = response.status;
+          throw loadError;
+        }
+        return response.json();
+      })
+      .then((loadedDataset) => {
+        setDataset(loadedDataset);
+        setError(null);
+      })
+      .catch((loadError) => {
+        if (loadError.name !== "AbortError") setError({ status: loadError.status, message: loadError.message });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    replaceHashState("market-clock", {});
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("cycle-map-hide-crypto", showCrypto ? "0" : "1");
+    } catch {
+      // Preference persistence is optional.
+    }
+    if (!showCrypto && selected?.market === "crypto") setSelected(null);
+  }, [showCrypto, selected]);
+
+  const statuses = useMemo(() => dataset ? marketClockStatuses(dataset, now, language, copy) : {}, [dataset, now, language, copy]);
+  const rows = useMemo(() => dataset ? marketClockRows(dataset, statuses, showCrypto) : [], [dataset, statuses, showCrypto]);
+
+  if (error) {
+    return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
+  }
+  if (!dataset) {
+    return <main className="status-page"><p>{copy.loading}</p></main>;
+  }
+
+  return (
+    <main className="app-page market-clock-page">
+      <header className="app-header">
+        <div className="title-block">
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h1><span>{copy.titleAccent}</span> {copy.titleRest}</h1>
+          <p>{copy.subtitle}</p>
+          <PageNav page="marketClock" t={t} />
+        </div>
+        <div className="freshness-block">
+          <LanguageToggle language={language} onChange={setLanguage} t={t} />
+          <CacheStatus label={copy.cache} tooltip={copy.cacheTooltip} />
+          <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
+          <small>{dataset.failures?.length ? copy.failure(dataset.failures.length) : copy.success}</small>
+        </div>
+      </header>
+
+      <MarketClockSummary dataset={dataset} statuses={statuses} language={language} copy={copy} />
+
+      <section className="control-bar market-clock-controls" aria-label={copy.controls}>
+        <div className="control-primary">
+          <button type="button" className={showCrypto ? "market-toggle is-active" : "market-toggle"} onClick={() => setShowCrypto((value) => !value)}>
+            {showCrypto ? copy.hideCrypto : copy.showCrypto}
+          </button>
+        </div>
+        <div className="control-secondary">
+          <span className="market-clock-hidden-note">{showCrypto ? "" : copy.cryptoHidden}</span>
+        </div>
+      </section>
+
+      <section className="visualization market-clock-section" aria-label={copy.assetList}>
+        <div className="visualization-heading">
+          <div>
+            <p>{copy.marketState}</p>
+            <h2>{copy.assetList}</h2>
+          </div>
+          <p className="method-note">{dataset.refreshCadence}</p>
+        </div>
+        <MarketClockTable rows={rows} selected={selected} onSelect={setSelected} language={language} copy={copy} />
+      </section>
+
+      <MarketClockDetail selected={selected} copy={copy} language={language} />
+
+      <footer className="source-footer">
+        <div>
+          <strong>{t.footer.title}</strong>
+          <span>OKX public market data</span>
+          <span>CoinMarketCap market caps</span>
+          <span>Session clocks computed locally</span>
+        </div>
+        <p>{dataset.methodology}</p>
+      </footer>
     </main>
   );
 }
@@ -1182,13 +3301,11 @@ function EquityMacroPage({ language, setLanguage, t }) {
 function CryptoCyclePage({ language, setLanguage, t }) {
   const [dataset, setDataset] = useState(null);
   const [error, setError] = useState(null);
-  const [view, setView] = useState("rotation");
-  const [metric, setMetric] = useState("absolute");
-  const [range, setRange] = useState("48");
-  const [asset, setAsset] = useState("BTC");
+  const [cryptoState, setCryptoState] = useState(readCryptoStateFromHash);
   const [hover, setHover] = useState(null);
   const [tooltip, setTooltip] = useState(null);
   const [selected, setSelected] = useState(null);
+  const { view, metric, range, asset } = cryptoState;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -1213,6 +3330,22 @@ function CryptoCyclePage({ language, setLanguage, t }) {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    const syncFromHash = () => {
+      if (currentPage() !== "crypto") return;
+      setCryptoState(readCryptoStateFromHash());
+      setHover(null);
+      setTooltip(null);
+      setSelected(null);
+    };
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
+  useEffect(() => {
+    replaceHashState("", cryptoState);
+  }, [cryptoState]);
+
   const assetMaps = useMemo(() => dataset ? makeAssetMaps(dataset) : null, [dataset]);
   const rotationRows = useMemo(
     () => dataset && assetMaps ? buildRotationRows(dataset, assetMaps, range, metric) : [],
@@ -1225,15 +3358,14 @@ function CryptoCyclePage({ language, setLanguage, t }) {
   const stats = useMemo(() => monthlyStats(cycleYears), [cycleYears]);
 
   const switchView = (next) => {
-    setView(next);
+    setCryptoState((current) => ({ ...current, view: next }));
     setHover(null);
     setTooltip(null);
     setSelected(null);
   };
 
   const openAsset = (symbol) => {
-    setAsset(symbol);
-    setView("cycle");
+    setCryptoState((current) => ({ ...current, asset: symbol, view: "cycle" }));
     setSelected(null);
   };
 
@@ -1251,17 +3383,17 @@ function CryptoCyclePage({ language, setLanguage, t }) {
   }
 
   return (
-    <main className={`app-page view-${view}`}>
+    <main className={`app-page view-${view} ${selected ? "has-mobile-dock" : ""}`}>
       <header className="app-header">
         <div className="title-block">
           <p className="eyebrow">{t.header.eyebrow}</p>
           <h1><span>{t.header.titleAccent}</span> {t.header.titleRest}</h1>
           <p>{t.header.subtitle}</p>
+          <PageNav page="crypto" t={t} />
         </div>
         <div className="freshness-block">
           <LanguageToggle language={language} onChange={setLanguage} t={t} />
-          <PageNav page="crypto" t={t} />
-          <span className="cache-badge">{t.header.cache}</span>
+          <CacheStatus label={t.header.cache} tooltip={t.header.cacheTooltip} />
           <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
           <small>{dataset.failures?.length ? t.header.failure(dataset.failures.length) : t.header.success}</small>
         </div>
@@ -1270,18 +3402,59 @@ function CryptoCyclePage({ language, setLanguage, t }) {
       <LatestStrip dataset={dataset} onOpenAsset={openAsset} t={t} />
 
       <section className="control-bar" aria-label={t.controls.chart}>
-        <Segmented label={t.controls.view} options={t.options.views} value={view} onChange={switchView} />
-        <div className="control-spacer"></div>
-        <Segmented label={t.controls.metric} options={t.options.metrics} value={metric} onChange={(next) => { setMetric(next); setSelected(null); }} compact />
-        {view === "rotation" ? <Segmented label={t.controls.range} options={t.options.ranges} value={range} onChange={setRange} compact /> : null}
+        <div className="control-primary">
+          <Segmented label={t.controls.view} options={t.options.views} value={view} onChange={switchView} />
+        </div>
+        <div className="control-secondary">
+          <Segmented
+            label={t.controls.metric}
+            options={t.options.metrics}
+            value={metric}
+            onChange={(next) => {
+              setCryptoState((current) => ({ ...current, metric: next }));
+              setSelected(null);
+            }}
+            compact
+          />
+          {view === "rotation" ? (
+            <Segmented
+              label={t.controls.range}
+              options={t.options.ranges}
+              value={range}
+              onChange={(next) => {
+                setCryptoState((current) => ({ ...current, range: next }));
+                setSelected(null);
+              }}
+              compact
+            />
+          ) : null}
+        </div>
       </section>
 
       {view === "cycle" ? (
         <>
-          <AssetSwitch value={asset} onChange={(next) => { setAsset(next); setSelected(null); }} t={t} />
+          <AssetSwitch
+            value={asset}
+            onChange={(next) => {
+              setCryptoState((current) => ({ ...current, asset: next }));
+              setSelected(null);
+            }}
+            t={t}
+          />
           <AssetSpotSummary dataset={dataset} symbol={asset} t={t} />
         </>
       ) : null}
+
+      <CryptoInsight
+        view={view}
+        metric={metric}
+        range={range}
+        asset={asset}
+        dataset={dataset}
+        rotationRows={rotationRows}
+        selected={selected}
+        t={t}
+      />
 
       <section className="visualization" aria-label={view === "rotation" ? t.visualization.rotationAria : t.visualization.cycleAria(asset)}>
         <div className="visualization-heading">
@@ -1332,26 +3505,45 @@ function CryptoCyclePage({ language, setLanguage, t }) {
       </footer>
 
       <Tooltip value={tooltip} dataset={dataset} t={t} />
+      <MobilePinnedDetail selected={selected} dataset={dataset} metric={metric} onClear={() => setSelected(null)} t={t} />
     </main>
   );
 }
 
 function currentPage() {
   if (typeof window === "undefined") return "crypto";
+  const hashPath = window.location.hash.replace(/^#/, "");
+  if (hashPath.startsWith("/market-clock")) return "marketClock";
+  if (hashPath.startsWith("/macro-calendar")) return "macro";
+  if (hashPath.startsWith("/equity-macro")) return "equity";
+  if (hashPath.startsWith("/") || hashPath === "") return "crypto";
+  if (routePathname(window.location.pathname).startsWith("/market-clock")) return "marketClock";
+  if (routePathname(window.location.pathname).startsWith("/macro-calendar")) return "macro";
   return routePathname(window.location.pathname).startsWith("/equity-macro") ? "equity" : "crypto";
 }
 
 export function App() {
   const [language, setLanguage] = useState(getInitialLanguage);
-  const page = currentPage();
+  const [page, setPage] = useState(currentPage);
   const t = TRANSLATIONS[language];
 
   useEffect(() => {
+    const syncPage = () => setPage(currentPage());
+    window.addEventListener("hashchange", syncPage);
+    window.addEventListener("popstate", syncPage);
+    return () => {
+      window.removeEventListener("hashchange", syncPage);
+      window.removeEventListener("popstate", syncPage);
+    };
+  }, []);
+
+  useEffect(() => {
     document.documentElement.lang = t.htmlLang;
-    document.title = page === "equity" ? t.equity.docTitle : t.docTitle;
+    const marketClock = marketClockCopy(t);
+    document.title = page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", page === "equity" ? t.equity.docDescription : t.docDescription);
+      ?.setAttribute("content", page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
     try {
       window.localStorage.setItem("cycle-map-language", language);
     } catch {
@@ -1359,7 +3551,8 @@ export function App() {
     }
   }, [language, page, t]);
 
-  return page === "equity"
-    ? <EquityMacroPage language={language} setLanguage={setLanguage} t={t} />
-    : <CryptoCyclePage language={language} setLanguage={setLanguage} t={t} />;
+  if (page === "marketClock") return <MarketClockPage language={language} setLanguage={setLanguage} t={t} />;
+  if (page === "macro") return <MacroCalendarPage language={language} setLanguage={setLanguage} t={t} />;
+  if (page === "equity") return <EquityMacroPage language={language} setLanguage={setLanguage} t={t} />;
+  return <CryptoCyclePage language={language} setLanguage={setLanguage} t={t} />;
 }

@@ -9,7 +9,9 @@
     "build:pages": "vite build && node scripts/prepare-github-pages.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "update-data": "node scripts/update-market-data.mjs",
-    "update-equity-data": "python scripts/update-equity-data.py"
+    "update-market-session": "node scripts/update-market-session-data.mjs",
+    "update-equity-data": "python scripts/update-equity-data.py",
+    "update-macro-calendar": "python scripts/update-macro-calendar.py"
   },
   "dependencies": {
     "@vitejs/plugin-react": "5.0.4",
