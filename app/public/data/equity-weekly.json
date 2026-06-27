@@ -2,29 +2,33 @@
   "version": 1,
   "page": "equity-macro",
   "timezone": "America/New_York for trading dates; FRED observations use provider dates",
-  "generatedAt": "2026-06-25T09:41:25Z",
+  "generatedAt": "2026-06-27T06:05:22Z",
   "startDate": "2025-01-20",
   "methodology": "Weekly price rows are derived from daily OHLC and grouped by Friday week-end. QQQ minus SPY is shown in percentage points. Event fields are intentionally empty in the MVP.",
   "priceSourcePreference": "akshare",
-  "failures": [],
+  "failures": [
+    "FRED DGS10: Bad Request.  The value for variable api_key is not a 32 character alpha-numeric lower-case string.  Read https://fred.stlouisfed.org/docs/api/api_key.html for more information.",
+    "FRED VIXCLS: Bad Request.  The value for variable api_key is not a 32 character alpha-numeric lower-case string.  Read https://fred.stlouisfed.org/docs/api/api_key.html for more information.",
+    "FRED DFF: Bad Request.  The value for variable api_key is not a 32 character alpha-numeric lower-case string.  Read https://fred.stlouisfed.org/docs/api/api_key.html for more information."
+  ],
   "assets": {
     "QQQ": {
       "symbol": "QQQ",
       "name": "Invesco QQQ Trust",
       "role": "Nasdaq 100 proxy",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "rows": 358,
+      "rows": 360,
       "firstDate": "2025-01-21",
-      "lastDate": "2026-06-24"
+      "lastDate": "2026-06-26"
     },
     "SPY": {
       "symbol": "SPY",
       "name": "SPDR S&P 500 ETF Trust",
       "role": "S&P 500 proxy",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "rows": 358,
+      "rows": 360,
       "firstDate": "2025-01-21",
-      "lastDate": "2026-06-24"
+      "lastDate": "2026-06-26"
     }
   },
   "macroSeries": {
@@ -79,32 +83,7 @@
       },
       "relativePct": -0.2333846167386987,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.57,
-          "end": 4.63,
-          "change": 0.05999999999999961,
-          "changeBp": 5.999999999999961,
-          "observationStart": "2025-01-21",
-          "observationEnd": "2025-01-24"
-        },
-        "VIXCLS": {
-          "start": 15.81,
-          "end": 14.85,
-          "change": -0.9600000000000009,
-          "changeBp": -96.00000000000009,
-          "observationStart": "2025-01-20",
-          "observationEnd": "2025-01-24"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-01-20",
-          "observationEnd": "2025-01-24"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -135,32 +114,7 @@
       },
       "relativePct": 1.0308657493318263,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.53,
-          "end": 4.58,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-01-27",
-          "observationEnd": "2025-01-31"
-        },
-        "VIXCLS": {
-          "start": 17.9,
-          "end": 16.43,
-          "change": -1.4699999999999989,
-          "changeBp": -146.9999999999999,
-          "observationStart": "2025-01-27",
-          "observationEnd": "2025-01-31"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-01-25",
-          "observationEnd": "2025-01-31"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -191,32 +145,7 @@
       },
       "relativePct": 0.4737226339252656,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.54,
-          "end": 4.49,
-          "change": -0.04999999999999982,
-          "changeBp": -4.999999999999982,
-          "observationStart": "2025-02-03",
-          "observationEnd": "2025-02-07"
-        },
-        "VIXCLS": {
-          "start": 18.62,
-          "end": 16.54,
-          "change": -2.080000000000002,
-          "changeBp": -208.00000000000017,
-          "observationStart": "2025-02-03",
-          "observationEnd": "2025-02-07"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-02-01",
-          "observationEnd": "2025-02-07"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -247,32 +176,7 @@
       },
       "relativePct": 1.1344432503919688,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.51,
-          "end": 4.47,
-          "change": -0.040000000000000036,
-          "changeBp": -4.0000000000000036,
-          "observationStart": "2025-02-10",
-          "observationEnd": "2025-02-14"
-        },
-        "VIXCLS": {
-          "start": 15.81,
-          "end": 14.77,
-          "change": -1.040000000000001,
-          "changeBp": -104.00000000000009,
-          "observationStart": "2025-02-10",
-          "observationEnd": "2025-02-14"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-02-08",
-          "observationEnd": "2025-02-14"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -303,32 +207,7 @@
       },
       "relativePct": -0.7381832103992219,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.55,
-          "end": 4.42,
-          "change": -0.1299999999999999,
-          "changeBp": -12.99999999999999,
-          "observationStart": "2025-02-18",
-          "observationEnd": "2025-02-21"
-        },
-        "VIXCLS": {
-          "start": 15.37,
-          "end": 18.21,
-          "change": 2.8400000000000016,
-          "changeBp": 284.00000000000017,
-          "observationStart": "2025-02-17",
-          "observationEnd": "2025-02-21"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-02-15",
-          "observationEnd": "2025-02-21"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -359,32 +238,7 @@
       },
       "relativePct": -2.4315208208744794,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.4,
-          "end": 4.24,
-          "change": -0.16000000000000014,
-          "changeBp": -16.000000000000014,
-          "observationStart": "2025-02-24",
-          "observationEnd": "2025-02-28"
-        },
-        "VIXCLS": {
-          "start": 18.98,
-          "end": 19.63,
-          "change": 0.6499999999999986,
-          "changeBp": 64.99999999999986,
-          "observationStart": "2025-02-24",
-          "observationEnd": "2025-02-28"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-02-22",
-          "observationEnd": "2025-02-28"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -415,32 +269,7 @@
       },
       "relativePct": -0.45882915987285067,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.16,
-          "end": 4.32,
-          "change": 0.16000000000000014,
-          "changeBp": 16.000000000000014,
-          "observationStart": "2025-03-03",
-          "observationEnd": "2025-03-07"
-        },
-        "VIXCLS": {
-          "start": 22.78,
-          "end": 23.37,
-          "change": 0.5899999999999999,
-          "changeBp": 58.999999999999986,
-          "observationStart": "2025-03-03",
-          "observationEnd": "2025-03-07"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-03-01",
-          "observationEnd": "2025-03-07"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -471,32 +300,7 @@
       },
       "relativePct": 0.058208488892656174,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.22,
-          "end": 4.31,
-          "change": 0.08999999999999986,
-          "changeBp": 8.999999999999986,
-          "observationStart": "2025-03-10",
-          "observationEnd": "2025-03-14"
-        },
-        "VIXCLS": {
-          "start": 27.86,
-          "end": 21.77,
-          "change": -6.09,
-          "changeBp": -609.0,
-          "observationStart": "2025-03-10",
-          "observationEnd": "2025-03-14"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-03-08",
-          "observationEnd": "2025-03-14"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -527,32 +331,7 @@
       },
       "relativePct": 0.04501182931203032,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.31,
-          "end": 4.25,
-          "change": -0.05999999999999961,
-          "changeBp": -5.999999999999961,
-          "observationStart": "2025-03-17",
-          "observationEnd": "2025-03-21"
-        },
-        "VIXCLS": {
-          "start": 20.51,
-          "end": 19.28,
-          "change": -1.2300000000000004,
-          "changeBp": -123.00000000000004,
-          "observationStart": "2025-03-17",
-          "observationEnd": "2025-03-21"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-03-15",
-          "observationEnd": "2025-03-21"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -583,32 +362,7 @@
       },
       "relativePct": -1.2020949907571112,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.34,
-          "end": 4.27,
-          "change": -0.07000000000000028,
-          "changeBp": -7.000000000000028,
-          "observationStart": "2025-03-24",
-          "observationEnd": "2025-03-28"
-        },
-        "VIXCLS": {
-          "start": 17.48,
-          "end": 21.65,
-          "change": 4.169999999999998,
-          "changeBp": 416.99999999999983,
-          "observationStart": "2025-03-24",
-          "observationEnd": "2025-03-28"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-03-22",
-          "observationEnd": "2025-03-28"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -639,32 +393,7 @@
       },
       "relativePct": -0.3946379518596679,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.23,
-          "end": 4.01,
-          "change": -0.22000000000000064,
-          "changeBp": -22.000000000000064,
-          "observationStart": "2025-03-31",
-          "observationEnd": "2025-04-04"
-        },
-        "VIXCLS": {
-          "start": 22.28,
-          "end": 45.31,
-          "change": 23.03,
-          "changeBp": 2303.0,
-          "observationStart": "2025-03-31",
-          "observationEnd": "2025-04-04"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-03-29",
-          "observationEnd": "2025-04-04"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -695,32 +424,7 @@
       },
       "relativePct": 2.0449036170622144,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.15,
-          "end": 4.48,
-          "change": 0.33000000000000007,
-          "changeBp": 33.00000000000001,
-          "observationStart": "2025-04-07",
-          "observationEnd": "2025-04-11"
-        },
-        "VIXCLS": {
-          "start": 46.98,
-          "end": 37.56,
-          "change": -9.419999999999995,
-          "changeBp": -941.9999999999994,
-          "observationStart": "2025-04-07",
-          "observationEnd": "2025-04-11"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-04-05",
-          "observationEnd": "2025-04-11"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -751,32 +455,7 @@
       },
       "relativePct": -1.1412361899712389,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.38,
-          "end": 4.34,
-          "change": -0.040000000000000036,
-          "changeBp": -4.0000000000000036,
-          "observationStart": "2025-04-14",
-          "observationEnd": "2025-04-17"
-        },
-        "VIXCLS": {
-          "start": 30.89,
-          "end": 29.65,
-          "change": -1.240000000000002,
-          "changeBp": -124.0000000000002,
-          "observationStart": "2025-04-14",
-          "observationEnd": "2025-04-17"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-04-12",
-          "observationEnd": "2025-04-18"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -807,32 +486,7 @@
       },
       "relativePct": 2.1771737386624554,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.42,
-          "end": 4.29,
-          "change": -0.1299999999999999,
-          "changeBp": -12.99999999999999,
-          "observationStart": "2025-04-21",
-          "observationEnd": "2025-04-25"
-        },
-        "VIXCLS": {
-          "start": 33.82,
-          "end": 24.84,
-          "change": -8.98,
-          "changeBp": -898.0,
-          "observationStart": "2025-04-21",
-          "observationEnd": "2025-04-25"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-04-19",
-          "observationEnd": "2025-04-25"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -863,32 +517,7 @@
       },
       "relativePct": 0.5526680195602576,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.23,
-          "end": 4.33,
-          "change": 0.09999999999999964,
-          "changeBp": 9.999999999999964,
-          "observationStart": "2025-04-28",
-          "observationEnd": "2025-05-02"
-        },
-        "VIXCLS": {
-          "start": 25.15,
-          "end": 22.68,
-          "change": -2.469999999999999,
-          "changeBp": -246.9999999999999,
-          "observationStart": "2025-04-28",
-          "observationEnd": "2025-05-02"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-04-26",
-          "observationEnd": "2025-05-02"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -919,32 +548,7 @@
       },
       "relativePct": 0.3807913891667733,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.36,
-          "end": 4.37,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-05-05",
-          "observationEnd": "2025-05-09"
-        },
-        "VIXCLS": {
-          "start": 23.64,
-          "end": 21.9,
-          "change": -1.740000000000002,
-          "changeBp": -174.0000000000002,
-          "observationStart": "2025-05-05",
-          "observationEnd": "2025-05-09"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-05-03",
-          "observationEnd": "2025-05-09"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -975,32 +579,7 @@
       },
       "relativePct": 0.6746829172527975,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.45,
-          "end": 4.43,
-          "change": -0.020000000000000462,
-          "changeBp": -2.000000000000046,
-          "observationStart": "2025-05-12",
-          "observationEnd": "2025-05-16"
-        },
-        "VIXCLS": {
-          "start": 18.39,
-          "end": 17.24,
-          "change": -1.1500000000000021,
-          "changeBp": -115.00000000000021,
-          "observationStart": "2025-05-12",
-          "observationEnd": "2025-05-16"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-05-10",
-          "observationEnd": "2025-05-16"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1031,32 +610,7 @@
       },
       "relativePct": 0.5563429402079231,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.46,
-          "end": 4.51,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-05-19",
-          "observationEnd": "2025-05-23"
-        },
-        "VIXCLS": {
-          "start": 18.14,
-          "end": 22.29,
-          "change": 4.149999999999999,
-          "changeBp": 414.9999999999999,
-          "observationStart": "2025-05-19",
-          "observationEnd": "2025-05-23"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-05-17",
-          "observationEnd": "2025-05-23"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1087,32 +641,7 @@
       },
       "relativePct": 0.006991470369473007,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.43,
-          "end": 4.41,
-          "change": -0.019999999999999574,
-          "changeBp": -1.9999999999999574,
-          "observationStart": "2025-05-27",
-          "observationEnd": "2025-05-30"
-        },
-        "VIXCLS": {
-          "start": 20.57,
-          "end": 18.57,
-          "change": -2.0,
-          "changeBp": -200.0,
-          "observationStart": "2025-05-26",
-          "observationEnd": "2025-05-30"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-05-24",
-          "observationEnd": "2025-05-30"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1143,32 +672,7 @@
       },
       "relativePct": 0.5153087830764864,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.46,
-          "end": 4.51,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-06-02",
-          "observationEnd": "2025-06-06"
-        },
-        "VIXCLS": {
-          "start": 18.36,
-          "end": 16.77,
-          "change": -1.5899999999999999,
-          "changeBp": -159.0,
-          "observationStart": "2025-06-02",
-          "observationEnd": "2025-06-06"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-05-31",
-          "observationEnd": "2025-06-06"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1199,32 +703,7 @@
       },
       "relativePct": -0.14629656362741655,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.49,
-          "end": 4.41,
-          "change": -0.08000000000000007,
-          "changeBp": -8.000000000000007,
-          "observationStart": "2025-06-09",
-          "observationEnd": "2025-06-13"
-        },
-        "VIXCLS": {
-          "start": 17.16,
-          "end": 20.82,
-          "change": 3.66,
-          "changeBp": 366.0,
-          "observationStart": "2025-06-09",
-          "observationEnd": "2025-06-13"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-06-07",
-          "observationEnd": "2025-06-13"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1255,32 +734,7 @@
       },
       "relativePct": 0.32752026452990735,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.46,
-          "end": 4.38,
-          "change": -0.08000000000000007,
-          "changeBp": -8.000000000000007,
-          "observationStart": "2025-06-16",
-          "observationEnd": "2025-06-20"
-        },
-        "VIXCLS": {
-          "start": 19.11,
-          "end": 20.62,
-          "change": 1.5100000000000016,
-          "changeBp": 151.00000000000017,
-          "observationStart": "2025-06-16",
-          "observationEnd": "2025-06-20"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-06-14",
-          "observationEnd": "2025-06-20"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1311,32 +765,7 @@
       },
       "relativePct": 0.7001356873381939,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.34,
-          "end": 4.29,
-          "change": -0.04999999999999982,
-          "changeBp": -4.999999999999982,
-          "observationStart": "2025-06-23",
-          "observationEnd": "2025-06-27"
-        },
-        "VIXCLS": {
-          "start": 19.83,
-          "end": 16.32,
-          "change": -3.509999999999998,
-          "changeBp": -350.9999999999998,
-          "observationStart": "2025-06-23",
-          "observationEnd": "2025-06-27"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-06-21",
-          "observationEnd": "2025-06-27"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1367,32 +796,7 @@
       },
       "relativePct": -0.39280195732922607,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.24,
-          "end": 4.35,
-          "change": 0.10999999999999943,
-          "changeBp": 10.999999999999943,
-          "observationStart": "2025-06-30",
-          "observationEnd": "2025-07-03"
-        },
-        "VIXCLS": {
-          "start": 16.73,
-          "end": 17.48,
-          "change": 0.75,
-          "changeBp": 75.0,
-          "observationStart": "2025-06-30",
-          "observationEnd": "2025-07-04"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-06-28",
-          "observationEnd": "2025-07-04"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1423,32 +827,7 @@
       },
       "relativePct": 0.08114067726492022,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.4,
-          "end": 4.43,
-          "change": 0.02999999999999936,
-          "changeBp": 2.999999999999936,
-          "observationStart": "2025-07-07",
-          "observationEnd": "2025-07-11"
-        },
-        "VIXCLS": {
-          "start": 17.79,
-          "end": 16.4,
-          "change": -1.3900000000000006,
-          "changeBp": -139.00000000000006,
-          "observationStart": "2025-07-07",
-          "observationEnd": "2025-07-11"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-07-05",
-          "observationEnd": "2025-07-11"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1479,32 +858,7 @@
       },
       "relativePct": 0.6030099116247623,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.43,
-          "end": 4.44,
-          "change": 0.010000000000000675,
-          "changeBp": 1.0000000000000675,
-          "observationStart": "2025-07-14",
-          "observationEnd": "2025-07-18"
-        },
-        "VIXCLS": {
-          "start": 17.2,
-          "end": 16.41,
-          "change": -0.7899999999999991,
-          "changeBp": -78.99999999999991,
-          "observationStart": "2025-07-14",
-          "observationEnd": "2025-07-18"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-07-12",
-          "observationEnd": "2025-07-18"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1535,32 +889,7 @@
       },
       "relativePct": -0.5633648567134661,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.38,
-          "end": 4.4,
-          "change": 0.020000000000000462,
-          "changeBp": 2.000000000000046,
-          "observationStart": "2025-07-21",
-          "observationEnd": "2025-07-25"
-        },
-        "VIXCLS": {
-          "start": 16.65,
-          "end": 14.93,
-          "change": -1.7199999999999989,
-          "changeBp": -171.9999999999999,
-          "observationStart": "2025-07-21",
-          "observationEnd": "2025-07-25"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-07-19",
-          "observationEnd": "2025-07-25"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1591,32 +920,7 @@
       },
       "relativePct": 0.03097610056916489,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.42,
-          "end": 4.23,
-          "change": -0.1899999999999995,
-          "changeBp": -18.99999999999995,
-          "observationStart": "2025-07-28",
-          "observationEnd": "2025-08-01"
-        },
-        "VIXCLS": {
-          "start": 15.03,
-          "end": 20.38,
-          "change": 5.35,
-          "changeBp": 535.0,
-          "observationStart": "2025-07-28",
-          "observationEnd": "2025-08-01"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-07-26",
-          "observationEnd": "2025-08-01"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1647,32 +951,7 @@
       },
       "relativePct": 0.9329326749936229,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.22,
-          "end": 4.27,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-08-04",
-          "observationEnd": "2025-08-08"
-        },
-        "VIXCLS": {
-          "start": 17.52,
-          "end": 15.15,
-          "change": -2.369999999999999,
-          "changeBp": -236.99999999999991,
-          "observationStart": "2025-08-04",
-          "observationEnd": "2025-08-08"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-08-02",
-          "observationEnd": "2025-08-08"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1703,32 +982,7 @@
       },
       "relativePct": -0.4769799086862554,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.27,
-          "end": 4.33,
-          "change": 0.0600000000000005,
-          "changeBp": 6.00000000000005,
-          "observationStart": "2025-08-11",
-          "observationEnd": "2025-08-15"
-        },
-        "VIXCLS": {
-          "start": 16.25,
-          "end": 15.09,
-          "change": -1.1600000000000001,
-          "changeBp": -116.00000000000001,
-          "observationStart": "2025-08-11",
-          "observationEnd": "2025-08-15"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-08-09",
-          "observationEnd": "2025-08-15"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1759,32 +1013,7 @@
       },
       "relativePct": -1.1565587268466735,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.34,
-          "end": 4.26,
-          "change": -0.08000000000000007,
-          "changeBp": -8.000000000000007,
-          "observationStart": "2025-08-18",
-          "observationEnd": "2025-08-22"
-        },
-        "VIXCLS": {
-          "start": 14.99,
-          "end": 14.22,
-          "change": -0.7699999999999996,
-          "changeBp": -76.99999999999996,
-          "observationStart": "2025-08-18",
-          "observationEnd": "2025-08-22"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-08-16",
-          "observationEnd": "2025-08-22"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1815,32 +1044,7 @@
       },
       "relativePct": -0.1568225576051163,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.28,
-          "end": 4.23,
-          "change": -0.04999999999999982,
-          "changeBp": -4.999999999999982,
-          "observationStart": "2025-08-25",
-          "observationEnd": "2025-08-29"
-        },
-        "VIXCLS": {
-          "start": 14.79,
-          "end": 15.36,
-          "change": 0.5700000000000003,
-          "changeBp": 57.00000000000003,
-          "observationStart": "2025-08-25",
-          "observationEnd": "2025-08-29"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-08-23",
-          "observationEnd": "2025-08-29"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1871,32 +1075,7 @@
       },
       "relativePct": 1.0999383025911715,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.28,
-          "end": 4.1,
-          "change": -0.1800000000000006,
-          "changeBp": -18.00000000000006,
-          "observationStart": "2025-09-02",
-          "observationEnd": "2025-09-05"
-        },
-        "VIXCLS": {
-          "start": 16.12,
-          "end": 15.18,
-          "change": -0.9400000000000013,
-          "changeBp": -94.00000000000013,
-          "observationStart": "2025-09-01",
-          "observationEnd": "2025-09-05"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-08-30",
-          "observationEnd": "2025-09-05"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1927,32 +1106,7 @@
       },
       "relativePct": 0.07815366632664111,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.05,
-          "end": 4.06,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-09-08",
-          "observationEnd": "2025-09-12"
-        },
-        "VIXCLS": {
-          "start": 15.11,
-          "end": 14.76,
-          "change": -0.34999999999999964,
-          "changeBp": -34.999999999999964,
-          "observationStart": "2025-09-08",
-          "observationEnd": "2025-09-12"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.33,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-09-06",
-          "observationEnd": "2025-09-12"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -1983,32 +1137,7 @@
       },
       "relativePct": 1.2385675534716694,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.05,
-          "end": 4.14,
-          "change": 0.08999999999999986,
-          "changeBp": 8.999999999999986,
-          "observationStart": "2025-09-15",
-          "observationEnd": "2025-09-19"
-        },
-        "VIXCLS": {
-          "start": 15.69,
-          "end": 15.45,
-          "change": -0.2400000000000002,
-          "changeBp": -24.00000000000002,
-          "observationStart": "2025-09-15",
-          "observationEnd": "2025-09-19"
-        },
-        "DFF": {
-          "start": 4.33,
-          "end": 4.08,
-          "change": -0.25,
-          "changeBp": -25.0,
-          "observationStart": "2025-09-13",
-          "observationEnd": "2025-09-19"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2039,32 +1168,7 @@
       },
       "relativePct": -0.2387308918965733,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.15,
-          "end": 4.2,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-09-22",
-          "observationEnd": "2025-09-26"
-        },
-        "VIXCLS": {
-          "start": 16.1,
-          "end": 15.29,
-          "change": -0.8100000000000023,
-          "changeBp": -81.00000000000023,
-          "observationStart": "2025-09-22",
-          "observationEnd": "2025-09-26"
-        },
-        "DFF": {
-          "start": 4.08,
-          "end": 4.09,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-09-20",
-          "observationEnd": "2025-09-26"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2095,32 +1199,7 @@
       },
       "relativePct": -0.05068486706122066,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.15,
-          "end": 4.13,
-          "change": -0.020000000000000462,
-          "changeBp": -2.000000000000046,
-          "observationStart": "2025-09-29",
-          "observationEnd": "2025-10-03"
-        },
-        "VIXCLS": {
-          "start": 16.12,
-          "end": 16.65,
-          "change": 0.5299999999999976,
-          "changeBp": 52.99999999999976,
-          "observationStart": "2025-09-29",
-          "observationEnd": "2025-10-03"
-        },
-        "DFF": {
-          "start": 4.09,
-          "end": 4.09,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-09-27",
-          "observationEnd": "2025-10-03"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2151,32 +1230,7 @@
       },
       "relativePct": -0.3450480115746042,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.18,
-          "end": 4.05,
-          "change": -0.1299999999999999,
-          "changeBp": -12.99999999999999,
-          "observationStart": "2025-10-06",
-          "observationEnd": "2025-10-10"
-        },
-        "VIXCLS": {
-          "start": 16.37,
-          "end": 21.66,
-          "change": 5.289999999999999,
-          "changeBp": 528.9999999999999,
-          "observationStart": "2025-10-06",
-          "observationEnd": "2025-10-10"
-        },
-        "DFF": {
-          "start": 4.09,
-          "end": 4.1,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-10-04",
-          "observationEnd": "2025-10-10"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2207,32 +1261,7 @@
       },
       "relativePct": 0.14260217775724615,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.03,
-          "end": 4.02,
-          "change": -0.010000000000000675,
-          "changeBp": -1.0000000000000675,
-          "observationStart": "2025-10-14",
-          "observationEnd": "2025-10-17"
-        },
-        "VIXCLS": {
-          "start": 19.03,
-          "end": 20.78,
-          "change": 1.75,
-          "changeBp": 175.0,
-          "observationStart": "2025-10-13",
-          "observationEnd": "2025-10-17"
-        },
-        "DFF": {
-          "start": 4.1,
-          "end": 4.11,
-          "change": 0.010000000000000675,
-          "changeBp": 1.0000000000000675,
-          "observationStart": "2025-10-11",
-          "observationEnd": "2025-10-17"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2263,32 +1292,7 @@
       },
       "relativePct": 0.15243658901796153,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.0,
-          "end": 4.02,
-          "change": 0.019999999999999574,
-          "changeBp": 1.9999999999999574,
-          "observationStart": "2025-10-20",
-          "observationEnd": "2025-10-24"
-        },
-        "VIXCLS": {
-          "start": 18.23,
-          "end": 16.37,
-          "change": -1.8599999999999994,
-          "changeBp": -185.99999999999994,
-          "observationStart": "2025-10-20",
-          "observationEnd": "2025-10-24"
-        },
-        "DFF": {
-          "start": 4.11,
-          "end": 4.11,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-10-18",
-          "observationEnd": "2025-10-24"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2319,32 +1323,7 @@
       },
       "relativePct": 0.826694960611027,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.01,
-          "end": 4.11,
-          "change": 0.10000000000000053,
-          "changeBp": 10.000000000000053,
-          "observationStart": "2025-10-27",
-          "observationEnd": "2025-10-31"
-        },
-        "VIXCLS": {
-          "start": 15.79,
-          "end": 17.44,
-          "change": 1.6500000000000021,
-          "changeBp": 165.00000000000023,
-          "observationStart": "2025-10-27",
-          "observationEnd": "2025-10-31"
-        },
-        "DFF": {
-          "start": 4.11,
-          "end": 3.86,
-          "change": -0.25000000000000044,
-          "changeBp": -25.000000000000043,
-          "observationStart": "2025-10-25",
-          "observationEnd": "2025-10-31"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2375,32 +1354,7 @@
       },
       "relativePct": -1.8506951559736997,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.13,
-          "end": 4.11,
-          "change": -0.019999999999999574,
-          "changeBp": -1.9999999999999574,
-          "observationStart": "2025-11-03",
-          "observationEnd": "2025-11-07"
-        },
-        "VIXCLS": {
-          "start": 17.17,
-          "end": 19.08,
-          "change": 1.9099999999999966,
-          "changeBp": 190.99999999999966,
-          "observationStart": "2025-11-03",
-          "observationEnd": "2025-11-07"
-        },
-        "DFF": {
-          "start": 3.86,
-          "end": 3.87,
-          "change": 0.010000000000000231,
-          "changeBp": 1.000000000000023,
-          "observationStart": "2025-11-01",
-          "observationEnd": "2025-11-07"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2431,32 +1385,7 @@
       },
       "relativePct": -0.8420797821248484,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.13,
-          "end": 4.14,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-11-10",
-          "observationEnd": "2025-11-14"
-        },
-        "VIXCLS": {
-          "start": 17.6,
-          "end": 19.83,
-          "change": 2.229999999999997,
-          "changeBp": 222.9999999999997,
-          "observationStart": "2025-11-10",
-          "observationEnd": "2025-11-14"
-        },
-        "DFF": {
-          "start": 3.87,
-          "end": 3.88,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2025-11-08",
-          "observationEnd": "2025-11-14"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2487,32 +1416,7 @@
       },
       "relativePct": -1.0836419181393375,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.13,
-          "end": 4.06,
-          "change": -0.07000000000000028,
-          "changeBp": -7.000000000000028,
-          "observationStart": "2025-11-17",
-          "observationEnd": "2025-11-21"
-        },
-        "VIXCLS": {
-          "start": 22.38,
-          "end": 23.43,
-          "change": 1.0500000000000007,
-          "changeBp": 105.00000000000007,
-          "observationStart": "2025-11-17",
-          "observationEnd": "2025-11-21"
-        },
-        "DFF": {
-          "start": 3.88,
-          "end": 3.88,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-11-15",
-          "observationEnd": "2025-11-21"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2543,32 +1447,7 @@
       },
       "relativePct": 0.9030440543032192,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.04,
-          "end": 4.02,
-          "change": -0.020000000000000462,
-          "changeBp": -2.000000000000046,
-          "observationStart": "2025-11-24",
-          "observationEnd": "2025-11-28"
-        },
-        "VIXCLS": {
-          "start": 20.52,
-          "end": 16.35,
-          "change": -4.169999999999998,
-          "changeBp": -416.99999999999983,
-          "observationStart": "2025-11-24",
-          "observationEnd": "2025-11-28"
-        },
-        "DFF": {
-          "start": 3.88,
-          "end": 3.89,
-          "change": 0.010000000000000231,
-          "changeBp": 1.000000000000023,
-          "observationStart": "2025-11-22",
-          "observationEnd": "2025-11-28"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2599,32 +1478,7 @@
       },
       "relativePct": 0.9175927395772385,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.09,
-          "end": 4.14,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2025-12-01",
-          "observationEnd": "2025-12-05"
-        },
-        "VIXCLS": {
-          "start": 17.24,
-          "end": 15.41,
-          "change": -1.8299999999999983,
-          "changeBp": -182.99999999999983,
-          "observationStart": "2025-12-01",
-          "observationEnd": "2025-12-05"
-        },
-        "DFF": {
-          "start": 3.89,
-          "end": 3.89,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-11-29",
-          "observationEnd": "2025-12-05"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2655,32 +1509,7 @@
       },
       "relativePct": -1.463261811215224,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.17,
-          "end": 4.19,
-          "change": 0.020000000000000462,
-          "changeBp": 2.000000000000046,
-          "observationStart": "2025-12-08",
-          "observationEnd": "2025-12-12"
-        },
-        "VIXCLS": {
-          "start": 16.66,
-          "end": 15.74,
-          "change": -0.9199999999999999,
-          "changeBp": -92.0,
-          "observationStart": "2025-12-08",
-          "observationEnd": "2025-12-12"
-        },
-        "DFF": {
-          "start": 3.89,
-          "end": 3.64,
-          "change": -0.25,
-          "changeBp": -25.0,
-          "observationStart": "2025-12-06",
-          "observationEnd": "2025-12-12"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2711,32 +1540,7 @@
       },
       "relativePct": 0.5375490729796075,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.18,
-          "end": 4.16,
-          "change": -0.019999999999999574,
-          "changeBp": -1.9999999999999574,
-          "observationStart": "2025-12-15",
-          "observationEnd": "2025-12-19"
-        },
-        "VIXCLS": {
-          "start": 16.5,
-          "end": 14.91,
-          "change": -1.5899999999999999,
-          "changeBp": -159.0,
-          "observationStart": "2025-12-15",
-          "observationEnd": "2025-12-19"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-12-13",
-          "observationEnd": "2025-12-19"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2767,32 +1571,7 @@
       },
       "relativePct": -0.5225809307400238,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.17,
-          "end": 4.14,
-          "change": -0.03000000000000025,
-          "changeBp": -3.000000000000025,
-          "observationStart": "2025-12-22",
-          "observationEnd": "2025-12-26"
-        },
-        "VIXCLS": {
-          "start": 14.08,
-          "end": 13.6,
-          "change": -0.4800000000000004,
-          "changeBp": -48.00000000000004,
-          "observationStart": "2025-12-22",
-          "observationEnd": "2025-12-26"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-12-20",
-          "observationEnd": "2025-12-26"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2823,32 +1602,7 @@
       },
       "relativePct": -0.49002551590119947,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.12,
-          "end": 4.19,
-          "change": 0.07000000000000028,
-          "changeBp": 7.000000000000028,
-          "observationStart": "2025-12-29",
-          "observationEnd": "2026-01-02"
-        },
-        "VIXCLS": {
-          "start": 14.2,
-          "end": 14.51,
-          "change": 0.3100000000000005,
-          "changeBp": 31.00000000000005,
-          "observationStart": "2025-12-29",
-          "observationEnd": "2026-01-02"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2025-12-27",
-          "observationEnd": "2026-01-02"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2879,32 +1633,7 @@
       },
       "relativePct": 0.08675189350282464,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.17,
-          "end": 4.18,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2026-01-05",
-          "observationEnd": "2026-01-09"
-        },
-        "VIXCLS": {
-          "start": 14.9,
-          "end": 14.49,
-          "change": -0.41000000000000014,
-          "changeBp": -41.000000000000014,
-          "observationStart": "2026-01-05",
-          "observationEnd": "2026-01-09"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-01-03",
-          "observationEnd": "2026-01-09"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2935,32 +1664,7 @@
       },
       "relativePct": -0.3106153502733284,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.19,
-          "end": 4.24,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2026-01-12",
-          "observationEnd": "2026-01-16"
-        },
-        "VIXCLS": {
-          "start": 15.12,
-          "end": 15.86,
-          "change": 0.7400000000000002,
-          "changeBp": 74.00000000000003,
-          "observationStart": "2026-01-12",
-          "observationEnd": "2026-01-16"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-01-10",
-          "observationEnd": "2026-01-16"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -2991,32 +1695,7 @@
       },
       "relativePct": 0.8608792096982192,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.3,
-          "end": 4.24,
-          "change": -0.05999999999999961,
-          "changeBp": -5.999999999999961,
-          "observationStart": "2026-01-20",
-          "observationEnd": "2026-01-23"
-        },
-        "VIXCLS": {
-          "start": 18.84,
-          "end": 16.09,
-          "change": -2.75,
-          "changeBp": -275.0,
-          "observationStart": "2026-01-19",
-          "observationEnd": "2026-01-23"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-01-17",
-          "observationEnd": "2026-01-23"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3047,32 +1726,7 @@
       },
       "relativePct": -0.4293563460416817,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.22,
-          "end": 4.26,
-          "change": 0.040000000000000036,
-          "changeBp": 4.0000000000000036,
-          "observationStart": "2026-01-26",
-          "observationEnd": "2026-01-30"
-        },
-        "VIXCLS": {
-          "start": 16.15,
-          "end": 17.44,
-          "change": 1.2900000000000027,
-          "changeBp": 129.00000000000028,
-          "observationStart": "2026-01-26",
-          "observationEnd": "2026-01-30"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-01-24",
-          "observationEnd": "2026-01-30"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3103,32 +1757,7 @@
       },
       "relativePct": -1.613560903190983,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.29,
-          "end": 4.22,
-          "change": -0.07000000000000028,
-          "changeBp": -7.000000000000028,
-          "observationStart": "2026-02-02",
-          "observationEnd": "2026-02-06"
-        },
-        "VIXCLS": {
-          "start": 16.34,
-          "end": 17.76,
-          "change": 1.4200000000000017,
-          "changeBp": 142.00000000000017,
-          "observationStart": "2026-02-02",
-          "observationEnd": "2026-02-06"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-01-31",
-          "observationEnd": "2026-02-06"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3159,32 +1788,7 @@
       },
       "relativePct": 0.18748739997100372,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.22,
-          "end": 4.04,
-          "change": -0.17999999999999972,
-          "changeBp": -17.99999999999997,
-          "observationStart": "2026-02-09",
-          "observationEnd": "2026-02-13"
-        },
-        "VIXCLS": {
-          "start": 17.36,
-          "end": 20.6,
-          "change": 3.240000000000002,
-          "changeBp": 324.0000000000002,
-          "observationStart": "2026-02-09",
-          "observationEnd": "2026-02-13"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-02-07",
-          "observationEnd": "2026-02-13"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3215,32 +1819,7 @@
       },
       "relativePct": 0.37799444441539864,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.05,
-          "end": 4.08,
-          "change": 0.03000000000000025,
-          "changeBp": 3.000000000000025,
-          "observationStart": "2026-02-17",
-          "observationEnd": "2026-02-20"
-        },
-        "VIXCLS": {
-          "start": 21.2,
-          "end": 19.09,
-          "change": -2.1099999999999994,
-          "changeBp": -210.99999999999994,
-          "observationStart": "2026-02-16",
-          "observationEnd": "2026-02-20"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-02-14",
-          "observationEnd": "2026-02-20"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3271,32 +1850,7 @@
       },
       "relativePct": 0.3804315262221231,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.03,
-          "end": 3.97,
-          "change": -0.06000000000000005,
-          "changeBp": -6.000000000000005,
-          "observationStart": "2026-02-23",
-          "observationEnd": "2026-02-27"
-        },
-        "VIXCLS": {
-          "start": 21.01,
-          "end": 19.86,
-          "change": -1.1500000000000021,
-          "changeBp": -115.00000000000021,
-          "observationStart": "2026-02-23",
-          "observationEnd": "2026-02-27"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-02-21",
-          "observationEnd": "2026-02-27"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3327,32 +1881,7 @@
       },
       "relativePct": 1.0798076878459477,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.05,
-          "end": 4.15,
-          "change": 0.10000000000000053,
-          "changeBp": 10.000000000000053,
-          "observationStart": "2026-03-02",
-          "observationEnd": "2026-03-06"
-        },
-        "VIXCLS": {
-          "start": 21.44,
-          "end": 29.49,
-          "change": 8.049999999999997,
-          "changeBp": 804.9999999999998,
-          "observationStart": "2026-03-02",
-          "observationEnd": "2026-03-06"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-02-28",
-          "observationEnd": "2026-03-06"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3383,32 +1912,7 @@
       },
       "relativePct": 0.5302706870984973,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.12,
-          "end": 4.28,
-          "change": 0.16000000000000014,
-          "changeBp": 16.000000000000014,
-          "observationStart": "2026-03-09",
-          "observationEnd": "2026-03-13"
-        },
-        "VIXCLS": {
-          "start": 25.5,
-          "end": 27.19,
-          "change": 1.6900000000000013,
-          "changeBp": 169.0000000000001,
-          "observationStart": "2026-03-09",
-          "observationEnd": "2026-03-13"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-03-07",
-          "observationEnd": "2026-03-13"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3439,32 +1943,7 @@
       },
       "relativePct": -0.032584081056885594,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.23,
-          "end": 4.39,
-          "change": 0.15999999999999925,
-          "changeBp": 15.999999999999925,
-          "observationStart": "2026-03-16",
-          "observationEnd": "2026-03-20"
-        },
-        "VIXCLS": {
-          "start": 23.51,
-          "end": 26.78,
-          "change": 3.2699999999999996,
-          "changeBp": 326.99999999999994,
-          "observationStart": "2026-03-16",
-          "observationEnd": "2026-03-20"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-03-14",
-          "observationEnd": "2026-03-20"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3495,32 +1974,7 @@
       },
       "relativePct": -1.0874339112096458,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.34,
-          "end": 4.44,
-          "change": 0.10000000000000053,
-          "changeBp": 10.000000000000053,
-          "observationStart": "2026-03-23",
-          "observationEnd": "2026-03-27"
-        },
-        "VIXCLS": {
-          "start": 26.15,
-          "end": 31.05,
-          "change": 4.900000000000002,
-          "changeBp": 490.0000000000002,
-          "observationStart": "2026-03-23",
-          "observationEnd": "2026-03-27"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-03-21",
-          "observationEnd": "2026-03-27"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3551,32 +2005,7 @@
       },
       "relativePct": 0.6461496060841467,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.35,
-          "end": 4.35,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-03-30",
-          "observationEnd": "2026-04-03"
-        },
-        "VIXCLS": {
-          "start": 30.61,
-          "end": 23.87,
-          "change": -6.739999999999998,
-          "changeBp": -673.9999999999999,
-          "observationStart": "2026-03-30",
-          "observationEnd": "2026-04-02"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-03-28",
-          "observationEnd": "2026-04-03"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3607,32 +2036,7 @@
       },
       "relativePct": 0.638915855754135,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.34,
-          "end": 4.31,
-          "change": -0.03000000000000025,
-          "changeBp": -3.000000000000025,
-          "observationStart": "2026-04-06",
-          "observationEnd": "2026-04-10"
-        },
-        "VIXCLS": {
-          "start": 24.17,
-          "end": 19.23,
-          "change": -4.940000000000001,
-          "changeBp": -494.0000000000001,
-          "observationStart": "2026-04-06",
-          "observationEnd": "2026-04-10"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-04-04",
-          "observationEnd": "2026-04-10"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3663,32 +2067,7 @@
       },
       "relativePct": 1.6279667579093227,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.3,
-          "end": 4.26,
-          "change": -0.040000000000000036,
-          "changeBp": -4.0000000000000036,
-          "observationStart": "2026-04-13",
-          "observationEnd": "2026-04-17"
-        },
-        "VIXCLS": {
-          "start": 19.12,
-          "end": 17.48,
-          "change": -1.6400000000000006,
-          "changeBp": -164.00000000000006,
-          "observationStart": "2026-04-13",
-          "observationEnd": "2026-04-17"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-04-11",
-          "observationEnd": "2026-04-17"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3719,32 +2098,7 @@
       },
       "relativePct": 1.7162820493855868,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.26,
-          "end": 4.31,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "observationStart": "2026-04-20",
-          "observationEnd": "2026-04-24"
-        },
-        "VIXCLS": {
-          "start": 18.87,
-          "end": 18.71,
-          "change": -0.16000000000000014,
-          "changeBp": -16.000000000000014,
-          "observationStart": "2026-04-20",
-          "observationEnd": "2026-04-24"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-04-18",
-          "observationEnd": "2026-04-24"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3775,32 +2129,7 @@
       },
       "relativePct": 0.571601871366364,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.35,
-          "end": 4.39,
-          "change": 0.040000000000000036,
-          "changeBp": 4.0000000000000036,
-          "observationStart": "2026-04-27",
-          "observationEnd": "2026-05-01"
-        },
-        "VIXCLS": {
-          "start": 18.02,
-          "end": 16.99,
-          "change": -1.0300000000000011,
-          "changeBp": -103.00000000000011,
-          "observationStart": "2026-04-27",
-          "observationEnd": "2026-05-01"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.64,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-04-25",
-          "observationEnd": "2026-05-01"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3831,32 +2160,7 @@
       },
       "relativePct": 2.9832450639169057,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.45,
-          "end": 4.38,
-          "change": -0.07000000000000028,
-          "changeBp": -7.000000000000028,
-          "observationStart": "2026-05-04",
-          "observationEnd": "2026-05-08"
-        },
-        "VIXCLS": {
-          "start": 18.29,
-          "end": 17.19,
-          "change": -1.0999999999999979,
-          "changeBp": -109.99999999999979,
-          "observationStart": "2026-05-04",
-          "observationEnd": "2026-05-08"
-        },
-        "DFF": {
-          "start": 3.64,
-          "end": 3.63,
-          "change": -0.010000000000000231,
-          "changeBp": -1.000000000000023,
-          "observationStart": "2026-05-02",
-          "observationEnd": "2026-05-08"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3887,32 +2191,7 @@
       },
       "relativePct": -0.5706457783293404,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.42,
-          "end": 4.59,
-          "change": 0.16999999999999993,
-          "changeBp": 16.999999999999993,
-          "observationStart": "2026-05-11",
-          "observationEnd": "2026-05-15"
-        },
-        "VIXCLS": {
-          "start": 18.38,
-          "end": 18.43,
-          "change": 0.05000000000000071,
-          "changeBp": 5.000000000000071,
-          "observationStart": "2026-05-11",
-          "observationEnd": "2026-05-15"
-        },
-        "DFF": {
-          "start": 3.63,
-          "end": 3.63,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-05-09",
-          "observationEnd": "2026-05-15"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3943,32 +2222,7 @@
       },
       "relativePct": 0.05792587455541176,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.61,
-          "end": 4.56,
-          "change": -0.05000000000000071,
-          "changeBp": -5.000000000000071,
-          "observationStart": "2026-05-18",
-          "observationEnd": "2026-05-22"
-        },
-        "VIXCLS": {
-          "start": 17.82,
-          "end": 16.7,
-          "change": -1.120000000000001,
-          "changeBp": -112.0000000000001,
-          "observationStart": "2026-05-18",
-          "observationEnd": "2026-05-22"
-        },
-        "DFF": {
-          "start": 3.63,
-          "end": 3.62,
-          "change": -0.009999999999999787,
-          "changeBp": -0.9999999999999787,
-          "observationStart": "2026-05-16",
-          "observationEnd": "2026-05-22"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -3999,32 +2253,7 @@
       },
       "relativePct": 0.8385404935651625,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.5,
-          "end": 4.45,
-          "change": -0.04999999999999982,
-          "changeBp": -4.999999999999982,
-          "observationStart": "2026-05-26",
-          "observationEnd": "2026-05-29"
-        },
-        "VIXCLS": {
-          "start": 16.59,
-          "end": 15.32,
-          "change": -1.2699999999999996,
-          "changeBp": -126.99999999999996,
-          "observationStart": "2026-05-25",
-          "observationEnd": "2026-05-29"
-        },
-        "DFF": {
-          "start": 3.62,
-          "end": 3.62,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-05-23",
-          "observationEnd": "2026-05-29"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -4055,32 +2284,7 @@
       },
       "relativePct": -1.9811613911004438,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.47,
-          "end": 4.55,
-          "change": 0.08000000000000007,
-          "changeBp": 8.000000000000007,
-          "observationStart": "2026-06-01",
-          "observationEnd": "2026-06-05"
-        },
-        "VIXCLS": {
-          "start": 16.05,
-          "end": 21.51,
-          "change": 5.460000000000001,
-          "changeBp": 546.0000000000001,
-          "observationStart": "2026-06-01",
-          "observationEnd": "2026-06-05"
-        },
-        "DFF": {
-          "start": 3.62,
-          "end": 3.62,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-05-30",
-          "observationEnd": "2026-06-05"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -4111,32 +2315,7 @@
       },
       "relativePct": 0.7083577475271803,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.56,
-          "end": 4.48,
-          "change": -0.07999999999999918,
-          "changeBp": -7.999999999999918,
-          "observationStart": "2026-06-08",
-          "observationEnd": "2026-06-12"
-        },
-        "VIXCLS": {
-          "start": 18.92,
-          "end": 17.68,
-          "change": -1.240000000000002,
-          "changeBp": -124.0000000000002,
-          "observationStart": "2026-06-08",
-          "observationEnd": "2026-06-12"
-        },
-        "DFF": {
-          "start": 3.62,
-          "end": 3.62,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-06-06",
-          "observationEnd": "2026-06-12"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -4167,32 +2346,7 @@
       },
       "relativePct": 1.0210739985928394,
       "leader": "QQQ",
-      "macro": {
-        "DGS10": {
-          "start": 4.47,
-          "end": 4.46,
-          "change": -0.009999999999999787,
-          "changeBp": -0.9999999999999787,
-          "observationStart": "2026-06-15",
-          "observationEnd": "2026-06-18"
-        },
-        "VIXCLS": {
-          "start": 16.2,
-          "end": 16.78,
-          "change": 0.5800000000000018,
-          "changeBp": 58.000000000000185,
-          "observationStart": "2026-06-15",
-          "observationEnd": "2026-06-19"
-        },
-        "DFF": {
-          "start": 3.62,
-          "end": 3.63,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
-          "observationStart": "2026-06-13",
-          "observationEnd": "2026-06-19"
-        }
-      },
+      "macro": {},
       "events": []
     },
     {
@@ -4202,53 +2356,28 @@
       "assets": {
         "QQQ": {
           "tradingStart": "2026-06-22",
-          "tradingEnd": "2026-06-24",
+          "tradingEnd": "2026-06-26",
           "open": 742.02,
           "high": 745.45,
-          "low": 704.45,
-          "close": 710.62,
-          "volume": 149353163.0,
-          "pct": -4.231691868143713
+          "low": 702.81,
+          "close": 706.52,
+          "volume": 246579002.0,
+          "pct": -4.78423762162745
         },
         "SPY": {
           "tradingStart": "2026-06-22",
-          "tradingEnd": "2026-06-24",
+          "tradingEnd": "2026-06-26",
           "open": 747.7,
           "high": 750.18,
-          "low": 730.84,
-          "close": 733.24,
-          "volume": 170914352.0,
-          "pct": -1.933930720877362
+          "low": 716.58,
+          "close": 728.99,
+          "volume": 296076355.0,
+          "pct": -2.5023405109000985
         }
       },
-      "relativePct": -2.297761147266351,
+      "relativePct": -2.2818971107273516,
       "leader": "SPY",
-      "macro": {
-        "DGS10": {
-          "start": 4.51,
-          "end": 4.5,
-          "change": -0.009999999999999787,
-          "changeBp": -0.9999999999999787,
-          "observationStart": "2026-06-22",
-          "observationEnd": "2026-06-23"
-        },
-        "VIXCLS": {
-          "start": 17.28,
-          "end": 19.49,
-          "change": 2.2099999999999973,
-          "changeBp": 220.99999999999972,
-          "observationStart": "2026-06-22",
-          "observationEnd": "2026-06-23"
-        },
-        "DFF": {
-          "start": 3.63,
-          "end": 3.63,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "observationStart": "2026-06-20",
-          "observationEnd": "2026-06-23"
-        }
-      },
+      "macro": {},
       "events": []
     }
   ]
