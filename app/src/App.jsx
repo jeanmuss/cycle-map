@@ -31,12 +31,17 @@ const DEFAULT_MACRO_STATE = {
   category: "all",
 };
 
+const DEFAULT_CHIP_CHAIN_STATE = {
+  range: "1d",
+};
+
 const VALID_CRYPTO_VIEWS = new Set(["rotation", "cycle"]);
 const VALID_CRYPTO_METRICS = new Set(["absolute", "relative"]);
 const VALID_CRYPTO_RANGES = new Set(["12", "24", "48", "all"]);
 const VALID_ASSETS = new Set(ASSETS.map((asset) => asset.symbol));
 const VALID_EQUITY_RANGES = new Set(["26", "52", "all"]);
 const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity"]);
+const VALID_CHIP_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 
 const EQUITY_MARKET_TEXT = {
   zh: {
@@ -226,6 +231,101 @@ function marketClockCopy(t) {
   return t.htmlLang === "zh-CN" ? MARKET_CLOCK_TEXT.zh : MARKET_CLOCK_TEXT.en;
 }
 
+const CHIP_CHAIN_TEXT = {
+  zh: {
+    docTitle: "AI 芯片产业链热点",
+    docDescription: "按产业链细分类目追踪 AI 芯片相关美股和韩股的板块轮动热点",
+    eyebrow: "AI CHIP CHAIN",
+    titleAccent: "AI 芯片",
+    titleRest: "产业链热点",
+    subtitle: "用细分类目、股票代码和相对强弱观察存储、光模块、设备、服务器和终端应用的轮动节奏",
+    cache: "样例缓存",
+    cacheTooltip: "当前页面读取的是本地样例缓存，用于验证信息架构和交互。正式版应由后端/CI 脚本读取经审查的行情源并生成静态 JSON；前端不直连行情源。",
+    success: "样例产业链数据已加载",
+    failure: (count) => `样例源提示：${count}`,
+    loading: "正在读取产业链样例缓存…",
+    unavailable: "AI 芯片产业链数据未能加载",
+    controls: "产业链热点控制",
+    range: "观察周期",
+    latest: "当前热点",
+    boardKicker: "CHAIN ROTATION BOARD",
+    boardTitle: "产业链热力板",
+    boardMethod: "类目涨幅为可见样例股票等权平均；颜色越深代表所选周期内越强。",
+    detailEmptyTitle: "查看股票详情",
+    detailEmptyBody: "点击任意股票代码，查看产业链角色、样例价格、各周期涨跌、相对强弱和计划信源。",
+    selected: "已选股票",
+    category: "所属模块",
+    role: "产业链角色",
+    price: "样例价格",
+    returns: "涨跌幅",
+    relative: "相对强弱",
+    volume: "成交量放大",
+    week52: "52 周位置",
+    marketCap: "市值",
+    source: "来源",
+    sourceNote: "当前版本先用样例缓存展示页面结构，迷你 K 线也是按周期生成的样例走势；正式接入前需要完成数据授权、缓存频率、再展示条款、真实窗口价格序列和缺失数据策略确认。",
+    sampleSource: "样例缓存",
+    plannedSource: "计划信源",
+    noRows: "当前筛选下暂无股票",
+    excess: "超额",
+    vsSoxx: "SOXX",
+    vsQqq: "QQQ",
+    stage: {
+      Upstream: "上游",
+      Middle: "中游",
+      Downstream: "下游",
+    },
+  },
+  en: {
+    docTitle: "AI Chip Chain Hotspots",
+    docDescription: "Track AI chip supply-chain rotation across U.S. and Korean equities by category.",
+    eyebrow: "AI CHIP CHAIN",
+    titleAccent: "AI Chip",
+    titleRest: "Chain Hotspots",
+    subtitle: "Track rotation across memory, optics, equipment, servers, infrastructure, and applications using category panels and tickers.",
+    cache: "Sample cache",
+    cacheTooltip: "This page reads a local sample cache to validate information architecture and interaction. Production should generate static JSON from backend/CI scripts using reviewed market-data feeds; the frontend must not call providers directly.",
+    success: "Sample chip-chain data loaded",
+    failure: (count) => `Sample source notes: ${count}`,
+    loading: "Reading chip-chain sample cache...",
+    unavailable: "AI chip-chain data could not be loaded",
+    controls: "Chip-chain hotspot controls",
+    range: "Window",
+    latest: "Current hotspots",
+    boardKicker: "CHAIN ROTATION BOARD",
+    boardTitle: "Supply-chain heat board",
+    boardMethod: "Category returns are equal-weighted from visible sample tickers. Deeper color means stronger performance in the selected window.",
+    detailEmptyTitle: "Inspect a ticker",
+    detailEmptyBody: "Select any ticker to see its role, sample price, multi-window returns, relative strength, and planned source.",
+    selected: "Selected ticker",
+    category: "Module",
+    role: "Supply-chain role",
+    price: "Sample price",
+    returns: "Returns",
+    relative: "Relative strength",
+    volume: "Volume ratio",
+    week52: "52-week position",
+    marketCap: "Market cap",
+    source: "Source",
+    sourceNote: "This version uses a sample cache for page structure, and the mini price paths are generated sample paths by window. Before live data, confirm data licensing, cache cadence, redistribution rights, true window price series, and missing-data handling.",
+    sampleSource: "Sample cache",
+    plannedSource: "Planned source",
+    noRows: "No tickers for this filter",
+    excess: "Excess",
+    vsSoxx: "SOXX",
+    vsQqq: "QQQ",
+    stage: {
+      Upstream: "Upstream",
+      Middle: "Middle",
+      Downstream: "Downstream",
+    },
+  },
+};
+
+function chipChainCopy(t) {
+  return t.htmlLang === "zh-CN" ? CHIP_CHAIN_TEXT.zh : CHIP_CHAIN_TEXT.en;
+}
+
 function hashParams() {
   if (typeof window === "undefined") return new URLSearchParams();
   const rawHash = window.location.hash.replace(/^#/, "");
@@ -260,6 +360,14 @@ function readMacroStateFromHash() {
   const category = params.get("category");
   return {
     category: VALID_MACRO_CATEGORIES.has(category) ? category : DEFAULT_MACRO_STATE.category,
+  };
+}
+
+function readChipChainStateFromHash() {
+  const params = hashParams();
+  const range = params.get("range");
+  return {
+    range: VALID_CHIP_CHAIN_RANGES.has(range) ? range : DEFAULT_CHIP_CHAIN_STATE.range,
   };
 }
 
@@ -431,6 +539,7 @@ const TRANSLATIONS = {
       equity: "美股宏观",
       macro: "\u4e8b\u4ef6\u4e0e\u6d41\u52a8\u6027",
       marketClock: "开市轮动",
+      chipChain: "芯片链热点",
     },
     equity: {
       docTitle: "美股宏观轮动图",
@@ -720,6 +829,7 @@ const TRANSLATIONS = {
       equity: "Equity macro",
       macro: "Events & liquidity",
       marketClock: "Market clock",
+      chipChain: "Chip chain",
     },
     equity: {
       docTitle: "Equity Macro Rotation Map",
@@ -969,6 +1079,7 @@ function PageNav({ page, t }) {
       <a className={page === "equity" ? "is-active" : ""} aria-current={page === "equity" ? "page" : undefined} href={appHashUrl("equity-macro")}>{t.nav.equity}</a>
       <a className={page === "macro" ? "is-active" : ""} aria-current={page === "macro" ? "page" : undefined} href={appHashUrl("macro-calendar")}>{t.nav.macro}</a>
       <a className={page === "marketClock" ? "is-active" : ""} aria-current={page === "marketClock" ? "page" : undefined} href={appHashUrl("market-clock")}>{t.nav.marketClock}</a>
+      <a className={page === "chipChain" ? "is-active" : ""} aria-current={page === "chipChain" ? "page" : undefined} href={appHashUrl("chip-chain")}>{t.nav.chipChain}</a>
     </nav>
   );
 }
@@ -3510,13 +3621,432 @@ function CryptoCyclePage({ language, setLanguage, t }) {
   );
 }
 
+function localizedField(item, field, language) {
+  return item?.[`${field}${language === "en" ? "En" : "Zh"}`] || item?.[field] || "";
+}
+
+function chipHeatClass(value) {
+  if (!Number.isFinite(value)) return "chip-heat-na";
+  if (value >= 8) return "chip-heat-up-4";
+  if (value >= 4) return "chip-heat-up-3";
+  if (value >= 1.5) return "chip-heat-up-2";
+  if (value >= 0) return "chip-heat-up-1";
+  if (value > -1.5) return "chip-heat-down-1";
+  if (value > -4) return "chip-heat-down-2";
+  if (value > -8) return "chip-heat-down-3";
+  return "chip-heat-down-4";
+}
+
+function chipStageLabel(stage, copy) {
+  return copy.stage?.[stage] || stage || "";
+}
+
+function chipSourceLabel(asset, copy) {
+  if (!asset) return "N/A";
+  return asset.sourceKind === "sample" ? copy.sampleSource : asset.sourceKind || "N/A";
+}
+
+function plannedSourceLabel(language) {
+  return language === "en" ? "Reviewed backend quote cache" : "经审查的后端行情缓存";
+}
+
+function formatMarketCap(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "N/A";
+  if (n >= 1000) return `${formatNumber(n / 1000, 2)}T USD`;
+  return `${formatNumber(n, n >= 10 ? 0 : 1)}B USD`;
+}
+
+function formatWeek52Position(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "N/A";
+  return `${Math.round(n * 100)}%`;
+}
+
+function chipSparkValues(asset, range) {
+  const returnPct = Number(asset?.returns?.[range]);
+  const profiles = {
+    "1d": { steps: 14, frequency: 2.2, pulse: 5.4, phase: 0.2, amplitude: 0.9, bend: -0.8 },
+    "5d": { steps: 18, frequency: 3.6, pulse: 4.2, phase: 1.1, amplitude: 1.35, bend: 0.65 },
+    "1m": { steps: 24, frequency: 5.1, pulse: 6.5, phase: 2.4, amplitude: 1.9, bend: 1.25 },
+    "3m": { steps: 30, frequency: 4.4, pulse: 8.1, phase: 3.2, amplitude: 2.35, bend: -1.45 },
+  };
+  const profile = profiles[range] || profiles["1d"];
+  const steps = profile.steps;
+  const start = 100;
+  const end = Number.isFinite(returnPct) ? 100 * (1 + returnPct / 100) : 100;
+  const seed = String(asset?.symbol || "")
+    .split("")
+    .reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 3), 17);
+  return Array.from({ length: steps }, (_, index) => {
+    if (index === 0) return start;
+    if (index === steps - 1) return end;
+    const t = index / (steps - 1);
+    const drift = start + (end - start) * t;
+    const magnitude = Math.min(6, Math.abs(returnPct || 0) * 0.12);
+    const wave = Math.sin((seed % 5 + profile.frequency) * Math.PI * t + profile.phase) * (profile.amplitude + magnitude);
+    const pulse = Math.cos((seed % 7 + profile.pulse) * Math.PI * t + profile.phase / 2) * 0.7;
+    const bend = Math.sin(Math.PI * t) * profile.bend * (returnPct >= 0 ? 1 : -1);
+    return drift + wave + pulse + bend;
+  });
+}
+
+function chipSparkGeometry(values, width = 94, height = 28) {
+  const numeric = values.filter(Number.isFinite);
+  const min = Math.min(...numeric);
+  const max = Math.max(...numeric);
+  const spread = Math.max(1, max - min);
+  const points = values.map((value, index) => {
+    const x = values.length > 1 ? (index / (values.length - 1)) * width : 0;
+    const y = height - ((value - min) / spread) * (height - 6) - 3;
+    return { x, y };
+  });
+  return {
+    points: points.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" "),
+    end: points[points.length - 1] || { x: 0, y: height / 2 },
+    midY: height / 2,
+  };
+}
+
+function ChipSparkline({ asset, range }) {
+  const returnPct = Number(asset?.returns?.[range]);
+  const values = chipSparkValues(asset, range);
+  const geometry = chipSparkGeometry(values);
+  return (
+    <span className={`chip-sparkline ${returnPct >= 0 ? "positive" : "negative"}`} aria-hidden="true">
+      <svg viewBox="0 0 94 28" focusable="false">
+        <polyline className="chip-sparkline-mid" points={`0,${geometry.midY} 94,${geometry.midY}`} />
+        <polyline className="chip-sparkline-line" points={geometry.points} />
+        <circle className="chip-sparkline-dot" cx={geometry.end.x} cy={geometry.end.y} r="2.2" />
+      </svg>
+    </span>
+  );
+}
+
+function chipCategoryRows(dataset, range) {
+  const assetMap = dataset?.assets || {};
+  return (dataset?.categories || []).map((category) => {
+    const assets = (category.tickers || [])
+      .map((symbol) => assetMap[symbol])
+      .filter(Boolean);
+    const values = assets
+      .map((asset) => Number(asset.returns?.[range]))
+      .filter(Number.isFinite);
+    const average = values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+    const leader = [...assets]
+      .filter((asset) => Number.isFinite(Number(asset.returns?.[range])))
+      .sort((a, b) => Number(b.returns?.[range]) - Number(a.returns?.[range]))[0] || null;
+    return { category, assets, average, leader };
+  }).filter((row) => row.assets.length);
+}
+
+function chipTopMovers(rows, range) {
+  const seen = new Set();
+  const assets = [];
+  rows.forEach((row) => {
+    row.assets.forEach((asset) => {
+      if (!seen.has(asset.symbol)) {
+        seen.add(asset.symbol);
+        assets.push(asset);
+      }
+    });
+  });
+  return assets
+    .filter((asset) => Number.isFinite(Number(asset.returns?.[range])))
+    .sort((a, b) => Number(b.returns?.[range]) - Number(a.returns?.[range]));
+}
+
+function ChipHotspotSummary({ movers, range, selectedSymbol, onSelect, copy }) {
+  return (
+    <section className="chip-hotspot-summary" aria-label={copy.latest}>
+      {movers.slice(0, 4).map((asset) => {
+        const value = Number(asset.returns?.[range]);
+        return (
+          <button
+            type="button"
+            className={`chip-hotspot-card ${selectedSymbol === asset.symbol ? "is-selected" : ""}`}
+            key={asset.symbol}
+            onClick={() => onSelect(asset.symbol)}
+          >
+            <strong>{asset.symbol}</strong>
+            <span>{asset.name}</span>
+            <em className={value >= 0 ? "positive" : "negative"}>{formatPct(value, 1)}</em>
+          </button>
+        );
+      })}
+    </section>
+  );
+}
+
+function ChipTickerButton({ asset, range, selected, onSelect, copy }) {
+  const value = Number(asset.returns?.[range]);
+  return (
+    <button
+      type="button"
+      className={`chip-ticker-button ${chipHeatClass(value)} ${selected ? "is-selected" : ""}`}
+      onClick={() => onSelect(asset.symbol)}
+      aria-pressed={selected}
+      title={`${asset.symbol} ${asset.name}`}
+    >
+      <span>
+        <strong>{asset.symbol}</strong>
+        <small>{asset.name}</small>
+      </span>
+      <ChipSparkline asset={asset} range={range} />
+      <span>
+        <em>{formatPrice(asset.price, asset.quote)}</em>
+        <b>{formatPct(value, 1)}</b>
+      </span>
+    </button>
+  );
+}
+
+function ChipCategoryCard({ row, range, selectedSymbol, onSelect, language, copy }) {
+  const { category, assets, average, leader } = row;
+  return (
+    <article className={`chip-category-card ${chipHeatClass(average)}`}>
+      <header>
+        <div>
+          <small>{chipStageLabel(category.stage, copy)}</small>
+          <h3>{localizedField(category, "title", language)}</h3>
+          <p>{localizedField(category, "subtitle", language)}</p>
+        </div>
+        <div className="chip-category-score">
+          <span>{formatPct(average, 1)}</span>
+          <small>{leader?.symbol || "N/A"}</small>
+        </div>
+      </header>
+      <div className="chip-structure-tags" aria-label={localizedField(category, "title", language)}>
+        {(language === "en" ? category.structureEn : category.structureZh)?.map((tag) => (
+          <span key={tag}>{tag}</span>
+        ))}
+      </div>
+      <div className="chip-ticker-grid">
+        {assets.map((asset) => (
+          <ChipTickerButton
+            asset={asset}
+            range={range}
+            selected={selectedSymbol === asset.symbol}
+            onSelect={onSelect}
+            copy={copy}
+            key={`${category.id}-${asset.symbol}`}
+          />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function ChipChainBoard({ rows, range, selectedSymbol, onSelect, language, copy }) {
+  if (!rows.length) {
+    return <div className="chip-empty-board">{copy.noRows}</div>;
+  }
+  return (
+    <div className="chip-chain-board">
+      {rows.map((row) => (
+        <ChipCategoryCard
+          row={row}
+          range={range}
+          selectedSymbol={selectedSymbol}
+          onSelect={onSelect}
+          language={language}
+          copy={copy}
+          key={row.category.id}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ChipChainDetail({ asset, category, copy, language }) {
+  if (!asset) {
+    return (
+      <aside className="detail-band detail-empty chip-detail-empty" aria-live="polite">
+        <strong>{copy.detailEmptyTitle}</strong>
+        <span>{copy.detailEmptyBody}</span>
+      </aside>
+    );
+  }
+  const role = language === "en" ? asset.roleEn : asset.roleZh;
+  return (
+    <aside className="detail-band chip-detail-band" aria-live="polite">
+      <div>
+        <small>{copy.selected}</small>
+        <strong>{asset.symbol}</strong>
+      </div>
+      <div>
+        <small>{copy.category}</small>
+        <strong>{localizedField(category, "title", language)}</strong>
+      </div>
+      <div>
+        <small>{copy.price}</small>
+        <strong>{formatPrice(asset.price, asset.quote)}</strong>
+      </div>
+      <div>
+        <small>{copy.returns}</small>
+        <strong>
+          1D {formatPct(asset.returns?.["1d"], 1)} / 5D {formatPct(asset.returns?.["5d"], 1)} / 1M {formatPct(asset.returns?.["1m"], 1)}
+        </strong>
+      </div>
+      <div>
+        <small>{copy.relative}</small>
+        <strong>{copy.vsSoxx} {formatPct(asset.relative?.soxx, 1)} / {copy.vsQqq} {formatPct(asset.relative?.qqq, 1)}</strong>
+      </div>
+      <div>
+        <small>{copy.volume}</small>
+        <strong>{formatNumber(asset.volumeRatio, 2)}x</strong>
+      </div>
+      <div>
+        <small>{copy.week52}</small>
+        <strong>{formatWeek52Position(asset.week52Position)}</strong>
+      </div>
+      <div>
+        <small>{copy.marketCap}</small>
+        <strong>{formatMarketCap(asset.marketCapUsdB)}</strong>
+      </div>
+      <div>
+        <small>{copy.source}</small>
+        <strong>{chipSourceLabel(asset, copy)} · {sourceTimeLabel(asset.asOf, language)}</strong>
+      </div>
+      <div>
+        <small>{copy.plannedSource}</small>
+        <strong>{plannedSourceLabel(language)}</strong>
+      </div>
+      <div className="ranking-line">
+        <small>{copy.role}</small>
+        <strong>{role}</strong>
+      </div>
+    </aside>
+  );
+}
+
+function ChipChainPage({ language, setLanguage, t }) {
+  const copy = chipChainCopy(t);
+  const [dataset, setDataset] = useState(null);
+  const [error, setError] = useState(null);
+  const [chipState, setChipState] = useState(readChipChainStateFromHash);
+  const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const { range } = chipState;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(appUrl("data/chip-chain-hotspots.json"), { signal: controller.signal, cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          const loadError = new Error("data-file");
+          loadError.status = response.status;
+          throw loadError;
+        }
+        return response.json();
+      })
+      .then((loadedDataset) => {
+        setDataset(loadedDataset);
+        setError(null);
+      })
+      .catch((loadError) => {
+        if (loadError.name !== "AbortError") setError({ status: loadError.status, message: loadError.message });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const syncFromHash = () => {
+      if (currentPage() !== "chipChain") return;
+      setChipState(readChipChainStateFromHash());
+    };
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
+  useEffect(() => {
+    replaceHashState("chip-chain", chipState);
+  }, [chipState]);
+
+  const rows = useMemo(() => chipCategoryRows(dataset, range), [dataset, range]);
+  const movers = useMemo(() => chipTopMovers(rows, range), [rows, range]);
+  const categoryById = useMemo(() => new Map((dataset?.categories || []).map((category) => [category.id, category])), [dataset]);
+  const assetMap = dataset?.assets || {};
+  const selectedAsset = selectedSymbol ? assetMap[selectedSymbol] : null;
+  const selectedCategory = selectedAsset ? categoryById.get(selectedAsset.primaryCategory) : null;
+  const rangeOptions = (dataset?.ranges || []).map((item) => ({ value: item.value, label: item.label }));
+
+  useEffect(() => {
+    if (!dataset) return;
+    if (!movers.length) {
+      setSelectedSymbol(null);
+      return;
+    }
+    if (!selectedSymbol || !movers.some((asset) => asset.symbol === selectedSymbol)) {
+      setSelectedSymbol(movers[0].symbol);
+    }
+  }, [dataset, movers, selectedSymbol]);
+
+  if (error) {
+    return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
+  }
+  if (!dataset) {
+    return <main className="status-page"><p>{copy.loading}</p></main>;
+  }
+
+  return (
+    <main className="app-page chip-chain-page">
+      <header className="app-header">
+        <div className="title-block">
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h1><span>{copy.titleAccent}</span> {copy.titleRest}</h1>
+          <p>{copy.subtitle}</p>
+          <PageNav page="chipChain" t={t} />
+        </div>
+        <div className="freshness-block">
+          <LanguageToggle language={language} onChange={setLanguage} t={t} />
+          <CacheStatus label={copy.cache} tooltip={copy.cacheTooltip} />
+          <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
+          <small>{dataset.failures?.length ? copy.failure(dataset.failures.length) : copy.success}</small>
+        </div>
+      </header>
+
+      <ChipHotspotSummary movers={movers} range={range} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} copy={copy} />
+
+      <section className="control-bar chip-chain-controls" aria-label={copy.controls}>
+        <div className="control-primary">
+          <Segmented label={copy.range} options={rangeOptions} value={range} onChange={(next) => setChipState((current) => ({ ...current, range: next }))} />
+        </div>
+      </section>
+
+      <section className="visualization chip-chain-section" aria-label={copy.boardTitle}>
+        <div className="visualization-heading">
+          <div>
+            <p>{copy.boardKicker}</p>
+            <h2>{copy.boardTitle}</h2>
+          </div>
+          <p className="method-note">{copy.boardMethod}</p>
+        </div>
+        <ChipChainBoard rows={rows} range={range} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} language={language} copy={copy} />
+      </section>
+
+      <ChipChainDetail asset={selectedAsset} category={selectedCategory} copy={copy} language={language} />
+
+      <footer className="source-footer">
+        <div>
+          <strong>{t.footer.title}</strong>
+          <span>{plannedSourceLabel(language)}</span>
+          <span>{copy.sampleSource}</span>
+        </div>
+        <p>{copy.sourceNote}</p>
+      </footer>
+    </main>
+  );
+}
+
 function currentPage() {
   if (typeof window === "undefined") return "crypto";
   const hashPath = window.location.hash.replace(/^#/, "");
+  if (hashPath.startsWith("/chip-chain")) return "chipChain";
   if (hashPath.startsWith("/market-clock")) return "marketClock";
   if (hashPath.startsWith("/macro-calendar")) return "macro";
   if (hashPath.startsWith("/equity-macro")) return "equity";
   if (hashPath.startsWith("/") || hashPath === "") return "crypto";
+  if (routePathname(window.location.pathname).startsWith("/chip-chain")) return "chipChain";
   if (routePathname(window.location.pathname).startsWith("/market-clock")) return "marketClock";
   if (routePathname(window.location.pathname).startsWith("/macro-calendar")) return "macro";
   return routePathname(window.location.pathname).startsWith("/equity-macro") ? "equity" : "crypto";
@@ -3540,10 +4070,11 @@ export function App() {
   useEffect(() => {
     document.documentElement.lang = t.htmlLang;
     const marketClock = marketClockCopy(t);
-    document.title = page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
+    const chipChain = chipChainCopy(t);
+    document.title = page === "chipChain" ? chipChain.docTitle : page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
+      ?.setAttribute("content", page === "chipChain" ? chipChain.docDescription : page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
     try {
       window.localStorage.setItem("cycle-map-language", language);
     } catch {
@@ -3551,6 +4082,7 @@ export function App() {
     }
   }, [language, page, t]);
 
+  if (page === "chipChain") return <ChipChainPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "marketClock") return <MarketClockPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "macro") return <MacroCalendarPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "equity") return <EquityMacroPage language={language} setLanguage={setLanguage} t={t} />;
