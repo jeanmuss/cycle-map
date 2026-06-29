@@ -35,6 +35,10 @@ const DEFAULT_CHIP_CHAIN_STATE = {
   range: "1d",
 };
 
+const DEFAULT_ROBOT_CHAIN_STATE = {
+  range: "1d",
+};
+
 const VALID_CRYPTO_VIEWS = new Set(["rotation", "cycle"]);
 const VALID_CRYPTO_METRICS = new Set(["absolute", "relative"]);
 const VALID_CRYPTO_RANGES = new Set(["12", "24", "48", "all"]);
@@ -42,6 +46,7 @@ const VALID_ASSETS = new Set(ASSETS.map((asset) => asset.symbol));
 const VALID_EQUITY_RANGES = new Set(["26", "52", "all"]);
 const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity"]);
 const VALID_CHIP_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
+const VALID_ROBOT_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 
 const EQUITY_MARKET_TEXT = {
   zh: {
@@ -326,6 +331,87 @@ function chipChainCopy(t) {
   return t.htmlLang === "zh-CN" ? CHIP_CHAIN_TEXT.zh : CHIP_CHAIN_TEXT.en;
 }
 
+const ROBOT_CHAIN_TEXT = {
+  zh: {
+    docTitle: "机器人产业链观察池",
+    docDescription: "按机器人产业链板块追踪上市标的、业务定位、样例价格和多周期涨跌幅。",
+    eyebrow: "ROBOTICS CHAIN",
+    titleAccent: "机器人产业链",
+    titleRest: "观察池",
+    subtitle: "按算力、感知、芯片、运动控制、自动驾驶、仓储服务、医疗、防务和 ETF 梳理机器人主题标的",
+    cache: "样例缓存",
+    cacheTooltip: "当前页面读取本地样例缓存复刻表格结构。正式版本应由后端或 CI 脚本生成静态行情 JSON，前端不直连行情源。",
+    success: "样例机器人产业链数据已加载",
+    failure: (count) => `样例源提示：${count}`,
+    loading: "正在读取机器人产业链样例缓存…",
+    unavailable: "机器人产业链数据未能加载",
+    controls: "机器人产业链控制",
+    range: "观察周期",
+    latest: "当前观察池热点",
+    tableKicker: "ROBOTICS WATCHLIST",
+    tableTitle: "机器人产业链上市标的观察池",
+    tableMethod: "表格复刻参考图的分组与业务定位；价格、涨跌幅和简要 K 线为样例行情，用于验证页面形态。",
+    sector: "板块",
+    company: "公司 / 代码",
+    business: "业务定位",
+    marketCap: "市值 / 规模",
+    attribute: "属性",
+    price: "价格",
+    change: "涨幅",
+    sparkline: "简要 K 线",
+    sourceNote: "注：市值来自参考图的约数；ETF 为主题基金，规模信息可简化展示。以上仅为信息整理，不构成投资建议。",
+    sampleSource: "样例行情缓存",
+    noRows: "当前筛选下暂无标的",
+    attributeLabels: {
+      core: "核心层",
+      growth: "成长层",
+      speculative: "投机层",
+      etf: "ETF",
+    },
+  },
+  en: {
+    docTitle: "Robotics Chain Watchlist",
+    docDescription: "Track robotics value-chain listed names by segment, business role, sample price, and multi-window returns.",
+    eyebrow: "ROBOTICS CHAIN",
+    titleAccent: "Robotics Chain",
+    titleRest: "Watchlist",
+    subtitle: "A robotics-theme watchlist across compute, perception, chips, motion control, autonomy, warehouse/service robots, medical robotics, defense, and ETFs.",
+    cache: "Sample cache",
+    cacheTooltip: "This page reads a local sample cache to reproduce the table structure. Production should generate static quote JSON from backend or CI scripts; the frontend must not call market-data providers directly.",
+    success: "Sample robotics-chain data loaded",
+    failure: (count) => `Sample source notes: ${count}`,
+    loading: "Reading robotics-chain sample cache...",
+    unavailable: "Robotics-chain data could not be loaded",
+    controls: "Robotics-chain controls",
+    range: "Window",
+    latest: "Current watchlist movers",
+    tableKicker: "ROBOTICS WATCHLIST",
+    tableTitle: "Robotics Industry Listed-Name Watchlist",
+    tableMethod: "The table mirrors the reference grouping and business roles. Prices, returns, and sparklines are sample quotes for validating the page shape.",
+    sector: "Sector",
+    company: "Company / Code",
+    business: "Business role",
+    marketCap: "Market cap / scale",
+    attribute: "Layer",
+    price: "Price",
+    change: "Change",
+    sparkline: "Mini chart",
+    sourceNote: "Market caps are approximate values from the reference image. ETFs are thematic funds and scale is simplified. For information only, not investment advice.",
+    sampleSource: "Sample quote cache",
+    noRows: "No tickers for this filter",
+    attributeLabels: {
+      core: "Core",
+      growth: "Growth",
+      speculative: "Speculative",
+      etf: "ETF",
+    },
+  },
+};
+
+function robotChainCopy(t) {
+  return t.htmlLang === "zh-CN" ? ROBOT_CHAIN_TEXT.zh : ROBOT_CHAIN_TEXT.en;
+}
+
 function hashParams() {
   if (typeof window === "undefined") return new URLSearchParams();
   const rawHash = window.location.hash.replace(/^#/, "");
@@ -368,6 +454,14 @@ function readChipChainStateFromHash() {
   const range = params.get("range");
   return {
     range: VALID_CHIP_CHAIN_RANGES.has(range) ? range : DEFAULT_CHIP_CHAIN_STATE.range,
+  };
+}
+
+function readRobotChainStateFromHash() {
+  const params = hashParams();
+  const range = params.get("range");
+  return {
+    range: VALID_ROBOT_CHAIN_RANGES.has(range) ? range : DEFAULT_ROBOT_CHAIN_STATE.range,
   };
 }
 
@@ -540,6 +634,7 @@ const TRANSLATIONS = {
       macro: "\u4e8b\u4ef6\u4e0e\u6d41\u52a8\u6027",
       marketClock: "开市轮动",
       chipChain: "芯片链热点",
+      robotChain: "机器人链",
     },
     equity: {
       docTitle: "美股宏观轮动图",
@@ -831,6 +926,7 @@ const TRANSLATIONS = {
       macro: "Events & liquidity",
       marketClock: "Market clock",
       chipChain: "Chip chain",
+      robotChain: "Robot chain",
     },
     equity: {
       docTitle: "Equity Macro Rotation Map",
@@ -1082,6 +1178,7 @@ function PageNav({ page, t }) {
       <a className={page === "macro" ? "is-active" : ""} aria-current={page === "macro" ? "page" : undefined} href={appHashUrl("macro-calendar")}>{t.nav.macro}</a>
       <a className={page === "marketClock" ? "is-active" : ""} aria-current={page === "marketClock" ? "page" : undefined} href={appHashUrl("market-clock")}>{t.nav.marketClock}</a>
       <a className={page === "chipChain" ? "is-active" : ""} aria-current={page === "chipChain" ? "page" : undefined} href={appHashUrl("chip-chain")}>{t.nav.chipChain}</a>
+      <a className={page === "robotChain" ? "is-active" : ""} aria-current={page === "robotChain" ? "page" : undefined} href={appHashUrl("robot-chain")}>{t.nav.robotChain}</a>
     </nav>
   );
 }
@@ -1637,6 +1734,37 @@ function dateKeyFromUtc(date) {
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
 }
 
+function localDateKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function useAutoLocalDateKey() {
+  const [todayKey, setTodayKey] = useState(localDateKey);
+
+  useEffect(() => {
+    const refreshTodayKey = () => {
+      const nextKey = localDateKey();
+      setTodayKey((current) => current === nextKey ? current : nextKey);
+    };
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") refreshTodayKey();
+    };
+
+    refreshTodayKey();
+    const interval = window.setInterval(refreshTodayKey, 60000);
+    window.addEventListener("focus", refreshTodayKey);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", refreshTodayKey);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, []);
+
+  return todayKey;
+}
+
 function addUtcDays(date, days) {
   const copy = new Date(date.getTime());
   copy.setUTCDate(copy.getUTCDate() + days);
@@ -1650,7 +1778,7 @@ function startOfSundayWeek(dateKey) {
 
 function weekDaysFor(dateKey) {
   const start = startOfSundayWeek(dateKey);
-  const todayKey = dateKeyFromUtc(new Date());
+  const todayKey = localDateKey();
   return Array.from({ length: 7 }, (_, index) => {
     const date = addUtcDays(start, index);
     const itemDateKey = dateKeyFromUtc(date);
@@ -1674,7 +1802,7 @@ function monthGrid(monthKey) {
       date,
       dateKey: dateKeyFromUtc(date),
       inMonth: date.getUTCMonth() === first.getUTCMonth(),
-      isToday: dateKeyFromUtc(date) === dateKeyFromUtc(new Date()),
+      isToday: dateKeyFromUtc(date) === localDateKey(),
       dayOfMonth: date.getUTCDate(),
     });
     if (index >= 34 && date >= last && date.getUTCDay() === 6) break;
@@ -1975,7 +2103,7 @@ function MacroEnvironmentPanel({ dataset, t }) {
 }
 
 function MacroWeekCalendar({ dataset, t }) {
-  const [visibleWeekDate, setVisibleWeekDate] = useState(dataset.window.endDate);
+  const [visibleWeekDate, setVisibleWeekDate] = useState(localDateKey);
   const eventMap = useMemo(() => eventsByDate(dataset.events || []), [dataset]);
   const days = useMemo(() => weekDaysFor(visibleWeekDate), [visibleWeekDate]);
   const visibleWeek = useMemo(() => findWeeklyStateForDate(dataset, visibleWeekDate), [dataset, visibleWeekDate]);
@@ -2359,7 +2487,7 @@ function MacroCalendarPage({ language, setLanguage, t }) {
 
   const defaultDate = useMemo(() => {
     if (!dataset) return null;
-    return dataset.window.endDate;
+    return localDateKey();
   }, [dataset]);
 
   useEffect(() => {
@@ -2878,6 +3006,7 @@ function EquityMacroPage({ language, setLanguage, t }) {
   const [error, setError] = useState(null);
   const [visibleWeekDate, setVisibleWeekDate] = useState(null);
   const [visibleMonth, setVisibleMonth] = useState(null);
+  const todayKey = useAutoLocalDateKey();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -2906,10 +3035,10 @@ function EquityMacroPage({ language, setLanguage, t }) {
 
   useEffect(() => {
     if (!dataset) return;
-    const latestDate = latestEquityDate(dataset);
-    setVisibleWeekDate((current) => current || latestDate);
-    setVisibleMonth((current) => current || monthKeyFromDateKey(latestDate));
-  }, [dataset]);
+    const focusDate = todayKey || latestEquityDate(dataset);
+    setVisibleWeekDate(focusDate);
+    setVisibleMonth(monthKeyFromDateKey(focusDate));
+  }, [dataset, todayKey]);
 
   if (error) {
     return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
@@ -3667,6 +3796,24 @@ function formatWeek52Position(value) {
   return `${Math.round(n * 100)}%`;
 }
 
+function hashString(value) {
+  return String(value || "").split("").reduce((hash, char) => {
+    const next = ((hash << 5) - hash) + char.charCodeAt(0);
+    return next >>> 0;
+  }, 2166136261);
+}
+
+function seededRandom(seed) {
+  let value = seed >>> 0;
+  return () => {
+    value += 0x6D2B79F5;
+    let next = value;
+    next = Math.imul(next ^ (next >>> 15), next | 1);
+    next ^= next + Math.imul(next ^ (next >>> 7), next | 61);
+    return ((next ^ (next >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function chipSparkValues(asset, range) {
   const pricePathValues = (asset?.pricePaths?.[range] || [])
     .map((point) => Number(point?.c ?? point?.close ?? point?.price ?? point))
@@ -3675,28 +3822,42 @@ function chipSparkValues(asset, range) {
 
   const returnPct = Number(asset?.returns?.[range]);
   const profiles = {
-    "1d": { steps: 14, frequency: 2.2, pulse: 5.4, phase: 0.2, amplitude: 0.9, bend: -0.8 },
-    "5d": { steps: 18, frequency: 3.6, pulse: 4.2, phase: 1.1, amplitude: 1.35, bend: 0.65 },
-    "1m": { steps: 24, frequency: 5.1, pulse: 6.5, phase: 2.4, amplitude: 1.9, bend: 1.25 },
-    "3m": { steps: 30, frequency: 4.4, pulse: 8.1, phase: 3.2, amplitude: 2.35, bend: -1.45 },
+    "1d": { steps: 14, noise: 0.55, cycles: 1.8, easing: 1 },
+    "5d": { steps: 22, noise: 0.85, cycles: 2.6, easing: 1.08 },
+    "1m": { steps: 30, noise: 1.1, cycles: 3.4, easing: 1.16 },
+    "3m": { steps: 38, noise: 1.35, cycles: 4.2, easing: 1.24 },
   };
   const profile = profiles[range] || profiles["1d"];
   const steps = profile.steps;
   const start = 100;
   const end = Number.isFinite(returnPct) ? 100 * (1 + returnPct / 100) : 100;
-  const seed = String(asset?.symbol || "")
-    .split("")
-    .reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 3), 17);
+  const move = end - start;
+  const absMove = Math.abs(move);
+  const direction = move === 0 ? 0 : Math.sign(move);
+  const seed = hashString(`${asset?.symbol || ""}:${range}:${asset?.primaryCategory || ""}`);
+  const random = seededRandom(seed);
+  const phase = random() * Math.PI * 2;
+  const waveTwo = 1.3 + random() * 2.2;
+  const noiseScale = profile.noise * (1 + Math.min(2.6, Math.abs(returnPct || 0) / 24));
   return Array.from({ length: steps }, (_, index) => {
     if (index === 0) return start;
     if (index === steps - 1) return end;
     const t = index / (steps - 1);
-    const drift = start + (end - start) * t;
-    const magnitude = Math.min(6, Math.abs(returnPct || 0) * 0.12);
-    const wave = Math.sin((seed % 5 + profile.frequency) * Math.PI * t + profile.phase) * (profile.amplitude + magnitude);
-    const pulse = Math.cos((seed % 7 + profile.pulse) * Math.PI * t + profile.phase / 2) * 0.7;
-    const bend = Math.sin(Math.PI * t) * profile.bend * (returnPct >= 0 ? 1 : -1);
-    return drift + wave + pulse + bend;
+    const eased = Math.pow(t, profile.easing);
+    const drift = start + move * eased;
+    const taper = Math.sin(Math.PI * t);
+    const wave = Math.sin(profile.cycles * Math.PI * t + phase) * noiseScale * taper;
+    const pulse = Math.cos(waveTwo * Math.PI * t + phase / 2) * noiseScale * 0.45 * taper;
+    const jitter = (random() - 0.5) * noiseScale * 0.7 * taper;
+    let value = drift + wave + pulse + jitter;
+    if (direction > 0 && absMove > 0.2) {
+      value = Math.min(value, end - 0.04);
+      value = Math.max(value, start - Math.max(0.45, absMove * 0.08));
+    } else if (direction < 0 && absMove > 0.2) {
+      value = Math.max(value, end + 0.04);
+      value = Math.min(value, start + Math.max(0.45, absMove * 0.08));
+    }
+    return value;
   });
 }
 
@@ -3935,6 +4096,7 @@ function ChipChainPage({ language, setLanguage, t }) {
   const [error, setError] = useState(null);
   const [chipState, setChipState] = useState(readChipChainStateFromHash);
   const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const [selectionCleared, setSelectionCleared] = useState(false);
   const { range } = chipState;
 
   useEffect(() => {
@@ -3978,6 +4140,20 @@ function ChipChainPage({ language, setLanguage, t }) {
   const selectedAsset = selectedSymbol ? assetMap[selectedSymbol] : null;
   const selectedCategory = selectedAsset ? categoryById.get(selectedAsset.primaryCategory) : null;
   const rangeOptions = (dataset?.ranges || []).map((item) => ({ value: item.value, label: item.label }));
+  const selectChipSymbol = (symbol) => {
+    setSelectionCleared(false);
+    setSelectedSymbol(symbol);
+  };
+  const clearChipSelection = () => {
+    setSelectionCleared(true);
+    setSelectedSymbol(null);
+  };
+  const clearChipSelectionOnNonTicker = (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest(".chip-ticker-button, .chip-hotspot-card, .chip-detail-band, .chip-detail-empty")) return;
+    clearChipSelection();
+  };
 
   useEffect(() => {
     if (!dataset) return;
@@ -3985,10 +4161,11 @@ function ChipChainPage({ language, setLanguage, t }) {
       setSelectedSymbol(null);
       return;
     }
+    if (selectionCleared) return;
     if (!selectedSymbol || !movers.some((asset) => asset.symbol === selectedSymbol)) {
       setSelectedSymbol(movers[0].symbol);
     }
-  }, [dataset, movers, selectedSymbol]);
+  }, [dataset, movers, selectedSymbol, selectionCleared]);
 
   if (error) {
     return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
@@ -3998,7 +4175,7 @@ function ChipChainPage({ language, setLanguage, t }) {
   }
 
   return (
-    <main className="app-page chip-chain-page">
+    <main className="app-page chip-chain-page" onPointerDown={clearChipSelectionOnNonTicker}>
       <header className="app-header">
         <div className="title-block">
           <p className="eyebrow">{copy.eyebrow}</p>
@@ -4014,7 +4191,7 @@ function ChipChainPage({ language, setLanguage, t }) {
         </div>
       </header>
 
-      <ChipHotspotSummary movers={movers} range={range} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} copy={copy} />
+      <ChipHotspotSummary movers={movers} range={range} selectedSymbol={selectedSymbol} onSelect={selectChipSymbol} copy={copy} />
 
       <section className="control-bar chip-chain-controls" aria-label={copy.controls}>
         <div className="control-primary">
@@ -4030,10 +4207,10 @@ function ChipChainPage({ language, setLanguage, t }) {
           </div>
           <p className="method-note">{copy.boardMethod}</p>
         </div>
-        <ChipChainBoard rows={rows} range={range} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} language={language} copy={copy} />
+        <ChipChainBoard rows={rows} range={range} selectedSymbol={selectedSymbol} onSelect={selectChipSymbol} language={language} copy={copy} />
       </section>
 
-      <ChipChainDetail asset={selectedAsset} category={selectedCategory} copy={copy} language={language} />
+      {selectedAsset ? <ChipChainDetail asset={selectedAsset} category={selectedCategory} copy={copy} language={language} /> : null}
 
       <footer className="source-footer">
         <div>
@@ -4047,14 +4224,203 @@ function ChipChainPage({ language, setLanguage, t }) {
   );
 }
 
+function robotAttributeLabel(attribute, copy) {
+  return copy.attributeLabels?.[attribute] || attribute || "N/A";
+}
+
+function robotCategoryRows(dataset) {
+  const assetMap = dataset?.assets || {};
+  return (dataset?.categories || []).map((category) => ({
+    category,
+    assets: (category.tickers || []).map((symbol) => assetMap[symbol]).filter(Boolean),
+  })).filter((row) => row.assets.length);
+}
+
+function robotTopMovers(rows, range) {
+  return rows
+    .flatMap((row) => row.assets)
+    .filter((asset) => Number.isFinite(Number(asset.returns?.[range])))
+    .sort((a, b) => Number(b.returns?.[range]) - Number(a.returns?.[range]));
+}
+
+function RobotHotspotSummary({ movers, range, copy }) {
+  return (
+    <section className="chip-hotspot-summary robot-hotspot-summary" aria-label={copy.latest}>
+      {movers.slice(0, 4).map((asset) => {
+        const value = Number(asset.returns?.[range]);
+        return (
+          <div className="chip-hotspot-card robot-hotspot-card" key={asset.symbol}>
+            <strong>{asset.symbol}</strong>
+            <span>{asset.company}</span>
+            <em className={value >= 0 ? "positive" : "negative"}>{formatPct(value, 1)}</em>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+function RobotChainTable({ rows, range, language, copy }) {
+  if (!rows.length) {
+    return <div className="chip-empty-board">{copy.noRows}</div>;
+  }
+  return (
+    <div className="table-shell robot-chain-shell">
+      <table className="robot-chain-table">
+        <caption className="sr-only">{copy.tableTitle}</caption>
+        <thead>
+          <tr>
+            <th>{copy.sector}</th>
+            <th>{copy.company}</th>
+            <th>{copy.business}</th>
+            <th>{copy.marketCap}</th>
+            <th>{copy.attribute}</th>
+            <th>{copy.price}</th>
+            <th>{copy.change}</th>
+            <th>{copy.sparkline}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => row.assets.map((asset, assetIndex) => {
+            const value = Number(asset.returns?.[range]);
+            const business = language === "en" ? asset.businessEn : asset.businessZh;
+            const sectorLabel = language === "en" ? row.category.labelEn : row.category.labelZh;
+            return (
+              <tr key={`${row.category.id}-${asset.symbol}`}>
+                {assetIndex === 0 ? (
+                  <th scope="rowgroup" rowSpan={row.assets.length} className="robot-sector-cell">{sectorLabel}</th>
+                ) : null}
+                <td className="robot-company-cell">
+                  <strong>{asset.symbol}</strong>
+                  <span>{asset.company}</span>
+                </td>
+                <td className="robot-business-cell">{business}</td>
+                <td className="robot-market-cell">{asset.marketCapLabel}</td>
+                <td>
+                  <span className={`robot-attribute robot-attribute-${asset.attribute}`}>{robotAttributeLabel(asset.attribute, copy)}</span>
+                </td>
+                <td className="robot-price-cell">{formatPrice(asset.price, asset.quote)}</td>
+                <td className={value >= 0 ? "positive robot-return-cell" : "negative robot-return-cell"}>{formatPct(value, 1)}</td>
+                <td className="robot-spark-cell"><ChipSparkline asset={asset} range={range} /></td>
+              </tr>
+            );
+          }))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function RobotChainPage({ language, setLanguage, t }) {
+  const copy = robotChainCopy(t);
+  const [dataset, setDataset] = useState(null);
+  const [error, setError] = useState(null);
+  const [robotState, setRobotState] = useState(readRobotChainStateFromHash);
+  const { range } = robotState;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(appUrl("data/robot-chain-watchlist.json"), { signal: controller.signal, cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          const loadError = new Error("data-file");
+          loadError.status = response.status;
+          throw loadError;
+        }
+        return response.json();
+      })
+      .then((loadedDataset) => {
+        setDataset(loadedDataset);
+        setError(null);
+      })
+      .catch((loadError) => {
+        if (loadError.name !== "AbortError") setError({ status: loadError.status, message: loadError.message });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const syncFromHash = () => {
+      if (currentPage() !== "robotChain") return;
+      setRobotState(readRobotChainStateFromHash());
+    };
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
+  useEffect(() => {
+    replaceHashState("robot-chain", robotState);
+  }, [robotState]);
+
+  const rows = useMemo(() => robotCategoryRows(dataset), [dataset]);
+  const movers = useMemo(() => robotTopMovers(rows, range), [rows, range]);
+  const rangeOptions = (dataset?.ranges || []).map((item) => ({ value: item.value, label: item.label }));
+
+  if (error) {
+    return <main className="status-page"><h1>{copy.unavailable}</h1><p>{error.status ? `${t.status.dataFileFailed} (${error.status})` : error.message}</p></main>;
+  }
+  if (!dataset) {
+    return <main className="status-page"><p>{copy.loading}</p></main>;
+  }
+
+  return (
+    <main className="app-page robot-chain-page">
+      <header className="app-header">
+        <div className="title-block">
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h1><span>{copy.titleAccent}</span> {copy.titleRest}</h1>
+          <p>{copy.subtitle}</p>
+          <PageNav page="robotChain" t={t} />
+        </div>
+        <div className="freshness-block">
+          <LanguageToggle language={language} onChange={setLanguage} t={t} />
+          <CacheStatus label={copy.cache} tooltip={copy.cacheTooltip} />
+          <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
+          <small>{dataset.failures?.length ? copy.failure(dataset.failures.length) : copy.success}</small>
+        </div>
+      </header>
+
+      <RobotHotspotSummary movers={movers} range={range} copy={copy} />
+
+      <section className="control-bar chip-chain-controls" aria-label={copy.controls}>
+        <div className="control-primary">
+          <Segmented label={copy.range} options={rangeOptions} value={range} onChange={(next) => setRobotState((current) => ({ ...current, range: next }))} />
+        </div>
+      </section>
+
+      <section className="visualization robot-chain-section" aria-label={copy.tableTitle}>
+        <div className="visualization-heading">
+          <div>
+            <p>{copy.tableKicker}</p>
+            <h2>{copy.tableTitle}</h2>
+          </div>
+          <p className="method-note">{copy.tableMethod}</p>
+        </div>
+        <RobotChainTable rows={rows} range={range} language={language} copy={copy} />
+      </section>
+
+      <footer className="source-footer">
+        <div>
+          <strong>{t.footer.title}</strong>
+          <span>{copy.sampleSource}</span>
+          <span>{dataset.sourceNoteZh || dataset.sourceNoteEn}</span>
+        </div>
+        <p>{copy.sourceNote}</p>
+      </footer>
+    </main>
+  );
+}
+
 function currentPage() {
   if (typeof window === "undefined") return "crypto";
   const hashPath = window.location.hash.replace(/^#/, "");
+  if (hashPath.startsWith("/robot-chain")) return "robotChain";
   if (hashPath.startsWith("/chip-chain")) return "chipChain";
   if (hashPath.startsWith("/market-clock")) return "marketClock";
   if (hashPath.startsWith("/macro-calendar")) return "macro";
   if (hashPath.startsWith("/equity-macro")) return "equity";
   if (hashPath.startsWith("/") || hashPath === "") return "crypto";
+  if (routePathname(window.location.pathname).startsWith("/robot-chain")) return "robotChain";
   if (routePathname(window.location.pathname).startsWith("/chip-chain")) return "chipChain";
   if (routePathname(window.location.pathname).startsWith("/market-clock")) return "marketClock";
   if (routePathname(window.location.pathname).startsWith("/macro-calendar")) return "macro";
@@ -4080,10 +4446,11 @@ export function App() {
     document.documentElement.lang = t.htmlLang;
     const marketClock = marketClockCopy(t);
     const chipChain = chipChainCopy(t);
-    document.title = page === "chipChain" ? chipChain.docTitle : page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
+    const robotChain = robotChainCopy(t);
+    document.title = page === "robotChain" ? robotChain.docTitle : page === "chipChain" ? chipChain.docTitle : page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", page === "chipChain" ? chipChain.docDescription : page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
+      ?.setAttribute("content", page === "robotChain" ? robotChain.docDescription : page === "chipChain" ? chipChain.docDescription : page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
     try {
       window.localStorage.setItem("cycle-map-language", language);
     } catch {
@@ -4091,6 +4458,7 @@ export function App() {
     }
   }, [language, page, t]);
 
+  if (page === "robotChain") return <RobotChainPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "chipChain") return <ChipChainPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "marketClock") return <MarketClockPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "macro") return <MacroCalendarPage language={language} setLanguage={setLanguage} t={t} />;
