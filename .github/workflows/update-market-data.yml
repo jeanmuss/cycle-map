@@ -37,19 +37,31 @@ jobs:
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
         run: node scripts/update-market-session-data.mjs
+      - name: Refresh chip-chain data
+        working-directory: app
+        env:
+          APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
+          CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
+        run: node scripts/update-chip-chain-data.mjs
       - name: Refresh weekly equity data
         working-directory: app
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/update-equity-data.py
+      - name: Refresh macro calendar
+        working-directory: app
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/update-macro-calendar.py
       - name: Commit changed cache
         run: |
-          if git diff --quiet -- app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json; then
+          if git diff --quiet -- app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json app/public/data/macro-calendar.json app/public/data/chip-chain-hotspots.json; then
             echo "Cache is already current"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json
+          git add app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json app/public/data/macro-calendar.json app/public/data/chip-chain-hotspots.json
           git commit -m "data: refresh market caches"
           git push

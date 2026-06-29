@@ -1,7 +1,7 @@
 {
   "version": 1,
   "page": "macro-calendar",
-  "generatedAt": "2026-06-27T15:25:43Z",
+  "generatedAt": "2026-06-29T10:54:36Z",
   "window": {
     "months": 6,
     "startDate": "2025-12-27",
@@ -11,7 +11,8 @@
   "cache": {
     "providerCachePath": "tmp/macro-cache/fred",
     "maxAgeHours": 18.0,
-    "forceRefresh": false
+    "forceRefresh": false,
+    "manualEventLookaheadDays": 120
   },
   "methodology": "FRED observation dates are retained as observation or period dates, not public release timestamps. Forecast values are intentionally null until a reviewed forecast source or manual backend input is added. Weekly state rows summarize observed start/end changes inside each Friday-ending window.",
   "categories": [
@@ -1134,9 +1135,9 @@
     {
       "category": "liquidity",
       "label": "Liquidity & Balance Sheet",
-      "eventCount": 5,
-      "latestEventDate": "2026-05-01",
-      "latestEventLabel": "M2 money stock",
+      "eventCount": 6,
+      "latestEventDate": "2026-07-20",
+      "latestEventLabel": "世界杯决赛 / FIFA World Cup Final",
       "latestStatus": {
         "weekKey": "2026-06-27",
         "series": [
@@ -1149,6 +1150,27 @@
     }
   ],
   "events": [
+    {
+      "date": "2026-07-20",
+      "seriesId": "MANUAL_FIFA_WC_FINAL_2026",
+      "label": "世界杯决赛 / FIFA World Cup Final",
+      "category": "liquidity",
+      "categoryLabel": "Liquidity & Balance Sheet",
+      "role": "manual_liquidity_event",
+      "cadence": "event",
+      "unit": "event",
+      "source": "FIFA match schedule / manual liquidity annotation",
+      "dateMeaning": "scheduled_beijing_date",
+      "actual": null,
+      "previous": null,
+      "forecast": null,
+      "change": null,
+      "changeBp": null,
+      "pctChange": null,
+      "yearAgo": null,
+      "yoyPct": null,
+      "note": "Scheduled for 2026-07-19 15:00 America/New_York at New York New Jersey Stadium; Beijing time is 2026-07-20 03:00. Added as a discretionary liquidity/attention event, not an economic data release."
+    },
     {
       "date": "2026-06-20",
       "seriesId": "ICSA",
@@ -11303,7 +11325,7 @@
   ],
   "sources": {
     "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
-    "manualEvents": "Reserved for future curated policy, legal, holiday, and institutional-flow annotations."
+    "manualEvents": "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py."
   },
   "failures": []
 }

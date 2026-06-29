@@ -643,6 +643,7 @@ const TRANSLATIONS = {
       observationPeriod: "\u89c2\u6d4b\u671f",
       projectionYear: "\u9884\u6d4b\u5e74",
       sepProjection: "SEP \u89c2\u6d4b",
+      scheduledBeijingDate: "\u5317\u4eac\u65f6\u95f4\u6392\u671f",
       week: "\u5468",
       twoYear: "2Y",
       tenYear: "10Y",
@@ -933,6 +934,7 @@ const TRANSLATIONS = {
       observationPeriod: "Observation period",
       projectionYear: "Projection year",
       sepProjection: "SEP observation",
+      scheduledBeijingDate: "Beijing scheduled date",
       week: "Week",
       twoYear: "2Y",
       tenYear: "10Y",
@@ -1574,6 +1576,7 @@ function macroDateMeaningLabel(value, t) {
   if (value === "daily_observation") return t.macroCalendar.dailyObservation;
   if (value === "projection_year") return t.macroCalendar.projectionYear;
   if (value === "sep_release_observation") return t.macroCalendar.sepProjection;
+  if (value === "scheduled_beijing_date") return t.macroCalendar.scheduledBeijingDate;
   return value || "N/A";
 }
 
@@ -3643,6 +3646,7 @@ function chipStageLabel(stage, copy) {
 
 function chipSourceLabel(asset, copy) {
   if (!asset) return "N/A";
+  if (asset.sourceLabel) return asset.sourceLabel;
   return asset.sourceKind === "sample" ? copy.sampleSource : asset.sourceKind || "N/A";
 }
 
@@ -3664,6 +3668,11 @@ function formatWeek52Position(value) {
 }
 
 function chipSparkValues(asset, range) {
+  const pricePathValues = (asset?.pricePaths?.[range] || [])
+    .map((point) => Number(point?.c ?? point?.close ?? point?.price ?? point))
+    .filter(Number.isFinite);
+  if (pricePathValues.length >= 2) return pricePathValues;
+
   const returnPct = Number(asset?.returns?.[range]);
   const profiles = {
     "1d": { steps: 14, frequency: 2.2, pulse: 5.4, phase: 0.2, amplitude: 0.9, bend: -0.8 },

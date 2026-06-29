@@ -6,6 +6,7 @@ Interactive return tables for risk assets:
 - Equity macro map: weekly QQQ/SPY relative strength with FRED macro context from January 20, 2025 onward.
 - Event and liquidity calendar: six-month macro, rates, dollar, volatility, and credit context.
 - Global market clock: crypto, U.S., Korea, and China market-session rotation with prices, market caps where available, and source-quality labels.
+- AI chip-chain hotspots: supply-chain category rotation with ticker-level price paths and a pinned detail panel.
 
 The interface follows the visual and technical idea of the original Bitcoin four-year cycle map: semantic HTML tables, CSS heat classes, and JavaScript-driven calculations.
 
@@ -16,6 +17,7 @@ npm run dev
 npm run build
 npm run update-data
 npm run update-market-session
+npm run update-chip-chain
 npm run update-equity-data
 npm run update-macro-calendar
 ```
@@ -61,6 +63,15 @@ Only derived weekly data is cached. API keys, cookies, sessions, raw tick data, 
 
 The browser reads only the generated JSON. `CMC_PRO_API_KEY` must never be exposed through `VITE_*` variables or frontend code.
 
+`scripts/update-chip-chain-data.mjs` retrieves the fifth-page chip-chain market cache and writes `public/data/chip-chain-hotspots.json`.
+
+- U.S. equities, ETFs, and ADRs: Alpaca official stock bars via backend/CI, using `APCA_API_KEY_ID` and `APCA_API_SECRET_KEY` from local ignored env files or GitHub Actions secrets.
+- Feed selection: set `CHIP_CHAIN_US_FEED` to `iex` by default, or to `delayed_sip` / `sip` only when the account subscription and redistribution terms support it.
+- Price paths: `1D`, `5D`, `1M`, and `3M` are written as static `pricePaths` and the frontend draws those paths when present.
+- Korea rows: Samsung Electronics `005930.KS` and SK hynix `000660.KS` remain in the page, but the KIS/KRX adapter is pending reviewed credentials, licensing, and redistribution terms. Until then those rows keep their visible sample/static source quality.
+
+If Alpaca credentials are not configured, the updater keeps the last-known-good JSON and does not rewrite `generatedAt`. A commit or deploy does not automatically convert sample chip-chain data into live market data; provider credentials and reviewed adapters must be configured first.
+
 `scripts/update-macro-calendar.py` retrieves the first macro-calendar source set and writes `public/data/macro-calendar.json`.
 
 - Inflation: CPI, core CPI, PPI, core PPI goods, PCE, and core PCE from FRED.
@@ -72,6 +83,8 @@ The browser reads only the generated JSON. `CMC_PRO_API_KEY` must never be expos
 The script caches provider observations under `tmp/macro-cache/fred` before generating the public JSON. `tmp/` is ignored by git, so local reruns avoid repeated API calls without committing provider cache files. By default the provider cache is reused for 18 hours; set `MACRO_CACHE_REFRESH=1` to force a refresh, `MACRO_CALENDAR_MONTHS=6` to adjust the output window, or `MACRO_CACHE_MAX_AGE_HOURS=...` to tune local reuse.
 
 FRED observation dates are retained as economic observation/period dates, not publication timestamps. Forecast values stay `null` until a reviewed forecast source or manual backend input is added. This avoids presenting period dates or unreviewed consensus numbers as release-calendar facts.
+
+Curated manual events live in `scripts/update-macro-calendar.py` and are merged into `macro-calendar.json` alongside FRED observations. These are discretionary liquidity or attention annotations, not economic data releases.
 
 For CI or deployment, install Python dependencies with:
 
@@ -87,9 +100,9 @@ GitHub Pages is the preferred static-share path for this repo. `.github/workflow
 
 - every push to `main`
 - manual workflow dispatch
-- an hourly schedule for current spot and market-session refreshes
+- an hourly schedule for current spot, market-session, and configured chip-chain refreshes
 
-Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow can still be used for auditable checked-in cache updates on a lower-frequency schedule.
+Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow can still be used for auditable checked-in cache updates on a lower-frequency schedule, including macro-calendar and chip-chain cache files.
 
 The repository root includes `vercel.json` for Vercel preview deployments from this workspace:
 

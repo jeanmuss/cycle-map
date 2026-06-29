@@ -10,6 +10,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "update-data": "node scripts/update-market-data.mjs",
     "update-market-session": "node scripts/update-market-session-data.mjs",
+    "update-chip-chain": "node scripts/update-chip-chain-data.mjs",
     "update-equity-data": "python scripts/update-equity-data.py",
     "update-macro-calendar": "python scripts/update-macro-calendar.py"
   },

@@ -37,10 +37,13 @@ FRED_OBSERVATIONS_URL = "https://api.stlouisfed.org/fred/series/observations"
 WINDOW_MONTHS = int(os.environ.get("MACRO_CALENDAR_MONTHS", "6"))
 CACHE_MAX_AGE_HOURS = float(os.environ.get("MACRO_CACHE_MAX_AGE_HOURS", "18"))
 FORCE_REFRESH = os.environ.get("MACRO_CACHE_REFRESH", "").strip().lower() in {"1", "true", "yes"}
+MANUAL_ONLY = os.environ.get("MACRO_MANUAL_ONLY", "").strip().lower() in {"1", "true", "yes"}
+MANUAL_EVENT_LOOKAHEAD_DAYS = int(os.environ.get("MACRO_MANUAL_EVENT_LOOKAHEAD_DAYS", "120"))
 DEFAULT_END_DATE = pd.Timestamp(datetime.now(UTC).date())
 END_DATE = pd.Timestamp(os.environ.get("MACRO_CALENDAR_END_DATE", DEFAULT_END_DATE.strftime("%Y-%m-%d")))
 WINDOW_START = (END_DATE - pd.DateOffset(months=WINDOW_MONTHS)).normalize()
 LOOKBACK_START = (WINDOW_START - pd.DateOffset(years=1, days=14)).normalize()
+MANUAL_EVENT_END = (END_DATE + pd.DateOffset(days=MANUAL_EVENT_LOOKAHEAD_DAYS)).normalize()
 
 
 @dataclass(frozen=True)
@@ -114,6 +117,31 @@ STATUS_SERIES: list[Indicator] = [
 
 
 ALL_SERIES = {indicator.id: indicator for indicator in [*EVENT_SERIES, *STATUS_SERIES]}
+
+
+MANUAL_EVENTS: list[dict] = [
+    {
+        "date": "2026-07-20",
+        "seriesId": "MANUAL_FIFA_WC_FINAL_2026",
+        "label": "世界杯决赛 / FIFA World Cup Final",
+        "category": "liquidity",
+        "categoryLabel": CATEGORIES["liquidity"],
+        "role": "manual_liquidity_event",
+        "cadence": "event",
+        "unit": "event",
+        "source": "FIFA match schedule / manual liquidity annotation",
+        "dateMeaning": "scheduled_beijing_date",
+        "actual": None,
+        "previous": None,
+        "forecast": None,
+        "change": None,
+        "changeBp": None,
+        "pctChange": None,
+        "yearAgo": None,
+        "yoyPct": None,
+        "note": "Scheduled for 2026-07-19 15:00 America/New_York at New York New Jersey Stadium; Beijing time is 2026-07-20 03:00. Added as a discretionary liquidity/attention event, not an economic data release.",
+    },
+]
 
 
 def iso_now() -> str:
@@ -330,6 +358,25 @@ def build_observation_events(series_frames: dict[str, pd.DataFrame]) -> list[dic
     return sorted(events, key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
 
 
+def manual_events_for_window() -> list[dict]:
+    events = []
+    for event in MANUAL_EVENTS:
+        date = pd.Timestamp(event["date"])
+        if WINDOW_START <= date <= MANUAL_EVENT_END:
+            events.append(dict(event))
+    return events
+
+
+def merge_manual_events(events: list[dict]) -> list[dict]:
+    manual_events = manual_events_for_window()
+    manual_keys = {(event["seriesId"], event["date"]) for event in manual_events}
+    kept_events = [
+        event for event in events
+        if (event.get("seriesId"), event.get("date")) not in manual_keys
+    ]
+    return sorted([*kept_events, *manual_events], key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
+
+
 def build_fed_target_events(series_frames: dict[str, pd.DataFrame]) -> list[dict]:
     upper = series_frames.get("DFEDTARU", pd.DataFrame())
     lower = series_frames.get("DFEDTARL", pd.DataFrame())
@@ -510,7 +557,7 @@ def build_output() -> dict:
         observations = fetch_fred_observations(fred, series_id, LOOKBACK_START, END_DATE, failures)
         series_frames[series_id] = observation_frame(observations)
 
-    events = build_observation_events(series_frames)
+    events = merge_manual_events(build_observation_events(series_frames))
     weekly_rows = weekly_window_rows(series_frames)
     summary = build_summary(series_frames)
     if not events and not weekly_rows:
@@ -535,6 +582,7 @@ def build_output() -> dict:
             "providerCachePath": "tmp/macro-cache/fred",
             "maxAgeHours": CACHE_MAX_AGE_HOURS,
             "forceRefresh": FORCE_REFRESH,
+            "manualEventLookaheadDays": MANUAL_EVENT_LOOKAHEAD_DAYS,
         },
         "methodology": (
             "FRED observation dates are retained as observation or period dates, not public release timestamps. "
@@ -549,22 +597,57 @@ def build_output() -> dict:
         "weeklyState": weekly_rows,
         "sources": {
             "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
-            "manualEvents": "Reserved for future curated policy, legal, holiday, and institutional-flow annotations.",
+            "manualEvents": "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py.",
         },
         "failures": failures,
     }
 
 
+def merge_manual_events_into_existing(existing: dict, error: Exception | None = None) -> dict:
+    output = dict(existing)
+    events = merge_manual_events(list(output.get("events") or []))
+    output["events"] = events
+    output["generatedAt"] = iso_now()
+    output["categorySummary"] = category_summary(events, list(output.get("weeklyState") or []))
+    output.setdefault("cache", {})["manualEventLookaheadDays"] = MANUAL_EVENT_LOOKAHEAD_DAYS
+    output.setdefault("sources", {})["manualEvents"] = (
+        "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py."
+    )
+    failures = [
+        failure for failure in list(output.get("failures") or [])
+        if "manual events merged into last-known-good cache" not in str(failure)
+    ]
+    if error is not None:
+        failures.append(f"FRED refresh skipped; manual events merged into last-known-good cache: {safe_error_message(error)}")
+    output["failures"] = failures
+    return output
+
+
 def main() -> int:
     existing = read_existing()
+    if MANUAL_ONLY:
+        if not existing:
+            raise RuntimeError("MACRO_MANUAL_ONLY requires an existing macro-calendar.json")
+        output = merge_manual_events_into_existing(existing)
+        OUTPUT_PATH.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({
+            "status": "merged-manual-events",
+            "outputPath": str(OUTPUT_PATH),
+            "events": len(output["events"]),
+        }, ensure_ascii=False))
+        return 0
+
     try:
         output = build_output()
     except Exception as exc:  # noqa: BLE001
         if existing:
+            output = merge_manual_events_into_existing(existing, exc)
+            OUTPUT_PATH.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             print(json.dumps({
-                "status": "kept-last-known-good",
+                "status": "merged-manual-events-into-last-known-good",
                 "outputPath": str(OUTPUT_PATH),
                 "error": str(exc),
+                "events": len(output["events"]),
             }, ensure_ascii=False))
             return 0
         raise
