@@ -18,12 +18,15 @@ from __future__ import annotations
 
 import json
 import os
+import html as html_lib
+import re
 import sys
 import time
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import pandas as pd
 import requests
@@ -32,18 +35,60 @@ APP_ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = APP_ROOT.parent
 OUTPUT_PATH = APP_ROOT / "public" / "data" / "macro-calendar.json"
 CACHE_DIR = WORKSPACE_ROOT / "tmp" / "macro-cache" / "fred"
+SCHEDULE_CACHE_DIR = WORKSPACE_ROOT / "tmp" / "macro-cache" / "official-schedules"
 FRED_OBSERVATIONS_URL = "https://api.stlouisfed.org/fred/series/observations"
+FRED_RELEASE_DATES_URL = "https://api.stlouisfed.org/fred/release/dates"
+FRED_EMPLOYMENT_SITUATION_RELEASE_ID = 50
+FRED_CPI_RELEASE_ID = 10
+FED_FOMC_CALENDAR_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
 
 WINDOW_MONTHS = int(os.environ.get("MACRO_CALENDAR_MONTHS", "6"))
 CACHE_MAX_AGE_HOURS = float(os.environ.get("MACRO_CACHE_MAX_AGE_HOURS", "18"))
+SCHEDULE_CACHE_MAX_AGE_HOURS = float(os.environ.get("MACRO_SCHEDULE_CACHE_MAX_AGE_HOURS", "18"))
 FORCE_REFRESH = os.environ.get("MACRO_CACHE_REFRESH", "").strip().lower() in {"1", "true", "yes"}
 MANUAL_ONLY = os.environ.get("MACRO_MANUAL_ONLY", "").strip().lower() in {"1", "true", "yes"}
 MANUAL_EVENT_LOOKAHEAD_DAYS = int(os.environ.get("MACRO_MANUAL_EVENT_LOOKAHEAD_DAYS", "120"))
+SCHEDULE_EVENT_LOOKAHEAD_DAYS = int(os.environ.get("MACRO_SCHEDULE_EVENT_LOOKAHEAD_DAYS", "120"))
 DEFAULT_END_DATE = pd.Timestamp(datetime.now(UTC).date())
 END_DATE = pd.Timestamp(os.environ.get("MACRO_CALENDAR_END_DATE", DEFAULT_END_DATE.strftime("%Y-%m-%d")))
 WINDOW_START = (END_DATE - pd.DateOffset(months=WINDOW_MONTHS)).normalize()
 LOOKBACK_START = (WINDOW_START - pd.DateOffset(years=1, days=14)).normalize()
 MANUAL_EVENT_END = (END_DATE + pd.DateOffset(days=MANUAL_EVENT_LOOKAHEAD_DAYS)).normalize()
+SCHEDULE_EVENT_END = (END_DATE + pd.DateOffset(days=SCHEDULE_EVENT_LOOKAHEAD_DAYS)).normalize()
+
+try:
+    EASTERN_TZ = ZoneInfo("America/New_York")
+    BEIJING_TZ = ZoneInfo("Asia/Shanghai")
+except ZoneInfoNotFoundError:
+    EASTERN_TZ = timezone(timedelta(hours=-5))
+    BEIJING_TZ = timezone(timedelta(hours=8))
+
+MONTH_NUMBER = {
+    "jan": 1,
+    "january": 1,
+    "feb": 2,
+    "february": 2,
+    "mar": 3,
+    "march": 3,
+    "apr": 4,
+    "april": 4,
+    "may": 5,
+    "jun": 6,
+    "june": 6,
+    "jul": 7,
+    "july": 7,
+    "aug": 8,
+    "august": 8,
+    "sep": 9,
+    "sept": 9,
+    "september": 9,
+    "oct": 10,
+    "october": 10,
+    "nov": 11,
+    "november": 11,
+    "dec": 12,
+    "december": 12,
+}
 
 
 @dataclass(frozen=True)
@@ -228,6 +273,95 @@ def write_cache(series_id: str, start_date: pd.Timestamp, end_date: pd.Timestamp
     cache_path(series_id).write_text(json.dumps(payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
 
 
+def schedule_cache_path(cache_key: str) -> Path:
+    safe_key = re.sub(r"[^a-zA-Z0-9_.-]+", "-", cache_key).strip("-")
+    return SCHEDULE_CACHE_DIR / f"{safe_key}.html"
+
+
+def read_text_cache(cache_key: str) -> str | None:
+    if FORCE_REFRESH:
+        return None
+    path = schedule_cache_path(cache_key)
+    try:
+        cached = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+    fetched_at = parse_timestamp(cached.get("fetchedAt"))
+    if fetched_at is None:
+        return None
+    age_hours = (pd.Timestamp.now(tz="UTC") - utc_timestamp(fetched_at)).total_seconds() / 3600
+    if age_hours > SCHEDULE_CACHE_MAX_AGE_HOURS:
+        return None
+    text = cached.get("text")
+    return text if isinstance(text, str) else None
+
+
+def write_text_cache(cache_key: str, source_url: str, text: str) -> None:
+    SCHEDULE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "sourceUrl": source_url,
+        "fetchedAt": iso_now(),
+        "text": text,
+    }
+    schedule_cache_path(cache_key).write_text(json.dumps(payload, ensure_ascii=True) + "\n", encoding="utf-8")
+
+
+def fetch_official_schedule_text(cache_key: str, source_url: str, failures: list[str]) -> str | None:
+    cached = read_text_cache(cache_key)
+    if cached is not None:
+        return cached
+    try:
+        response = requests.get(source_url, timeout=30, headers={"User-Agent": "cycle-map-market-calendar/1.0"})
+        response.raise_for_status()
+        text = response.text
+        write_text_cache(cache_key, source_url, text)
+        return text
+    except Exception as exc:  # noqa: BLE001 - schedule source failures are reported without secrets.
+        failures.append(f"Official schedule {cache_key}: {safe_error_message(exc)}")
+        return cached
+
+
+def fetch_fred_release_dates(release_id: int, failures: list[str]) -> list[pd.Timestamp]:
+    cache_key = f"fred-release-dates-{release_id}"
+    cached = read_text_cache(cache_key)
+    text = cached
+    if text is None:
+        api_key = os.environ.get("FRED_API_KEY")
+        if not api_key:
+            failures.append(f"FRED release dates {release_id}: FRED_API_KEY is not set")
+            return []
+        params = {
+            "release_id": release_id,
+            "api_key": api_key,
+            "file_type": "json",
+            "include_release_dates_with_no_data": "true",
+            "sort_order": "desc",
+            "limit": 120,
+        }
+        try:
+            response = requests.get(FRED_RELEASE_DATES_URL, params=params, timeout=30)
+            response.raise_for_status()
+            text = response.text
+            write_text_cache(cache_key, f"{FRED_RELEASE_DATES_URL}?release_id={release_id}", text)
+        except Exception as exc:  # noqa: BLE001 - provider errors are summarized without secrets.
+            failures.append(f"FRED release dates {release_id}: {safe_error_message(exc)}")
+            return []
+
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError as exc:
+        failures.append(f"FRED release dates {release_id}: invalid cached JSON ({safe_error_message(exc)})")
+        return []
+
+    dates = []
+    for item in payload.get("release_dates", []):
+        try:
+            dates.append(pd.Timestamp(item.get("date")))
+        except (TypeError, ValueError):
+            continue
+    return sorted(set(dates))
+
+
 def observations_from_fred_json(payload: dict) -> list[dict]:
     rows = []
     for observation in payload.get("observations", []):
@@ -343,6 +477,294 @@ def event_from_point(indicator: Indicator, frame: pd.DataFrame, index: int) -> d
         "yoyPct": yoy_pct,
         "note": indicator.note,
     }
+
+
+def plain_text_from_html(html_text: str) -> str:
+    text = re.sub(r"(?is)<(script|style).*?</\1>", " ", html_text)
+    text = re.sub(r"(?s)<[^>]+>", "\n", text)
+    text = html_lib.unescape(text)
+    return "\n".join(line.strip() for line in text.splitlines() if line.strip())
+
+
+def fred_release_timestamp(release_date: pd.Timestamp, hour: int = 8, minute: int = 30) -> datetime:
+    return datetime(release_date.year, release_date.month, release_date.day, hour, minute, tzinfo=EASTERN_TZ)
+
+
+def beijing_release_date(release_time_eastern: datetime) -> pd.Timestamp:
+    return pd.Timestamp(release_time_eastern.astimezone(BEIJING_TZ).date())
+
+
+def release_time_payload(release_time_eastern: datetime) -> dict:
+    utc_time = release_time_eastern.astimezone(UTC).replace(microsecond=0)
+    beijing_time = release_time_eastern.astimezone(BEIJING_TZ).replace(microsecond=0)
+    return {
+        "releaseTimeUtc": utc_time.isoformat().replace("+00:00", "Z"),
+        "releaseTimeBeijing": beijing_time.isoformat(),
+    }
+
+
+def latest_value_for_series(series_frames: dict[str, pd.DataFrame], series_id: str) -> float | None:
+    frame = series_frames.get(series_id, pd.DataFrame())
+    if frame.empty:
+        return None
+    latest = frame[frame.index <= END_DATE]
+    if latest.empty:
+        return None
+    return finite_number(latest.iloc[-1]["value"])
+
+
+def latest_change_for_series(series_frames: dict[str, pd.DataFrame], series_id: str) -> float | None:
+    frame = series_frames.get(series_id, pd.DataFrame())
+    if frame.empty:
+        return None
+    latest = frame[frame.index <= END_DATE]
+    if len(latest) < 2:
+        return None
+    current = finite_number(latest.iloc[-1]["value"])
+    previous = finite_number(latest.iloc[-2]["value"])
+    if current is None or previous is None:
+        return None
+    return current - previous
+
+
+def latest_pct_change_for_series(series_frames: dict[str, pd.DataFrame], series_id: str) -> float | None:
+    frame = series_frames.get(series_id, pd.DataFrame())
+    if frame.empty:
+        return None
+    latest = frame[frame.index <= END_DATE]
+    if len(latest) < 2:
+        return None
+    return pct_change(finite_number(latest.iloc[-2]["value"]), finite_number(latest.iloc[-1]["value"]))
+
+
+def latest_yoy_for_series(series_frames: dict[str, pd.DataFrame], series_id: str) -> float | None:
+    frame = series_frames.get(series_id, pd.DataFrame())
+    if frame.empty:
+        return None
+    latest = frame[frame.index <= END_DATE]
+    if latest.empty:
+        return None
+    latest_date = latest.index[-1]
+    latest_value = finite_number(latest.iloc[-1]["value"])
+    year_ago = value_near_year_ago(frame, latest_date, "monthly")
+    return pct_change(year_ago, latest_value)
+
+
+def scheduled_event(
+    *,
+    date: pd.Timestamp,
+    series_id: str,
+    label: str,
+    category: str,
+    unit: str,
+    source: str,
+    previous: float | None,
+    release_time_eastern: datetime,
+    reference_period: str | None = None,
+    note: str = "",
+    target_lower: float | None = None,
+) -> dict:
+    payload = {
+        "date": as_date(date),
+        "seriesId": series_id,
+        "label": label,
+        "category": category,
+        "categoryLabel": CATEGORIES[category],
+        "role": "scheduled_release",
+        "cadence": "event",
+        "unit": unit,
+        "source": source,
+        "dateMeaning": "scheduled_beijing_date",
+        "actual": None,
+        "previous": previous,
+        "forecast": None,
+        "change": None,
+        "changeBp": None,
+        "pctChange": None,
+        "yearAgo": None,
+        "yoyPct": None,
+        "note": note,
+        **release_time_payload(release_time_eastern),
+    }
+    if reference_period:
+        payload["referencePeriod"] = reference_period
+    if target_lower is not None:
+        payload["targetLower"] = target_lower
+    return payload
+
+
+def in_schedule_window(date: pd.Timestamp) -> bool:
+    return END_DATE < date <= SCHEDULE_EVENT_END
+
+
+def build_bls_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: list[str]) -> list[dict]:
+    events: list[dict] = []
+    for release_date in fetch_fred_release_dates(FRED_EMPLOYMENT_SITUATION_RELEASE_ID, failures):
+        release_time = fred_release_timestamp(release_date)
+        date = beijing_release_date(release_time)
+        if not in_schedule_window(date):
+            continue
+        source = "FRED release dates / BLS Employment Situation"
+        events.append(scheduled_event(
+            date=date,
+            series_id=f"PAYEMS_SCHEDULED_{as_date(date)}",
+            label="Nonfarm payrolls",
+            category="growth",
+            unit="thousand_persons",
+            source=source,
+            previous=latest_change_for_series(series_frames, "PAYEMS"),
+            release_time_eastern=release_time,
+            note="Scheduled release date from FRED's official release-date endpoint for the BLS Employment Situation; previous value is the latest month-over-month payroll change derived from FRED observations.",
+        ))
+        events.append(scheduled_event(
+            date=date,
+            series_id=f"UNRATE_SCHEDULED_{as_date(date)}",
+            label="Unemployment rate",
+            category="growth",
+            unit="percent",
+            source=source,
+            previous=latest_value_for_series(series_frames, "UNRATE"),
+            release_time_eastern=release_time,
+            note="Scheduled release date from FRED's official release-date endpoint for the BLS Employment Situation; previous value is the latest FRED observation available at generation time.",
+        ))
+
+    for release_date in fetch_fred_release_dates(FRED_CPI_RELEASE_ID, failures):
+        release_time = fred_release_timestamp(release_date)
+        date = beijing_release_date(release_time)
+        if not in_schedule_window(date):
+            continue
+        source = "FRED release dates / BLS CPI"
+        events.append(scheduled_event(
+            date=date,
+            series_id=f"CPI_MOM_SCHEDULED_{as_date(date)}",
+            label="CPI monthly inflation rate",
+            category="inflation",
+            unit="percent",
+            source=source,
+            previous=latest_pct_change_for_series(series_frames, "CPIAUCSL"),
+            release_time_eastern=release_time,
+            note="Scheduled release date from FRED's official release-date endpoint for CPI; previous value is derived from latest FRED CPI index observations.",
+        ))
+        events.append(scheduled_event(
+            date=date,
+            series_id=f"CPI_YOY_SCHEDULED_{as_date(date)}",
+            label="CPI yearly inflation rate",
+            category="inflation",
+            unit="percent",
+            source=source,
+            previous=latest_yoy_for_series(series_frames, "CPIAUCSL"),
+            release_time_eastern=release_time,
+            note="Scheduled release date from FRED's official release-date endpoint for CPI; previous value is derived from latest FRED CPI index observations.",
+        ))
+    return events
+
+
+def month_number(label: str) -> int | None:
+    return MONTH_NUMBER.get(label.strip().lower().rstrip("."))
+
+
+def parse_fomc_meetings(html_text: str) -> list[datetime]:
+    lines = plain_text_from_html(html_text).splitlines()
+    meetings: list[datetime] = []
+    active_year: int | None = None
+    current_month_label: str | None = None
+
+    for raw_line in lines:
+        line = raw_line.strip().replace("*", "")
+        year_match = re.search(r"\b(20\d{2})\s+FOMC\s+Meetings\b", line, re.IGNORECASE)
+        if year_match:
+            active_year = int(year_match.group(1))
+            current_month_label = None
+            continue
+        if active_year is None:
+            continue
+        if re.search(r"\b(20\d{2})\s+FOMC\s+Meetings\b", line, re.IGNORECASE):
+            continue
+        if re.fullmatch(r"[A-Za-z]{3,9}(?:/[A-Za-z]{3,9})?", line):
+            current_month_label = line
+            continue
+        if current_month_label is None:
+            continue
+        date_match = re.fullmatch(r"(\d{1,2})(?:-(\d{1,2}))?", line)
+        if not date_match:
+            continue
+
+        month_parts = current_month_label.split("/")
+        start_month = month_number(month_parts[0])
+        if start_month is None:
+            continue
+        start_day = int(date_match.group(1))
+        end_day = int(date_match.group(2) or date_match.group(1))
+        end_month = start_month
+        end_year = active_year
+        if len(month_parts) > 1:
+            end_month = month_number(month_parts[-1]) or start_month
+        elif end_day < start_day:
+            end_month += 1
+            if end_month == 13:
+                end_month = 1
+                end_year += 1
+        meetings.append(datetime(end_year, end_month, end_day, 14, 0, tzinfo=EASTERN_TZ))
+
+    return meetings
+
+
+def build_fomc_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: list[str]) -> list[dict]:
+    html_text = fetch_official_schedule_text("fed-fomc-calendar", FED_FOMC_CALENDAR_URL, failures)
+    if not html_text:
+        return []
+
+    events: list[dict] = []
+    target_upper = latest_value_for_series(series_frames, "DFEDTARU")
+    target_lower = latest_value_for_series(series_frames, "DFEDTARL")
+    for decision_time in parse_fomc_meetings(html_text):
+        decision_date = beijing_release_date(decision_time)
+        if in_schedule_window(decision_date):
+            events.append(scheduled_event(
+                date=decision_date,
+                series_id=f"FOMC_RATE_DECISION_SCHEDULED_{as_date(decision_date)}",
+                label="FOMC rate decision",
+                category="rates",
+                unit="percent",
+                source="Federal Reserve FOMC calendar",
+                previous=target_upper,
+                target_lower=target_lower,
+                release_time_eastern=decision_time,
+                note="Scheduled FOMC policy decision. Previous value displays the latest target upper bound; targetLower carries the latest lower bound.",
+            ))
+
+        minutes_time = decision_time + timedelta(days=21)
+        minutes_date = beijing_release_date(minutes_time)
+        if in_schedule_window(minutes_date):
+            events.append(scheduled_event(
+                date=minutes_date,
+                series_id=f"FOMC_MINUTES_SCHEDULED_{as_date(minutes_date)}",
+                label="FOMC meeting minutes",
+                category="rates",
+                unit="event",
+                source="Federal Reserve FOMC calendar",
+                previous=None,
+                release_time_eastern=minutes_time,
+                note="Federal Reserve notes that minutes of regularly scheduled meetings are released three weeks after the policy decision.",
+            ))
+    return events
+
+
+def build_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: list[str]) -> list[dict]:
+    events = [
+        *build_bls_scheduled_events(series_frames, failures),
+        *build_fomc_scheduled_events(series_frames, failures),
+    ]
+    return sorted(events, key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
+
+
+def merge_scheduled_events(events: list[dict], scheduled_events: list[dict]) -> list[dict]:
+    scheduled_keys = {(event["seriesId"], event["date"]) for event in scheduled_events}
+    kept_events = [
+        event for event in events
+        if (event.get("seriesId"), event.get("date")) not in scheduled_keys
+    ]
+    return sorted([*kept_events, *scheduled_events], key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
 
 
 def build_observation_events(series_frames: dict[str, pd.DataFrame]) -> list[dict]:
@@ -557,7 +979,8 @@ def build_output() -> dict:
         observations = fetch_fred_observations(fred, series_id, LOOKBACK_START, END_DATE, failures)
         series_frames[series_id] = observation_frame(observations)
 
-    events = merge_manual_events(build_observation_events(series_frames))
+    scheduled_events = build_scheduled_events(series_frames, failures)
+    events = merge_manual_events(merge_scheduled_events(build_observation_events(series_frames), scheduled_events))
     weekly_rows = weekly_window_rows(series_frames)
     summary = build_summary(series_frames)
     if not events and not weekly_rows:
@@ -580,13 +1003,17 @@ def build_output() -> dict:
         },
         "cache": {
             "providerCachePath": "tmp/macro-cache/fred",
+            "officialScheduleCachePath": "tmp/macro-cache/official-schedules",
             "maxAgeHours": CACHE_MAX_AGE_HOURS,
+            "scheduleMaxAgeHours": SCHEDULE_CACHE_MAX_AGE_HOURS,
             "forceRefresh": FORCE_REFRESH,
             "manualEventLookaheadDays": MANUAL_EVENT_LOOKAHEAD_DAYS,
+            "scheduleEventLookaheadDays": SCHEDULE_EVENT_LOOKAHEAD_DAYS,
         },
         "methodology": (
             "FRED observation dates are retained as observation or period dates, not public release timestamps. "
-            "Forecast values are intentionally null until a reviewed forecast source or manual backend input is added. "
+            "Future BLS scheduled release rows come from the official FRED release-date API; FOMC rows come from the Federal Reserve calendar and use Beijing dates. "
+            "Scheduled rows leave actual and forecast null until a reviewed forecast source or released observation is available. "
             "Weekly state rows summarize observed start/end changes inside each Friday-ending window."
         ),
         "categories": [{"id": key, "label": value} for key, value in CATEGORIES.items()],
@@ -597,6 +1024,8 @@ def build_output() -> dict:
         "weeklyState": weekly_rows,
         "sources": {
             "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
+            "FRED release dates": "https://fred.stlouisfed.org/docs/api/fred/release_dates.html",
+            "Federal Reserve FOMC calendar": FED_FOMC_CALENDAR_URL,
             "manualEvents": "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py.",
         },
         "failures": failures,
@@ -605,18 +1034,23 @@ def build_output() -> dict:
 
 def merge_manual_events_into_existing(existing: dict, error: Exception | None = None) -> dict:
     output = dict(existing)
-    events = merge_manual_events(list(output.get("events") or []))
-    output["events"] = events
-    output["generatedAt"] = iso_now()
-    output["categorySummary"] = category_summary(events, list(output.get("weeklyState") or []))
-    output.setdefault("cache", {})["manualEventLookaheadDays"] = MANUAL_EVENT_LOOKAHEAD_DAYS
-    output.setdefault("sources", {})["manualEvents"] = (
-        "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py."
-    )
     failures = [
         failure for failure in list(output.get("failures") or [])
         if "manual events merged into last-known-good cache" not in str(failure)
     ]
+    scheduled_events = build_scheduled_events({}, failures)
+    events = merge_manual_events(merge_scheduled_events(list(output.get("events") or []), scheduled_events))
+    output["events"] = events
+    output["generatedAt"] = iso_now()
+    output["categorySummary"] = category_summary(events, list(output.get("weeklyState") or []))
+    output.setdefault("cache", {})["manualEventLookaheadDays"] = MANUAL_EVENT_LOOKAHEAD_DAYS
+    output.setdefault("cache", {})["scheduleEventLookaheadDays"] = SCHEDULE_EVENT_LOOKAHEAD_DAYS
+    output.setdefault("cache", {})["officialScheduleCachePath"] = "tmp/macro-cache/official-schedules"
+    output.setdefault("sources", {})["manualEvents"] = (
+        "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py."
+    )
+    output.setdefault("sources", {})["FRED release dates"] = "https://fred.stlouisfed.org/docs/api/fred/release_dates.html"
+    output.setdefault("sources", {})["Federal Reserve FOMC calendar"] = FED_FOMC_CALENDAR_URL
     if error is not None:
         failures.append(f"FRED refresh skipped; manual events merged into last-known-good cache: {safe_error_message(error)}")
     output["failures"] = failures
