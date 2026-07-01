@@ -938,7 +938,7 @@ html[lang="zh-CN"] .title-block h1 {
 
 .macro-environment-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-left: 1px solid var(--ink);
 }
@@ -2125,11 +2125,17 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .robot-sector-cell {
-  min-width: 92px;
+  min-width: 76px;
   background: #f4ecd9;
   text-align: center;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 900;
+  line-height: 1.15;
+}
+
+.robot-sector-line {
+  display: block;
+  white-space: nowrap;
 }
 
 .robot-company-cell {
@@ -2561,7 +2567,7 @@ html[lang="zh-CN"] .title-block h1 {
   }
 
   .macro-environment-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .market-clock-summary {
@@ -2601,8 +2607,43 @@ html[lang="zh-CN"] .title-block h1 {
     align-items: start;
   }
 
+  .macro-date-detail-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .macro-date-detail-item {
+    gap: 7px;
+    padding: 9px 10px;
+  }
+
+  .macro-date-detail-item:nth-child(odd) {
+    border-right: 1px solid var(--soft-line);
+  }
+
+  .macro-date-detail-item > strong {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .macro-date-detail-item > small {
+    overflow-wrap: anywhere;
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
   .macro-date-detail-item dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .macro-date-detail-item dt {
+    font-size: 8px;
+  }
+
+  .macro-date-detail-item dd {
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.15;
   }
 }
 
@@ -2683,7 +2724,28 @@ html[lang="zh-CN"] .title-block h1 {
   }
 
   .macro-environment-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .macro-environment-card {
+    padding: 8px 7px;
+  }
+
+  .macro-environment-card small {
+    font-size: 8px;
+    line-height: 1.2;
+  }
+
+  .macro-environment-card strong {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .macro-environment-card span {
+    font-size: 10px;
+    line-height: 1.2;
   }
 
   .market-clock-summary {
@@ -2761,9 +2823,29 @@ html[lang="zh-CN"] .title-block h1 {
     flex-direction: column;
   }
 
+  .macro-date-detail-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .macro-date-detail-item {
+    padding: 8px;
+  }
+
   .macro-date-detail-item dl {
-    grid-template-columns: 1fr;
-    gap: 5px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 6px;
+  }
+
+  .macro-date-detail-item > strong {
+    font-size: 11px;
+  }
+
+  .macro-date-detail-item > small {
+    font-size: 8px;
+  }
+
+  .macro-date-detail-item dd {
+    font-size: 10px;
   }
 
   .detail-empty {

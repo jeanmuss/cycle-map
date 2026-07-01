@@ -2073,12 +2073,43 @@ function environmentDeltaText(item, t, mode = "change") {
   return formatMacroChange(item);
 }
 
+function macroUsdBillions(item) {
+  if (!isMacroNumber(item?.end)) return null;
+  if (item.unit === "usd_millions") return Number(item.end) / 1000;
+  if (item.unit === "usd_billions" || item.unit === "usd_billions_chained") return Number(item.end);
+  return null;
+}
+
+function formatMacroUsdLiquidity(value) {
+  if (!isMacroNumber(value)) return "N/A";
+  const billions = Number(value);
+  if (Math.abs(billions) >= 1000) return `$${formatNumber(billions / 1000, 2)}T`;
+  return `$${formatNumber(billions, 1)}B`;
+}
+
+function netLiquidityCard(values, t) {
+  const fedAssets = macroUsdBillions(values.WALCL);
+  const tga = macroUsdBillions(values.WTREGEN);
+  const reverseRepo = macroUsdBillions(values.RRPONTSYD);
+  const value = [fedAssets, tga, reverseRepo].every(isMacroNumber)
+    ? fedAssets - tga - reverseRepo
+    : null;
+  return {
+    label: t.htmlLang === "zh-CN" ? "\u51c0\u6d41\u52a8\u6027" : "Net liquidity",
+    value: formatMacroUsdLiquidity(value),
+    delta: "Fed-TGA-RRP",
+    className: "",
+  };
+}
+
 function environmentSummary(week, t) {
   const values = week?.values || {};
   const tenYear = values.DGS10;
+  const realYield = values.DFII10;
   const dollar = values.DTWEXBGS;
   const vix = values.VIXCLS;
   const credit = values.BAMLH0A0HYM2;
+  const tenYearRealLabel = t.htmlLang === "zh-CN" ? "10Y / \u5b9e\u9645\u5229\u7387" : "10Y / real yield";
   const score = pressureSignal(tenYear)
     + pressureSignal(dollar, "pct")
     + pressureSignal(vix)
@@ -2089,9 +2120,11 @@ function environmentSummary(week, t) {
     score,
     cards: [
       { label: t.macroCalendar.riskPosture, value: posture, delta: week?.weekKey || "N/A", className: score >= 2 ? "macro-up" : score <= -2 ? "macro-down" : "" },
-      { label: "10Y", value: formatMacroValue(tenYear?.end, tenYear?.unit), delta: environmentDeltaText(tenYear, t), className: macroMoveClass(tenYear?.changeBp) },
+      { label: tenYearRealLabel, value: `${formatMacroValue(tenYear?.end, tenYear?.unit)} / ${formatMacroValue(realYield?.end, realYield?.unit)}`, delta: `${environmentDeltaText(tenYear, t)} / ${environmentDeltaText(realYield, t)}`, className: macroMoveClass((Number(tenYear?.changeBp) || 0) + (Number(realYield?.changeBp) || 0)) },
       { label: "DXY", value: formatMacroValue(dollar?.end, dollar?.unit), delta: environmentDeltaText(dollar, t, "pct"), className: dollar?.carriedForward ? "" : macroMoveClass(dollar?.pctChange) },
-      { label: "VIX / HY", value: `${formatMacroValue(vix?.end, vix?.unit)} / ${formatMacroValue(credit?.end, credit?.unit)}`, delta: `${environmentDeltaText(vix, t)} / ${environmentDeltaText(credit, t)}`, className: macroMoveClass((Number(vix?.change) || 0) + (Number(credit?.changeBp) || 0)) },
+      { label: "VIX", value: formatMacroValue(vix?.end, vix?.unit), delta: environmentDeltaText(vix, t), className: macroMoveClass(vix?.change) },
+      { label: "HY OAS", value: formatMacroValue(credit?.end, credit?.unit), delta: environmentDeltaText(credit, t), className: macroMoveClass(credit?.changeBp) },
+      netLiquidityCard(values, t),
     ],
   };
 }
@@ -4283,6 +4316,12 @@ function RobotChainTable({ rows, range, language, copy }) {
   if (!rows.length) {
     return <div className="chip-empty-board">{copy.noRows}</div>;
   }
+  const sectorLabelParts = (row) => {
+    if (row.category.id !== "warehouse-service") {
+      return [language === "en" ? row.category.labelEn : row.category.labelZh];
+    }
+    return language === "en" ? ["Warehouse & Service", "Robots"] : ["\u4ed3\u50a8\u4e0e\u670d\u52a1", "\u673a\u5668\u4eba"];
+  };
   return (
     <div className="table-shell robot-chain-shell">
       <table className="robot-chain-table">
@@ -4303,11 +4342,12 @@ function RobotChainTable({ rows, range, language, copy }) {
           {rows.map((row) => row.assets.map((asset, assetIndex) => {
             const value = Number(asset.returns?.[range]);
             const business = language === "en" ? asset.businessEn : asset.businessZh;
-            const sectorLabel = language === "en" ? row.category.labelEn : row.category.labelZh;
             return (
               <tr key={`${row.category.id}-${asset.symbol}`}>
                 {assetIndex === 0 ? (
-                  <th scope="rowgroup" rowSpan={row.assets.length} className="robot-sector-cell">{sectorLabel}</th>
+                  <th scope="rowgroup" rowSpan={row.assets.length} className="robot-sector-cell">
+                    {sectorLabelParts(row).map((part) => <span className="robot-sector-line" key={part}>{part}</span>)}
+                  </th>
                 ) : null}
                 <td className="robot-company-cell">
                   <strong>{asset.symbol}</strong>
