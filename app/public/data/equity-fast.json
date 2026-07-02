@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "page": "equity-fast",
+  "generatedAt": "2026-07-02T10:21:48Z",
+  "refreshCadence": "Target 15 minutes for fast indicators; provider schedules and static deployment queues can add delay.",
+  "baseDataset": {
+    "file": "equity-weekly.json",
+    "generatedAt": "2026-07-01T06:28:17Z"
+  },
+  "methodology": "Fast indicators are generated separately from the slower equity calendar cache. CMC supplies crypto market capitalization; FRED supplies a gold price proxy index because the old LBMA gold fix series is not available in the current FRED API. The frontend reads this static derived JSON and never receives provider credentials.",
+  "metrics": [
+    {
+      "id": "BTC_MARKET_CAP",
+      "label": "BTC market cap",
+      "value": null,
+      "unit": "USD",
+      "previous": null,
+      "changePct": null,
+      "asOf": null,
+      "sourceLabel": "CoinMarketCap cryptocurrency quotes/latest",
+      "sourceUrl": "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest",
+      "quality": "unavailable",
+      "failure": "CMC_PRO_API_KEY is not configured"
+    },
+    {
+      "id": "CRYPTO_MARKET_CAP",
+      "label": "Total crypto market cap",
+      "value": null,
+      "unit": "USD",
+      "previous": null,
+      "changePct": null,
+      "asOf": null,
+      "sourceLabel": "CoinMarketCap global-metrics/quotes/latest",
+      "sourceUrl": "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest",
+      "quality": "unavailable",
+      "failure": "CMC_PRO_API_KEY is not configured"
+    },
+    {
+      "id": "GOLD_PRICE_PROXY",
+      "label": "Gold price proxy",
+      "value": 2542.69,
+      "unit": "index",
+      "previous": 2527.55,
+      "changePct": 0.5989990306818805,
+      "asOf": "2026-07-01",
+      "sourceLabel": "FRED / Credit Suisse NASDAQ Gold FLOWS103 Price Index",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NASDAQQGLDI",
+      "quality": "fresh"
+    }
+  ],
+  "sources": {
+    "CoinMarketCap": "https://coinmarketcap.com/api/documentation/v1/",
+    "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
+    "Gold proxy": "https://fred.stlouisfed.org/series/NASDAQQGLDI"
+  },
+  "failures": [
+    "BTC_MARKET_CAP: CMC_PRO_API_KEY is not configured",
+    "CRYPTO_MARKET_CAP: CMC_PRO_API_KEY is not configured"
+  ]
+}

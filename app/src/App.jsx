@@ -55,7 +55,7 @@ const EQUITY_MARKET_TEXT = {
     titleRest: "\u65e5\u5386",
     subtitle: "\u7528\u65e5\u9891\u4ef7\u683c\u3001\u5229\u7387\u548c\u6ce2\u52a8\u7387\u89c2\u5bdf\u98ce\u9669\u8d44\u4ea7\u7684\u77ed\u671f\u73af\u5883",
     cache: "\u5e02\u573a\u7f13\u5b58",
-    cacheTooltip: "\u9875\u9762\u53ea\u8bfb\u53d6\u540e\u53f0\u751f\u6210\u7684\u9759\u6001\u7f13\u5b58\u3002\u5f00\u76d8\u671f\u53ef\u7531\u540e\u53f0\u6bcf\u5c0f\u65f6\u5237\u65b0\uff1b\u524d\u7aef\u4e0d\u76f4\u8fde\u884c\u60c5\u6e90\u3002",
+    cacheTooltip: "\u9875\u9762\u53ea\u8bfb\u53d6\u540e\u53f0\u751f\u6210\u7684\u9759\u6001\u7f13\u5b58\u3002\u7edf\u8ba1\u5361\u4f18\u5148\u8bfb\u53d6 15 \u5206\u949f\u76ee\u6807\u5237\u65b0\u7684\u5feb\u7f13\u5b58\uff1b\u5468\u5386\u548c\u6708\u5386\u7ee7\u7eed\u8bfb\u53d6\u6162\u7f13\u5b58\u3002\u524d\u7aef\u4e0d\u76f4\u8fde\u884c\u60c5\u6e90\u3002",
     success: "\u5e02\u573a\u6570\u636e\u5df2\u66f4\u65b0",
     failure: (count) => `\u6570\u636e\u6e90\u5f02\u5e38\uff1a${count}`,
     loading: "\u6b63\u5728\u8bfb\u53d6\u672c\u5730\u5e02\u573a\u7f13\u5b58\u2026",
@@ -65,8 +65,15 @@ const EQUITY_MARKET_TEXT = {
     tenYear: "10Y",
     vix: "VIX",
     open: "\u5f00",
+    currentPrice: "\u73b0\u4ef7",
     close: "\u6536",
+    dayMove: "\u6da8\u8dcc",
+    priceIndicators: "\u89c2\u5bdf\u6307\u6807",
     macro: "\u5229\u7387 / \u6ce2\u52a8",
+    btcMarketCap: "BTC\u5e02\u503c",
+    cryptoMarketCap: "\u52a0\u5bc6\u603b\u5e02\u503c",
+    goldProxy: "\u9ec4\u91d1\u6307\u6570",
+    waitingForFastData: "\u7b49\u5f85\u5feb\u7f13\u5b58",
     weekCalendarTitle: "\u672c\u5468\u8be6\u60c5",
     monthCalendarTitle: "\u6708\u5ea6\u6982\u89c8",
     currentWeek: "\u672c\u5468",
@@ -75,7 +82,7 @@ const EQUITY_MARKET_TEXT = {
     nextWeek: "\u4e0b\u5468",
     previousMonth: "\u4e0a\u6708",
     nextMonth: "\u4e0b\u6708",
-    priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y \u548c VIX \u6765\u81ea FRED\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
+    priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y\u3001VIX \u548c\u9ec4\u91d1\u6307\u6570\u4ee3\u7406\u6765\u81ea FRED\uff0c\u52a0\u5bc6\u5e02\u503c\u6765\u81ea CMC\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
     eventPlaceholder: "\u672c\u9875\u6682\u4e0d\u63a5\u5165\u4e8b\u4ef6\u6ce8\u91ca\u3002",
   },
   en: {
@@ -84,7 +91,7 @@ const EQUITY_MARKET_TEXT = {
     titleRest: "Calendar",
     subtitle: "Daily price, rates, and volatility context for short-term risk-asset conditions.",
     cache: "Market cache",
-    cacheTooltip: "The page reads a generated static cache. During market hours, backend jobs can refresh hourly; the frontend never connects directly to market-data providers.",
+    cacheTooltip: "The page reads generated static caches. Summary cards prefer the fast cache with a 15-minute target cadence; calendars keep using the slower cache. The frontend never connects directly to market-data providers.",
     success: "Market data updated",
     failure: (count) => `Source issues: ${count}`,
     loading: "Reading local market cache...",
@@ -94,8 +101,15 @@ const EQUITY_MARKET_TEXT = {
     tenYear: "10Y",
     vix: "VIX",
     open: "Open",
+    currentPrice: "Current",
     close: "Close",
+    dayMove: "Move",
+    priceIndicators: "Observations",
     macro: "Rates / volatility",
+    btcMarketCap: "BTC cap",
+    cryptoMarketCap: "Crypto cap",
+    goldProxy: "Gold proxy",
+    waitingForFastData: "Waiting for fast cache",
     weekCalendarTitle: "This week details",
     monthCalendarTitle: "Monthly overview",
     currentWeek: "This week",
@@ -104,7 +118,7 @@ const EQUITY_MARKET_TEXT = {
     nextWeek: "Next week",
     previousMonth: "Previous",
     nextMonth: "Next",
-    priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y and VIX use FRED. The frontend reads static cache only.",
+    priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y, VIX, and the gold proxy use FRED; crypto market caps use CMC. The frontend reads static cache only.",
     eventPlaceholder: "No event annotation source is connected for this page yet.",
   },
 };
@@ -631,7 +645,7 @@ const TRANSLATIONS = {
     nav: {
       crypto: "加密周期",
       equity: "美股大盘",
-      macro: "\u5b8f\u89c2\u4e0e\u6d41\u52a8\u6027",
+      macro: "\u5b8f\u89c2\u6d41\u52a8\u6027",
       marketClock: "开市轮动",
       chipChain: "芯片链热点",
       robotChain: "机器人链",
@@ -684,10 +698,10 @@ const TRANSLATIONS = {
       eventPlaceholder: "事件标注接口已预留，本版暂不自动抓取或人工编辑事件。",
     },
     macroCalendar: {
-      docTitle: "\u5b8f\u89c2\u4e0e\u6d41\u52a8\u6027\u65e5\u5386",
+      docTitle: "\u5b8f\u89c2\u6d41\u52a8\u6027\u65e5\u5386",
       docDescription: "\u98ce\u9669\u8d44\u4ea7\u7684\u5b8f\u89c2\u3001\u5229\u7387\u3001\u7f8e\u5143\u3001\u6ce2\u52a8\u7387\u4e0e\u4fe1\u7528\u5229\u5dee\u89c2\u6d4b\u65e5\u5386",
       eyebrow: "EVENT & LIQUIDITY MAP",
-      titleAccent: "\u5b8f\u89c2\u4e0e\u6d41\u52a8\u6027",
+      titleAccent: "\u5b8f\u89c2\u6d41\u52a8\u6027",
       titleRest: "\u65e5\u5386",
       subtitle: "\u7528\u534a\u5e74\u671f FRED \u89c2\u6d4b\u6570\u636e\u8865\u8db3\u4ef7\u683c\u80cc\u540e\u7684\u901a\u80c0\u3001\u589e\u957f\u3001\u5229\u7387\u4e0e\u98ce\u9669\u504f\u597d\u7ebf\u7d22",
       cache: "\u5b8f\u89c2\u7f13\u5b58",
@@ -705,6 +719,63 @@ const TRANSLATIONS = {
         rates: "\u5229\u7387\u4e0e\u7f8e\u5143",
         volatility: "\u6ce2\u52a8\u4e0e\u4fe1\u7528",
       },
+      eventLabels: {
+        "ADP private payrolls": "ADP\u5c0f\u975e\u519c",
+        "Average hourly earnings": "\u5e73\u5747\u65f6\u85aa",
+        "Broad USD index": "\u5e7f\u4e49\u7f8e\u5143\u6307\u6570",
+        "China 3M interbank rate": "\u4e2d\u56fd3M\u540c\u4e1a\u5229\u7387",
+        "Consumer sentiment": "\u5bc6\u5927\u6d88\u8d39\u8005\u4fe1\u5fc3",
+        "Core CPI": "\u6838\u5fc3CPI",
+        "Core PCE": "\u6838\u5fc3PCE",
+        "Core PPI goods": "\u6838\u5fc3PPI\u5546\u54c1",
+        "CPI": "CPI",
+        "CPI monthly inflation rate": "CPI\u6708\u901a\u80c0\u7387",
+        "CPI yearly inflation rate": "CPI\u5e74\u901a\u80c0\u7387",
+        "Effective fed funds": "\u6709\u6548\u8054\u90a6\u57fa\u91d1\u5229\u7387",
+        "Fed target range": "\u8054\u50a8\u76ee\u6807\u5229\u7387\u533a\u95f4",
+        "FOMC fed funds median projection": "FOMC\u70b9\u9635\u56fe\u4e2d\u503c",
+        "FOMC longer-run fed funds median": "FOMC\u957f\u671f\u5229\u7387\u4e2d\u503c",
+        "FOMC meeting minutes": "FOMC\u4f1a\u8bae\u7eaa\u8981",
+        "FOMC rate decision": "FOMC\u5229\u7387\u51b3\u8bae",
+        "Industrial production": "\u5de5\u4e1a\u4ea7\u51fa",
+        "Initial jobless claims": "\u521d\u8bf7\u5931\u4e1a\u91d1",
+        "Japan overnight rate": "\u65e5\u672c\u9694\u591c\u5229\u7387",
+        "M2 money stock": "M2\u8d27\u5e01\u4f9b\u5e94",
+        "Nonfarm payrolls": "\u975e\u519c\u5c31\u4e1a",
+        "PCE price index": "PCE\u7269\u4ef7\u6307\u6570",
+        "PPI": "PPI",
+        "Real GDP": "\u5b9e\u9645GDP",
+        "Retail sales": "\u96f6\u552e\u9500\u552e",
+        "U.S. Christmas Day holiday": "\u7f8e\u56fd\u5723\u8bde\u8282\u5047\u671f",
+        "U.S. Columbus Day holiday": "\u7f8e\u56fd\u54e5\u4f26\u5e03\u65e5\u5047\u671f",
+        "U.S. Independence Day holiday": "\u7f8e\u56fd\u72ec\u7acb\u65e5\u5047\u671f",
+        "U.S. Juneteenth holiday": "\u7f8e\u56fd\u516d\u6708\u8282\u5047\u671f",
+        "U.S. Labor Day holiday": "\u7f8e\u56fd\u52b3\u5de5\u8282\u5047\u671f",
+        "U.S. Martin Luther King Jr. Day holiday": "\u7f8e\u56fd\u9a6c\u4e01\u8def\u5fb7\u91d1\u65e5\u5047\u671f",
+        "U.S. Memorial Day holiday": "\u7f8e\u56fd\u9635\u4ea1\u5c06\u58eb\u7eaa\u5ff5\u65e5\u5047\u671f",
+        "U.S. New Year's Day holiday": "\u7f8e\u56fd\u65b0\u5e74\u5047\u671f",
+        "U.S. Thanksgiving Day holiday": "\u7f8e\u56fd\u611f\u6069\u8282\u5047\u671f",
+        "U.S. Veterans Day holiday": "\u7f8e\u56fd\u9000\u4f0d\u519b\u4eba\u8282\u5047\u671f",
+        "U.S. Washington's Birthday holiday": "\u7f8e\u56fd\u534e\u76db\u987f\u8bde\u8fb0\u5047\u671f",
+        "Unemployment rate": "\u5931\u4e1a\u7387",
+      },
+      eventLabelPrefixes: {
+        ADP_PRIVATE_PAYROLLS: "ADP\u5c0f\u975e\u519c",
+        FOMC_MINUTES_SCHEDULED: "FOMC\u4f1a\u8bae\u7eaa\u8981",
+        FOMC_RATE_DECISION_SCHEDULED: "FOMC\u5229\u7387\u51b3\u8bae",
+        US_FEDERAL_HOLIDAY: "\u7f8e\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5",
+      },
+      compactEventLabels: {
+        "ADP\u5c0f\u975e\u519c": "ADP\u5c0f\u975e\u519c",
+        "CPI\u5e74\u901a\u80c0\u7387": "CPI\u5e74",
+        "CPI\u6708\u901a\u80c0\u7387": "CPI\u6708",
+        "FOMC\u4f1a\u8bae\u7eaa\u8981": "FOMC\u7eaa\u8981",
+        "FOMC\u5229\u7387\u51b3\u8bae": "FOMC\u51b3\u8bae",
+        "\u7f8e\u56fd\u72ec\u7acb\u65e5\u5047\u671f": "\u72ec\u7acb\u65e5",
+        "\u7f8e\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5": "\u7f8e\u56fd\u5047\u65e5",
+        "\u975e\u519c\u5c31\u4e1a": "\u975e\u519c",
+        "\u5931\u4e1a\u7387": "\u5931\u4e1a\u7387",
+      },
       compactCategories: {
         inflation: "\u901a\u80c0",
         growth: "\u589e\u957f",
@@ -721,7 +792,7 @@ const TRANSLATIONS = {
       eventsCaption: "\u534a\u5e74\u671f\u5b8f\u89c2\u6307\u6807\u89c2\u6d4b\u8868",
       stateTitle: "\u5468\u5ea6\u72b6\u6001\u80cc\u666f",
       stateCaption: "\u5229\u7387\u3001\u7f8e\u5143\u3001\u6ce2\u52a8\u7387\u548c\u4fe1\u7528\u5229\u5dee\u7684\u5468\u5ea6\u72b6\u6001\u8868",
-      methodology: "\u5386\u53f2\u89c2\u6d4b\u65e5\u4e0d\u7b49\u4e8e\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\uff1b\u672a\u6765 BLS \u6392\u671f\u6765\u81ea FRED release-date API\uff0cFOMC \u6765\u81ea\u7f8e\u8054\u50a8\u65e5\u5386\uff0c\u5b9e\u9645\u503c\u548c\u9884\u6d4b\u503c\u6682\u7f3a\u3002",
+      methodology: "\u5386\u53f2\u89c2\u6d4b\u65e5\u4e0d\u7b49\u4e8e\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\uff1b\u672a\u6765 BLS \u6392\u671f\u6765\u81ea FRED release-date API\uff0cADP \u5c0f\u975e\u519c\u6765\u81ea ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\uff0cFOMC \u6765\u81ea\u7f8e\u8054\u50a8\u65e5\u5386\uff0c\u8282\u5047\u65e5\u4f7f\u7528\u7f8e\u56fd\u8054\u90a6\u89c2\u5bdf\u65e5\u89c4\u5219\u3002",
       date: "\u65e5\u671f",
       indicator: "\u6307\u6807",
       actual: "\u5b9e\u9645",
@@ -748,7 +819,7 @@ const TRANSLATIONS = {
       credit: "\u4fe1\u7528",
       stress: "\u538b\u529b",
       noRows: "\u6682\u65e0\u5339\u914d\u6570\u636e",
-      sourceNote: "\u5f53\u524d\u4f7f\u7528 FRED \u5b98\u65b9 API\u3001FRED release-date API\u3001\u672c\u5730\u7f13\u5b58\u548c\u7f8e\u8054\u50a8 FOMC \u65e5\u5386\uff1b\u672a\u4f7f\u7528 yfinance\uff0c\u4e5f\u672a\u63a5\u5165\u672a\u5ba1\u67e5\u7684\u9884\u6d4b\u6765\u6e90\u3002",
+      sourceNote: "\u5f53\u524d\u4f7f\u7528 FRED \u5b98\u65b9 API\u3001FRED release-date API\u3001ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\u3001\u7f8e\u8054\u50a8 FOMC \u65e5\u5386\u548c\u7f8e\u56fd\u8054\u90a6\u8282\u5047\u65e5\u89c4\u5219\uff1b\u672a\u4f7f\u7528 yfinance\uff0c\u4e5f\u672a\u63a5\u5165\u672a\u5ba1\u67e5\u7684\u9884\u6d4b\u6765\u6e90\u3002",
       environmentTitle: "\u5f53\u524d\u5b8f\u89c2\u73af\u5883",
       weekCalendarTitle: "\u672c\u5468\u73af\u5883\u5468\u5386",
       monthCalendarTitle: "\u6708\u5ea6\u6307\u6807\u65e5\u5386",
@@ -762,6 +833,9 @@ const TRANSLATIONS = {
       quarterWindow: "\u5b63\u672b\u7a97\u53e3",
       monthWindow: "\u6708\u672b\u7a97\u53e3",
       sellPressureExhausted: "\u5356\u538b\u6e10\u7aed",
+      earningsSeason: "\u8d22\u62a5\u5b63",
+      earningsSeasonWindow: "\u8d22\u62a5\u5b63\u7a97\u53e3",
+      earningsSeasonNotice: "7 \u6708\u4e2d\u65ec\u5230\u6708\u5e95\u7684\u7f8e\u80a1\u8d22\u62a5\u5b63\u7a97\u53e3\uff0c\u7528\u4e8e\u63d0\u793a\u98ce\u9669\u504f\u597d\u548c\u6ce2\u52a8\u7387\u53ef\u80fd\u88ab\u4e2a\u80a1\u8d22\u62a5\u548c\u6307\u5f15\u5f71\u54cd\u3002",
       noData: "\u65e0\u6570\u636e",
       noIndicators: "\u5f53\u65e5\u65e0\u6307\u6807",
       clickDateHint: "\u70b9\u51fb\u65e5\u671f\u67e5\u770b\u8be6\u60c5",
@@ -1014,7 +1088,7 @@ const TRANSLATIONS = {
       eventsCaption: "Six-month macro indicator observation table",
       stateTitle: "Weekly state backdrop",
       stateCaption: "Weekly rates, dollar, volatility, and credit spread state table",
-      methodology: "Historical observation dates are not release timestamps. Future BLS schedules come from the FRED release-date API; FOMC rows come from the Federal Reserve calendar. Actual and forecast stay N/A until a reviewed source or released observation is available.",
+      methodology: "Historical observation dates are not release timestamps. Future BLS schedules come from the FRED release-date API; ADP small-nonfarm rows come from ADP's official static data; FOMC rows come from the Federal Reserve calendar; holiday rows use U.S. federal observed-date rules.",
       date: "Date",
       indicator: "Indicator",
       actual: "Actual",
@@ -1041,7 +1115,7 @@ const TRANSLATIONS = {
       credit: "Credit",
       stress: "Stress",
       noRows: "No matching rows",
-      sourceNote: "This version uses the official FRED API, the FRED release-date API, local cache, and the Federal Reserve FOMC calendar. It does not use yfinance or unreviewed forecast sources.",
+      sourceNote: "This version uses the official FRED API, the FRED release-date API, ADP's official static data, local cache, the Federal Reserve FOMC calendar, and U.S. federal holiday rules. It does not use yfinance or unreviewed forecast sources.",
       environmentTitle: "Current macro environment",
       weekCalendarTitle: "This week calendar",
       monthCalendarTitle: "Monthly indicator calendar",
@@ -1055,6 +1129,9 @@ const TRANSLATIONS = {
       quarterWindow: "Quarter-end window",
       monthWindow: "Month-end window",
       sellPressureExhausted: "Selling pressure exhausted",
+      earningsSeason: "Earnings season",
+      earningsSeasonWindow: "Earnings season window",
+      earningsSeasonNotice: "U.S. earnings-season window from mid-July to month-end, used as a risk-appetite and volatility attention marker.",
       noData: "No data",
       noIndicators: "No indicators",
       clickDateHint: "Click a date for details",
@@ -1849,9 +1926,25 @@ function findWeeklyStateForDate(dataset, dateKey) {
     || null;
 }
 
-function compactIndicatorLabel(label) {
+function macroEventLabel(event, t) {
+  if (!event) return "N/A";
+  const labels = t.macroCalendar.eventLabels || {};
+  const prefixes = t.macroCalendar.eventLabelPrefixes || {};
+  const seriesId = String(event.seriesId || "");
+  const bySeries = labels[seriesId];
+  if (bySeries) return bySeries;
+  const prefixMatch = Object.entries(prefixes).find(([prefix]) => seriesId.startsWith(prefix));
+  if (prefixMatch) return prefixMatch[1];
+  return labels[event.label] || event.label || "N/A";
+}
+
+function compactIndicatorLabel(label, t) {
+  const translated = t?.macroCalendar?.eventLabels?.[label] || label || "";
+  const compactLabel = t?.macroCalendar?.compactEventLabels?.[translated];
+  if (compactLabel) return compactLabel;
   const replacements = [
     ["Average hourly earnings", "AHE"],
+    ["ADP private payrolls", "ADP"],
     ["Initial jobless claims", "Initial claims"],
     ["Industrial production", "Ind. production"],
     ["PCE price index", "PCE"],
@@ -1864,17 +1957,27 @@ function compactIndicatorLabel(label) {
     ["China 3M interbank rate", "China 3M"],
     ["FOMC fed funds median projection", "Dot median"],
     ["FOMC longer-run fed funds median", "Dot long-run"],
+    ["FOMC meeting minutes", "FOMC minutes"],
+    ["FOMC rate decision", "FOMC decision"],
     ["M2 money stock", "M2"],
+    ["U.S. Independence Day holiday", "Independence Day"],
+    ["U.S. federal holiday", "U.S. holiday"],
   ];
-  return replacements.reduce((value, [from, to]) => value.replace(from, to), label || "");
+  return replacements.reduce((value, [from, to]) => value.replace(from, to), translated);
 }
 
-function eventWeekText(event) {
-  return `${compactIndicatorLabel(event.label)} ${formatMacroValue(event.actual, event.unit)}`;
+function compactEventLabel(event, t) {
+  const label = macroEventLabel(event, t);
+  const compactLabel = t.macroCalendar.compactEventLabels?.[label];
+  return compactLabel || compactIndicatorLabel(label, t);
 }
 
-function eventMonthText(event) {
-  return compactIndicatorLabel(event.label);
+function eventWeekText(event, t) {
+  return `${compactEventLabel(event, t)} ${formatMacroValue(event.actual, event.unit)}`;
+}
+
+function eventMonthText(event, t) {
+  return compactEventLabel(event, t);
 }
 
 function statusChipText(seriesId, value) {
@@ -1933,7 +2036,17 @@ function flowItemsForDate(dateKey, t) {
     lastWorkingDay.setUTCDate(lastWorkingDay.getUTCDate() - 1);
   }
   const isQuarterEnd = [2, 5, 8, 11].includes(date.getUTCMonth());
+  const isJulyEarningsSeasonWindow = date.getUTCMonth() === 6 && date.getUTCDate() >= 15 && date.getUTCDate() <= 31;
   const items = [];
+  if (isJulyEarningsSeasonWindow) {
+    items.push({
+      type: "flow",
+      date: dateKey,
+      category: "volatility",
+      label: t.macroCalendar.earningsSeasonWindow,
+      text: t.macroCalendar.earningsSeason,
+    });
+  }
   if (daysToMonthEnd >= 0 && daysToMonthEnd <= 5) {
     items.push({
       type: "flow",
@@ -1967,11 +2080,11 @@ function eventsByDate(events) {
 function buildWeekCellItems(dateKey, category, eventMap, statusItems, t) {
   const eventItems = (eventMap.get(dateKey) || [])
     .filter((event) => event.category === category)
-    .map((event) => ({ type: "event", category, event, text: eventWeekText(event) }));
+    .map((event) => ({ type: "event", category, event, text: eventWeekText(event, t) }));
   const stateItems = statusItems
     .filter((item) => item.date === dateKey && item.category === category)
     .map((item) => ({ ...item, text: item.text }));
-  const flowItems = category === "liquidity" ? flowItemsForDate(dateKey, t) : [];
+  const flowItems = flowItemsForDate(dateKey, t).filter((item) => item.category === category);
   return [...eventItems, ...stateItems, ...flowItems].slice(0, 4);
 }
 
@@ -1980,7 +2093,7 @@ function buildWeekDayItems(dateKey, eventMap, statusItems, t) {
     type: "event",
     category: event.category,
     event,
-    text: eventWeekText(event),
+    text: eventWeekText(event, t),
   }));
   const stateItems = statusItems
     .filter((item) => item.date === dateKey)
@@ -2036,7 +2149,7 @@ function buildMonthItems(dateKey, dataset, eventMap, t) {
     type: "event",
     category: event.category,
     event,
-    text: eventMonthText(event),
+    text: eventMonthText(event, t),
   }));
   return limitMonthItems([
     ...eventItems,
@@ -2050,7 +2163,7 @@ function buildMonthDetailItems(dateKey, dataset, eventMap, t) {
     type: "event",
     category: event.category,
     event,
-    text: eventMonthText(event),
+    text: eventMonthText(event, t),
   }));
   return [...eventItems, ...statusItemsForDate(dataset, dateKey), ...flowItemsForDate(dateKey, t)];
 }
@@ -2290,7 +2403,7 @@ function MacroDateDetails({ dateKey, items, t }) {
           {items.map((item) => item.type === "event" ? (
             <div className="macro-date-detail-item" key={`${item.event.seriesId}-${item.event.date}`}>
               <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
-              <strong>{item.event.label}</strong>
+              <strong>{macroEventLabel(item.event, t)}</strong>
               <dl>
                 <div><dt>{t.macroCalendar.previous}</dt><dd>{formatMacroValue(item.event.previous, item.event.unit)}</dd></div>
                 <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMacroValue(item.event.actual, item.event.unit)}</dd></div>
@@ -2315,7 +2428,7 @@ function MacroDateDetails({ dateKey, items, t }) {
             <div className="macro-date-detail-item" key={`${item.type}-${item.text}`}>
               <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
               <strong>{item.label}</strong>
-              <small>{t.macroCalendar.periodNotice}</small>
+              <small>{item.label === t.macroCalendar.earningsSeasonWindow ? t.macroCalendar.earningsSeasonNotice : t.macroCalendar.periodNotice}</small>
             </div>
           ))}
         </div>
@@ -2333,7 +2446,7 @@ function MacroSummaryStrip({ dataset, t }) {
         <div className="equity-summary-card macro-summary-card" key={category.category}>
           <span className="ticker">{macroCategoryLabel(category.category, t)}</span>
           <span className="latest-price">{category.eventCount} {t.macroCalendar.eventCount}</span>
-          <span className="latest-return">{category.latestEventLabel || t.macroCalendar.noLatest}</span>
+          <span className="latest-return">{category.latestEventLabel ? compactIndicatorLabel(category.latestEventLabel, t) : t.macroCalendar.noLatest}</span>
           <small>{category.latestEventDate || category.latestStatus?.weekKey || t.macroCalendar.noLatest}</small>
         </div>
       ))}
@@ -2371,7 +2484,7 @@ function MacroEventsTable({ rows, selected, onSelect, t }) {
               <td><span className={`macro-pill macro-${event.category}`}>{macroCategoryLabel(event.category, t)}</span></td>
               <td>
                 <button type="button" className="macro-row-button" onClick={() => onSelect(event)}>
-                  <strong>{event.label}</strong>
+                  <strong>{macroEventLabel(event, t)}</strong>
                   <span>{event.seriesId}</span>
                 </button>
               </td>
@@ -2636,8 +2749,71 @@ function equityMoveClass(value) {
   return Number(value) > 0 ? "positive" : "negative";
 }
 
+function equityMarketPrice(asset) {
+  return Number.isFinite(Number(asset?.price)) ? Number(asset.price) : Number(asset?.close);
+}
+
+function equityOpenMove(asset) {
+  const current = equityMarketPrice(asset);
+  const open = Number(asset?.open);
+  if (!Number.isFinite(current) || !Number.isFinite(open)) return null;
+  return current - open;
+}
+
+function equityDirectionSymbol(asset) {
+  const move = equityOpenMove(asset);
+  if (!Number.isFinite(Number(move)) || Math.abs(Number(move)) < 0.0001) return "\u2192";
+  return Number(move) > 0 ? "\u2191" : "\u2193";
+}
+
+function equityDirectionClass(asset) {
+  return equityMoveClass(equityOpenMove(asset));
+}
+
+function equityFastMetric(dataset, metricId) {
+  return (dataset.fast?.metrics || []).find((metric) => metric.id === metricId) || null;
+}
+
+function formatUsdCompact(value) {
+  if (value == null || value === "") return "N/A";
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "N/A";
+  const abs = Math.abs(number);
+  if (abs >= 1_000_000_000_000) return `$${formatNumber(number / 1_000_000_000_000, 2)}T`;
+  if (abs >= 1_000_000_000) return `$${formatNumber(number / 1_000_000_000, 1)}B`;
+  if (abs >= 1_000_000) return `$${formatNumber(number / 1_000_000, 1)}M`;
+  return `$${formatNumber(number, 0)}`;
+}
+
+function formatEquityFastMetricValue(metric) {
+  if (!metric) return "N/A";
+  const number = Number(metric.value);
+  if (metric.value == null || metric.value === "" || !Number.isFinite(number)) return "N/A";
+  if (metric.unit === "USD") return formatUsdCompact(metric.value);
+  if (metric.unit === "index") return formatNumber(metric.value, 2);
+  return formatEquityPrice(metric.value);
+}
+
+function formatEquityFastMetricNote(metric, copy, language) {
+  if (!metric?.asOf) return copy.waitingForFastData;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(metric.asOf)) return dayLabel(metric.asOf);
+  const timestamp = new Date(metric.asOf);
+  if (Number.isNaN(timestamp.getTime())) return metric.asOf;
+  const locale = language === "en" ? "en-US" : "zh-CN";
+  const timeZone = language === "en" ? "America/New_York" : "Asia/Shanghai";
+  return new Intl.DateTimeFormat(locale, {
+    timeZone,
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(timestamp);
+}
+
 function EquityMarketSummary({ dataset, t }) {
   const copy = equityCopy(t);
+  const language = t.htmlLang === "zh-CN" ? "zh" : "en";
   const latest = dataset.latest || {};
   const cards = EQUITY_ASSET_KEYS.map((symbol) => {
     const item = latest.assets?.[symbol];
@@ -2650,11 +2826,26 @@ function EquityMarketSummary({ dataset, t }) {
       note: item?.date || latest.date || "N/A",
     };
   });
+  const fastCards = [
+    ["BTC_MARKET_CAP", copy.btcMarketCap],
+    ["CRYPTO_MARKET_CAP", copy.cryptoMarketCap],
+    ["GOLD_PRICE_PROXY", copy.goldProxy],
+  ].map(([metricId, label]) => {
+    const metric = equityFastMetric(dataset, metricId);
+    return {
+      key: metricId,
+      label,
+      value: formatEquityFastMetricValue(metric),
+      delta: Number.isFinite(Number(metric?.changePct)) ? formatPct(metric.changePct, 2) : "N/A",
+      className: equityMoveClass(metric?.changePct),
+      note: formatEquityFastMetricNote(metric, copy, language),
+    };
+  });
   const tenYear = latest.macro?.DGS10;
   const vix = latest.macro?.VIXCLS;
   return (
     <div className="latest-strip equity-strip" aria-label={copy.latest}>
-      {cards.slice(0, 2).map((card) => (
+      {cards.map((card) => (
         <div className="equity-summary-card" key={card.key}>
           <span className="ticker">{card.label}</span>
           <span className="latest-price">{card.value}</span>
@@ -2662,12 +2853,6 @@ function EquityMarketSummary({ dataset, t }) {
           <small>{card.note}</small>
         </div>
       ))}
-      <div className="equity-summary-card" key={cards[2].key}>
-        <span className="ticker">{cards[2].label}</span>
-        <span className="latest-price">{cards[2].value}</span>
-        <span className={`latest-return ${cards[2].className}`}>{cards[2].delta}</span>
-        <small>{cards[2].note}</small>
-      </div>
       <div className="equity-summary-card equity-macro-summary">
         <span className="ticker">{copy.macro}</span>
         <div className="equity-summary-lines">
@@ -2676,6 +2861,14 @@ function EquityMarketSummary({ dataset, t }) {
         </div>
         <small>{latest.date || "N/A"}</small>
       </div>
+      {fastCards.map((card) => (
+        <div className="equity-summary-card equity-fast-summary" key={card.key}>
+          <span className="ticker">{card.label}</span>
+          <span className="latest-price">{card.value}</span>
+          <span className={`latest-return ${card.className}`}>{card.delta}</span>
+          <small>{card.note}</small>
+        </div>
+      ))}
     </div>
   );
 }
@@ -2725,11 +2918,9 @@ function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate
                           {EQUITY_ASSET_KEYS.map((symbol) => {
                             const asset = row.assets?.[symbol];
                             return asset ? (
-                              <span className="equity-day-row" key={symbol}>
+                              <span className={`equity-day-row equity-direction-row ${equityDirectionClass(asset)}`} key={symbol}>
                                 <b>{equityAssetLabel(dataset, symbol, t)}</b>
-                                <em>{copy.open} {formatEquityPrice(asset.open)}</em>
-                                <em>{copy.close} {formatEquityPrice(asset.close)}</em>
-                                <strong className={equityMoveClass(asset.pct)}>{formatPct(asset.pct, 2)}</strong>
+                                <strong>{equityDirectionSymbol(asset)}</strong>
                               </span>
                             ) : null;
                           })}
@@ -2761,10 +2952,75 @@ function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate
   );
 }
 
-function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, language, t }) {
+function EquityDateDetails({ dateKey, row, dataset, t }) {
+  const copy = equityCopy(t);
+  const assetItems = EQUITY_ASSET_KEYS
+    .map((symbol) => ({ symbol, asset: row?.assets?.[symbol] }))
+    .filter((item) => item.asset);
+  const macroItems = ["DGS10", "VIXCLS"]
+    .map((seriesId) => ({ seriesId, item: row?.macro?.[seriesId] }))
+    .filter((entry) => entry.item);
+  const count = assetItems.length + macroItems.length;
+  return (
+    <aside className="macro-date-detail equity-date-detail" aria-live="polite">
+      <div className="macro-date-detail-heading">
+        <div>
+          <small>{t.macroCalendar.selectedDate}</small>
+          <strong>{dateKey}</strong>
+        </div>
+        <span>{count ? `${count} ${copy.priceIndicators}` : t.macroCalendar.noIndicators}</span>
+      </div>
+      {count ? (
+        <div className="macro-date-detail-list">
+          {assetItems.map(({ symbol, asset }) => {
+            const current = equityMarketPrice(asset);
+            const move = equityOpenMove(asset);
+            const className = equityMoveClass(move);
+            return (
+              <div className="macro-date-detail-item equity-date-detail-item" key={`${symbol}-${asset.date || dateKey}`}>
+                <span className={`macro-pill equity-pill ${className}`}>{equityAssetLabel(dataset, symbol, t)}</span>
+                <strong>{dataset.assets?.[symbol]?.name || symbol}</strong>
+                <dl>
+                  <div><dt>{copy.open}</dt><dd>{formatEquityPrice(asset.open)}</dd></div>
+                  <div><dt>{copy.currentPrice}</dt><dd>{formatEquityPrice(current)}</dd></div>
+                  <div><dt>{copy.dayMove}</dt><dd className={className}>{formatPct(asset.pct, 2)}</dd></div>
+                  <div><dt>{copy.close}</dt><dd>{formatEquityPrice(asset.close)}</dd></div>
+                </dl>
+                <small>{asset.date || dateKey} / {dataset.assets?.[symbol]?.sourceLabel || symbol}</small>
+              </div>
+            );
+          })}
+          {macroItems.map(({ seriesId, item }) => {
+            const label = seriesId === "DGS10" ? copy.tenYear : copy.vix;
+            const unit = dataset.macroSeries?.[seriesId]?.unit;
+            const move = seriesId === "DGS10" ? item.changeBp : item.change;
+            return (
+              <div className="macro-date-detail-item equity-date-detail-item" key={`${seriesId}-${item.date || dateKey}`}>
+                <span className={`macro-pill ${seriesId === "DGS10" ? "macro-rates" : "macro-volatility"}`}>{label}</span>
+                <strong>{dataset.macroSeries?.[seriesId]?.label || label}</strong>
+                <dl>
+                  <div><dt>{t.macroCalendar.previous}</dt><dd>{formatEquityMacroValue(item.previous, unit)}</dd></div>
+                  <div><dt>{t.macroCalendar.actual}</dt><dd>{formatEquityMacroValue(item.value, unit)}</dd></div>
+                  <div><dt>{t.macroCalendar.change}</dt><dd className={macroClass(move)}>{formatEquityMacroChange(seriesId, item)}</dd></div>
+                  <div><dt>{t.macroCalendar.dateMeaning}</dt><dd>{dayLabel(item.date || dateKey)}</dd></div>
+                </dl>
+                <small>{t.macroCalendar.dailyObservation} / FRED</small>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p>{t.macroCalendar.noIndicators}</p>
+      )}
+    </aside>
+  );
+}
+
+function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, selectedDate, setSelectedDate, language, t }) {
   const copy = equityCopy(t);
   const byDate = useMemo(() => equityDaysByDate(dataset), [dataset]);
   const days = useMemo(() => monthGrid(visibleMonth), [visibleMonth]);
+  const selectedRow = byDate.get(selectedDate);
   return (
     <section className="visualization equity-calendar-section" aria-label={copy.monthCalendarTitle}>
       <div className="macro-section-heading">
@@ -2787,13 +3043,16 @@ function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, lan
             const row = byDate.get(day.dateKey);
             const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
             return (
-              <div
+              <button
+                type="button"
                 key={day.dateKey}
+                onClick={() => setSelectedDate(day.dateKey)}
                 className={[
                   "macro-month-day",
                   "equity-month-day",
                   day.inMonth ? "" : "is-muted",
                   day.isToday ? "is-today" : "",
+                  selectedDate === day.dateKey ? "is-selected" : "",
                   hasData ? "has-items" : "",
                 ].filter(Boolean).join(" ")}
               >
@@ -2802,8 +3061,8 @@ function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, lan
                   {hasData ? EQUITY_ASSET_KEYS.map((symbol) => {
                     const asset = row.assets?.[symbol];
                     return asset ? (
-                      <small className={`macro-month-tag equity-month-tag ${equityMoveClass(asset.pct)}`} key={symbol}>
-                        {equityAssetLabel(dataset, symbol, t)} {formatPct(asset.pct, 1)}
+                      <small className={`macro-month-tag equity-month-tag ${equityDirectionClass(asset)}`} key={symbol}>
+                        {equityAssetLabel(dataset, symbol, t)} {equityDirectionSymbol(asset)}
                       </small>
                     ) : null;
                   }) : null}
@@ -2818,11 +3077,12 @@ function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, lan
                     ) : null;
                   }) : null}
                 </span>
-              </div>
+              </button>
             );
           })}
         </div>
       </div>
+      <EquityDateDetails dateKey={selectedDate} row={selectedRow} dataset={dataset} t={t} />
     </section>
   );
 }
@@ -3058,11 +3318,12 @@ function EquityMacroPage({ language, setLanguage, t }) {
   const [error, setError] = useState(null);
   const [visibleWeekDate, setVisibleWeekDate] = useState(null);
   const [visibleMonth, setVisibleMonth] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const todayKey = useAutoLocalDateKey();
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(appUrl("data/equity-weekly.json"), { signal: controller.signal, cache: "no-store" })
+    const fetchJson = (path, required = true) => fetch(appUrl(path), { signal: controller.signal, cache: "no-store" })
       .then((response) => {
         if (!response.ok) {
           const loadError = new Error("data-file");
@@ -3071,8 +3332,16 @@ function EquityMacroPage({ language, setLanguage, t }) {
         }
         return response.json();
       })
-      .then((loadedDataset) => {
-        setDataset(loadedDataset);
+      .catch((loadError) => {
+        if (!required && loadError.name !== "AbortError") return null;
+        throw loadError;
+      });
+    Promise.all([
+      fetchJson("data/equity-weekly.json"),
+      fetchJson("data/equity-fast.json", false),
+    ])
+      .then(([loadedDataset, fastDataset]) => {
+        setDataset({ ...loadedDataset, fast: fastDataset });
         setError(null);
       })
       .catch((loadError) => {
@@ -3088,8 +3357,10 @@ function EquityMacroPage({ language, setLanguage, t }) {
   useEffect(() => {
     if (!dataset) return;
     const focusDate = todayKey || latestEquityDate(dataset);
+    const latestDate = latestEquityDate(dataset);
     setVisibleWeekDate(focusDate);
     setVisibleMonth(monthKeyFromDateKey(focusDate));
+    setSelectedDate((current) => current || latestDate || focusDate);
   }, [dataset, todayKey]);
 
   if (error) {
@@ -3098,6 +3369,7 @@ function EquityMacroPage({ language, setLanguage, t }) {
   if (!dataset) {
     return <main className="status-page"><p>{copy.loading}</p></main>;
   }
+  const failureCount = [...(dataset.failures || []), ...(dataset.fast?.failures || [])].length;
 
   return (
     <main className="app-page equity-page">
@@ -3111,8 +3383,8 @@ function EquityMacroPage({ language, setLanguage, t }) {
         <div className="freshness-block">
           <LanguageToggle language={language} onChange={setLanguage} t={t} />
           <CacheStatus label={copy.cache} tooltip={copy.cacheTooltip} />
-          <strong>{freshnessLabel(dataset.generatedAt, language)}</strong>
-          <small>{dataset.failures?.length ? copy.failure(dataset.failures.length) : copy.success}</small>
+          <strong>{freshnessLabel(dataset.fast?.generatedAt || dataset.generatedAt, language)}</strong>
+          <small>{failureCount ? copy.failure(failureCount) : copy.success}</small>
         </div>
       </header>
 
@@ -3132,6 +3404,8 @@ function EquityMacroPage({ language, setLanguage, t }) {
           dataset={dataset}
           visibleMonth={visibleMonth}
           setVisibleMonth={setVisibleMonth}
+          selectedDate={selectedDate || latestEquityDate(dataset)}
+          setSelectedDate={setSelectedDate}
           language={language}
           t={t}
         />
@@ -3142,6 +3416,7 @@ function EquityMacroPage({ language, setLanguage, t }) {
           <strong>{t.footer.title}</strong>
           <span>QQQ / SPY / DIA · {dataset.assets.QQQ.sourceLabel}</span>
           <span>FRED · DGS10 / VIXCLS</span>
+          <span>Fast cache / CMC / FRED Gold proxy</span>
           <span>{dataset.sources?.calendar}</span>
           <span>{copy.eventPlaceholder}</span>
         </div>

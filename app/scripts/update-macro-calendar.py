@@ -41,6 +41,8 @@ FRED_RELEASE_DATES_URL = "https://api.stlouisfed.org/fred/release/dates"
 FRED_EMPLOYMENT_SITUATION_RELEASE_ID = 50
 FRED_CPI_RELEASE_ID = 10
 FED_FOMC_CALENDAR_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+ADP_NER_JSON_URL = "https://adpemploymentreport.com/ner_production.json"
+US_FEDERAL_HOLIDAYS_URL = "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
 
 WINDOW_MONTHS = int(os.environ.get("MACRO_CALENDAR_MONTHS", "6"))
 CACHE_MAX_AGE_HOURS = float(os.environ.get("MACRO_CACHE_MAX_AGE_HOURS", "18"))
@@ -597,6 +599,160 @@ def in_schedule_window(date: pd.Timestamp) -> bool:
     return END_DATE < date <= SCHEDULE_EVENT_END
 
 
+def in_event_window(date: pd.Timestamp) -> bool:
+    return WINDOW_START <= date <= MANUAL_EVENT_END
+
+
+def parse_jobs_to_thousands(value: str | None) -> float | None:
+    if not value:
+        return None
+    match = re.search(r"-?[\d,]+", str(value))
+    if not match:
+        return None
+    try:
+        return int(match.group(0).replace(",", "")) / 1000
+    except ValueError:
+        return None
+
+
+def adp_report_release_time(payload: dict) -> datetime | None:
+    for value in [payload.get("reportDownloadLink"), payload.get("reportPressReleaseLink")]:
+        match = re.search(r"/(20\d{6})/", str(value or ""))
+        if match:
+            stamp = match.group(1)
+            return datetime(int(stamp[:4]), int(stamp[4:6]), int(stamp[6:8]), 8, 15, tzinfo=EASTERN_TZ)
+    try:
+        month = month_number(str(payload.get("reportMonth") or ""))
+        year = int(payload.get("reportYear"))
+    except (TypeError, ValueError):
+        return None
+    if month is None:
+        return None
+    return datetime(year, month, 1, 8, 15, tzinfo=EASTERN_TZ)
+
+
+def build_adp_report_events(failures: list[str]) -> list[dict]:
+    text = fetch_official_schedule_text("adp-ner-production-json", ADP_NER_JSON_URL, failures)
+    if not text:
+        return []
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError as exc:
+        failures.append(f"ADP National Employment Report: invalid JSON ({safe_error_message(exc)})")
+        return []
+
+    release_time = adp_report_release_time(payload)
+    if release_time is None:
+        failures.append("ADP National Employment Report: release date is unavailable")
+        return []
+    date = beijing_release_date(release_time)
+    if not in_event_window(date):
+        return []
+
+    cards = payload.get("reportOverview", {}).get("cards", [])
+    employment_card = next((card for card in cards if card.get("metricName") == "Employment Change"), None)
+    actual = parse_jobs_to_thousands((employment_card or {}).get("metricValue"))
+    reference_period = " ".join(
+        part for part in [str(payload.get("reportMonth") or "").strip(), str(payload.get("reportYear") or "").strip()]
+        if part
+    ) or None
+
+    return [{
+        "date": as_date(date),
+        "seriesId": f"ADP_PRIVATE_PAYROLLS_{as_date(date)}",
+        "label": "ADP private payrolls",
+        "category": "growth",
+        "categoryLabel": CATEGORIES["growth"],
+        "role": "external_release",
+        "cadence": "monthly",
+        "unit": "thousand_persons",
+        "source": "ADP National Employment Report",
+        "dateMeaning": "scheduled_beijing_date",
+        "actual": actual,
+        "previous": None,
+        "forecast": None,
+        "change": None,
+        "changeBp": None,
+        "pctChange": None,
+        "yearAgo": None,
+        "yoyPct": None,
+        "referencePeriod": reference_period,
+        "note": "Latest ADP National Employment Report from ADP's public static NER JSON. Actual is converted from jobs to thousands of persons for display consistency.",
+        "sourceUrl": ADP_NER_JSON_URL,
+        "pressReleaseUrl": payload.get("reportPressReleaseLink"),
+        **release_time_payload(release_time),
+    }]
+
+
+def nth_weekday(year: int, month: int, weekday: int, n: int) -> datetime:
+    date = datetime(year, month, 1, tzinfo=EASTERN_TZ)
+    offset = (weekday - date.weekday()) % 7
+    return date + timedelta(days=offset + (n - 1) * 7)
+
+
+def last_weekday(year: int, month: int, weekday: int) -> datetime:
+    if month == 12:
+        date = datetime(year + 1, 1, 1, tzinfo=EASTERN_TZ) - timedelta(days=1)
+    else:
+        date = datetime(year, month + 1, 1, tzinfo=EASTERN_TZ) - timedelta(days=1)
+    return date - timedelta(days=(date.weekday() - weekday) % 7)
+
+
+def observed_holiday(date: datetime) -> datetime:
+    if date.weekday() == 5:
+        return date - timedelta(days=1)
+    if date.weekday() == 6:
+        return date + timedelta(days=1)
+    return date
+
+
+def us_federal_holidays(year: int) -> list[tuple[datetime, str]]:
+    return [
+        (observed_holiday(datetime(year, 1, 1, tzinfo=EASTERN_TZ)), "U.S. New Year's Day holiday"),
+        (nth_weekday(year, 1, 0, 3), "U.S. Martin Luther King Jr. Day holiday"),
+        (nth_weekday(year, 2, 0, 3), "U.S. Washington's Birthday holiday"),
+        (last_weekday(year, 5, 0), "U.S. Memorial Day holiday"),
+        (observed_holiday(datetime(year, 6, 19, tzinfo=EASTERN_TZ)), "U.S. Juneteenth holiday"),
+        (observed_holiday(datetime(year, 7, 4, tzinfo=EASTERN_TZ)), "U.S. Independence Day holiday"),
+        (nth_weekday(year, 9, 0, 1), "U.S. Labor Day holiday"),
+        (nth_weekday(year, 10, 0, 2), "U.S. Columbus Day holiday"),
+        (observed_holiday(datetime(year, 11, 11, tzinfo=EASTERN_TZ)), "U.S. Veterans Day holiday"),
+        (nth_weekday(year, 11, 3, 4), "U.S. Thanksgiving Day holiday"),
+        (observed_holiday(datetime(year, 12, 25, tzinfo=EASTERN_TZ)), "U.S. Christmas Day holiday"),
+    ]
+
+
+def build_us_holiday_events() -> list[dict]:
+    events: list[dict] = []
+    for year in range(WINDOW_START.year, MANUAL_EVENT_END.year + 1):
+        for holiday_date, label in us_federal_holidays(year):
+            date = pd.Timestamp(holiday_date.date())
+            if not in_event_window(date):
+                continue
+            events.append({
+                "date": as_date(date),
+                "seriesId": f"US_FEDERAL_HOLIDAY_{as_date(date)}",
+                "label": label,
+                "category": "liquidity",
+                "categoryLabel": CATEGORIES["liquidity"],
+                "role": "holiday",
+                "cadence": "event",
+                "unit": "event",
+                "source": "OPM federal holiday calendar / U.S. federal holiday rules",
+                "dateMeaning": "scheduled_beijing_date",
+                "actual": None,
+                "previous": None,
+                "forecast": None,
+                "change": None,
+                "changeBp": None,
+                "pctChange": None,
+                "yearAgo": None,
+                "yoyPct": None,
+                "note": "U.S. federal holiday observed date generated from standard OPM holiday rules. It is a liquidity/market-attention annotation, not an economic data release.",
+            })
+    return events
+
+
 def build_bls_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: list[str]) -> list[dict]:
     events: list[dict] = []
     for release_date in fetch_fred_release_dates(FRED_EMPLOYMENT_SITUATION_RELEASE_ID, failures):
@@ -752,8 +908,10 @@ def build_fomc_scheduled_events(series_frames: dict[str, pd.DataFrame], failures
 
 def build_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: list[str]) -> list[dict]:
     events = [
+        *build_adp_report_events(failures),
         *build_bls_scheduled_events(series_frames, failures),
         *build_fomc_scheduled_events(series_frames, failures),
+        *build_us_holiday_events(),
     ]
     return sorted(events, key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
 
@@ -1026,6 +1184,8 @@ def build_output() -> dict:
             "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
             "FRED release dates": "https://fred.stlouisfed.org/docs/api/fred/release_dates.html",
             "Federal Reserve FOMC calendar": FED_FOMC_CALENDAR_URL,
+            "ADP National Employment Report": ADP_NER_JSON_URL,
+            "U.S. federal holidays": US_FEDERAL_HOLIDAYS_URL,
             "manualEvents": "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py.",
         },
         "failures": failures,
@@ -1051,6 +1211,8 @@ def merge_manual_events_into_existing(existing: dict, error: Exception | None = 
     )
     output.setdefault("sources", {})["FRED release dates"] = "https://fred.stlouisfed.org/docs/api/fred/release_dates.html"
     output.setdefault("sources", {})["Federal Reserve FOMC calendar"] = FED_FOMC_CALENDAR_URL
+    output.setdefault("sources", {})["ADP National Employment Report"] = ADP_NER_JSON_URL
+    output.setdefault("sources", {})["U.S. federal holidays"] = US_FEDERAL_HOLIDAYS_URL
     if error is not None:
         failures.append(f"FRED refresh skipped; manual events merged into last-known-good cache: {safe_error_message(error)}")
     output["failures"] = failures

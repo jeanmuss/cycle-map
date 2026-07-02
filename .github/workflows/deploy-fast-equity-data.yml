@@ -1,10 +1,8 @@
-name: Deploy GitHub Pages
+name: Deploy Fast Equity Data
 
 on:
-  push:
-    branches: [main]
   schedule:
-    - cron: "0 * * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -14,7 +12,7 @@ permissions:
 
 concurrency:
   group: github-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -37,33 +35,11 @@ jobs:
         run: npm --prefix app ci
       - name: Install equity data dependencies
         run: python -m pip install -r app/requirements-equity.txt
-      - name: Refresh hourly crypto spot cache
-        run: npm --prefix app run update-data
-      - name: Refresh US market cache
-        env:
-          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: npm --prefix app run update-equity-data
       - name: Refresh fast US market indicators
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: npm --prefix app run update-equity-fast-data
-      - name: Refresh market session cache
-        env:
-          CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
-        run: npm --prefix app run update-market-session
-      - name: Refresh chip-chain cache
-        env:
-          APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
-          APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
-          CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
-        run: npm --prefix app run update-chip-chain
-      - name: Refresh robot-chain cache
-        env:
-          APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
-          APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
-          CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
-        run: npm --prefix app run update-robot-chain
       - name: Build static site for GitHub Pages
         run: npm --prefix app run build:pages
       - uses: actions/configure-pages@v5
