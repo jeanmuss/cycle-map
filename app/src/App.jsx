@@ -48,6 +48,11 @@ const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "
 const VALID_CHIP_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 const VALID_ROBOT_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 
+const MACRO_CALENDAR_TIME_ZONES = {
+  zh: "Asia/Shanghai",
+  en: "America/New_York",
+};
+
 const EQUITY_MARKET_TEXT = {
   zh: {
     eyebrow: "EQUITY MARKET MAP",
@@ -83,6 +88,7 @@ const EQUITY_MARKET_TEXT = {
     previousMonth: "\u4e0a\u6708",
     nextMonth: "\u4e0b\u6708",
     priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y\u3001VIX \u548c\u9ec4\u91d1\u6307\u6570\u4ee3\u7406\u6765\u81ea FRED\uff0c\u52a0\u5bc6\u5e02\u503c\u6765\u81ea CMC\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
+    methodology: "\u65e5\u5386\u884c\u5408\u5e76\u7f13\u5b58\u7684 QQQ/SPY/DIA \u65e5\u7ebf OHLC \u4e0e FRED 10Y/VIX \u89c2\u6d4b\uff1b\u9876\u90e8\u5feb\u5361\u6765\u81ea\u5355\u72ec\u7684\u5feb\u7f13\u5b58\u3002",
     eventPlaceholder: "\u672c\u9875\u6682\u4e0d\u63a5\u5165\u4e8b\u4ef6\u6ce8\u91ca\u3002",
   },
   en: {
@@ -119,6 +125,7 @@ const EQUITY_MARKET_TEXT = {
     previousMonth: "Previous",
     nextMonth: "Next",
     priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y, VIX, and the gold proxy use FRED; crypto market caps use CMC. The frontend reads static cache only.",
+    methodology: "Calendar rows combine cached QQQ/SPY/DIA daily OHLC with FRED 10Y/VIX observations; summary cards use a separate fast cache.",
     eventPlaceholder: "No event annotation source is connected for this page yet.",
   },
 };
@@ -152,6 +159,7 @@ const MARKET_CLOCK_TEXT = {
     next: "下一阶段",
     alwaysOpen: "24小时交易",
     sourceNote: "价格优先使用公开行情快照；美股和 CL 可使用 OKX 合约/指数代理，旁边会标注数据质量。",
+    methodology: "\u9875\u9762\u8bfb\u53d6 market-session.json\uff1b\u5f00\u95ed\u5e02\u72b6\u6001\u7531\u672c\u5730\u65f6\u533a\u548c\u4ea4\u6613\u65f6\u6bb5\u89c4\u5219\u8ba1\u7b97\uff0c\u4ef7\u683c\u4e0e\u5e02\u503c\u6765\u81ea\u540e\u7aef\u751f\u6210\u7f13\u5b58\u3002",
     status: {
       open: "盘中",
       trading: "交易中",
@@ -210,6 +218,7 @@ const MARKET_CLOCK_TEXT = {
     next: "Next phase",
     alwaysOpen: "24/7 trading",
     sourceNote: "Prices use public market snapshots where available; U.S. equities and CL may use clearly labeled OKX proxy contracts or index prices.",
+    methodology: "The page reads market-session.json; session status is computed from local time-zone and session rules, while prices and market caps come from a generated backend cache.",
     status: {
       open: "Open",
       trading: "Trading",
@@ -641,6 +650,16 @@ const TRANSLATIONS = {
     },
     footer: {
       title: "数据来源",
+      trustTitle: "\u6570\u636e\u53ef\u4fe1\u5ea6\u4e0e\u65b9\u6cd5",
+      status: "\u72b6\u6001",
+      updated: "\u66f4\u65b0\u65f6\u95f4",
+      sources: "\u6765\u6e90",
+      methodology: "\u65b9\u6cd5",
+      limitations: "\u9650\u5236\u8bf4\u660e",
+      healthyStatus: "\u5df2\u751f\u6210\u6700\u65b0\u7f13\u5b58",
+      partialStatus: (count) => `\u6709 ${count} \u9879\u4e0a\u6e38\u63d0\u793a\uff0c\u5f53\u524d\u663e\u793a\u5df2\u751f\u6210\u7f13\u5b58`,
+      unknown: "\u672a\u6807\u6ce8",
+      staticCacheOnly: "\u524d\u7aef\u53ea\u8bfb\u53d6\u540e\u53f0\u6216 CI \u751f\u6210\u7684\u9759\u6001\u7f13\u5b58\uff1b\u884c\u60c5\u6e90\u5bc6\u94a5\u4e0d\u8fdb\u5165\u6d4f\u89c8\u5668\u3002",
     },
     nav: {
       crypto: "加密周期",
@@ -723,6 +742,12 @@ const TRANSLATIONS = {
         "ADP private payrolls": "ADP\u5c0f\u975e\u519c",
         "Average hourly earnings": "\u5e73\u5747\u65f6\u85aa",
         "Broad USD index": "\u5e7f\u4e49\u7f8e\u5143\u6307\u6570",
+        "China Dragon Boat Festival holiday": "\u4e2d\u56fd\u7aef\u5348\u8282\u5047\u671f",
+        "China Labor Day holiday": "\u4e2d\u56fd\u52b3\u52a8\u8282\u5047\u671f",
+        "China Mid-Autumn Festival holiday": "\u4e2d\u56fd\u4e2d\u79cb\u8282\u5047\u671f",
+        "China National Day holiday": "\u4e2d\u56fd\u56fd\u5e86\u8282\u5047\u671f",
+        "China Qingming Festival holiday": "\u4e2d\u56fd\u6e05\u660e\u8282\u5047\u671f",
+        "China Spring Festival holiday": "\u4e2d\u56fd\u6625\u8282\u5047\u671f",
         "China 3M interbank rate": "\u4e2d\u56fd3M\u540c\u4e1a\u5229\u7387",
         "Consumer sentiment": "\u5bc6\u5927\u6d88\u8d39\u8005\u4fe1\u5fc3",
         "Core CPI": "\u6838\u5fc3CPI",
@@ -761,6 +786,7 @@ const TRANSLATIONS = {
       },
       eventLabelPrefixes: {
         ADP_PRIVATE_PAYROLLS: "ADP\u5c0f\u975e\u519c",
+        CN_PUBLIC_HOLIDAY: "\u4e2d\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5",
         FOMC_MINUTES_SCHEDULED: "FOMC\u4f1a\u8bae\u7eaa\u8981",
         FOMC_RATE_DECISION_SCHEDULED: "FOMC\u5229\u7387\u51b3\u8bae",
         US_FEDERAL_HOLIDAY: "\u7f8e\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5",
@@ -771,6 +797,13 @@ const TRANSLATIONS = {
         "CPI\u6708\u901a\u80c0\u7387": "CPI\u6708",
         "FOMC\u4f1a\u8bae\u7eaa\u8981": "FOMC\u7eaa\u8981",
         "FOMC\u5229\u7387\u51b3\u8bae": "FOMC\u51b3\u8bae",
+        "\u4e2d\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5": "\u4e2d\u56fd\u5047\u65e5",
+        "\u4e2d\u56fd\u6625\u8282\u5047\u671f": "\u6625\u8282",
+        "\u4e2d\u56fd\u6e05\u660e\u8282\u5047\u671f": "\u6e05\u660e",
+        "\u4e2d\u56fd\u52b3\u52a8\u8282\u5047\u671f": "\u52b3\u52a8\u8282",
+        "\u4e2d\u56fd\u7aef\u5348\u8282\u5047\u671f": "\u7aef\u5348",
+        "\u4e2d\u56fd\u4e2d\u79cb\u8282\u5047\u671f": "\u4e2d\u79cb",
+        "\u4e2d\u56fd\u56fd\u5e86\u8282\u5047\u671f": "\u56fd\u5e86",
         "\u7f8e\u56fd\u72ec\u7acb\u65e5\u5047\u671f": "\u72ec\u7acb\u65e5",
         "\u7f8e\u56fd\u6cd5\u5b9a\u8282\u5047\u65e5": "\u7f8e\u56fd\u5047\u65e5",
         "\u975e\u519c\u5c31\u4e1a": "\u975e\u519c",
@@ -792,7 +825,7 @@ const TRANSLATIONS = {
       eventsCaption: "\u534a\u5e74\u671f\u5b8f\u89c2\u6307\u6807\u89c2\u6d4b\u8868",
       stateTitle: "\u5468\u5ea6\u72b6\u6001\u80cc\u666f",
       stateCaption: "\u5229\u7387\u3001\u7f8e\u5143\u3001\u6ce2\u52a8\u7387\u548c\u4fe1\u7528\u5229\u5dee\u7684\u5468\u5ea6\u72b6\u6001\u8868",
-      methodology: "\u5386\u53f2\u89c2\u6d4b\u65e5\u4e0d\u7b49\u4e8e\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\uff1b\u672a\u6765 BLS \u6392\u671f\u6765\u81ea FRED release-date API\uff0cADP \u5c0f\u975e\u519c\u6765\u81ea ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\uff0cFOMC \u6765\u81ea\u7f8e\u8054\u50a8\u65e5\u5386\uff0c\u8282\u5047\u65e5\u4f7f\u7528\u7f8e\u56fd\u8054\u90a6\u89c2\u5bdf\u65e5\u89c4\u5219\u3002",
+      methodology: "\u5386\u53f2\u89c2\u6d4b\u65e5\u4e0d\u7b49\u4e8e\u771f\u5b9e\u53d1\u5e03\u65f6\u95f4\uff1b\u672a\u6765 BLS \u6392\u671f\u6765\u81ea FRED release-date API\uff0cADP \u5c0f\u975e\u519c\u6765\u81ea ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\uff0cFOMC \u6765\u81ea\u7f8e\u8054\u50a8\u65e5\u5386\uff1b\u8282\u5047\u65e5\u4f7f\u7528\u7f8e\u56fd\u8054\u90a6\u89c2\u5bdf\u65e5\u89c4\u5219\u548c\u4e2d\u56fd\u8282\u65e5\u4eba\u5de5\u6ce8\u91ca\u3002",
       date: "\u65e5\u671f",
       indicator: "\u6307\u6807",
       actual: "\u5b9e\u9645",
@@ -810,6 +843,17 @@ const TRANSLATIONS = {
       projectionYear: "\u9884\u6d4b\u5e74",
       sepProjection: "SEP \u89c2\u6d4b",
       scheduledBeijingDate: "\u5317\u4eac\u65f6\u95f4\u6392\u671f",
+      observedHolidayDate: "\u8282\u5047\u65e5\u89c2\u5bdf\u65e5",
+      holiday: "\u8282\u65e5",
+      observedDate: "\u89c2\u5bdf\u65e5",
+      legalDate: "\u6cd5\u5b9a\u65e5",
+      country: "\u56fd\u5bb6",
+      countries: {
+        CN: "\u4e2d\u56fd",
+        US: "\u7f8e\u56fd",
+      },
+      holidayObservedNote: (observedDate, legalDate) => `\u89c2\u5bdf\u65e5 ${observedDate}\uff1b\u6cd5\u5b9a\u65e5 ${legalDate}\u3002`,
+      holidaySameDayNote: (observedDate) => `\u8282\u5047\u65e5 ${observedDate}\u3002`,
       week: "\u5468",
       twoYear: "2Y",
       tenYear: "10Y",
@@ -819,7 +863,7 @@ const TRANSLATIONS = {
       credit: "\u4fe1\u7528",
       stress: "\u538b\u529b",
       noRows: "\u6682\u65e0\u5339\u914d\u6570\u636e",
-      sourceNote: "\u5f53\u524d\u4f7f\u7528 FRED \u5b98\u65b9 API\u3001FRED release-date API\u3001ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\u3001\u7f8e\u8054\u50a8 FOMC \u65e5\u5386\u548c\u7f8e\u56fd\u8054\u90a6\u8282\u5047\u65e5\u89c4\u5219\uff1b\u672a\u4f7f\u7528 yfinance\uff0c\u4e5f\u672a\u63a5\u5165\u672a\u5ba1\u67e5\u7684\u9884\u6d4b\u6765\u6e90\u3002",
+      sourceNote: "\u5f53\u524d\u4f7f\u7528 FRED \u5b98\u65b9 API\u3001FRED release-date API\u3001ADP \u5b98\u65b9\u9759\u6001\u6570\u636e\u3001\u7f8e\u8054\u50a8 FOMC \u65e5\u5386\u3001\u7f8e\u56fd\u8054\u90a6\u8282\u5047\u65e5\u89c4\u5219\u548c\u4e2d\u56fd\u8282\u65e5\u4eba\u5de5\u6ce8\u91ca\uff1b\u672a\u4f7f\u7528 yfinance\uff0c\u4e5f\u672a\u63a5\u5165\u672a\u5ba1\u67e5\u7684\u9884\u6d4b\u6765\u6e90\u3002",
       environmentTitle: "\u5f53\u524d\u5b8f\u89c2\u73af\u5883",
       weekCalendarTitle: "\u672c\u5468\u73af\u5883\u5468\u5386",
       monthCalendarTitle: "\u6708\u5ea6\u6307\u6807\u65e5\u5386",
@@ -841,7 +885,7 @@ const TRANSLATIONS = {
       clickDateHint: "\u70b9\u51fb\u65e5\u671f\u67e5\u770b\u8be6\u60c5",
       selectedDate: "\u5df2\u9009\u65e5\u671f",
       asOf: (date) => `\u622a\u81f3 ${date}`,
-      periodNotice: "\u5386\u53f2\u884c\u4f7f\u7528 FRED \u89c2\u6d4b\u671f\u65e5\u671f\uff1b\u672a\u6765\u6392\u671f\u884c\u4f7f\u7528\u5b98\u65b9\u53d1\u5e03\u65e5\u5386\u6362\u7b97\u540e\u7684\u5317\u4eac\u65f6\u95f4\u65e5\u671f\u3002",
+      periodNotice: "\u5386\u53f2\u884c\u4f7f\u7528 FRED \u89c2\u6d4b\u671f\u65e5\u671f\uff1b\u672a\u6765\u6392\u671f\u884c\u6309\u5f53\u524d\u8bed\u8a00\u5207\u6362\u65e5\u671f\uff1a\u4e2d\u6587\u4e3a\u5317\u4eac\u65f6\u95f4\uff0c\u82f1\u6587\u4e3a\u7ebd\u7ea6\u65f6\u95f4\u3002",
       previousMonth: "\u4e0a\u6708",
       nextMonth: "\u4e0b\u6708",
       previousWeek: "\u4e0a\u5468",
@@ -994,6 +1038,16 @@ const TRANSLATIONS = {
     },
     footer: {
       title: "Data sources",
+      trustTitle: "Data trust & methodology",
+      status: "Status",
+      updated: "Updated",
+      sources: "Sources",
+      methodology: "Methodology",
+      limitations: "Limitations",
+      healthyStatus: "Latest cache generated",
+      partialStatus: (count) => `${count} upstream note${count === 1 ? "" : "s"}; showing the generated cache`,
+      unknown: "Not stated",
+      staticCacheOnly: "The frontend reads only backend or CI generated static caches; market-data credentials never enter the browser.",
     },
     nav: {
       crypto: "Crypto cycle",
@@ -1072,6 +1126,21 @@ const TRANSLATIONS = {
         rates: "Rates & dollar",
         volatility: "Volatility & credit",
       },
+      eventLabelPrefixes: {
+        CN_PUBLIC_HOLIDAY: "China public holiday",
+        US_FEDERAL_HOLIDAY: "U.S. federal holiday",
+      },
+      compactEventLabels: {
+        "China Dragon Boat Festival holiday": "Dragon Boat",
+        "China Labor Day holiday": "Labor Day",
+        "China Mid-Autumn Festival holiday": "Mid-Autumn",
+        "China National Day holiday": "National Day",
+        "China public holiday": "China holiday",
+        "China Qingming Festival holiday": "Qingming",
+        "China Spring Festival holiday": "Spring Festival",
+        "U.S. Independence Day holiday": "Independence Day",
+        "U.S. federal holiday": "U.S. holiday",
+      },
       compactCategories: {
         inflation: "Infl",
         growth: "Growth",
@@ -1088,7 +1157,7 @@ const TRANSLATIONS = {
       eventsCaption: "Six-month macro indicator observation table",
       stateTitle: "Weekly state backdrop",
       stateCaption: "Weekly rates, dollar, volatility, and credit spread state table",
-      methodology: "Historical observation dates are not release timestamps. Future BLS schedules come from the FRED release-date API; ADP small-nonfarm rows come from ADP's official static data; FOMC rows come from the Federal Reserve calendar; holiday rows use U.S. federal observed-date rules.",
+      methodology: "Historical observation dates are not release timestamps. Future BLS schedules come from the FRED release-date API; ADP small-nonfarm rows come from ADP's official static data; FOMC rows come from the Federal Reserve calendar; holiday rows use U.S. federal observed-date rules and manual China festival-date annotations.",
       date: "Date",
       indicator: "Indicator",
       actual: "Actual",
@@ -1106,6 +1175,17 @@ const TRANSLATIONS = {
       projectionYear: "Projection year",
       sepProjection: "SEP observation",
       scheduledBeijingDate: "Beijing scheduled date",
+      observedHolidayDate: "Observed holiday date",
+      holiday: "Holiday",
+      observedDate: "Observed date",
+      legalDate: "Legal date",
+      country: "Country",
+      countries: {
+        CN: "China",
+        US: "United States",
+      },
+      holidayObservedNote: (observedDate, legalDate) => `Observed ${observedDate}; legal date ${legalDate}.`,
+      holidaySameDayNote: (observedDate) => `Holiday date ${observedDate}.`,
       week: "Week",
       twoYear: "2Y",
       tenYear: "10Y",
@@ -1115,7 +1195,7 @@ const TRANSLATIONS = {
       credit: "Credit",
       stress: "Stress",
       noRows: "No matching rows",
-      sourceNote: "This version uses the official FRED API, the FRED release-date API, ADP's official static data, local cache, the Federal Reserve FOMC calendar, and U.S. federal holiday rules. It does not use yfinance or unreviewed forecast sources.",
+      sourceNote: "This version uses the official FRED API, the FRED release-date API, ADP's official static data, local cache, the Federal Reserve FOMC calendar, U.S. federal holiday rules, and manual China holiday annotations. It does not use yfinance or unreviewed forecast sources.",
       environmentTitle: "Current macro environment",
       weekCalendarTitle: "This week calendar",
       monthCalendarTitle: "Monthly indicator calendar",
@@ -1137,7 +1217,7 @@ const TRANSLATIONS = {
       clickDateHint: "Click a date for details",
       selectedDate: "Selected date",
       asOf: (date) => `as of ${date}`,
-      periodNotice: "Historical rows use FRED observation-period dates; future scheduled rows use official release calendars converted to Beijing dates.",
+      periodNotice: "Historical rows use FRED observation-period dates; future scheduled rows follow the current language: Chinese uses Beijing dates, English uses New York dates.",
       previousMonth: "Previous",
       nextMonth: "Next",
       previousWeek: "Previous week",
@@ -1246,6 +1326,60 @@ function CacheStatus({ label, tooltip }) {
         {tooltip}
       </span>
     </div>
+  );
+}
+
+function textBlock(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(" ");
+  return value || "";
+}
+
+function DataTrustFooter({
+  t,
+  language,
+  generatedAt,
+  sources = [],
+  methodology,
+  limitations,
+  failures = 0,
+}) {
+  const failureCount = Array.isArray(failures) ? failures.length : Number(failures) || 0;
+  const sourceItems = sources.filter(Boolean);
+  const methodologyText = textBlock(methodology) || t.footer.unknown;
+  const limitationsText = textBlock(limitations) || t.footer.staticCacheOnly;
+  return (
+    <footer className="source-footer data-trust-footer">
+      <div className="data-trust-top">
+        <div>
+          <strong>{t.footer.trustTitle}</strong>
+          <span className={`data-trust-status ${failureCount ? "is-partial" : "is-healthy"}`}>
+            {failureCount ? t.footer.partialStatus(failureCount) : t.footer.healthyStatus}
+          </span>
+        </div>
+        <dl>
+          <div>
+            <dt>{t.footer.updated}</dt>
+            <dd>{generatedAt ? freshnessLabel(generatedAt, language) : t.footer.unknown}</dd>
+          </div>
+        </dl>
+      </div>
+      <div className="data-trust-grid">
+        <section>
+          <small>{t.footer.sources}</small>
+          <div className="data-trust-tags">
+            {sourceItems.length ? sourceItems.map((source) => <span key={source}>{source}</span>) : <span>{t.footer.unknown}</span>}
+          </div>
+        </section>
+        <section>
+          <small>{t.footer.methodology}</small>
+          <p>{methodologyText}</p>
+        </section>
+        <section>
+          <small>{t.footer.limitations}</small>
+          <p>{limitationsText}</p>
+        </section>
+      </div>
+    </footer>
   );
 }
 
@@ -1754,6 +1888,7 @@ function macroDateMeaningLabel(value, t) {
   if (value === "projection_year") return t.macroCalendar.projectionYear;
   if (value === "sep_release_observation") return t.macroCalendar.sepProjection;
   if (value === "scheduled_beijing_date") return t.macroCalendar.scheduledBeijingDate;
+  if (value === "observed_holiday_date") return t.macroCalendar.observedHolidayDate;
   return value || "N/A";
 }
 
@@ -1814,8 +1949,31 @@ function dateKeyFromUtc(date) {
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
 }
 
+function calendarTimeZone(language) {
+  return MACRO_CALENDAR_TIME_ZONES[language] || MACRO_CALENDAR_TIME_ZONES.zh;
+}
+
+function dateKeyInTimeZone(value, timeZone) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(date).map((part) => [part.type, part.value]),
+  );
+  if (!parts.year || !parts.month || !parts.day) return null;
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
 function localDateKey(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function localDateKeyForLanguage(language, date = new Date()) {
+  return dateKeyInTimeZone(date, calendarTimeZone(language)) || localDateKey(date);
 }
 
 function useAutoLocalDateKey() {
@@ -1856,9 +2014,9 @@ function startOfSundayWeek(dateKey) {
   return addUtcDays(date, -date.getUTCDay());
 }
 
-function weekDaysFor(dateKey) {
+function weekDaysFor(dateKey, language = "zh") {
   const start = startOfSundayWeek(dateKey);
-  const todayKey = localDateKey();
+  const todayKey = localDateKeyForLanguage(language);
   return Array.from({ length: 7 }, (_, index) => {
     const date = addUtcDays(start, index);
     const itemDateKey = dateKeyFromUtc(date);
@@ -1870,19 +2028,21 @@ function monthKeyFromDateKey(dateKey) {
   return String(dateKey || "").slice(0, 7);
 }
 
-function monthGrid(monthKey) {
+function monthGrid(monthKey, language = "zh") {
   const [year, month] = monthKey.split("-").map(Number);
   const first = new Date(Date.UTC(year, month - 1, 1));
   const last = new Date(Date.UTC(year, month, 0));
   const start = startOfSundayWeek(dateKeyFromUtc(first));
+  const todayKey = localDateKeyForLanguage(language);
   const days = [];
   for (let index = 0; index < 42; index += 1) {
     const date = addUtcDays(start, index);
+    const dateKey = dateKeyFromUtc(date);
     days.push({
       date,
-      dateKey: dateKeyFromUtc(date),
+      dateKey,
       inMonth: date.getUTCMonth() === first.getUTCMonth(),
-      isToday: dateKeyFromUtc(date) === localDateKey(),
+      isToday: dateKey === todayKey,
       dayOfMonth: date.getUTCDate(),
     });
     if (index >= 34 && date >= last && date.getUTCDay() === 6) break;
@@ -2068,19 +2228,53 @@ function flowItemsForDate(dateKey, t) {
   return items;
 }
 
-function eventsByDate(events) {
+function calendarDateKeyForEvent(event, language) {
+  if (event?.releaseTimeUtc) {
+    return dateKeyInTimeZone(event.releaseTimeUtc, calendarTimeZone(language)) || event.date;
+  }
+  return event?.date;
+}
+
+function eventsByDate(events, language = "zh") {
   return events.reduce((map, event) => {
-    const list = map.get(event.date) || [];
+    const dateKey = calendarDateKeyForEvent(event, language);
+    if (!dateKey) return map;
+    const list = map.get(dateKey) || [];
     list.push(event);
-    map.set(event.date, list);
+    map.set(dateKey, list);
     return map;
   }, new Map());
+}
+
+function isHolidayEvent(event) {
+  return event?.role === "holiday";
+}
+
+function holidayCountryCode(event) {
+  const country = String(event?.country || "").toUpperCase();
+  if (country) return country;
+  const seriesId = String(event?.seriesId || "");
+  if (seriesId.startsWith("US_FEDERAL_HOLIDAY")) return "US";
+  if (seriesId.startsWith("CN_PUBLIC_HOLIDAY")) return "CN";
+  return "";
+}
+
+function holidayCountryLabel(countryCode, t) {
+  return t.macroCalendar.countries?.[countryCode] || countryCode || "N/A";
+}
+
+function holidayCountryCodesForDate(eventMap, dateKey) {
+  return [...new Set((eventMap.get(dateKey) || [])
+    .filter(isHolidayEvent)
+    .map(holidayCountryCode)
+    .filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b));
 }
 
 function buildWeekCellItems(dateKey, category, eventMap, statusItems, t) {
   const eventItems = (eventMap.get(dateKey) || [])
     .filter((event) => event.category === category)
-    .map((event) => ({ type: "event", category, event, text: eventWeekText(event, t) }));
+    .map((event) => ({ type: "event", category, event, displayDate: dateKey, text: eventWeekText(event, t) }));
   const stateItems = statusItems
     .filter((item) => item.date === dateKey && item.category === category)
     .map((item) => ({ ...item, text: item.text }));
@@ -2093,6 +2287,7 @@ function buildWeekDayItems(dateKey, eventMap, statusItems, t) {
     type: "event",
     category: event.category,
     event,
+    displayDate: dateKey,
     text: eventWeekText(event, t),
   }));
   const stateItems = statusItems
@@ -2149,6 +2344,7 @@ function buildMonthItems(dateKey, dataset, eventMap, t) {
     type: "event",
     category: event.category,
     event,
+    displayDate: dateKey,
     text: eventMonthText(event, t),
   }));
   return limitMonthItems([
@@ -2163,6 +2359,7 @@ function buildMonthDetailItems(dateKey, dataset, eventMap, t) {
     type: "event",
     category: event.category,
     event,
+    displayDate: dateKey,
     text: eventMonthText(event, t),
   }));
   return [...eventItems, ...statusItemsForDate(dataset, dateKey), ...flowItemsForDate(dateKey, t)];
@@ -2267,10 +2464,10 @@ function MacroEnvironmentPanel({ dataset, t }) {
   );
 }
 
-function MacroWeekCalendar({ dataset, t }) {
-  const [visibleWeekDate, setVisibleWeekDate] = useState(localDateKey);
-  const eventMap = useMemo(() => eventsByDate(dataset.events || []), [dataset]);
-  const days = useMemo(() => weekDaysFor(visibleWeekDate), [visibleWeekDate]);
+function MacroWeekCalendar({ dataset, language, t }) {
+  const [visibleWeekDate, setVisibleWeekDate] = useState(() => localDateKeyForLanguage(language));
+  const eventMap = useMemo(() => eventsByDate(dataset.events || [], language), [dataset, language]);
+  const days = useMemo(() => weekDaysFor(visibleWeekDate, language), [visibleWeekDate, language]);
   const visibleWeek = useMemo(() => findWeeklyStateForDate(dataset, visibleWeekDate), [dataset, visibleWeekDate]);
   const statusItems = statusItemsForWeek(visibleWeek);
   const shiftVisibleWeek = (daysToAdd) => {
@@ -2336,8 +2533,8 @@ function MacroWeekCalendar({ dataset, t }) {
 }
 
 function MacroMonthCalendar({ dataset, selectedDate, setSelectedDate, visibleMonth, setVisibleMonth, language, t }) {
-  const eventMap = useMemo(() => eventsByDate(dataset.events || []), [dataset]);
-  const days = useMemo(() => monthGrid(visibleMonth), [visibleMonth]);
+  const eventMap = useMemo(() => eventsByDate(dataset.events || [], language), [dataset, language]);
+  const days = useMemo(() => monthGrid(visibleMonth, language), [visibleMonth, language]);
   const selectedItems = buildMonthDetailItems(selectedDate, dataset, eventMap, t);
   return (
     <section className="visualization macro-calendar-section" aria-label={t.macroCalendar.monthCalendarTitle}>
@@ -2359,6 +2556,7 @@ function MacroMonthCalendar({ dataset, selectedDate, setSelectedDate, visibleMon
         <div className="macro-month-grid">
           {days.map((day) => {
             const items = buildMonthItems(day.dateKey, dataset, eventMap, t);
+            const holidayCountries = holidayCountryCodesForDate(eventMap, day.dateKey);
             return (
               <button
                 type="button"
@@ -2372,7 +2570,18 @@ function MacroMonthCalendar({ dataset, selectedDate, setSelectedDate, visibleMon
                 ].filter(Boolean).join(" ")}
                 onClick={() => setSelectedDate(day.dateKey)}
               >
-                <strong>{day.dayOfMonth}</strong>
+                <span className="macro-month-date-line">
+                  <strong>{day.dayOfMonth}</strong>
+                  {holidayCountries.length ? (
+                    <span className="macro-country-markers">
+                      {holidayCountries.map((countryCode) => (
+                        <span className={`macro-country-marker country-${countryCode.toLowerCase()}`} title={holidayCountryLabel(countryCode, t)} key={countryCode}>
+                          {countryCode}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
+                </span>
                 <span className="macro-month-items">
                   {items.length ? items.map((item) => (
                     <small className={`macro-month-tag macro-${item.category}`} title={item.label || item.text} key={`${item.type}-${item.text}`}>{item.text}</small>
@@ -2385,6 +2594,54 @@ function MacroMonthCalendar({ dataset, selectedDate, setSelectedDate, visibleMon
       </div>
       <MacroDateDetails dateKey={selectedDate} items={selectedItems} t={t} />
     </section>
+  );
+}
+
+function holidayDisplayName(event, t) {
+  if (t.htmlLang === "zh-CN" && event?.holidayNameZh) return event.holidayNameZh;
+  return event?.holidayName || macroEventLabel(event, t);
+}
+
+function holidayDateNote(event, t) {
+  const observedDate = event?.observedDate || event?.date;
+  const legalDate = event?.legalDate || observedDate;
+  if (!observedDate) return event?.note || "";
+  if (legalDate && legalDate !== observedDate) {
+    return t.macroCalendar.holidayObservedNote(observedDate, legalDate);
+  }
+  return t.macroCalendar.holidaySameDayNote(observedDate);
+}
+
+function MacroDateEventDetail({ item, t }) {
+  const event = item.event;
+  if (isHolidayEvent(event)) {
+    const countryCode = holidayCountryCode(event);
+    return (
+      <div className="macro-date-detail-item macro-holiday-detail-item">
+        <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
+        <strong>{macroEventLabel(event, t)}</strong>
+        <dl>
+          <div><dt>{t.macroCalendar.holiday}</dt><dd>{holidayDisplayName(event, t)}</dd></div>
+          <div><dt>{t.macroCalendar.observedDate}</dt><dd>{event.observedDate || event.date || "N/A"}</dd></div>
+          <div><dt>{t.macroCalendar.legalDate}</dt><dd>{event.legalDate || event.observedDate || event.date || "N/A"}</dd></div>
+          <div><dt>{t.macroCalendar.country}</dt><dd>{holidayCountryLabel(countryCode, t)}</dd></div>
+        </dl>
+        <small>{holidayDateNote(event, t)} / {event.source}</small>
+      </div>
+    );
+  }
+  return (
+    <div className="macro-date-detail-item">
+      <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
+      <strong>{macroEventLabel(event, t)}</strong>
+      <dl>
+        <div><dt>{t.macroCalendar.previous}</dt><dd>{formatMacroValue(event.previous, event.unit)}</dd></div>
+        <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMacroValue(event.actual, event.unit)}</dd></div>
+        <div><dt>{t.macroCalendar.change}</dt><dd className={macroMoveClass(event.change)}>{formatMacroChange(event)}</dd></div>
+        <div><dt>{t.macroCalendar.yoy}</dt><dd className={macroMoveClass(event.yoyPct)}>{isMacroNumber(event.yoyPct) ? formatPct(event.yoyPct, 2) : "N/A"}</dd></div>
+      </dl>
+      <small>{macroDateMeaningLabel(event.dateMeaning, t)} / {event.source}</small>
+    </div>
   );
 }
 
@@ -2401,17 +2658,7 @@ function MacroDateDetails({ dateKey, items, t }) {
       {items.length ? (
         <div className="macro-date-detail-list">
           {items.map((item) => item.type === "event" ? (
-            <div className="macro-date-detail-item" key={`${item.event.seriesId}-${item.event.date}`}>
-              <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
-              <strong>{macroEventLabel(item.event, t)}</strong>
-              <dl>
-                <div><dt>{t.macroCalendar.previous}</dt><dd>{formatMacroValue(item.event.previous, item.event.unit)}</dd></div>
-                <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMacroValue(item.event.actual, item.event.unit)}</dd></div>
-                <div><dt>{t.macroCalendar.change}</dt><dd className={macroMoveClass(item.event.change)}>{formatMacroChange(item.event)}</dd></div>
-                <div><dt>{t.macroCalendar.yoy}</dt><dd className={macroMoveClass(item.event.yoyPct)}>{isMacroNumber(item.event.yoyPct) ? formatPct(item.event.yoyPct, 2) : "N/A"}</dd></div>
-              </dl>
-              <small>{macroDateMeaningLabel(item.event.dateMeaning, t)} / {item.event.source}</small>
-            </div>
+            <MacroDateEventDetail item={item} t={t} key={`${item.event.seriesId}-${item.event.date}-${item.displayDate || dateKey}`} />
           ) : item.type === "status" ? (
             <div className="macro-date-detail-item" key={`${item.type}-${item.seriesId}-${item.date}`}>
               <span className={`macro-pill macro-${item.category}`}>{macroCategoryLabel(item.category, t)}</span>
@@ -2652,8 +2899,8 @@ function MacroCalendarPage({ language, setLanguage, t }) {
 
   const defaultDate = useMemo(() => {
     if (!dataset) return null;
-    return localDateKey();
-  }, [dataset]);
+    return localDateKeyForLanguage(language);
+  }, [dataset, language]);
 
   useEffect(() => {
     if (!dataset) return;
@@ -2686,7 +2933,7 @@ function MacroCalendarPage({ language, setLanguage, t }) {
       </header>
 
       <MacroEnvironmentPanel dataset={dataset} t={t} />
-      <MacroWeekCalendar dataset={dataset} t={t} />
+      <MacroWeekCalendar dataset={dataset} language={language} t={t} />
       {visibleMonth && selectedDate ? (
         <MacroMonthCalendar
           dataset={dataset}
@@ -2699,15 +2946,22 @@ function MacroCalendarPage({ language, setLanguage, t }) {
         />
       ) : null}
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>FRED</span>
-          <span>{dataset.cache.providerCachePath}</span>
-          <span>{dataset.sources.manualEvents}</span>
-        </div>
-        <p>{t.macroCalendar.sourceNote}</p>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.generatedAt}
+        failures={dataset.failures}
+        sources={[
+          "FRED",
+          "FRED release-date API",
+          "ADP official static data",
+          "Federal Reserve FOMC calendar",
+          "OPM federal holidays",
+          "Manual China holiday annotations",
+        ]}
+        methodology={language === "zh" ? t.macroCalendar.methodology : dataset.methodology || t.macroCalendar.methodology}
+        limitations={t.macroCalendar.sourceNote}
+      />
     </main>
   );
 }
@@ -3411,17 +3665,20 @@ function EquityMacroPage({ language, setLanguage, t }) {
         />
       ) : null}
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>QQQ / SPY / DIA · {dataset.assets.QQQ.sourceLabel}</span>
-          <span>FRED · DGS10 / VIXCLS</span>
-          <span>Fast cache / CMC / FRED Gold proxy</span>
-          <span>{dataset.sources?.calendar}</span>
-          <span>{copy.eventPlaceholder}</span>
-        </div>
-        <p>{copy.priceSourceNote}</p>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.fast?.generatedAt || dataset.generatedAt}
+        failures={failureCount}
+        sources={[
+          `QQQ / SPY / DIA - ${dataset.assets.QQQ.sourceLabel}`,
+          "FRED - DGS10 / VIXCLS / Gold proxy",
+          "CoinMarketCap when configured",
+          "Built-in NYSE holiday rules",
+        ]}
+        methodology={language === "zh" ? copy.methodology : [copy.methodology, dataset.fast?.methodology]}
+        limitations={[copy.priceSourceNote, copy.eventPlaceholder]}
+      />
 
     </main>
   );
@@ -3855,15 +4112,19 @@ function MarketClockPage({ language, setLanguage, t }) {
 
       <MarketClockDetail selected={selected} copy={copy} language={language} />
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>OKX public market data</span>
-          <span>CoinMarketCap market caps</span>
-          <span>Session clocks computed locally</span>
-        </div>
-        <p>{dataset.methodology}</p>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.generatedAt}
+        failures={dataset.failures}
+        sources={[
+          "OKX public market data",
+          "CoinMarketCap market caps",
+          "Local session clock rules",
+        ]}
+        methodology={copy.methodology || dataset.methodology}
+        limitations={copy.sourceNote}
+      />
     </main>
   );
 }
@@ -4065,14 +4326,19 @@ function CryptoCyclePage({ language, setLanguage, t }) {
       <DetailBand selected={selected} dataset={dataset} metric={metric} t={t} />
       <Legend t={t} />
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>BTC · Blockchain.info / Binance Spot</span>
-          <span>ETH / SOL · Binance Spot</span>
-          <span>HYPE · Hyperliquid</span>
-        </div>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.generatedAt}
+        failures={dataset.failures}
+        sources={[
+          "BTC - Blockchain.info / Binance Spot",
+          "ETH / SOL - Binance Spot",
+          "HYPE - Hyperliquid",
+        ]}
+        methodology={language === "zh" ? (metric === "absolute" ? t.visualization.absoluteMethod : t.visualization.relativeMethod) : dataset.methodology}
+        limitations={t.footer.staticCacheOnly}
+      />
 
       <Tooltip value={tooltip} dataset={dataset} t={t} />
       <MobilePinnedDetail selected={selected} dataset={dataset} metric={metric} onClear={() => setSelected(null)} t={t} />
@@ -4539,14 +4805,18 @@ function ChipChainPage({ language, setLanguage, t }) {
 
       {selectedAsset ? <ChipChainDetail asset={selectedAsset} category={selectedCategory} copy={copy} language={language} /> : null}
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>{plannedSourceLabel(language)}</span>
-          <span>{copy.sampleSource}</span>
-        </div>
-        <p>{copy.sourceNote}</p>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.generatedAt}
+        failures={dataset.failures}
+        sources={[
+          plannedSourceLabel(language),
+          copy.sampleSource,
+        ]}
+        methodology={language === "zh" ? copy.boardMethod : dataset.methodology || copy.boardMethod}
+        limitations={copy.sourceNote}
+      />
     </main>
   );
 }
@@ -4733,14 +5003,20 @@ function RobotChainPage({ language, setLanguage, t }) {
         <RobotChainTable rows={rows} range={range} language={language} copy={copy} />
       </section>
 
-      <footer className="source-footer">
-        <div>
-          <strong>{t.footer.title}</strong>
-          <span>{copy.sampleSource}</span>
-          <span>{dataset.sourceNoteZh || dataset.sourceNoteEn}</span>
-        </div>
-        <p>{copy.sourceNote}</p>
-      </footer>
+      <DataTrustFooter
+        t={t}
+        language={language}
+        generatedAt={dataset.generatedAt}
+        failures={dataset.failures}
+        sources={[
+          copy.sampleSource,
+        ]}
+        methodology={language === "zh" ? copy.tableMethod : dataset.methodology || copy.tableMethod}
+        limitations={[
+          copy.sourceNote,
+          language === "en" ? dataset.sourceNoteEn : dataset.sourceNoteZh,
+        ]}
+      />
     </main>
   );
 }

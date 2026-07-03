@@ -190,6 +190,17 @@ MANUAL_EVENTS: list[dict] = [
     },
 ]
 
+CHINA_PUBLIC_HOLIDAY_ANCHORS: dict[int, list[tuple[str, str, str, str]]] = {
+    2026: [
+        ("2026-02-17", "China Spring Festival holiday", "Spring Festival", "春节"),
+        ("2026-04-05", "China Qingming Festival holiday", "Qingming Festival", "清明节"),
+        ("2026-05-01", "China Labor Day holiday", "Labor Day", "劳动节"),
+        ("2026-06-19", "China Dragon Boat Festival holiday", "Dragon Boat Festival", "端午节"),
+        ("2026-09-25", "China Mid-Autumn Festival holiday", "Mid-Autumn Festival", "中秋节"),
+        ("2026-10-01", "China National Day holiday", "National Day", "国庆节"),
+    ],
+}
+
 
 def iso_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -706,40 +717,72 @@ def observed_holiday(date: datetime) -> datetime:
     return date
 
 
-def us_federal_holidays(year: int) -> list[tuple[datetime, str]]:
+def us_holiday_payload(label: str, holiday_name: str, holiday_name_zh: str, legal_date: datetime) -> dict:
+    observed_date = observed_holiday(legal_date)
+    return {
+        "observed": observed_date,
+        "legalDate": as_date(pd.Timestamp(legal_date.date())),
+        "label": label,
+        "holidayName": holiday_name,
+        "holidayNameZh": holiday_name_zh,
+    }
+
+
+def us_federal_holidays(year: int) -> list[dict]:
     return [
-        (observed_holiday(datetime(year, 1, 1, tzinfo=EASTERN_TZ)), "U.S. New Year's Day holiday"),
-        (nth_weekday(year, 1, 0, 3), "U.S. Martin Luther King Jr. Day holiday"),
-        (nth_weekday(year, 2, 0, 3), "U.S. Washington's Birthday holiday"),
-        (last_weekday(year, 5, 0), "U.S. Memorial Day holiday"),
-        (observed_holiday(datetime(year, 6, 19, tzinfo=EASTERN_TZ)), "U.S. Juneteenth holiday"),
-        (observed_holiday(datetime(year, 7, 4, tzinfo=EASTERN_TZ)), "U.S. Independence Day holiday"),
-        (nth_weekday(year, 9, 0, 1), "U.S. Labor Day holiday"),
-        (nth_weekday(year, 10, 0, 2), "U.S. Columbus Day holiday"),
-        (observed_holiday(datetime(year, 11, 11, tzinfo=EASTERN_TZ)), "U.S. Veterans Day holiday"),
-        (nth_weekday(year, 11, 3, 4), "U.S. Thanksgiving Day holiday"),
-        (observed_holiday(datetime(year, 12, 25, tzinfo=EASTERN_TZ)), "U.S. Christmas Day holiday"),
+        us_holiday_payload("U.S. New Year's Day holiday", "New Year's Day", "新年", datetime(year, 1, 1, tzinfo=EASTERN_TZ)),
+        us_holiday_payload("U.S. Martin Luther King Jr. Day holiday", "Martin Luther King Jr. Day", "马丁路德金日", nth_weekday(year, 1, 0, 3)),
+        us_holiday_payload("U.S. Washington's Birthday holiday", "Washington's Birthday", "华盛顿诞辰日", nth_weekday(year, 2, 0, 3)),
+        us_holiday_payload("U.S. Memorial Day holiday", "Memorial Day", "阵亡将士纪念日", last_weekday(year, 5, 0)),
+        us_holiday_payload("U.S. Juneteenth holiday", "Juneteenth", "六月节", datetime(year, 6, 19, tzinfo=EASTERN_TZ)),
+        us_holiday_payload("U.S. Independence Day holiday", "Independence Day", "独立日", datetime(year, 7, 4, tzinfo=EASTERN_TZ)),
+        us_holiday_payload("U.S. Labor Day holiday", "Labor Day", "劳工节", nth_weekday(year, 9, 0, 1)),
+        us_holiday_payload("U.S. Columbus Day holiday", "Columbus Day", "哥伦布日", nth_weekday(year, 10, 0, 2)),
+        us_holiday_payload("U.S. Veterans Day holiday", "Veterans Day", "退伍军人节", datetime(year, 11, 11, tzinfo=EASTERN_TZ)),
+        us_holiday_payload("U.S. Thanksgiving Day holiday", "Thanksgiving Day", "感恩节", nth_weekday(year, 11, 3, 4)),
+        us_holiday_payload("U.S. Christmas Day holiday", "Christmas Day", "圣诞节", datetime(year, 12, 25, tzinfo=EASTERN_TZ)),
     ]
 
 
 def build_us_holiday_events() -> list[dict]:
     events: list[dict] = []
     for year in range(WINDOW_START.year, MANUAL_EVENT_END.year + 1):
-        for holiday_date, label in us_federal_holidays(year):
-            date = pd.Timestamp(holiday_date.date())
+        for holiday in us_federal_holidays(year):
+            date = pd.Timestamp(holiday["observed"].date())
             if not in_event_window(date):
                 continue
+            observed_date = as_date(date)
+            legal_date = holiday["legalDate"]
+            holiday_name = holiday["holidayName"]
+            holiday_name_zh = holiday["holidayNameZh"]
+            if observed_date != legal_date:
+                note = (
+                    f"{holiday_name} is legally dated {legal_date} and observed on {observed_date} under "
+                    "standard OPM weekend-observance rules. It is a liquidity/market-attention annotation, "
+                    "not an economic data release."
+                )
+            else:
+                note = (
+                    f"{holiday_name} is observed on {observed_date} under standard OPM federal holiday rules. "
+                    "It is a liquidity/market-attention annotation, not an economic data release."
+                )
             events.append({
-                "date": as_date(date),
-                "seriesId": f"US_FEDERAL_HOLIDAY_{as_date(date)}",
-                "label": label,
+                "date": observed_date,
+                "seriesId": f"US_FEDERAL_HOLIDAY_{observed_date}",
+                "label": holiday["label"],
                 "category": "liquidity",
                 "categoryLabel": CATEGORIES["liquidity"],
                 "role": "holiday",
                 "cadence": "event",
                 "unit": "event",
+                "country": "US",
+                "holidayName": holiday_name,
+                "holidayNameZh": holiday_name_zh,
+                "observedDate": observed_date,
+                "legalDate": legal_date,
+                "timezone": "America/New_York",
                 "source": "OPM federal holiday calendar / U.S. federal holiday rules",
-                "dateMeaning": "scheduled_beijing_date",
+                "dateMeaning": "observed_holiday_date",
                 "actual": None,
                 "previous": None,
                 "forecast": None,
@@ -748,7 +791,48 @@ def build_us_holiday_events() -> list[dict]:
                 "pctChange": None,
                 "yearAgo": None,
                 "yoyPct": None,
-                "note": "U.S. federal holiday observed date generated from standard OPM holiday rules. It is a liquidity/market-attention annotation, not an economic data release.",
+                "note": note,
+            })
+    return events
+
+
+def build_china_holiday_events() -> list[dict]:
+    events: list[dict] = []
+    for year in range(WINDOW_START.year, MANUAL_EVENT_END.year + 1):
+        for date_text, label, holiday_name, holiday_name_zh in CHINA_PUBLIC_HOLIDAY_ANCHORS.get(year, []):
+            date = pd.Timestamp(date_text)
+            if not in_event_window(date):
+                continue
+            observed_date = as_date(date)
+            events.append({
+                "date": observed_date,
+                "seriesId": f"CN_PUBLIC_HOLIDAY_{observed_date}",
+                "label": label,
+                "category": "liquidity",
+                "categoryLabel": CATEGORIES["liquidity"],
+                "role": "holiday",
+                "cadence": "event",
+                "unit": "event",
+                "country": "CN",
+                "holidayName": holiday_name,
+                "holidayNameZh": holiday_name_zh,
+                "observedDate": observed_date,
+                "legalDate": observed_date,
+                "timezone": "Asia/Shanghai",
+                "source": "Manual China holiday festival-date annotation",
+                "dateMeaning": "observed_holiday_date",
+                "actual": None,
+                "previous": None,
+                "forecast": None,
+                "change": None,
+                "changeBp": None,
+                "pctChange": None,
+                "yearAgo": None,
+                "yoyPct": None,
+                "note": (
+                    f"{holiday_name} festival-date anchor for {observed_date}. "
+                    "This annotation marks the festival date for liquidity attention; the full adjusted public-holiday range is not modeled."
+                ),
             })
     return events
 
@@ -912,6 +996,7 @@ def build_scheduled_events(series_frames: dict[str, pd.DataFrame], failures: lis
         *build_bls_scheduled_events(series_frames, failures),
         *build_fomc_scheduled_events(series_frames, failures),
         *build_us_holiday_events(),
+        *build_china_holiday_events(),
     ]
     return sorted(events, key=lambda item: (item["date"], item["category"], item["seriesId"]), reverse=True)
 
@@ -1171,6 +1256,7 @@ def build_output() -> dict:
         "methodology": (
             "FRED observation dates are retained as observation or period dates, not public release timestamps. "
             "Future BLS scheduled release rows come from the official FRED release-date API; FOMC rows come from the Federal Reserve calendar and use Beijing dates. "
+            "Holiday rows use U.S. federal observed-date rules plus manual China festival-date annotations. "
             "Scheduled rows leave actual and forecast null until a reviewed forecast source or released observation is available. "
             "Weekly state rows summarize observed start/end changes inside each Friday-ending window."
         ),
@@ -1186,6 +1272,7 @@ def build_output() -> dict:
             "Federal Reserve FOMC calendar": FED_FOMC_CALENDAR_URL,
             "ADP National Employment Report": ADP_NER_JSON_URL,
             "U.S. federal holidays": US_FEDERAL_HOLIDAYS_URL,
+            "China holiday annotations": "Manual festival-date annotations maintained in scripts/update-macro-calendar.py.",
             "manualEvents": "Curated policy, legal, holiday, media, sports, and institutional-flow annotations maintained in scripts/update-macro-calendar.py.",
         },
         "failures": failures,
@@ -1213,6 +1300,7 @@ def merge_manual_events_into_existing(existing: dict, error: Exception | None = 
     output.setdefault("sources", {})["Federal Reserve FOMC calendar"] = FED_FOMC_CALENDAR_URL
     output.setdefault("sources", {})["ADP National Employment Report"] = ADP_NER_JSON_URL
     output.setdefault("sources", {})["U.S. federal holidays"] = US_FEDERAL_HOLIDAYS_URL
+    output.setdefault("sources", {})["China holiday annotations"] = "Manual festival-date annotations maintained in scripts/update-macro-calendar.py."
     if error is not None:
         failures.append(f"FRED refresh skipped; manual events merged into last-known-good cache: {safe_error_message(error)}")
     output["failures"] = failures
