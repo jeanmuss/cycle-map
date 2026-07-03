@@ -14,7 +14,8 @@
     "update-robot-chain": "node scripts/update-chip-chain-data.mjs robot",
     "update-equity-fast-data": "python scripts/update-equity-fast-data.py",
     "update-equity-data": "python scripts/update-equity-data.py",
-    "update-macro-calendar": "python scripts/update-macro-calendar.py"
+    "update-macro-calendar": "python scripts/update-macro-calendar.py",
+    "update-chart-series": "node scripts/update-chart-series-data.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "5.0.4",

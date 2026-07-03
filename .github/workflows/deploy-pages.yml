@@ -64,6 +64,8 @@ jobs:
           APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
           CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
         run: npm --prefix app run update-robot-chain
+      - name: Refresh interactive chart series
+        run: npm --prefix app run update-chart-series
       - name: Build static site for GitHub Pages
         run: npm --prefix app run build:pages
       - uses: actions/configure-pages@v5

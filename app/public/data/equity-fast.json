@@ -1,11 +1,11 @@
 {
   "version": 1,
   "page": "equity-fast",
-  "generatedAt": "2026-07-02T10:21:48Z",
+  "generatedAt": "2026-07-03T15:31:49Z",
   "refreshCadence": "Target 15 minutes for fast indicators; provider schedules and static deployment queues can add delay.",
   "baseDataset": {
     "file": "equity-weekly.json",
-    "generatedAt": "2026-07-01T06:28:17Z"
+    "generatedAt": "2026-07-03T15:31:26Z"
   },
   "methodology": "Fast indicators are generated separately from the slower equity calendar cache. CMC supplies crypto market capitalization; FRED supplies a gold price proxy index because the old LBMA gold fix series is not available in the current FRED API. The frontend reads this static derived JSON and never receives provider credentials.",
   "metrics": [
@@ -38,11 +38,11 @@
     {
       "id": "GOLD_PRICE_PROXY",
       "label": "Gold price proxy",
-      "value": 2542.69,
+      "value": 2593.52,
       "unit": "index",
-      "previous": 2527.55,
-      "changePct": 0.5989990306818805,
-      "asOf": "2026-07-01",
+      "previous": 2542.69,
+      "changePct": 1.9990639834191322,
+      "asOf": "2026-07-02",
       "sourceLabel": "FRED / Credit Suisse NASDAQ Gold FLOWS103 Price Index",
       "sourceUrl": "https://fred.stlouisfed.org/series/NASDAQQGLDI",
       "quality": "fresh"

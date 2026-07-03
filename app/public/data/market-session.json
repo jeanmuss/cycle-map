@@ -3,7 +3,7 @@
   "page": "market-clock",
   "generatedAt": "2026-07-01T05:54:56.298Z",
   "refreshCadence": "Target 10-15 minutes when a backend scheduler is available; static hosts may refresh less frequently.",
-  "methodology": "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI.",
+  "methodology": "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. Session states are calculated locally from market-hour rules: China uses call auction, continuous trading, closing auction, and after-hours blocks; Korea uses pre-market, regular, and after-hours sessions.",
   "failures": [],
   "markets": [
     {
@@ -41,21 +41,23 @@
       "displayName": "Korea",
       "displayNameZh": "韩国市场",
       "timezone": "Asia/Seoul",
-      "stateModel": "regular",
+      "stateModel": "premarket_regular_afterhours",
       "regularOpen": "09:00",
       "regularClose": "15:30",
       "assets": [
         "KOSPI200",
         "SAMSUNG",
         "SKHYNIX"
-      ]
+      ],
+      "premarketOpen": "08:30",
+      "afterhoursClose": "18:00"
     },
     {
       "id": "cn",
       "displayName": "China",
       "displayNameZh": "中国市场",
       "timezone": "Asia/Shanghai",
-      "stateModel": "regular_with_lunch",
+      "stateModel": "china_auction_regular_afterhours",
       "regularOpen": "09:30",
       "lunchStart": "11:30",
       "lunchEnd": "13:00",
@@ -63,7 +65,10 @@
       "assets": [
         "CSI500",
         "SSE50"
-      ]
+      ],
+      "auctionOpen": "09:15",
+      "closingAuctionOpen": "14:57",
+      "afterhoursClose": "15:30"
     }
   ],
   "assets": [
@@ -258,9 +263,9 @@
       "marketCapAsOf": null,
       "asOf": null,
       "sourceKind": "pending",
-      "sourceLabel": "Price source pending; status rotation is calculated locally from KRX regular hours.",
+      "sourceLabel": "Price source pending; status rotation is calculated locally from KRX pre-market, regular, and after-hours session rules.",
       "marketCapSourceLabel": null,
-      "quality": "Price source pending; status rotation is calculated locally from KRX regular hours.",
+      "quality": "Price source pending; status rotation is calculated locally from KRX pre-market, regular, and after-hours session rules.",
       "components": null
     },
     {
