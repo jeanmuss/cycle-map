@@ -74,7 +74,9 @@ const EQUITY_MARKET_TEXT = {
     close: "\u6536",
     dayMove: "\u6da8\u8dcc",
     priceIndicators: "\u89c2\u5bdf\u6307\u6807",
+    marketClosed: "\u7f8e\u80a1\u4f11\u5e02",
     macro: "\u5229\u7387 / \u6ce2\u52a8",
+    usdCny: "USD/CNY",
     btcMarketCap: "BTC\u5e02\u503c",
     cryptoMarketCap: "\u52a0\u5bc6\u603b\u5e02\u503c",
     goldProxy: "\u9ec4\u91d1\u6307\u6570",
@@ -84,6 +86,7 @@ const EQUITY_MARKET_TEXT = {
     compareSubtitle: "\u4ece\u9759\u6001\u6d3e\u751f\u7f13\u5b58\u8bfb\u53d6\u5386\u53f2\u70b9\uff0c\u5de6\u53f3 Y \u8f74\u53ef\u5206\u522b\u9009\u62e9\u6307\u6807\u3002",
     leftAxis: "\u5de6\u8f74",
     rightAxis: "\u53f3\u8f74",
+    noRightAxis: "\u4e0d\u4f7f\u7528\u53f3\u8f74",
     xWindow: "X \u8f74",
     transform: "\u53d8\u6362",
     yZoom: "Y \u7f29\u653e",
@@ -102,8 +105,8 @@ const EQUITY_MARKET_TEXT = {
     nextWeek: "\u4e0b\u5468",
     previousMonth: "\u4e0a\u6708",
     nextMonth: "\u4e0b\u6708",
-    priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y\u3001VIX \u548c\u9ec4\u91d1\u6307\u6570\u4ee3\u7406\u6765\u81ea FRED\uff0c\u52a0\u5bc6\u5e02\u503c\u6765\u81ea CMC\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
-    methodology: "\u65e5\u5386\u884c\u5408\u5e76\u7f13\u5b58\u7684 QQQ/SPY/DIA \u65e5\u7ebf OHLC \u4e0e FRED 10Y/VIX \u89c2\u6d4b\uff1b\u9876\u90e8\u5feb\u5361\u6765\u81ea\u5355\u72ec\u7684\u5feb\u7f13\u5b58\u3002",
+    priceSourceNote: "\u4ef7\u683c\u6765\u81ea AKShare/Sina \u7f8e\u80a1\u65e5\u7ebf\uff0cDOW \u4f7f\u7528 DIA ETF \u4ee3\u7406\uff1b10Y\u3001VIX\u3001USD/CNY \u548c\u9ec4\u91d1\u6307\u6570\u4ee3\u7406\u6765\u81ea FRED\uff0c\u52a0\u5bc6\u5e02\u503c\u6765\u81ea CMC\u3002\u524d\u7aef\u53ea\u8bfb\u53d6\u9759\u6001\u7f13\u5b58\u3002",
+    methodology: "\u65e5\u5386\u884c\u5408\u5e76\u7f13\u5b58\u7684 QQQ/SPY/DIA \u65e5\u7ebf OHLC \u4e0e FRED 10Y/VIX/USD-CNY \u89c2\u6d4b\uff1b\u9876\u90e8\u5feb\u5361\u6765\u81ea\u5355\u72ec\u7684\u5feb\u7f13\u5b58\u3002",
     eventPlaceholder: "\u672c\u9875\u6682\u4e0d\u63a5\u5165\u4e8b\u4ef6\u6ce8\u91ca\u3002",
   },
   en: {
@@ -126,7 +129,9 @@ const EQUITY_MARKET_TEXT = {
     close: "Close",
     dayMove: "Move",
     priceIndicators: "Observations",
+    marketClosed: "Market closed",
     macro: "Rates / volatility",
+    usdCny: "USD/CNY",
     btcMarketCap: "BTC cap",
     cryptoMarketCap: "Crypto cap",
     goldProxy: "Gold proxy",
@@ -136,6 +141,7 @@ const EQUITY_MARKET_TEXT = {
     compareSubtitle: "Reads historical points from the derived static cache; choose one metric for each Y axis.",
     leftAxis: "Left axis",
     rightAxis: "Right axis",
+    noRightAxis: "No right axis",
     xWindow: "X axis",
     transform: "Transform",
     yZoom: "Y zoom",
@@ -154,8 +160,8 @@ const EQUITY_MARKET_TEXT = {
     nextWeek: "Next week",
     previousMonth: "Previous",
     nextMonth: "Next",
-    priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y, VIX, and the gold proxy use FRED; crypto market caps use CMC. The frontend reads static cache only.",
-    methodology: "Calendar rows combine cached QQQ/SPY/DIA daily OHLC with FRED 10Y/VIX observations; summary cards use a separate fast cache.",
+    priceSourceNote: "Prices use AKShare/Sina U.S. daily data; DOW uses DIA as an ETF proxy. 10Y, VIX, USD/CNY, and the gold proxy use FRED; crypto market caps use CMC. The frontend reads static cache only.",
+    methodology: "Calendar rows combine cached QQQ/SPY/DIA daily OHLC with FRED 10Y/VIX/USD-CNY observations; summary cards use a separate fast cache.",
     eventPlaceholder: "No event annotation source is connected for this page yet.",
   },
 };
@@ -301,32 +307,33 @@ const CHIP_CHAIN_TEXT = {
     titleAccent: "AI 芯片",
     titleRest: "产业链热点",
     subtitle: "用细分类目、股票代码和相对强弱观察存储、光模块、设备、服务器和终端应用的轮动节奏",
-    cache: "样例缓存",
-    cacheTooltip: "当前页面读取的是本地样例缓存，用于验证信息架构和交互。正式版应由后端/CI 脚本读取经审查的行情源并生成静态 JSON；前端不直连行情源。",
-    success: "样例产业链数据已加载",
-    failure: (count) => `样例源提示：${count}`,
-    loading: "正在读取产业链样例缓存…",
+    cache: "静态行情缓存",
+    cacheTooltip: "当前页面读取后端/CI 脚本生成的静态行情 JSON；前端不直连行情源。",
+    success: "产业链行情缓存已加载",
+    failure: (count) => `信源提示：${count}`,
+    loading: "正在读取产业链行情缓存…",
     unavailable: "AI 芯片产业链数据未能加载",
     controls: "产业链热点控制",
     range: "观察周期",
     latest: "当前热点",
     boardKicker: "CHAIN ROTATION BOARD",
     boardTitle: "产业链热力板",
-    boardMethod: "类目涨幅为可见样例股票等权平均；颜色越深代表所选周期内越强。",
+    boardMethod: "类目涨幅为可见标的等权平均；颜色越深代表所选周期内越强。",
     detailEmptyTitle: "查看股票详情",
-    detailEmptyBody: "点击任意股票代码，查看产业链角色、样例价格、各周期涨跌、相对强弱和计划信源。",
+    detailEmptyBody: "点击任意股票代码，查看产业链角色、缓存价格、各周期涨跌、相对强弱和计划信源。",
     selected: "已选股票",
     category: "所属模块",
     role: "产业链角色",
-    price: "样例价格",
+    price: "缓存价格",
     returns: "涨跌幅",
     relative: "相对强弱",
     volume: "成交量放大",
     week52: "52 周位置",
     marketCap: "市值",
     source: "来源",
-    sourceNote: "当前版本先用样例缓存展示页面结构，迷你 K 线也是按周期生成的样例走势；正式接入前需要完成数据授权、缓存频率、再展示条款、真实窗口价格序列和缺失数据策略确认。",
-    sampleSource: "样例缓存",
+    sourceNote: "当前版本读取后端/CI 生成的静态行情缓存；简要 K 线只在标的存在真实 pricePaths 时展示，缺失或样例来源不再生成替代走势。",
+    sampleSource: "样例/待接入",
+    cacheSource: "静态行情缓存",
     plannedSource: "计划信源",
     noRows: "当前筛选下暂无股票",
     excess: "超额",
@@ -345,32 +352,33 @@ const CHIP_CHAIN_TEXT = {
     titleAccent: "AI Chip",
     titleRest: "Chain Hotspots",
     subtitle: "Track rotation across memory, optics, equipment, servers, infrastructure, and applications using category panels and tickers.",
-    cache: "Sample cache",
-    cacheTooltip: "This page reads a local sample cache to validate information architecture and interaction. Production should generate static JSON from backend/CI scripts using reviewed market-data feeds; the frontend must not call providers directly.",
-    success: "Sample chip-chain data loaded",
-    failure: (count) => `Sample source notes: ${count}`,
-    loading: "Reading chip-chain sample cache...",
+    cache: "Static quote cache",
+    cacheTooltip: "This page reads generated static JSON from local or CI scripts using reviewed market-data feeds; the frontend must not call providers directly.",
+    success: "Chip-chain quote cache loaded",
+    failure: (count) => `Source notes: ${count}`,
+    loading: "Reading chip-chain quote cache...",
     unavailable: "AI chip-chain data could not be loaded",
     controls: "Chip-chain hotspot controls",
     range: "Window",
     latest: "Current hotspots",
     boardKicker: "CHAIN ROTATION BOARD",
     boardTitle: "Supply-chain heat board",
-    boardMethod: "Category returns are equal-weighted from visible sample tickers. Deeper color means stronger performance in the selected window.",
+    boardMethod: "Category returns are equal-weighted from visible tickers. Deeper color means stronger performance in the selected window.",
     detailEmptyTitle: "Inspect a ticker",
-    detailEmptyBody: "Select any ticker to see its role, sample price, multi-window returns, relative strength, and planned source.",
+    detailEmptyBody: "Select any ticker to see its role, cached price, multi-window returns, relative strength, and planned source.",
     selected: "Selected ticker",
     category: "Module",
     role: "Supply-chain role",
-    price: "Sample price",
+    price: "Cached price",
     returns: "Returns",
     relative: "Relative strength",
     volume: "Volume ratio",
     week52: "52-week position",
     marketCap: "Market cap",
     source: "Source",
-    sourceNote: "This version uses a sample cache for page structure, and the mini price paths are generated sample paths by window. Before live data, confirm data licensing, cache cadence, redistribution rights, true window price series, and missing-data handling.",
-    sampleSource: "Sample cache",
+    sourceNote: "This version reads backend/CI generated static quote caches. Mini charts render only real cached pricePaths; missing or sample-sourced paths are left blank instead of being generated.",
+    sampleSource: "Sample/pending row",
+    cacheSource: "Static quote cache",
     plannedSource: "Planned source",
     noRows: "No tickers for this filter",
     excess: "Excess",
@@ -391,23 +399,23 @@ function chipChainCopy(t) {
 const ROBOT_CHAIN_TEXT = {
   zh: {
     docTitle: "机器人产业链观察池",
-    docDescription: "按机器人产业链板块追踪上市标的、业务定位、样例价格和多周期涨跌幅。",
+    docDescription: "按机器人产业链板块追踪上市标的、业务定位、缓存价格和多周期涨跌幅。",
     eyebrow: "ROBOTICS CHAIN",
     titleAccent: "机器人产业链",
     titleRest: "观察池",
     subtitle: "按算力、感知、芯片、运动控制、自动驾驶、仓储服务、医疗、防务和 ETF 梳理机器人主题标的",
-    cache: "样例缓存",
-    cacheTooltip: "当前页面读取本地样例缓存复刻表格结构。正式版本应由后端或 CI 脚本生成静态行情 JSON，前端不直连行情源。",
-    success: "样例机器人产业链数据已加载",
-    failure: (count) => `样例源提示：${count}`,
-    loading: "正在读取机器人产业链样例缓存…",
+    cache: "静态行情缓存",
+    cacheTooltip: "当前页面读取本地或 CI 生成的静态行情 JSON；前端不直连行情源。",
+    success: "机器人产业链行情缓存已加载",
+    failure: (count) => `信源提示：${count}`,
+    loading: "正在读取机器人产业链行情缓存…",
     unavailable: "机器人产业链数据未能加载",
     controls: "机器人产业链控制",
     range: "观察周期",
     latest: "当前观察池热点",
     tableKicker: "ROBOTICS WATCHLIST",
     tableTitle: "机器人产业链上市标的观察池",
-    tableMethod: "表格复刻参考图的分组与业务定位；价格、涨跌幅和简要 K 线为样例行情，用于验证页面形态。",
+    tableMethod: "表格保留分组与业务定位；价格、涨跌幅和简要 K 线来自静态行情缓存，可用时使用真实 pricePaths。",
     sector: "板块",
     company: "公司 / 代码",
     business: "业务定位",
@@ -417,7 +425,7 @@ const ROBOT_CHAIN_TEXT = {
     change: "涨幅",
     sparkline: "简要 K 线",
     sourceNote: "注：市值来自参考图的约数；ETF 为主题基金，规模信息可简化展示。以上仅为信息整理，不构成投资建议。",
-    sampleSource: "样例行情缓存",
+    sampleSource: "静态行情缓存",
     noRows: "当前筛选下暂无标的",
     attributeLabels: {
       core: "核心层",
@@ -428,23 +436,23 @@ const ROBOT_CHAIN_TEXT = {
   },
   en: {
     docTitle: "Robotics Chain Watchlist",
-    docDescription: "Track robotics value-chain listed names by segment, business role, sample price, and multi-window returns.",
+    docDescription: "Track robotics value-chain listed names by segment, business role, cached price, and multi-window returns.",
     eyebrow: "ROBOTICS CHAIN",
     titleAccent: "Robotics Chain",
     titleRest: "Watchlist",
     subtitle: "A robotics-theme watchlist across compute, perception, chips, motion control, autonomy, warehouse/service robots, medical robotics, defense, and ETFs.",
-    cache: "Sample cache",
-    cacheTooltip: "This page reads a local sample cache to reproduce the table structure. Production should generate static quote JSON from backend or CI scripts; the frontend must not call market-data providers directly.",
-    success: "Sample robotics-chain data loaded",
-    failure: (count) => `Sample source notes: ${count}`,
-    loading: "Reading robotics-chain sample cache...",
+    cache: "Static quote cache",
+    cacheTooltip: "This page reads static quote JSON generated by local or CI scripts; the frontend must not call market-data providers directly.",
+    success: "Robotics-chain quote cache loaded",
+    failure: (count) => `Source notes: ${count}`,
+    loading: "Reading robotics-chain quote cache...",
     unavailable: "Robotics-chain data could not be loaded",
     controls: "Robotics-chain controls",
     range: "Window",
     latest: "Current watchlist movers",
     tableKicker: "ROBOTICS WATCHLIST",
     tableTitle: "Robotics Industry Listed-Name Watchlist",
-    tableMethod: "The table mirrors the reference grouping and business roles. Prices, returns, and sparklines are sample quotes for validating the page shape.",
+    tableMethod: "The table keeps the grouping and business roles. Prices, returns, and sparklines come from the static quote cache and use real pricePaths when available.",
     sector: "Sector",
     company: "Company / Code",
     business: "Business role",
@@ -454,7 +462,7 @@ const ROBOT_CHAIN_TEXT = {
     change: "Change",
     sparkline: "Mini chart",
     sourceNote: "Market caps are approximate values from the reference image. ETFs are thematic funds and scale is simplified. For information only, not investment advice.",
-    sampleSource: "Sample quote cache",
+    sampleSource: "Static quote cache",
     noRows: "No tickers for this filter",
     attributeLabels: {
       core: "Core",
@@ -3001,6 +3009,8 @@ function MacroCalendarPage({ language, setLanguage, t }) {
 }
 
 const EQUITY_ASSET_KEYS = ["QQQ", "SPY", "DIA"];
+const NO_RIGHT_METRIC_ID = "__none__";
+const USD_CNY_METRIC_ID = "macro.DEXCHUS.value";
 const METRIC_CHART_DEFAULTS = {
   left: "equity.QQQ.close",
   right: "macro.VIXCLS.value",
@@ -3054,16 +3064,31 @@ function metricWindowDays(chartDataset, windowValue) {
   return Number((chartDataset?.windows || []).find((item) => item.value === windowValue)?.days) || 31;
 }
 
-function metricSeriesForWindow(chartDataset, metricId, windowValue) {
+function metricSeriesPoints(chartDataset, metricId) {
   const source = chartDataset?.series?.[metricId] || [];
-  const points = source
+  return source
     .map((point) => ({ t: point.t, ms: Date.parse(point.t), raw: Number(point.v) }))
     .filter((point) => point.t && Number.isFinite(point.ms) && Number.isFinite(point.raw))
     .sort((a, b) => a.ms - b.ms);
+}
+
+function metricWindowEnd(chartDataset, metricIds) {
+  const latestTimes = metricIds
+    .flatMap((metricId) => metricSeriesPoints(chartDataset, metricId).map((point) => point.ms))
+    .filter(Number.isFinite);
+  return latestTimes.length ? Math.max(...latestTimes) : Date.now();
+}
+
+function metricWindowDomain(chartDataset, windowValue, windowEndMs) {
+  const end = Number.isFinite(windowEndMs) ? windowEndMs : Date.now();
+  return [end - metricWindowDays(chartDataset, windowValue) * 86400000, end];
+}
+
+function metricSeriesForWindow(chartDataset, metricId, windowValue, windowEndMs) {
+  const points = metricSeriesPoints(chartDataset, metricId);
   if (!points.length) return [];
-  const latest = points.at(-1).ms;
-  const start = latest - metricWindowDays(chartDataset, windowValue) * 86400000;
-  return points.filter((point) => point.ms >= start);
+  const [start, end] = metricWindowDomain(chartDataset, windowValue, windowEndMs);
+  return points.filter((point) => point.ms >= start && point.ms <= end);
 }
 
 function transformMetricPoints(points, transform) {
@@ -3109,17 +3134,6 @@ function metricAxisDomain(points, zoom) {
   return [center - half, center + half];
 }
 
-function metricXDomain(pointSets) {
-  const points = pointSets.flat().filter((point) => Number.isFinite(point.ms));
-  if (!points.length) {
-    const now = Date.now();
-    return [now - 86400000, now];
-  }
-  const min = Math.min(...points.map((point) => point.ms));
-  const max = Math.max(...points.map((point) => point.ms));
-  return min === max ? [min - 43200000, max + 43200000] : [min, max];
-}
-
 function metricChartY(value, domain, size = METRIC_CHART_SIZE) {
   const plotHeight = size.height - size.top - size.bottom;
   const ratio = (value - domain[0]) / Math.max(0.000001, domain[1] - domain[0]);
@@ -3140,9 +3154,28 @@ function plottedMetricPoints(points, xDomain, yDomain) {
   }));
 }
 
-function metricLinePath(points) {
+function metricGapLimitMs(metric) {
+  const day = 86400000;
+  if (metric?.cadence === "daily") return day * 4;
+  if (metric?.cadence === "weekly") return day * 10;
+  if (metric?.cadence === "monthly") return day * 38;
+  if (metric?.cadence === "quarterly") return day * 105;
+  return day * 10;
+}
+
+function metricLinePath(points, metric) {
   if (!points.length) return "";
-  return points.map((point, index) => `${index ? "L" : "M"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ");
+  const gapLimit = metricGapLimitMs(metric);
+  return points.map((point, index) => {
+    const previous = points[index - 1];
+    const command = !previous || point.ms - previous.ms > gapLimit ? "M" : "L";
+    return `${command} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
+  }).join(" ");
+}
+
+function metricSparseDots(points) {
+  if (points.length > 24) return [];
+  return points;
 }
 
 function metricTicks(domain, count = 5) {
@@ -3186,6 +3219,7 @@ function formatMetricChartValue(value, metric, transform, language) {
   if (transform === "zscore") return `${formatNumber(number, 2)} sd`;
   const unit = metric?.unit;
   if (unit === "percent") return `${formatNumber(number, 2)}%`;
+  if (unit === "fx") return formatNumber(number, 4);
   if (unit === "USD" || unit === "USDT" || unit === "usd") return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 2 }).format(number);
   if (unit === "persons" || unit === "thousand_persons" || unit === "shares") return new Intl.NumberFormat(language === "en" ? "en-US" : "zh-CN", { notation: "compact", maximumFractionDigits: 1 }).format(number);
   if (unit === "usd_millions") return `$${formatNumber(number / 1000, 1)}B`;
@@ -3193,11 +3227,12 @@ function formatMetricChartValue(value, metric, transform, language) {
   return formatNumber(number, Math.abs(number) >= 100 ? 1 : 2);
 }
 
-function MetricSelect({ label, value, onChange, groups, language }) {
+function MetricSelect({ label, value, onChange, groups, language, emptyOptionLabel = null, emptyOptionValue = "" }) {
   return (
     <label className="metric-select">
       <span>{label}</span>
       <select value={value} onChange={(event) => onChange(event.target.value)}>
+        {emptyOptionLabel ? <option value={emptyOptionValue}>{emptyOptionLabel}</option> : null}
         {groups.map((group) => (
           <optgroup label={group.label} key={group.category}>
             {group.items.map((metric) => (
@@ -3238,6 +3273,28 @@ function formatEquityMacroChange(seriesId, value) {
   if (!value) return "N/A";
   if (seriesId === "DGS10") return formatBp(value.changeBp, 0);
   return formatSignedNumber(value.change, 2);
+}
+
+function metricPointAtOrBeforeDate(chartDataset, metricId, dateKey, maxLagDays = 10) {
+  if (!chartDataset || !dateKey) return null;
+  const metric = chartDataset.metrics?.[metricId];
+  if (!metric) return null;
+  const targetMs = Date.parse(`${dateKey}T23:59:59Z`);
+  if (!Number.isFinite(targetMs)) return null;
+  let previous = null;
+  let selected = null;
+  for (const point of metricSeriesPoints(chartDataset, metricId)) {
+    if (point.ms > targetMs) break;
+    previous = selected;
+    selected = point;
+  }
+  if (!selected || targetMs - selected.ms > maxLagDays * 86400000) return null;
+  return {
+    metric,
+    point: selected,
+    previous,
+    change: previous ? selected.raw - previous.raw : null,
+  };
 }
 
 function equityMoveClass(value) {
@@ -3374,7 +3431,7 @@ function MetricComparePanel({ chartDataset, language, t }) {
   const metrics = chartDataset?.metrics || {};
   const metricIds = chartDataset?.metricOrder || Object.keys(metrics);
   const defaultLeft = metrics[METRIC_CHART_DEFAULTS.left] ? METRIC_CHART_DEFAULTS.left : metricIds[0];
-  const defaultRight = metrics[METRIC_CHART_DEFAULTS.right] ? METRIC_CHART_DEFAULTS.right : metricIds[1] || metricIds[0];
+  const defaultRight = metrics[METRIC_CHART_DEFAULTS.right] ? METRIC_CHART_DEFAULTS.right : NO_RIGHT_METRIC_ID;
   const [leftMetricId, setLeftMetricId] = useState(defaultLeft || "");
   const [rightMetricId, setRightMetricId] = useState(defaultRight || "");
   const [windowValue, setWindowValue] = useState(METRIC_CHART_DEFAULTS.window);
@@ -3385,7 +3442,7 @@ function MetricComparePanel({ chartDataset, language, t }) {
   useEffect(() => {
     if (!metricIds.length) return;
     setLeftMetricId((current) => metrics[current] ? current : defaultLeft || metricIds[0]);
-    setRightMetricId((current) => metrics[current] ? current : defaultRight || metricIds[1] || metricIds[0]);
+    setRightMetricId((current) => current === NO_RIGHT_METRIC_ID || metrics[current] ? current : defaultRight || NO_RIGHT_METRIC_ID);
   }, [defaultLeft, defaultRight, metricIds, metrics]);
 
   const groups = useMemo(() => metricOptionsByCategory(chartDataset, language), [chartDataset, language]);
@@ -3398,15 +3455,22 @@ function MetricComparePanel({ chartDataset, language, t }) {
   const transforms = chartDataset?.transforms?.length ? chartDataset.transforms : [];
   const leftMetric = metrics[leftMetricId];
   const rightMetric = metrics[rightMetricId];
-  const leftRaw = useMemo(() => metricSeriesForWindow(chartDataset, leftMetricId, windowValue), [chartDataset, leftMetricId, windowValue]);
-  const rightRaw = useMemo(() => metricSeriesForWindow(chartDataset, rightMetricId, windowValue), [chartDataset, rightMetricId, windowValue]);
+  const hasRightMetric = rightMetricId !== NO_RIGHT_METRIC_ID && Boolean(rightMetric);
+  const selectedMetricIds = useMemo(() => [leftMetricId, hasRightMetric ? rightMetricId : null].filter(Boolean), [leftMetricId, rightMetricId, hasRightMetric]);
+  const windowEndMs = useMemo(() => metricWindowEnd(chartDataset, selectedMetricIds), [chartDataset, selectedMetricIds]);
+  const xDomain = useMemo(() => metricWindowDomain(chartDataset, windowValue, windowEndMs), [chartDataset, windowValue, windowEndMs]);
+  const leftRaw = useMemo(() => metricSeriesForWindow(chartDataset, leftMetricId, windowValue, windowEndMs), [chartDataset, leftMetricId, windowValue, windowEndMs]);
+  const rightRaw = useMemo(() => hasRightMetric ? metricSeriesForWindow(chartDataset, rightMetricId, windowValue, windowEndMs) : [], [chartDataset, rightMetricId, windowValue, windowEndMs, hasRightMetric]);
   const leftSeries = useMemo(() => transformMetricPoints(leftRaw, transform), [leftRaw, transform]);
   const rightSeries = useMemo(() => transformMetricPoints(rightRaw, transform), [rightRaw, transform]);
-  const xDomain = useMemo(() => metricXDomain([leftSeries, rightSeries]), [leftSeries, rightSeries]);
   const leftDomain = useMemo(() => metricAxisDomain(leftSeries, zoom), [leftSeries, zoom]);
   const rightDomain = useMemo(() => metricAxisDomain(rightSeries, zoom), [rightSeries, zoom]);
   const leftPoints = useMemo(() => plottedMetricPoints(leftSeries, xDomain, leftDomain), [leftSeries, xDomain, leftDomain]);
   const rightPoints = useMemo(() => plottedMetricPoints(rightSeries, xDomain, rightDomain), [rightSeries, xDomain, rightDomain]);
+  const leftPath = useMemo(() => metricLinePath(leftPoints, leftMetric), [leftPoints, leftMetric]);
+  const rightPath = useMemo(() => metricLinePath(rightPoints, rightMetric), [rightPoints, rightMetric]);
+  const leftDots = useMemo(() => metricSparseDots(leftPoints), [leftPoints]);
+  const rightDots = useMemo(() => metricSparseDots(rightPoints), [rightPoints]);
   const xTicks = useMemo(() => metricXTicks(xDomain, windowValue), [xDomain, windowValue]);
   const leftTicks = useMemo(() => metricTicks(leftDomain, 5), [leftDomain]);
   const rightTicks = useMemo(() => metricTicks(rightDomain, 5), [rightDomain]);
@@ -3448,13 +3512,13 @@ function MetricComparePanel({ chartDataset, language, t }) {
     setHover({
       x: clampedX,
       left: nearestMetricPoint(leftPoints, targetMs),
-      right: nearestMetricPoint(rightPoints, targetMs),
+      right: hasRightMetric ? nearestMetricPoint(rightPoints, targetMs) : null,
     });
   };
 
   const resetChart = () => {
     setLeftMetricId(defaultLeft || metricIds[0]);
-    setRightMetricId(defaultRight || metricIds[1] || metricIds[0]);
+    setRightMetricId(defaultRight || NO_RIGHT_METRIC_ID);
     setWindowValue(METRIC_CHART_DEFAULTS.window);
     setTransform(METRIC_CHART_DEFAULTS.transform);
     setZoom(METRIC_CHART_DEFAULTS.zoom);
@@ -3476,7 +3540,15 @@ function MetricComparePanel({ chartDataset, language, t }) {
 
       <div className="metric-chart-controls" aria-label={copy.compareTitle}>
         <MetricSelect label={copy.leftAxis} value={leftMetricId} onChange={setLeftMetricId} groups={groups} language={language} />
-        <MetricSelect label={copy.rightAxis} value={rightMetricId} onChange={setRightMetricId} groups={groups} language={language} />
+        <MetricSelect
+          label={copy.rightAxis}
+          value={rightMetricId}
+          onChange={setRightMetricId}
+          groups={groups}
+          language={language}
+          emptyOptionLabel={copy.noRightAxis}
+          emptyOptionValue={NO_RIGHT_METRIC_ID}
+        />
         <div className="metric-control-group">
           <span>{copy.xWindow}</span>
           <div className="segmented segmented-compact">
@@ -3509,7 +3581,7 @@ function MetricComparePanel({ chartDataset, language, t }) {
           className="metric-chart-svg"
           viewBox={`0 0 ${METRIC_CHART_SIZE.width} ${METRIC_CHART_SIZE.height}`}
           role="img"
-          aria-label={`${metricLabel(leftMetric, language)} / ${metricLabel(rightMetric, language)}`}
+          aria-label={`${metricLabel(leftMetric, language)}${hasRightMetric ? ` / ${metricLabel(rightMetric, language)}` : ""}`}
           onMouseMove={handlePointerMove}
           onMouseLeave={() => setHover(null)}
           focusable="false"
@@ -3530,20 +3602,22 @@ function MetricComparePanel({ chartDataset, language, t }) {
               </Fragment>
             );
           })}
-          {rightTicks.map((tick) => {
+          {hasRightMetric ? rightTicks.map((tick) => {
             const y = metricChartY(tick, rightDomain);
             return (
               <text className="metric-axis-label metric-axis-right" x={METRIC_CHART_SIZE.width - METRIC_CHART_SIZE.right + 10} y={y + 4} key={`right-${tick}`}>
                 {formatMetricChartValue(tick, rightMetric, transform, language)}
               </text>
             );
-          })}
+          }) : null}
           <text className="metric-axis-title metric-axis-title-left" x={METRIC_CHART_SIZE.left} y={METRIC_CHART_SIZE.top - 8}>
             {copy.leftAxis}: {compactMetricAxisTitle(leftMetric, language)}
           </text>
-          <text className="metric-axis-title metric-axis-title-right" x={METRIC_CHART_SIZE.width - METRIC_CHART_SIZE.right} y={METRIC_CHART_SIZE.top - 8}>
-            {copy.rightAxis}: {compactMetricAxisTitle(rightMetric, language)}
-          </text>
+          {hasRightMetric ? (
+            <text className="metric-axis-title metric-axis-title-right" x={METRIC_CHART_SIZE.width - METRIC_CHART_SIZE.right} y={METRIC_CHART_SIZE.top - 8}>
+              {copy.rightAxis}: {compactMetricAxisTitle(rightMetric, language)}
+            </text>
+          ) : null}
           {xTicks.map((tick) => {
             const x = metricChartX(tick, xDomain);
             return (
@@ -3554,10 +3628,16 @@ function MetricComparePanel({ chartDataset, language, t }) {
             );
           })}
           {hover ? <line className="metric-hover-line" x1={hover.x} x2={hover.x} y1={METRIC_CHART_SIZE.top} y2={METRIC_CHART_SIZE.height - METRIC_CHART_SIZE.bottom} /> : null}
-          {leftPoints.length >= 2 ? <path className="metric-line metric-line-left" d={metricLinePath(leftPoints)} /> : null}
-          {rightPoints.length >= 2 ? <path className="metric-line metric-line-right" d={metricLinePath(rightPoints)} /> : null}
+          {leftPoints.length >= 2 ? <path className="metric-line metric-line-left" d={leftPath} /> : null}
+          {hasRightMetric && rightPoints.length >= 2 ? <path className="metric-line metric-line-right" d={rightPath} /> : null}
+          {leftDots.map((point) => (
+            <circle className="metric-sample-dot metric-sample-left" cx={point.x} cy={point.y} r="2.6" key={`left-dot-${point.t}`} />
+          ))}
+          {hasRightMetric ? rightDots.map((point) => (
+            <circle className="metric-sample-dot metric-sample-right" cx={point.x} cy={point.y} r="2.6" key={`right-dot-${point.t}`} />
+          )) : null}
           {leftPoints.length ? <circle className="metric-end-dot metric-end-left" cx={leftPoints.at(-1).x} cy={leftPoints.at(-1).y} r="4" /> : null}
-          {rightPoints.length ? <circle className="metric-end-dot metric-end-right" cx={rightPoints.at(-1).x} cy={rightPoints.at(-1).y} r="4" /> : null}
+          {hasRightMetric && rightPoints.length ? <circle className="metric-end-dot metric-end-right" cx={rightPoints.at(-1).x} cy={rightPoints.at(-1).y} r="4" /> : null}
         </svg>
         {hover ? (
           <div className="metric-tooltip" style={{ left: `${(hover.x / METRIC_CHART_SIZE.width) * 100}%` }}>
@@ -3587,12 +3667,14 @@ function MetricComparePanel({ chartDataset, language, t }) {
           <small>{leftSeries.length} {copy.points} / {copy.latestPoint} {leftLatest ? formatMetricChartValue(leftLatest.raw, leftMetric, "raw", language) : "N/A"}</small>
           <em>{copy.source}: {leftMetric?.source || "N/A"}</em>
         </div>
-        <div>
-          <span className="metric-right-swatch">{copy.rightAxis}</span>
-          <strong>{metricLabel(rightMetric, language)}</strong>
-          <small>{rightSeries.length} {copy.points} / {copy.latestPoint} {rightLatest ? formatMetricChartValue(rightLatest.raw, rightMetric, "raw", language) : "N/A"}</small>
-          <em>{copy.source}: {rightMetric?.source || "N/A"}</em>
-        </div>
+        {hasRightMetric ? (
+          <div>
+            <span className="metric-right-swatch">{copy.rightAxis}</span>
+            <strong>{metricLabel(rightMetric, language)}</strong>
+            <small>{rightSeries.length} {copy.points} / {copy.latestPoint} {rightLatest ? formatMetricChartValue(rightLatest.raw, rightMetric, "raw", language) : "N/A"}</small>
+            <em>{copy.source}: {rightMetric?.source || "N/A"}</em>
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -3636,8 +3718,9 @@ function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate
                 {days.map((day) => {
                   const row = byDate.get(day.dateKey);
                   const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
+                  const isClosed = (row && !row.isMarketDay) || (!row && (day.dayIndex === 0 || day.dayIndex === 6));
                   return (
-                    <td key={day.dateKey} className={[hasData ? "" : "macro-calendar-empty", day.isToday ? "is-today" : ""].filter(Boolean).join(" ")}>
+                    <td key={day.dateKey} className={[hasData ? "" : "macro-calendar-empty", isClosed ? "is-closed" : "", day.isToday ? "is-today" : ""].filter(Boolean).join(" ")}>
                       {hasData ? (
                         <div className="equity-day-detail">
                           {EQUITY_ASSET_KEYS.map((symbol) => {
@@ -3661,6 +3744,10 @@ function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate
                             ) : null;
                           })}
                         </div>
+                      ) : isClosed ? (
+                        <div className="equity-day-detail">
+                          <span className="equity-market-closed">{copy.marketClosed}</span>
+                        </div>
                       ) : null}
                     </td>
                   );
@@ -3679,13 +3766,16 @@ function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate
 
 function EquityDateDetails({ dateKey, row, dataset, t }) {
   const copy = equityCopy(t);
+  const language = t.htmlLang === "zh-CN" ? "zh" : "en";
   const assetItems = EQUITY_ASSET_KEYS
     .map((symbol) => ({ symbol, asset: row?.assets?.[symbol] }))
     .filter((item) => item.asset);
   const macroItems = ["DGS10", "VIXCLS"]
     .map((seriesId) => ({ seriesId, item: row?.macro?.[seriesId] }))
     .filter((entry) => entry.item);
-  const count = assetItems.length + macroItems.length;
+  const usdCnyItem = metricPointAtOrBeforeDate(dataset.chartSeries, USD_CNY_METRIC_ID, dateKey);
+  const count = assetItems.length + macroItems.length + (usdCnyItem ? 1 : 0);
+  const isClosed = row && !row.isMarketDay;
   return (
     <aside className="macro-date-detail equity-date-detail" aria-live="polite">
       <div className="macro-date-detail-heading">
@@ -3693,7 +3783,7 @@ function EquityDateDetails({ dateKey, row, dataset, t }) {
           <small>{t.macroCalendar.selectedDate}</small>
           <strong>{dateKey}</strong>
         </div>
-        <span>{count ? `${count} ${copy.priceIndicators}` : t.macroCalendar.noIndicators}</span>
+        <span>{count ? `${count} ${copy.priceIndicators}` : isClosed ? copy.marketClosed : t.macroCalendar.noIndicators}</span>
       </div>
       {count ? (
         <div className="macro-date-detail-list">
@@ -3733,9 +3823,22 @@ function EquityDateDetails({ dateKey, row, dataset, t }) {
               </div>
             );
           })}
+          {usdCnyItem ? (
+            <div className="macro-date-detail-item equity-date-detail-item" key={`${USD_CNY_METRIC_ID}-${usdCnyItem.point.t}`}>
+              <span className="macro-pill macro-rates">{copy.usdCny}</span>
+              <strong>{metricLabel(usdCnyItem.metric, language)}</strong>
+              <dl>
+                <div><dt>{t.macroCalendar.previous}</dt><dd>{usdCnyItem.previous ? formatMetricChartValue(usdCnyItem.previous.raw, usdCnyItem.metric, "raw", language) : "N/A"}</dd></div>
+                <div><dt>{t.macroCalendar.actual}</dt><dd>{formatMetricChartValue(usdCnyItem.point.raw, usdCnyItem.metric, "raw", language)}</dd></div>
+                <div><dt>{t.macroCalendar.change}</dt><dd className={macroClass(usdCnyItem.change)}>{Number.isFinite(Number(usdCnyItem.change)) ? formatSignedNumber(usdCnyItem.change, 4) : "N/A"}</dd></div>
+                <div><dt>{t.macroCalendar.observedDate}</dt><dd>{dayLabel(usdCnyItem.point.t)}</dd></div>
+              </dl>
+              <small>{t.macroCalendar.dailyObservation} / {usdCnyItem.metric.source || "FRED"}</small>
+            </div>
+          ) : null}
         </div>
       ) : (
-        <p>{t.macroCalendar.noIndicators}</p>
+        <p>{isClosed ? copy.marketClosed : t.macroCalendar.noIndicators}</p>
       )}
     </aside>
   );
@@ -3767,6 +3870,7 @@ function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, sel
           {days.map((day) => {
             const row = byDate.get(day.dateKey);
             const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
+            const isClosed = day.inMonth && row && !row.isMarketDay;
             return (
               <button
                 type="button"
@@ -3801,7 +3905,9 @@ function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMonth, sel
                         {label} {formatEquityMacroChange(seriesId, item)}
                       </small>
                     ) : null;
-                  }) : null}
+                  }) : isClosed ? (
+                    <small className="macro-month-tag equity-month-tag equity-market-closed-tag">{copy.marketClosed}</small>
+                  ) : null}
                 </span>
               </button>
             );
@@ -4146,7 +4252,7 @@ function EquityMacroPage({ language, setLanguage, t }) {
         failures={failureCount}
         sources={[
           `QQQ / SPY / DIA - ${dataset.assets.QQQ.sourceLabel}`,
-          "FRED - DGS10 / VIXCLS / Gold proxy",
+          "FRED - DGS10 / VIXCLS / DEXCHUS / Gold proxy",
           "CoinMarketCap when configured",
           "Built-in NYSE holiday rules",
         ]}
@@ -4893,69 +4999,19 @@ function formatWeek52Position(value) {
   return `${Math.round(n * 100)}%`;
 }
 
-function hashString(value) {
-  return String(value || "").split("").reduce((hash, char) => {
-    const next = ((hash << 5) - hash) + char.charCodeAt(0);
-    return next >>> 0;
-  }, 2166136261);
-}
-
-function seededRandom(seed) {
-  let value = seed >>> 0;
-  return () => {
-    value += 0x6D2B79F5;
-    let next = value;
-    next = Math.imul(next ^ (next >>> 15), next | 1);
-    next ^= next + Math.imul(next ^ (next >>> 7), next | 61);
-    return ((next ^ (next >>> 14)) >>> 0) / 4294967296;
-  };
+function hasRealCachedPricePath(asset) {
+  const sourceKind = String(asset?.sourceKind || "").toLowerCase();
+  const dataQuality = String(asset?.dataQuality || "").toLowerCase();
+  if (sourceKind === "sample" || sourceKind === "pending") return false;
+  if (dataQuality.includes("sample") || dataQuality.includes("pending")) return false;
+  return true;
 }
 
 function chipSparkValues(asset, range) {
-  const pricePathValues = (asset?.pricePaths?.[range] || [])
+  if (!hasRealCachedPricePath(asset)) return [];
+  return (asset?.pricePaths?.[range] || [])
     .map((point) => Number(point?.c ?? point?.close ?? point?.price ?? point))
     .filter(Number.isFinite);
-  if (pricePathValues.length >= 2) return pricePathValues;
-
-  const returnPct = Number(asset?.returns?.[range]);
-  const profiles = {
-    "1d": { steps: 14, noise: 0.55, cycles: 1.8, easing: 1 },
-    "5d": { steps: 22, noise: 0.85, cycles: 2.6, easing: 1.08 },
-    "1m": { steps: 30, noise: 1.1, cycles: 3.4, easing: 1.16 },
-    "3m": { steps: 38, noise: 1.35, cycles: 4.2, easing: 1.24 },
-  };
-  const profile = profiles[range] || profiles["1d"];
-  const steps = profile.steps;
-  const start = 100;
-  const end = Number.isFinite(returnPct) ? 100 * (1 + returnPct / 100) : 100;
-  const move = end - start;
-  const absMove = Math.abs(move);
-  const direction = move === 0 ? 0 : Math.sign(move);
-  const seed = hashString(`${asset?.symbol || ""}:${range}:${asset?.primaryCategory || ""}`);
-  const random = seededRandom(seed);
-  const phase = random() * Math.PI * 2;
-  const waveTwo = 1.3 + random() * 2.2;
-  const noiseScale = profile.noise * (1 + Math.min(2.6, Math.abs(returnPct || 0) / 24));
-  return Array.from({ length: steps }, (_, index) => {
-    if (index === 0) return start;
-    if (index === steps - 1) return end;
-    const t = index / (steps - 1);
-    const eased = Math.pow(t, profile.easing);
-    const drift = start + move * eased;
-    const taper = Math.sin(Math.PI * t);
-    const wave = Math.sin(profile.cycles * Math.PI * t + phase) * noiseScale * taper;
-    const pulse = Math.cos(waveTwo * Math.PI * t + phase / 2) * noiseScale * 0.45 * taper;
-    const jitter = (random() - 0.5) * noiseScale * 0.7 * taper;
-    let value = drift + wave + pulse + jitter;
-    if (direction > 0 && absMove > 0.2) {
-      value = Math.min(value, end - 0.04);
-      value = Math.max(value, start - Math.max(0.45, absMove * 0.08));
-    } else if (direction < 0 && absMove > 0.2) {
-      value = Math.max(value, end + 0.04);
-      value = Math.min(value, start + Math.max(0.45, absMove * 0.08));
-    }
-    return value;
-  });
 }
 
 function chipSparkGeometry(values, width = 94, height = 28) {
@@ -4978,6 +5034,13 @@ function chipSparkGeometry(values, width = 94, height = 28) {
 function ChipSparkline({ asset, range }) {
   const returnPct = Number(asset?.returns?.[range]);
   const values = chipSparkValues(asset, range);
+  if (values.length < 2) {
+    return (
+      <span className="chip-sparkline chip-sparkline-empty" title="No real cached price path" aria-hidden="true">
+        <span />
+      </span>
+    );
+  }
   const geometry = chipSparkGeometry(values);
   return (
     <span className={`chip-sparkline ${returnPct >= 0 ? "positive" : "negative"}`} aria-hidden="true">
@@ -5095,30 +5158,37 @@ function chipTreemapTextClass(value) {
   return "chip-move-text-1";
 }
 
-function ChipHotspotSummary({ movers, range, selectedSymbol, onSelect, copy }) {
+function ChainTreemapSummary({ movers, range, selectedSymbol, onSelect, copy, className = "" }) {
   const tiles = useMemo(() => chipTreemapTiles(movers, range), [movers, range]);
   if (!tiles.length) {
     return (
-      <section className="chip-hotspot-summary chip-treemap-summary" aria-label={copy.latest}>
+      <section className={`chip-hotspot-summary chip-treemap-summary ${className}`.trim()} aria-label={copy.latest}>
         <div className="chip-treemap-empty">{copy.noRows}</div>
       </section>
     );
   }
+  const selectable = typeof onSelect === "function";
   return (
-    <section className="chip-hotspot-summary chip-treemap-summary" aria-label={copy.latest}>
+    <section className={`chip-hotspot-summary chip-treemap-summary ${className}`.trim()} aria-label={copy.latest}>
       {tiles.map(({ asset, value, rect }) => {
         const area = rect.width * rect.height;
         const tinyTile = rect.width < 5 || rect.height < 5 || area < 170;
         const compactTile = !tinyTile && (rect.height < 16 || area < 300 || (rect.width < 10 && area < 360));
         const densityClass = tinyTile ? "is-tiny" : compactTile ? "is-compact" : "";
         const shapeClass = rect.width < 6 || rect.height < 6 ? "is-narrow" : "";
+        const TileElement = selectable ? "button" : "div";
+        const interactiveProps = selectable
+          ? {
+              type: "button",
+              onClick: () => onSelect(asset.symbol),
+              "aria-pressed": selectedSymbol === asset.symbol,
+            }
+          : {};
         return (
-          <button
-            type="button"
-            className={`chip-treemap-tile ${chipHeatClass(value)} ${chipTreemapTextClass(value)} ${densityClass} ${shapeClass} ${selectedSymbol === asset.symbol ? "is-selected" : ""}`}
+          <TileElement
+            {...interactiveProps}
+            className={`chip-treemap-tile ${chipHeatClass(value)} ${chipTreemapTextClass(value)} ${densityClass} ${shapeClass} ${selectable ? "" : "is-static"} ${selectedSymbol === asset.symbol ? "is-selected" : ""}`}
             key={asset.symbol}
-            onClick={() => onSelect(asset.symbol)}
-            aria-pressed={selectedSymbol === asset.symbol}
             aria-label={`${asset.symbol} ${asset.name} ${formatPct(value, 1)}`}
             title={`${asset.symbol} ${asset.name} ${formatPct(value, 1)}`}
             style={{
@@ -5132,7 +5202,7 @@ function ChipHotspotSummary({ movers, range, selectedSymbol, onSelect, copy }) {
               <strong>{chipTreemapSymbol(asset.symbol)}</strong>
             </span>
             <em>{formatPct(value, 1)}</em>
-          </button>
+          </TileElement>
         );
       })}
     </section>
@@ -5398,7 +5468,7 @@ function ChipChainPage({ language, setLanguage, t }) {
         </div>
       </header>
 
-      <ChipHotspotSummary movers={movers} range={range} selectedSymbol={selectedSymbol} onSelect={selectChipSymbol} copy={copy} />
+      <ChainTreemapSummary movers={movers} range={range} selectedSymbol={selectedSymbol} onSelect={selectChipSymbol} copy={copy} />
 
       <section className="control-bar chip-chain-controls" aria-label={copy.controls}>
         <div className="control-primary">
@@ -5426,7 +5496,7 @@ function ChipChainPage({ language, setLanguage, t }) {
         failures={dataset.failures}
         sources={[
           plannedSourceLabel(language),
-          copy.sampleSource,
+          copy.cacheSource || copy.sampleSource,
         ]}
         methodology={language === "zh" ? copy.boardMethod : dataset.methodology || copy.boardMethod}
         limitations={copy.sourceNote}
@@ -5448,27 +5518,16 @@ function robotCategoryRows(dataset) {
 }
 
 function robotTopMovers(rows, range) {
+  const seen = new Set();
   return rows
     .flatMap((row) => row.assets)
+    .filter((asset) => {
+      if (seen.has(asset.symbol)) return false;
+      seen.add(asset.symbol);
+      return true;
+    })
     .filter((asset) => Number.isFinite(Number(asset.returns?.[range])))
     .sort((a, b) => Number(b.returns?.[range]) - Number(a.returns?.[range]));
-}
-
-function RobotHotspotSummary({ movers, range, copy }) {
-  return (
-    <section className="chip-hotspot-summary robot-hotspot-summary" aria-label={copy.latest}>
-      {movers.slice(0, 4).map((asset) => {
-        const value = Number(asset.returns?.[range]);
-        return (
-          <div className="chip-hotspot-card robot-hotspot-card" key={asset.symbol}>
-            <strong>{asset.symbol}</strong>
-            <span>{asset.company}</span>
-            <em className={value >= 0 ? "positive" : "negative"}>{formatPct(value, 1)}</em>
-          </div>
-        );
-      })}
-    </section>
-  );
 }
 
 function RobotChainTable({ rows, range, language, copy }) {
@@ -5598,7 +5657,7 @@ function RobotChainPage({ language, setLanguage, t }) {
         </div>
       </header>
 
-      <RobotHotspotSummary movers={movers} range={range} copy={copy} />
+      <ChainTreemapSummary movers={movers} range={range} copy={copy} className="robot-treemap-summary" />
 
       <section className="control-bar chip-chain-controls" aria-label={copy.controls}>
         <div className="control-primary">

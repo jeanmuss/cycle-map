@@ -869,10 +869,18 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .equity-direction-row strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1em;
   overflow: visible;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 950;
   line-height: 1;
+  -webkit-text-stroke-width: 0.35px;
+  -webkit-text-stroke-color: currentColor;
+  text-shadow: 0.35px 0 currentColor;
+  transform: translateY(1px);
 }
 
 .equity-macro-row {
@@ -902,9 +910,40 @@ html[lang="zh-CN"] .title-block h1 {
 
 .macro-month-day .equity-month-arrow {
   flex: 0 0 auto;
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1em;
+  font-size: 15px;
   font-weight: 950;
-  line-height: 0.9;
+  line-height: 1;
+  -webkit-text-stroke-width: 0.35px;
+  -webkit-text-stroke-color: currentColor;
+  text-shadow: 0.35px 0 currentColor;
+  transform: translateY(2px);
+}
+
+.equity-market-closed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 5px 6px;
+  border: 1px dashed rgba(23, 23, 23, 0.45);
+  background: #f3f3eb;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.equity-month-tag.equity-market-closed-tag {
+  justify-content: center;
+  color: var(--muted);
+  background: #f3f3eb;
+  font-size: 10px;
+  font-weight: 850;
 }
 
 .equity-month-tag.positive {
@@ -1082,6 +1121,19 @@ html[lang="zh-CN"] .title-block h1 {
 
 .metric-line-right,
 .metric-end-right {
+  stroke: #c6273b;
+}
+
+.metric-sample-dot {
+  fill: var(--paper);
+  stroke-width: 1.8;
+}
+
+.metric-sample-left {
+  stroke: #315dc1;
+}
+
+.metric-sample-right {
   stroke: #c6273b;
 }
 
@@ -2251,6 +2303,15 @@ html[lang="zh-CN"] .title-block h1 {
   box-shadow: inset 0 0 0 3px var(--ink), inset 0 0 0 1px rgba(255, 253, 246, 0.9);
 }
 
+.chip-treemap-tile.is-static {
+  cursor: default;
+}
+
+.chip-treemap-tile.is-static:hover {
+  z-index: 1;
+  box-shadow: inset 0 0 0 1px rgba(6, 18, 15, 0.12);
+}
+
 .chip-treemap-tile strong,
 .chip-treemap-tile small,
 .chip-treemap-tile em {
@@ -2574,6 +2635,19 @@ html[lang="zh-CN"] .title-block h1 {
 
 .chip-sparkline.negative {
   color: #b52435;
+}
+
+.chip-sparkline-empty {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.chip-sparkline-empty > span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  border-top: 1px dashed rgba(23, 23, 23, 0.28);
 }
 
 .chip-sparkline svg {

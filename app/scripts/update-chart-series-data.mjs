@@ -94,6 +94,118 @@ function macroWeeklyStateObservations(macroDataset, seriesId) {
     .filter((point) => finiteNumber(point.v) != null);
 }
 
+function unitToUsdBillions(value, unit) {
+  const number = finiteNumber(value);
+  if (number == null) return null;
+  if (unit === "usd_millions") return number / 1000;
+  if (unit === "usd_billions" || unit === "usd_billions_chained") return number;
+  return null;
+}
+
+function metricPointsInUsdBillions(output, metricId) {
+  const metric = output.metrics[metricId];
+  return (output.series[metricId] || [])
+    .map((point) => ({ t: point.t, ms: Date.parse(point.t), v: unitToUsdBillions(point.v, metric?.unit) }))
+    .filter((point) => point.t && Number.isFinite(point.ms) && point.v != null)
+    .sort((a, b) => a.ms - b.ms);
+}
+
+function latestPointAtOrBefore(points, targetMs) {
+  let latest = null;
+  for (const point of points) {
+    if (point.ms > targetMs) break;
+    latest = point;
+  }
+  return latest;
+}
+
+function alignedLiquidityPoints(seriesByKey, anchorKey, deriveValue) {
+  const anchors = seriesByKey[anchorKey] || [];
+  return anchors
+    .map((anchor) => {
+      const values = Object.fromEntries(Object.entries(seriesByKey).map(([key, points]) => {
+        const point = key === anchorKey ? anchor : latestPointAtOrBefore(points, anchor.ms);
+        return [key, point?.v ?? null];
+      }));
+      const value = deriveValue(values);
+      return { t: anchor.t, v: value };
+    })
+    .filter((point) => finiteNumber(point.v) != null);
+}
+
+function addDerivedLiquiditySeries(output) {
+  const liquiditySeries = {
+    fedAssets: metricPointsInUsdBillions(output, "macro.WALCL.value"),
+    reserves: metricPointsInUsdBillions(output, "macro.WRESBAL.value"),
+    tga: metricPointsInUsdBillions(output, "macro.WTREGEN.value"),
+    rrp: metricPointsInUsdBillions(output, "macro.RRPONTSYD.value"),
+  };
+  if (!liquiditySeries.fedAssets.length) return;
+  const derivedSource = "Derived from FRED WALCL / WRESBAL / WTREGEN / RRPONTSYD static caches";
+  const derivedMetrics = [
+    {
+      metric: {
+        id: "macro.NET_LIQUIDITY.value",
+        labelZh: "净流动性 (Fed-TGA-RRP)",
+        labelEn: "Net liquidity (Fed-TGA-RRP)",
+        unit: "usd_billions",
+        defaultTransform: "indexed",
+      },
+      value: ({ fedAssets, tga, rrp }) => [fedAssets, tga, rrp].every((item) => item != null) ? fedAssets - tga - rrp : null,
+    },
+    {
+      metric: {
+        id: "macro.FED_ASSETS_EX_TGA.value",
+        labelZh: "Fed资产-TGA",
+        labelEn: "Fed assets less TGA",
+        unit: "usd_billions",
+        defaultTransform: "indexed",
+      },
+      value: ({ fedAssets, tga }) => [fedAssets, tga].every((item) => item != null) ? fedAssets - tga : null,
+    },
+    {
+      metric: {
+        id: "macro.RESERVES_PLUS_RRP.value",
+        labelZh: "储备+隔夜逆回购",
+        labelEn: "Reserves + RRP",
+        unit: "usd_billions",
+        defaultTransform: "indexed",
+      },
+      value: ({ reserves, rrp }) => [reserves, rrp].every((item) => item != null) ? reserves + rrp : null,
+    },
+    {
+      metric: {
+        id: "macro.TGA_PLUS_RRP.value",
+        labelZh: "TGA+隔夜逆回购",
+        labelEn: "TGA + RRP drain",
+        unit: "usd_billions",
+        defaultTransform: "indexed",
+      },
+      value: ({ tga, rrp }) => [tga, rrp].every((item) => item != null) ? tga + rrp : null,
+    },
+    {
+      metric: {
+        id: "macro.RESERVES_SHARE_WALCL.value",
+        labelZh: "储备/Fed资产",
+        labelEn: "Reserves / Fed assets",
+        unit: "percent",
+        defaultTransform: "raw",
+      },
+      value: ({ reserves, fedAssets }) => [reserves, fedAssets].every((item) => item != null) && fedAssets !== 0 ? (reserves / fedAssets) * 100 : null,
+    },
+  ];
+
+  for (const item of derivedMetrics) {
+    addMetric(output, {
+      category: "liquidity",
+      kind: "derived_liquidity",
+      cadence: "weekly",
+      source: derivedSource,
+      ...item.metric,
+    }, alignedLiquidityPoints(liquiditySeries, "fedAssets", item.value));
+  }
+}
+
 function addEquitySeries(output, equityDataset) {
   if (!equityDataset?.days?.length) return;
   const assets = ["QQQ", "SPY", "DIA"];
@@ -156,9 +268,12 @@ async function addMacroFredSeries(output, macroDataset) {
   const indicators = macroDataset?.indicators || {};
   for (const [seriesId, indicator] of Object.entries(indicators)) {
     const cache = await readJson(resolve(macroFredCacheDir, `${seriesId}.json`));
-    let observations = Array.isArray(cache?.observations) ? cache.observations : [];
-    if (!observations.length) observations = macroEventObservations(macroDataset, seriesId);
-    if (!observations.length) observations = macroWeeklyStateObservations(macroDataset, seriesId);
+    const cacheObservations = Array.isArray(cache?.observations) ? cache.observations : [];
+    const observations = [
+      ...cacheObservations,
+      ...macroEventObservations(macroDataset, seriesId),
+      ...macroWeeklyStateObservations(macroDataset, seriesId),
+    ];
     if (!observations.length) continue;
     const metricId = `macro.${seriesId}.value`;
     if ((output.series[metricId]?.length || 0) >= observations.length) continue;
@@ -173,7 +288,7 @@ async function addMacroFredSeries(output, macroDataset) {
       source: indicator.source || "FRED",
       dateMeaning: indicator.date_meaning || indicator.dateMeaning || "observation_date",
       defaultTransform: indicator.unit === "percent" ? "raw" : "indexed",
-    }, observations.map((row) => ({ t: row.date, v: row.value })));
+    }, observations.map((row) => ({ t: row.date || row.t, v: row.value ?? row.v })));
   }
 }
 
@@ -223,6 +338,7 @@ async function buildOutput() {
 
   addEquitySeries(output, equityDataset);
   await addMacroFredSeries(output, macroDataset);
+  addDerivedLiquiditySeries(output);
   addChainSeries(output, chipDataset, "chip", "chip_chain");
   addChainSeries(output, robotDataset, "robot", "robot_chain");
 
