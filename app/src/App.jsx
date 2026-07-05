@@ -3149,6 +3149,17 @@ function metricTicks(domain, count = 5) {
   return Array.from({ length: count }, (_, index) => domain[0] + ((domain[1] - domain[0]) * index) / (count - 1));
 }
 
+function metricXTicks(domain, windowValue) {
+  const count = windowValue === "7d" ? 8 : 7;
+  return metricTicks(domain, count);
+}
+
+function compactMetricAxisTitle(metric, language) {
+  const label = metricLabel(metric, language);
+  const maxLength = language === "en" ? 30 : 18;
+  return label.length > maxLength ? `${label.slice(0, maxLength - 3)}...` : label;
+}
+
 function nearestMetricPoint(points, targetMs) {
   if (!points.length) return null;
   return points.reduce((nearest, point) => {
@@ -3396,7 +3407,7 @@ function MetricComparePanel({ chartDataset, language, t }) {
   const rightDomain = useMemo(() => metricAxisDomain(rightSeries, zoom), [rightSeries, zoom]);
   const leftPoints = useMemo(() => plottedMetricPoints(leftSeries, xDomain, leftDomain), [leftSeries, xDomain, leftDomain]);
   const rightPoints = useMemo(() => plottedMetricPoints(rightSeries, xDomain, rightDomain), [rightSeries, xDomain, rightDomain]);
-  const xTicks = useMemo(() => metricTicks(xDomain, 4), [xDomain]);
+  const xTicks = useMemo(() => metricXTicks(xDomain, windowValue), [xDomain, windowValue]);
   const leftTicks = useMemo(() => metricTicks(leftDomain, 5), [leftDomain]);
   const rightTicks = useMemo(() => metricTicks(rightDomain, 5), [rightDomain]);
   const hasDrawableLine = leftPoints.length >= 2 || rightPoints.length >= 2;
@@ -3527,6 +3538,12 @@ function MetricComparePanel({ chartDataset, language, t }) {
               </text>
             );
           })}
+          <text className="metric-axis-title metric-axis-title-left" x={METRIC_CHART_SIZE.left} y={METRIC_CHART_SIZE.top - 8}>
+            {copy.leftAxis}: {compactMetricAxisTitle(leftMetric, language)}
+          </text>
+          <text className="metric-axis-title metric-axis-title-right" x={METRIC_CHART_SIZE.width - METRIC_CHART_SIZE.right} y={METRIC_CHART_SIZE.top - 8}>
+            {copy.rightAxis}: {compactMetricAxisTitle(rightMetric, language)}
+          </text>
           {xTicks.map((tick) => {
             const x = metricChartX(tick, xDomain);
             return (
@@ -5006,21 +5023,115 @@ function chipTopMovers(rows, range) {
     .sort((a, b) => Number(b.returns?.[range]) - Number(a.returns?.[range]));
 }
 
+function chipTreemapWeight(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return 0;
+  return Math.abs(numeric) + 0.25;
+}
+
+function splitChipTreemapItems(items, rect) {
+  if (!items.length) return [];
+  if (items.length === 1) {
+    return [{ ...items[0], rect }];
+  }
+  const total = items.reduce((sum, item) => sum + item.weight, 0);
+  if (total <= 0) return [];
+  const half = total / 2;
+  let running = 0;
+  let splitIndex = 1;
+  let bestDistance = Infinity;
+  for (let index = 0; index < items.length - 1; index += 1) {
+    running += items[index].weight;
+    const distance = Math.abs(half - running);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      splitIndex = index + 1;
+    }
+  }
+  const first = items.slice(0, splitIndex);
+  const second = items.slice(splitIndex);
+  const firstWeight = first.reduce((sum, item) => sum + item.weight, 0);
+  const ratio = firstWeight / total;
+  if (rect.width >= rect.height) {
+    const firstWidth = rect.width * ratio;
+    return [
+      ...splitChipTreemapItems(first, { ...rect, width: firstWidth }),
+      ...splitChipTreemapItems(second, { ...rect, x: rect.x + firstWidth, width: rect.width - firstWidth }),
+    ];
+  }
+  const firstHeight = rect.height * ratio;
+  return [
+    ...splitChipTreemapItems(first, { ...rect, height: firstHeight }),
+    ...splitChipTreemapItems(second, { ...rect, y: rect.y + firstHeight, height: rect.height - firstHeight }),
+  ];
+}
+
+function chipTreemapTiles(movers, range) {
+  const items = movers
+    .map((asset) => {
+      const value = Number(asset.returns?.[range]);
+      return {
+        asset,
+        value,
+        weight: chipTreemapWeight(value),
+      };
+    })
+    .filter((item) => item.weight > 0)
+    .sort((a, b) => b.weight - a.weight || b.value - a.value || a.asset.symbol.localeCompare(b.asset.symbol));
+  return splitChipTreemapItems(items, { x: 0, y: 0, width: 100, height: 100 });
+}
+
+function chipTreemapSymbol(symbol) {
+  return String(symbol || "").replace(/\.(KS|KQ)$/i, "");
+}
+
+function chipTreemapTextClass(value) {
+  const magnitude = Math.abs(Number(value));
+  if (!Number.isFinite(magnitude)) return "chip-move-text-1";
+  if (magnitude >= 7) return "chip-move-text-5";
+  if (magnitude >= 4) return "chip-move-text-4";
+  if (magnitude >= 2) return "chip-move-text-3";
+  if (magnitude >= 0.8) return "chip-move-text-2";
+  return "chip-move-text-1";
+}
+
 function ChipHotspotSummary({ movers, range, selectedSymbol, onSelect, copy }) {
+  const tiles = useMemo(() => chipTreemapTiles(movers, range), [movers, range]);
+  if (!tiles.length) {
+    return (
+      <section className="chip-hotspot-summary chip-treemap-summary" aria-label={copy.latest}>
+        <div className="chip-treemap-empty">{copy.noRows}</div>
+      </section>
+    );
+  }
   return (
-    <section className="chip-hotspot-summary" aria-label={copy.latest}>
-      {movers.slice(0, 4).map((asset) => {
-        const value = Number(asset.returns?.[range]);
+    <section className="chip-hotspot-summary chip-treemap-summary" aria-label={copy.latest}>
+      {tiles.map(({ asset, value, rect }) => {
+        const area = rect.width * rect.height;
+        const tinyTile = rect.width < 5 || rect.height < 5 || area < 170;
+        const compactTile = !tinyTile && (rect.height < 16 || area < 300 || (rect.width < 10 && area < 360));
+        const densityClass = tinyTile ? "is-tiny" : compactTile ? "is-compact" : "";
+        const shapeClass = rect.width < 6 || rect.height < 6 ? "is-narrow" : "";
         return (
           <button
             type="button"
-            className={`chip-hotspot-card ${selectedSymbol === asset.symbol ? "is-selected" : ""}`}
+            className={`chip-treemap-tile ${chipHeatClass(value)} ${chipTreemapTextClass(value)} ${densityClass} ${shapeClass} ${selectedSymbol === asset.symbol ? "is-selected" : ""}`}
             key={asset.symbol}
             onClick={() => onSelect(asset.symbol)}
+            aria-pressed={selectedSymbol === asset.symbol}
+            aria-label={`${asset.symbol} ${asset.name} ${formatPct(value, 1)}`}
+            title={`${asset.symbol} ${asset.name} ${formatPct(value, 1)}`}
+            style={{
+              left: `${rect.x}%`,
+              top: `${rect.y}%`,
+              width: `${rect.width}%`,
+              height: `${rect.height}%`,
+            }}
           >
-            <strong>{asset.symbol}</strong>
-            <span>{asset.name}</span>
-            <em className={value >= 0 ? "positive" : "negative"}>{formatPct(value, 1)}</em>
+            <span className="chip-treemap-label">
+              <strong>{chipTreemapSymbol(asset.symbol)}</strong>
+            </span>
+            <em>{formatPct(value, 1)}</em>
           </button>
         );
       })}
@@ -5118,6 +5229,16 @@ function ChipChainDetail({ asset, category, copy, language }) {
     );
   }
   const role = language === "en" ? asset.roleEn : asset.roleZh;
+  const returnItems = [
+    ["1D", asset.returns?.["1d"]],
+    ["5D", asset.returns?.["5d"]],
+    ["1M", asset.returns?.["1m"]],
+    ["3M", asset.returns?.["3m"]],
+  ];
+  const relativeItems = [
+    [copy.vsSoxx, asset.relative?.soxx],
+    [copy.vsQqq, asset.relative?.qqq],
+  ];
   return (
     <aside className="detail-band chip-detail-band" aria-live="polite">
       <div>
@@ -5134,13 +5255,19 @@ function ChipChainDetail({ asset, category, copy, language }) {
       </div>
       <div>
         <small>{copy.returns}</small>
-        <strong>
-          1D {formatPct(asset.returns?.["1d"], 1)} / 5D {formatPct(asset.returns?.["5d"], 1)} / 1M {formatPct(asset.returns?.["1m"], 1)}
+        <strong className="chip-detail-moves">
+          {returnItems.map(([label, value]) => (
+            <span className={`chip-detail-move ${equityMoveClass(value)}`} key={label}>{label} {formatPct(value, 1)}</span>
+          ))}
         </strong>
       </div>
       <div>
         <small>{copy.relative}</small>
-        <strong>{copy.vsSoxx} {formatPct(asset.relative?.soxx, 1)} / {copy.vsQqq} {formatPct(asset.relative?.qqq, 1)}</strong>
+        <strong className="chip-detail-moves">
+          {relativeItems.map(([label, value]) => (
+            <span className={`chip-detail-move ${equityMoveClass(value)}`} key={label}>{label} {formatPct(value, 1)}</span>
+          ))}
+        </strong>
       </div>
       <div>
         <small>{copy.volume}</small>
@@ -5231,7 +5358,7 @@ function ChipChainPage({ language, setLanguage, t }) {
   const clearChipSelectionOnNonTicker = (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
-    if (target.closest(".chip-ticker-button, .chip-hotspot-card, .chip-detail-band, .chip-detail-empty")) return;
+    if (target.closest(".chip-ticker-button, .chip-hotspot-card, .chip-treemap-tile, .chip-detail-band, .chip-detail-empty")) return;
     clearChipSelection();
   };
 
