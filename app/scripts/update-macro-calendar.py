@@ -1349,8 +1349,7 @@ def merge_manual_events_into_existing(existing: dict, error: Exception | None = 
         failure for failure in list(output.get("failures") or [])
         if "manual events merged into last-known-good cache" not in str(failure)
     ]
-    scheduled_events = build_scheduled_events({}, failures)
-    events = merge_manual_events(merge_scheduled_events(list(output.get("events") or []), scheduled_events))
+    events = merge_manual_events(list(output.get("events") or []))
     output["events"] = events
     output["generatedAt"] = iso_now()
     output["categorySummary"] = category_summary(events, list(output.get("weeklyState") or []))

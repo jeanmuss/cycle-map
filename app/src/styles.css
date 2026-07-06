@@ -1726,6 +1726,48 @@ html[lang="zh-CN"] .title-block h1 {
   line-height: 1.45;
 }
 
+.admin-publish-status {
+  margin-top: 12px;
+}
+
+.admin-publish-status > div:first-child {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--ink);
+  border-bottom: 0;
+  background: #f3f3eb;
+}
+
+.admin-publish-status small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-publish-status strong {
+  font-size: 14px;
+}
+
+.admin-publish-status ul {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-publish-status li {
+  padding: 6px 8px;
+  border: 1px solid #b52435;
+  background: #ffe8ec;
+  color: #8e1223;
+  font-size: 11px;
+  font-weight: 780;
+}
+
 .macro-month-controls {
   display: inline-flex;
   align-items: center;

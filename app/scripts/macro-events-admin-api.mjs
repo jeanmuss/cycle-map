@@ -1,14 +1,20 @@
 import { createServer } from "node:http";
+import { execFile } from "node:child_process";
 import { readFile, rename, writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
 const manualEventsPath = resolve(appRoot, "data", "manual-macro-events.json");
+const macroCalendarPath = resolve(appRoot, "public", "data", "macro-calendar.json");
+const updateMacroCalendarScript = resolve(appRoot, "scripts", "update-macro-calendar.py");
 const host = process.env.MACRO_EVENTS_ADMIN_HOST || "127.0.0.1";
 const port = Number(process.env.MACRO_EVENTS_ADMIN_PORT || 5174);
+const pythonCommand = process.env.CYCLE_MAP_PYTHON || "python";
 const maxBodyBytes = 512 * 1024;
+const execFileAsync = promisify(execFile);
 const allowedOrigins = new Set([
   "http://127.0.0.1:5173",
   "http://localhost:5173",
@@ -17,6 +23,7 @@ const allowedOrigins = new Set([
 ]);
 
 const allowedCategories = new Set(["inflation", "growth", "rates", "volatility", "liquidity"]);
+const allowedStatuses = new Set(["published", "draft"]);
 
 function jsonResponse(res, status, payload, origin = null) {
   const body = JSON.stringify(payload, null, 2);
@@ -31,7 +38,7 @@ function jsonResponse(res, status, payload, origin = null) {
 function corsHeaders(origin) {
   return {
     "access-control-allow-origin": origin,
-    "access-control-allow-methods": "GET, PUT, OPTIONS",
+    "access-control-allow-methods": "GET, PUT, POST, OPTIONS",
     "access-control-allow-headers": "content-type, x-cycle-map-admin",
     "access-control-max-age": "600",
     vary: "Origin",
@@ -47,6 +54,16 @@ function requireAllowedOrigin(req, res) {
   const origin = requestOrigin(req);
   if (!origin) {
     jsonResponse(res, 403, { error: "origin_not_allowed" });
+    return null;
+  }
+  return origin;
+}
+
+function requireAdminRequest(req, res) {
+  const origin = requireAllowedOrigin(req, res);
+  if (!origin) return null;
+  if (req.headers["x-cycle-map-admin"] !== "1") {
+    jsonResponse(res, 403, { error: "admin_header_required" }, origin);
     return null;
   }
   return origin;
@@ -87,6 +104,8 @@ function normalizeEvent(raw, index) {
   if (!validateDateKey(date)) throw new Error(`events[${index}].date must be YYYY-MM-DD`);
   const seriesId = normalizeText(raw.seriesId);
   if (!/^[A-Z0-9_:-]{3,80}$/.test(seriesId)) throw new Error(`events[${index}].seriesId is invalid`);
+  const status = normalizeText(raw.status || "published");
+  if (!allowedStatuses.has(status)) throw new Error(`events[${index}].status is invalid`);
   const labelZh = normalizeText(raw.labelZh);
   const labelEn = normalizeText(raw.labelEn);
   const label = normalizeText(raw.label, [labelZh, labelEn].filter(Boolean).join(" / "));
@@ -94,7 +113,7 @@ function normalizeEvent(raw, index) {
   const source = normalizeText(raw.source);
   if (!source) throw new Error(`events[${index}].source is required`);
   const normalized = {
-    status: normalizeText(raw.status || "published"),
+    status,
     date,
     seriesId,
     label,
@@ -125,13 +144,25 @@ function normalizeEvent(raw, index) {
   return normalized;
 }
 
+function normalizeEvents(events) {
+  if (!Array.isArray(events)) throw new Error("manual macro events JSON must contain an events array");
+  if (events.length > 300) throw new Error("Too many manual events");
+  const normalized = events.map(normalizeEvent);
+  const keys = new Set();
+  for (const event of normalized) {
+    const key = `${event.seriesId}::${event.date}`;
+    if (keys.has(key)) throw new Error(`Duplicate manual event key: ${key}`);
+    keys.add(key);
+  }
+  return normalized;
+}
+
 function normalizePayload(payload) {
   const events = Array.isArray(payload?.events) ? payload.events : [];
-  if (events.length > 300) throw new Error("Too many manual events");
   return {
     version: 1,
     updatedAt: isoNow(),
-    events: events.map(normalizeEvent),
+    events: normalizeEvents(events),
   };
 }
 
@@ -142,6 +173,115 @@ async function readManualEvents() {
     if (error.code === "ENOENT") return { version: 1, updatedAt: null, events: [] };
     throw error;
   }
+}
+
+async function readMacroCalendar() {
+  return JSON.parse(await readFile(macroCalendarPath, "utf8"));
+}
+
+function manualEventStatus(normalizedEvents, calendarPayload = null) {
+  const published = normalizedEvents.filter((event) => event.status !== "draft");
+  const draft = normalizedEvents.length - published.length;
+  const calendarEvents = Array.isArray(calendarPayload?.events) ? calendarPayload.events : [];
+  const calendarKeys = new Set(calendarEvents.map((event) => `${event.seriesId || ""}::${event.date || ""}`));
+  const missingManualEvents = published
+    .filter((event) => !calendarKeys.has(`${event.seriesId}::${event.date}`))
+    .map((event) => ({
+      date: event.date,
+      seriesId: event.seriesId,
+      label: event.label,
+      labelZh: event.labelZh,
+      labelEn: event.labelEn,
+      category: event.category,
+    }));
+  return {
+    ok: !missingManualEvents.length,
+    manualEventCount: normalizedEvents.length,
+    publishedManualEventCount: published.length,
+    draftManualEventCount: draft,
+    macroCalendarGeneratedAt: calendarPayload?.generatedAt || null,
+    macroCalendarEventCount: calendarEvents.length,
+    missingManualEvents,
+  };
+}
+
+async function macroCalendarStatus() {
+  const manualPayload = await readManualEvents();
+  const normalizedEvents = normalizeEvents(Array.isArray(manualPayload?.events) ? manualPayload.events : []);
+  let calendarPayload = null;
+  let calendarError = null;
+  try {
+    calendarPayload = await readMacroCalendar();
+  } catch (error) {
+    calendarError = error.message || "macro-calendar read failed";
+  }
+  const status = manualEventStatus(normalizedEvents, calendarPayload);
+  return {
+    ...status,
+    ok: status.ok && !calendarError,
+    manualEventsUpdatedAt: manualPayload?.updatedAt || null,
+    calendarError,
+  };
+}
+
+function macroPublishEnv() {
+  return {
+    ...process.env,
+    MACRO_MANUAL_ONLY: "1",
+    PYTHONIOENCODING: "utf-8",
+  };
+}
+
+async function validateManualEvents() {
+  const manualPayload = await readManualEvents();
+  const normalizedEvents = normalizeEvents(Array.isArray(manualPayload?.events) ? manualPayload.events : []);
+  const status = await macroCalendarStatus();
+  return {
+    ok: true,
+    normalizedEventCount: normalizedEvents.length,
+    status,
+  };
+}
+
+function redactedText(text) {
+  return String(text || "").replaceAll(appRoot, "<app>");
+}
+
+function publishOutput(stdout) {
+  const text = String(stdout || "").trim();
+  if (!text) return null;
+  try {
+    const parsed = JSON.parse(text);
+    return {
+      status: parsed.status || null,
+      events: Number.isFinite(Number(parsed.events)) ? Number(parsed.events) : null,
+    };
+  } catch {
+    return { text: redactedText(text) };
+  }
+}
+
+async function publishMacroCalendar() {
+  const validation = await validateManualEvents();
+  const { stdout, stderr } = await execFileAsync(
+    pythonCommand,
+    [updateMacroCalendarScript],
+    {
+      cwd: appRoot,
+      env: macroPublishEnv(),
+      timeout: 60_000,
+      maxBuffer: 1024 * 1024,
+      windowsHide: true,
+    },
+  );
+  return {
+    ok: true,
+    command: `${pythonCommand} scripts/update-macro-calendar.py`,
+    output: publishOutput(stdout),
+    stderr: redactedText(stderr.trim()),
+    validation,
+    status: await macroCalendarStatus(),
+  };
 }
 
 async function readRequestBody(req) {
@@ -173,7 +313,23 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (url.pathname === "/health" && req.method === "GET") {
-      jsonResponse(res, 200, { ok: true, path: manualEventsPath }, requestOrigin(req));
+      jsonResponse(res, 200, { ok: true }, requestOrigin(req));
+      return;
+    }
+    if (url.pathname === "/macro-calendar-status" && req.method === "GET") {
+      jsonResponse(res, 200, await macroCalendarStatus(), requestOrigin(req));
+      return;
+    }
+    if (url.pathname === "/validate-macro-events" && req.method === "POST") {
+      const origin = requireAdminRequest(req, res);
+      if (!origin) return;
+      jsonResponse(res, 200, await validateManualEvents(), origin);
+      return;
+    }
+    if (url.pathname === "/publish-macro-calendar" && req.method === "POST") {
+      const origin = requireAdminRequest(req, res);
+      if (!origin) return;
+      jsonResponse(res, 200, await publishMacroCalendar(), origin);
       return;
     }
     if (url.pathname !== "/manual-macro-events") {
@@ -185,12 +341,8 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (req.method === "PUT") {
-      const origin = requireAllowedOrigin(req, res);
+      const origin = requireAdminRequest(req, res);
       if (!origin) return;
-      if (req.headers["x-cycle-map-admin"] !== "1") {
-        jsonResponse(res, 403, { error: "admin_header_required" }, origin);
-        return;
-      }
       const payload = normalizePayload(JSON.parse(await readRequestBody(req)));
       await writeManualEvents(payload);
       jsonResponse(res, 200, payload, origin);

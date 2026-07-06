@@ -3038,6 +3038,8 @@ function adminMacroCopy(t) {
     disconnected: "未连接",
     reload: "重新载入",
     saveAll: "保存到本地 JSON",
+    validate: "校验 JSON",
+    publish: "发布到日历缓存",
     saveDraft: "更新当前事件",
     newEvent: "新建事件",
     duplicate: "复制",
@@ -3080,6 +3082,16 @@ function adminMacroCopy(t) {
     saved: "已保存",
     loaded: "已载入",
     draftSaved: "当前事件已更新到列表，记得保存到本地 JSON。",
+    validationPassed: "校验通过",
+    publishPassed: "发布完成",
+    publishing: "处理中",
+    publishStatus: "发布状态",
+    manualEvents: "手动事件",
+    publishedEvents: "可发布",
+    draftEvents: "草稿",
+    calendarGenerated: "日历缓存",
+    missingEvents: "未发布",
+    readyToPublish: "已同步",
     beijingDate: "北京时间日期",
     newYorkDate: "纽约日期",
     displayDate: "保存日期",
@@ -3095,6 +3107,8 @@ function adminMacroCopy(t) {
     disconnected: "Disconnected",
     reload: "Reload",
     saveAll: "Save local JSON",
+    validate: "Validate JSON",
+    publish: "Publish calendar cache",
     saveDraft: "Update event",
     newEvent: "New event",
     duplicate: "Duplicate",
@@ -3137,6 +3151,16 @@ function adminMacroCopy(t) {
     saved: "Saved",
     loaded: "Loaded",
     draftSaved: "Current event was updated in the list. Remember to save the local JSON.",
+    validationPassed: "Validation passed",
+    publishPassed: "Publish complete",
+    publishing: "Working",
+    publishStatus: "Publish status",
+    manualEvents: "Manual events",
+    publishedEvents: "Publishable",
+    draftEvents: "Drafts",
+    calendarGenerated: "Calendar cache",
+    missingEvents: "Missing",
+    readyToPublish: "Synced",
     beijingDate: "Beijing date",
     newYorkDate: "New York date",
     displayDate: "Saved date",
@@ -3223,6 +3247,43 @@ function AdminField({ label, children }) {
   );
 }
 
+function AdminPublishStatus({ status, copy, language }) {
+  if (!status) return null;
+  const missing = Array.isArray(status.missingManualEvents) ? status.missingManualEvents : [];
+  const labelFor = (event) => (language === "en" ? event.labelEn : event.labelZh) || event.label || event.seriesId;
+  return (
+    <section className="admin-publish-status" aria-label={copy.publishStatus}>
+      <div>
+        <small>{copy.publishStatus}</small>
+        <strong className={status.ok ? "macro-up" : "macro-down"}>{status.ok ? copy.readyToPublish : `${missing.length} ${copy.missingEvents}`}</strong>
+      </div>
+      <dl>
+        <div><dt>{copy.manualEvents}</dt><dd>{status.manualEventCount ?? 0}</dd></div>
+        <div><dt>{copy.publishedEvents}</dt><dd>{status.publishedManualEventCount ?? 0}</dd></div>
+        <div><dt>{copy.draftEvents}</dt><dd>{status.draftManualEventCount ?? 0}</dd></div>
+        <div><dt>{copy.calendarGenerated}</dt><dd>{status.macroCalendarGeneratedAt ? freshnessLabel(status.macroCalendarGeneratedAt, language) : "N/A"}</dd></div>
+      </dl>
+      {missing.length ? (
+        <ul>
+          {missing.slice(0, 6).map((event) => (
+            <li key={`${event.seriesId}-${event.date}`}>{event.date} / {labelFor(event)}</li>
+          ))}
+        </ul>
+      ) : null}
+      {status.calendarError ? <p>{status.calendarError}</p> : null}
+    </section>
+  );
+}
+
+function adminResponseJson(response) {
+  return response.json()
+    .catch(() => ({}))
+    .then((data) => {
+      if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+      return data;
+    });
+}
+
 function AdminMacroEventsPage({ language, setLanguage, t }) {
   const copy = adminMacroCopy(t);
   const [payload, setPayload] = useState({ version: 1, updatedAt: null, events: [] });
@@ -3230,14 +3291,20 @@ function AdminMacroEventsPage({ language, setLanguage, t }) {
   const [selectedKey, setSelectedKey] = useState("");
   const [apiState, setApiState] = useState("loading");
   const [message, setMessage] = useState("");
+  const [publishStatus, setPublishStatus] = useState(null);
+  const [busyAction, setBusyAction] = useState("");
+
+  const loadPublishStatus = () => {
+    fetch(`${ADMIN_MACRO_API_BASE}/macro-calendar-status`, { cache: "no-store" })
+      .then(adminResponseJson)
+      .then((data) => setPublishStatus(data))
+      .catch(() => setPublishStatus(null));
+  };
 
   const loadEvents = () => {
     setApiState("loading");
     fetch(`${ADMIN_MACRO_API_BASE}/manual-macro-events`, { cache: "no-store" })
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-      })
+      .then(adminResponseJson)
       .then((data) => {
         const nextPayload = { version: 1, updatedAt: data.updatedAt || null, events: Array.isArray(data.events) ? data.events : [] };
         setPayload(nextPayload);
@@ -3246,11 +3313,32 @@ function AdminMacroEventsPage({ language, setLanguage, t }) {
         setSelectedKey(nextPayload.events[0] ? adminEventKey(first) : "");
         setApiState("connected");
         setMessage(copy.loaded);
+        loadPublishStatus();
       })
       .catch((error) => {
         setApiState("disconnected");
         setMessage(error.message);
       });
+  };
+
+  const runAdminCommand = (path, successMessage) => {
+    setBusyAction(path);
+    fetch(`${ADMIN_MACRO_API_BASE}/${path}`, {
+      method: "POST",
+      headers: { "x-cycle-map-admin": "1" },
+    })
+      .then(adminResponseJson)
+      .then((data) => {
+        setApiState("connected");
+        setPublishStatus(data.status || data);
+        setMessage(successMessage);
+      })
+      .catch((error) => {
+        const networkIssue = error.message.includes("Failed to fetch") || error.message.includes("NetworkError");
+        setApiState(networkIssue ? "disconnected" : "connected");
+        setMessage(error.message);
+      })
+      .finally(() => setBusyAction(""));
   };
 
   useEffect(() => {
@@ -3308,14 +3396,12 @@ function AdminMacroEventsPage({ language, setLanguage, t }) {
       },
       body: JSON.stringify({ version: 1, events: payload.events }),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-      })
+      .then(adminResponseJson)
       .then((data) => {
         setPayload(data);
         setApiState("connected");
         setMessage(copy.saved);
+        loadPublishStatus();
       })
       .catch((error) => {
         setApiState("disconnected");
@@ -3347,7 +3433,9 @@ function AdminMacroEventsPage({ language, setLanguage, t }) {
         <button type="button" onClick={newEvent}>{copy.newEvent}</button>
         <button type="button" onClick={duplicateEvent}>{copy.duplicate}</button>
         <button type="button" onClick={deleteEvent} disabled={!selectedKey}>{copy.delete}</button>
-        <button type="button" className="admin-primary-action" onClick={saveAll} disabled={apiState !== "connected"}>{copy.saveAll}</button>
+        <button type="button" onClick={() => runAdminCommand("validate-macro-events", copy.validationPassed)} disabled={apiState !== "connected" || Boolean(busyAction)}>{busyAction === "validate-macro-events" ? copy.publishing : copy.validate}</button>
+        <button type="button" onClick={() => runAdminCommand("publish-macro-calendar", copy.publishPassed)} disabled={apiState !== "connected" || Boolean(busyAction)}>{busyAction === "publish-macro-calendar" ? copy.publishing : copy.publish}</button>
+        <button type="button" className="admin-primary-action" onClick={saveAll} disabled={apiState !== "connected" || Boolean(busyAction)}>{copy.saveAll}</button>
       </section>
 
       <div className="admin-macro-layout">
@@ -3461,6 +3549,7 @@ function AdminMacroEventsPage({ language, setLanguage, t }) {
             <div><dt>UTC+8</dt><dd>{releaseTime ? adminFormatDateTime(releaseTime, "Asia/Shanghai", language) : "N/A"}</dd></div>
             <div><dt>ET</dt><dd>{releaseTime ? adminFormatDateTime(releaseTime, "America/New_York", language) : "N/A"}</dd></div>
           </dl>
+          <AdminPublishStatus status={publishStatus} copy={copy} language={language} />
           <p>{releaseTime ? copy.localOnly : copy.noReleaseTime}</p>
         </aside>
       </div>
