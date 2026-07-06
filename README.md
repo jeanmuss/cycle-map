@@ -65,6 +65,6 @@ python -m pip install -r app/requirements-equity.txt
 
 ## 部署
 
-GitHub Pages workflow 会在推送到 `main`、手动触发和定时任务中构建静态站点；`deploy-fast-equity-data.yml` 会按 15 分钟目标频率刷新美股大盘快缓存并重新部署 Pages。Vercel 也可以作为预览部署路径，根目录 `vercel.json` 会安装并构建 `app/`。
+GitHub Pages workflow 会在推送到 `main`、手动触发和定时任务中构建静态站点；`deploy-fast-equity-data.yml` 会按 15 分钟目标频率刷新美股大盘快缓存并重新部署 Pages。
 
-如果中国大陆访问 GitHub Pages 或 Vercel 不稳定，可以把同一个 `app/dist` 镜像到更稳定的静态托管服务；只要浏览器继续读取静态 JSON，就不需要把 provider 密钥暴露给前端。
+如果中国大陆访问 GitHub Pages 不稳定，可以把同一个 `app/dist` 镜像到更稳定的静态托管服务；只要浏览器继续读取静态 JSON，就不需要把 provider 密钥暴露给前端。

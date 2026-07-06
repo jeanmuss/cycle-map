@@ -106,13 +106,6 @@ GitHub Pages is the preferred static-share path for this repo. `.github/workflow
 
 Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow can still be used for auditable checked-in cache updates on a lower-frequency schedule, including macro-calendar, chip-chain, and robotics-chain cache files.
 
-The repository root includes `vercel.json` for Vercel preview deployments from this workspace:
-
-- install: `npm --prefix app ci`
-- build: `npm --prefix app run build`
-- output: `app/dist`
-- SPA rewrite: all routes fall back to `index.html`, so `/equity-macro` can be opened directly.
-
 The frontend is intentionally static. It should not call FRED, CoinMarketCap, AKShare, Yahoo, or any other provider from the browser. Scheduled backend/CI jobs refresh checked-in JSON caches, and the deployed site serves those static cache files.
 
-For mainland China users, treat Vercel as the first preview host, not the only production host. If real-user testing shows unstable access, the same `app/dist` build can be mirrored to a China-friendly static host such as Alibaba Cloud OSS + CDN or Tencent Cloud COS + CDN. No data relay is required as long as the browser continues to read only static JSON.
+For mainland China users, if real-user testing shows unstable access on the primary static host, the same `app/dist` build can be mirrored to a China-friendly static host such as Alibaba Cloud OSS + CDN or Tencent Cloud COS + CDN. No data relay is required as long as the browser continues to read only static JSON.

@@ -1,9 +1,0 @@
-{
-  "installCommand": "npm --prefix app ci",
-  "buildCommand": "npm --prefix app run build",
-  "outputDirectory": "app/dist",
-  "rewrites": [
-    { "source": "/equity-macro", "destination": "/index.html" },
-    { "source": "/equity-macro/(.*)", "destination": "/index.html" }
-  ]
-}
