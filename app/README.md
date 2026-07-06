@@ -21,6 +21,7 @@ npm run update-market-session
 npm run update-chip-chain
 npm run update-robot-chain
 npm run update-equity-data
+npm run sync-manual-macro-events
 npm run update-macro-calendar
 ```
 
@@ -86,7 +87,16 @@ The script caches provider observations under `tmp/macro-cache/fred` before gene
 
 FRED observation dates are retained as economic observation/period dates, not publication timestamps. Forecast values stay `null` until a reviewed forecast source or manual backend input is added. This avoids presenting period dates or unreviewed consensus numbers as release-calendar facts.
 
-Curated manual events live in `scripts/update-macro-calendar.py` and are merged into `macro-calendar.json` alongside FRED observations. These are discretionary liquidity or attention annotations, not economic data releases.
+Curated manual events are stored in `data/manual-macro-events.json` for local fallback and script input. When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are configured for backend/CI only, `npm run sync-manual-macro-events` pulls the canonical manual event rows from Supabase before `update-macro-calendar` runs. These are discretionary liquidity or attention annotations, not economic data releases.
+
+The local admin editor is available only in local development:
+
+```bash
+npm run admin:macro-events
+npm run dev
+```
+
+Use the Supabase service-role key only in ignored local environment setup or GitHub Actions secrets. The Vite frontend must never receive this key through `VITE_*` variables. If Supabase is not configured, the admin API keeps using `data/manual-macro-events.json`.
 
 For CI or deployment, install Python dependencies with:
 
@@ -94,7 +104,7 @@ For CI or deployment, install Python dependencies with:
 python -m pip install -r requirements-equity.txt
 ```
 
-On GitHub Actions, store `FRED_API_KEY` in repository secrets. Do not put it in `.env`, frontend code, checked-in JSON, logs, screenshots, or chat.
+On GitHub Actions, store `FRED_API_KEY`, `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` in repository secrets. Do not put keys in frontend code, checked-in JSON, logs, screenshots, or chat.
 
 ## Deployment notes
 

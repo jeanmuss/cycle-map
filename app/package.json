@@ -15,6 +15,7 @@
     "update-robot-chain": "node scripts/update-chip-chain-data.mjs robot",
     "update-equity-fast-data": "python scripts/update-equity-fast-data.py",
     "update-equity-data": "python scripts/update-equity-data.py",
+    "sync-manual-macro-events": "node scripts/sync-manual-macro-events-from-supabase.mjs",
     "update-macro-calendar": "python scripts/update-macro-calendar.py",
     "update-chart-series": "node scripts/update-chart-series-data.mjs"
   },

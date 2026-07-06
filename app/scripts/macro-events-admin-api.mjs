@@ -4,6 +4,12 @@ import { readFile, rename, writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import {
+  hasSupabaseManualEventsConfig,
+  manualEventsStoreMode,
+  readManualEventsPayloadFromSupabase,
+  writeManualEventsPayloadToSupabase,
+} from "./manual-macro-events-store.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
@@ -23,7 +29,7 @@ const allowedOrigins = new Set([
 ]);
 
 const allowedCategories = new Set(["inflation", "growth", "rates", "volatility", "liquidity"]);
-const allowedStatuses = new Set(["published", "draft"]);
+const allowedStatuses = new Set(["published", "draft", "archived"]);
 
 function jsonResponse(res, status, payload, origin = null) {
   const body = JSON.stringify(payload, null, 2);
@@ -167,6 +173,11 @@ function normalizePayload(payload) {
 }
 
 async function readManualEvents() {
+  if (hasSupabaseManualEventsConfig()) {
+    const payload = await readManualEventsPayloadFromSupabase();
+    await writeManualEventsFile(payload);
+    return payload;
+  }
   try {
     return JSON.parse(await readFile(manualEventsPath, "utf8"));
   } catch (error) {
@@ -180,8 +191,9 @@ async function readMacroCalendar() {
 }
 
 function manualEventStatus(normalizedEvents, calendarPayload = null) {
-  const published = normalizedEvents.filter((event) => event.status !== "draft");
-  const draft = normalizedEvents.length - published.length;
+  const published = normalizedEvents.filter((event) => event.status === "published");
+  const draft = normalizedEvents.filter((event) => event.status === "draft");
+  const archived = normalizedEvents.filter((event) => event.status === "archived");
   const calendarEvents = Array.isArray(calendarPayload?.events) ? calendarPayload.events : [];
   const calendarKeys = new Set(calendarEvents.map((event) => `${event.seriesId || ""}::${event.date || ""}`));
   const missingManualEvents = published
@@ -198,7 +210,8 @@ function manualEventStatus(normalizedEvents, calendarPayload = null) {
     ok: !missingManualEvents.length,
     manualEventCount: normalizedEvents.length,
     publishedManualEventCount: published.length,
-    draftManualEventCount: draft,
+    draftManualEventCount: draft.length,
+    archivedManualEventCount: archived.length,
     macroCalendarGeneratedAt: calendarPayload?.generatedAt || null,
     macroCalendarEventCount: calendarEvents.length,
     missingManualEvents,
@@ -219,6 +232,7 @@ async function macroCalendarStatus() {
   return {
     ...status,
     ok: status.ok && !calendarError,
+    manualEventsStore: manualEventsStoreMode(),
     manualEventsUpdatedAt: manualPayload?.updatedAt || null,
     calendarError,
   };
@@ -295,11 +309,22 @@ async function readRequestBody(req) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-async function writeManualEvents(payload) {
+async function writeManualEventsFile(payload) {
   await mkdir(dirname(manualEventsPath), { recursive: true });
   const tempPath = `${manualEventsPath}.tmp`;
   await writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
   await rename(tempPath, manualEventsPath);
+}
+
+async function writeManualEvents(payload) {
+  if (!hasSupabaseManualEventsConfig()) {
+    await writeManualEventsFile(payload);
+    return payload;
+  }
+  await writeManualEventsPayloadToSupabase(payload);
+  const savedPayload = await readManualEventsPayloadFromSupabase();
+  await writeManualEventsFile(savedPayload);
+  return savedPayload;
 }
 
 const server = createServer(async (req, res) => {
@@ -344,8 +369,8 @@ const server = createServer(async (req, res) => {
       const origin = requireAdminRequest(req, res);
       if (!origin) return;
       const payload = normalizePayload(JSON.parse(await readRequestBody(req)));
-      await writeManualEvents(payload);
-      jsonResponse(res, 200, payload, origin);
+      const savedPayload = await writeManualEvents(payload);
+      jsonResponse(res, 200, savedPayload, origin);
       return;
     }
     jsonResponse(res, 405, { error: "method_not_allowed" }, requestOrigin(req));
@@ -356,5 +381,6 @@ const server = createServer(async (req, res) => {
 
 server.listen(port, host, () => {
   console.log(`Macro events admin API listening at http://${host}:${port}`);
-  console.log(`Manual events file: ${manualEventsPath}`);
+  console.log(`Manual events store: ${manualEventsStoreMode()}`);
+  console.log(`Manual events cache file: ${manualEventsPath}`);
 });

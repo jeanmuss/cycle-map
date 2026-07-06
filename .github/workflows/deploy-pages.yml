@@ -48,6 +48,15 @@ jobs:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: npm --prefix app run update-equity-fast-data
+      - name: Sync manual macro events
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm --prefix app run sync-manual-macro-events
+      - name: Refresh macro calendar
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: npm --prefix app run update-macro-calendar
       - name: Refresh market session cache
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}

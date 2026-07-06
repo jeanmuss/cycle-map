@@ -1040,7 +1040,7 @@ def read_manual_event_file() -> list[dict]:
 def normalize_manual_event(event: dict) -> dict:
     if not isinstance(event, dict):
         raise RuntimeError("manual macro event must be an object")
-    if str(event.get("status", "published")).strip().lower() == "draft":
+    if str(event.get("status", "published")).strip().lower() != "published":
         return {}
     category = str(event.get("category") or "liquidity").strip()
     if category not in CATEGORIES:

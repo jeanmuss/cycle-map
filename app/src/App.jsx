@@ -3033,13 +3033,13 @@ function adminMacroCopy(t) {
     docDescription: "本地维护宏观流动性手动事件",
     eyebrow: "LOCAL ADMIN",
     title: "宏观事件后台",
-    subtitle: "编辑 app/data/manual-macro-events.json，再由数据脚本合并进宏观流动性日历。",
+    subtitle: "配置 Supabase 时编辑数据库事件，并同步到本地缓存供日历脚本使用。",
     api: "本地 API",
     connected: "已连接",
     disconnected: "未连接",
     reload: "重新载入",
-    saveAll: "保存到本地 JSON",
-    validate: "校验 JSON",
+    saveAll: "保存事件",
+    validate: "校验事件",
     publish: "发布到日历缓存",
     saveDraft: "更新当前事件",
     newEvent: "新建事件",
@@ -3049,7 +3049,7 @@ function adminMacroCopy(t) {
     editor: "事件编辑",
     preview: "时区预览",
     empty: "暂无手动事件",
-    localOnly: "只连接 127.0.0.1:5174，本地 API 不执行 shell、不读取密钥、不写入固定 JSON 以外的路径。",
+    localOnly: "只连接 127.0.0.1:5174。密钥只由本地 API 读取，不进入浏览器或公开构建。",
     startApi: "先运行 npm run admin:macro-events，再运行 npm run dev 打开本页。",
     fields: {
       status: "状态",
@@ -3072,6 +3072,7 @@ function adminMacroCopy(t) {
     statusOptions: [
       { value: "published", label: "发布" },
       { value: "draft", label: "草稿" },
+      { value: "archived", label: "归档" },
     ],
     validation: {
       date: "日期需要 YYYY-MM-DD",
@@ -3082,7 +3083,7 @@ function adminMacroCopy(t) {
     },
     saved: "已保存",
     loaded: "已载入",
-    draftSaved: "当前事件已更新到列表，记得保存到本地 JSON。",
+    draftSaved: "当前事件已更新到列表，记得保存事件。",
     validationPassed: "校验通过",
     publishPassed: "发布完成",
     publishing: "处理中",
@@ -3090,6 +3091,7 @@ function adminMacroCopy(t) {
     manualEvents: "手动事件",
     publishedEvents: "可发布",
     draftEvents: "草稿",
+    archivedEvents: "归档",
     calendarGenerated: "日历缓存",
     missingEvents: "未发布",
     readyToPublish: "已同步",
@@ -3102,13 +3104,13 @@ function adminMacroCopy(t) {
     docDescription: "Local editor for manual macro-liquidity events",
     eyebrow: "LOCAL ADMIN",
     title: "Macro Event Admin",
-    subtitle: "Edit app/data/manual-macro-events.json, then merge it into the macro-liquidity calendar with the data script.",
+    subtitle: "Edit Supabase-backed events when configured, with a local cache for the calendar script.",
     api: "Local API",
     connected: "Connected",
     disconnected: "Disconnected",
     reload: "Reload",
-    saveAll: "Save local JSON",
-    validate: "Validate JSON",
+    saveAll: "Save events",
+    validate: "Validate events",
     publish: "Publish calendar cache",
     saveDraft: "Update event",
     newEvent: "New event",
@@ -3118,7 +3120,7 @@ function adminMacroCopy(t) {
     editor: "Event editor",
     preview: "Time-zone preview",
     empty: "No manual events yet",
-    localOnly: "Only talks to 127.0.0.1:5174. The local API does not run shell commands, read secrets, or write outside the fixed JSON file.",
+    localOnly: "Only talks to 127.0.0.1:5174. Secrets are read by the local API only and never reach the browser or public build.",
     startApi: "Run npm run admin:macro-events, then npm run dev to use this page.",
     fields: {
       status: "Status",
@@ -3141,6 +3143,7 @@ function adminMacroCopy(t) {
     statusOptions: [
       { value: "published", label: "Published" },
       { value: "draft", label: "Draft" },
+      { value: "archived", label: "Archived" },
     ],
     validation: {
       date: "Date must be YYYY-MM-DD",
@@ -3151,7 +3154,7 @@ function adminMacroCopy(t) {
     },
     saved: "Saved",
     loaded: "Loaded",
-    draftSaved: "Current event was updated in the list. Remember to save the local JSON.",
+    draftSaved: "Current event was updated in the list. Remember to save events.",
     validationPassed: "Validation passed",
     publishPassed: "Publish complete",
     publishing: "Working",
@@ -3159,6 +3162,7 @@ function adminMacroCopy(t) {
     manualEvents: "Manual events",
     publishedEvents: "Publishable",
     draftEvents: "Drafts",
+    archivedEvents: "Archived",
     calendarGenerated: "Calendar cache",
     missingEvents: "Missing",
     readyToPublish: "Synced",
@@ -3262,6 +3266,7 @@ function AdminPublishStatus({ status, copy, language }) {
         <div><dt>{copy.manualEvents}</dt><dd>{status.manualEventCount ?? 0}</dd></div>
         <div><dt>{copy.publishedEvents}</dt><dd>{status.publishedManualEventCount ?? 0}</dd></div>
         <div><dt>{copy.draftEvents}</dt><dd>{status.draftManualEventCount ?? 0}</dd></div>
+        <div><dt>{copy.archivedEvents}</dt><dd>{status.archivedManualEventCount ?? 0}</dd></div>
         <div><dt>{copy.calendarGenerated}</dt><dd>{status.macroCalendarGeneratedAt ? freshnessLabel(status.macroCalendarGeneratedAt, language) : "N/A"}</dd></div>
       </dl>
       {missing.length ? (
