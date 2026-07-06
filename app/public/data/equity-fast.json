@@ -1,22 +1,22 @@
 {
   "version": 1,
   "page": "equity-fast",
-  "generatedAt": "2026-07-04T05:57:08Z",
+  "generatedAt": "2026-07-06T23:36:07Z",
   "refreshCadence": "Target 15 minutes for fast indicators; provider schedules and static deployment queues can add delay.",
   "baseDataset": {
     "file": "equity-weekly.json",
-    "generatedAt": "2026-07-04T05:57:07Z"
+    "generatedAt": "2026-07-06T23:36:07Z"
   },
   "methodology": "Fast indicators are generated separately from the slower equity calendar cache. CMC supplies crypto market capitalization; FRED supplies a gold price proxy index because the old LBMA gold fix series is not available in the current FRED API. The frontend reads this static derived JSON and never receives provider credentials.",
   "metrics": [
     {
       "id": "BTC_MARKET_CAP",
       "label": "BTC market cap",
-      "value": 1251498718626.4355,
+      "value": 1285416286181.488,
       "unit": "USD",
       "previous": null,
-      "changePct": 1.22691495,
-      "asOf": "2026-07-04T05:56:00.000Z",
+      "changePct": 0.78739711,
+      "asOf": "2026-07-06T23:35:05.000Z",
       "sourceLabel": "CoinMarketCap cryptocurrency quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest",
       "quality": "fresh"
@@ -24,11 +24,11 @@
     {
       "id": "CRYPTO_MARKET_CAP",
       "label": "Total crypto market cap",
-      "value": 2166267449617.3445,
+      "value": 2207740841173.871,
       "unit": "USD",
-      "previous": 2135651097972.8354,
-      "changePct": 1.43358396,
-      "asOf": "2026-07-04T05:55:59.999Z",
+      "previous": 2197301771270.2446,
+      "changePct": 0.47508585,
+      "asOf": "2026-07-06T23:34:59.999Z",
       "sourceLabel": "CoinMarketCap global-metrics/quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest",
       "quality": "fresh"

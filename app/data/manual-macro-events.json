@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-05T14:31:29Z",
+  "updatedAt": "2026-07-06T12:10:20.286Z",
   "events": [
     {
       "status": "published",
@@ -14,6 +14,7 @@
       "cadence": "event",
       "unit": "event",
       "source": "FIFA match schedule / manual liquidity annotation",
+      "sourceUrl": "",
       "dateMeaning": "scheduled_beijing_date",
       "actual": null,
       "previous": null,
