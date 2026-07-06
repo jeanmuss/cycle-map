@@ -47,6 +47,7 @@ const VALID_EQUITY_RANGES = new Set(["26", "52", "all"]);
 const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity"]);
 const VALID_CHIP_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 const VALID_ROBOT_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
+const ADMIN_PAGE_ENABLED = import.meta.env.DEV;
 
 const MACRO_CALENDAR_TIME_ZONES = {
   zh: "Asia/Shanghai",
@@ -1438,7 +1439,7 @@ function PageNav({ page, t }) {
       <a className={page === "marketClock" ? "is-active" : ""} aria-current={page === "marketClock" ? "page" : undefined} href={appHashUrl("market-clock")}>{t.nav.marketClock}</a>
       <a className={page === "chipChain" ? "is-active" : ""} aria-current={page === "chipChain" ? "page" : undefined} href={appHashUrl("chip-chain")}>{t.nav.chipChain}</a>
       <a className={page === "robotChain" ? "is-active" : ""} aria-current={page === "robotChain" ? "page" : undefined} href={appHashUrl("robot-chain")}>{t.nav.robotChain}</a>
-      <a className={page === "macroAdmin" ? "is-active" : ""} aria-current={page === "macroAdmin" ? "page" : undefined} href={appHashUrl("admin/macro-events")}>{t.nav.admin || "Admin"}</a>
+      {ADMIN_PAGE_ENABLED ? <a className={page === "macroAdmin" ? "is-active" : ""} aria-current={page === "macroAdmin" ? "page" : undefined} href={appHashUrl("admin/macro-events")}>{t.nav.admin || "Admin"}</a> : null}
     </nav>
   );
 }
@@ -6281,14 +6282,14 @@ function RobotChainPage({ language, setLanguage, t }) {
 function currentPage() {
   if (typeof window === "undefined") return "crypto";
   const hashPath = window.location.hash.replace(/^#/, "");
-  if (hashPath.startsWith("/admin/macro-events")) return "macroAdmin";
+  if (ADMIN_PAGE_ENABLED && hashPath.startsWith("/admin/macro-events")) return "macroAdmin";
   if (hashPath.startsWith("/robot-chain")) return "robotChain";
   if (hashPath.startsWith("/chip-chain")) return "chipChain";
   if (hashPath.startsWith("/market-clock")) return "marketClock";
   if (hashPath.startsWith("/macro-calendar")) return "macro";
   if (hashPath.startsWith("/equity-macro")) return "equity";
   if (hashPath.startsWith("/") || hashPath === "") return "crypto";
-  if (routePathname(window.location.pathname).startsWith("/admin/macro-events")) return "macroAdmin";
+  if (ADMIN_PAGE_ENABLED && routePathname(window.location.pathname).startsWith("/admin/macro-events")) return "macroAdmin";
   if (routePathname(window.location.pathname).startsWith("/robot-chain")) return "robotChain";
   if (routePathname(window.location.pathname).startsWith("/chip-chain")) return "chipChain";
   if (routePathname(window.location.pathname).startsWith("/market-clock")) return "marketClock";
@@ -6316,11 +6317,11 @@ export function App() {
     const marketClock = marketClockCopy(t);
     const chipChain = chipChainCopy(t);
     const robotChain = robotChainCopy(t);
-    const adminMacro = adminMacroCopy(t);
-    document.title = page === "macroAdmin" ? adminMacro.docTitle : page === "robotChain" ? robotChain.docTitle : page === "chipChain" ? chipChain.docTitle : page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
+    const adminMacro = ADMIN_PAGE_ENABLED && page === "macroAdmin" ? adminMacroCopy(t) : null;
+    document.title = adminMacro ? adminMacro.docTitle : page === "robotChain" ? robotChain.docTitle : page === "chipChain" ? chipChain.docTitle : page === "marketClock" ? marketClock.docTitle : page === "macro" ? t.macroCalendar.docTitle : page === "equity" ? t.equity.docTitle : t.docTitle;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", page === "macroAdmin" ? adminMacro.docDescription : page === "robotChain" ? robotChain.docDescription : page === "chipChain" ? chipChain.docDescription : page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
+      ?.setAttribute("content", adminMacro ? adminMacro.docDescription : page === "robotChain" ? robotChain.docDescription : page === "chipChain" ? chipChain.docDescription : page === "marketClock" ? marketClock.docDescription : page === "macro" ? t.macroCalendar.docDescription : page === "equity" ? t.equity.docDescription : t.docDescription);
     try {
       window.localStorage.setItem("cycle-map-language", language);
     } catch {
@@ -6328,7 +6329,7 @@ export function App() {
     }
   }, [language, page, t]);
 
-  if (page === "macroAdmin") return <AdminMacroEventsPage language={language} setLanguage={setLanguage} t={t} />;
+  if (ADMIN_PAGE_ENABLED && page === "macroAdmin") return <AdminMacroEventsPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "robotChain") return <RobotChainPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "chipChain") return <ChipChainPage language={language} setLanguage={setLanguage} t={t} />;
   if (page === "marketClock") return <MarketClockPage language={language} setLanguage={setLanguage} t={t} />;
