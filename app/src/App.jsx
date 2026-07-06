@@ -553,7 +553,7 @@ const TRANSLATIONS = {
   zh: {
     htmlLang: "zh-CN",
     docTitle: "风险资产周期与轮动图",
-    docDescription: "BTC、ETH、SOL、HYPE 月度收益周期与轮动可视化",
+    docDescription: "BTC、ETH、SOL、HYPE、BNB 月度收益周期与轮动可视化",
     separator: " · ",
     language: {
       aria: "切换页面语言",
@@ -609,11 +609,11 @@ const TRANSLATIONS = {
       eyebrow: "RISK ASSET CYCLE MAP",
       titleAccent: "风险资产",
       titleRest: "周期与轮动图",
-      subtitle: "按月观察 BTC、ETH、SOL、HYPE 的涨跌规律与轮动关系",
+      subtitle: "按月观察 BTC、ETH、SOL、HYPE、BNB 的涨跌规律与轮动关系",
       cache: "本地缓存",
       cacheTooltip: "页面读取的是已保存的静态行情快照；现价和月线由后台定时更新，浏览器不会直接连接交易所或暴露密钥。",
       failure: (count) => `上游异常：${count}`,
-      success: "四个来源更新成功",
+      success: "五个来源更新成功",
     },
     latest: {
       aria: "各币种最新月度状态",
@@ -644,7 +644,7 @@ const TRANSLATIONS = {
       relativeMethod: "相对收益 = 币种月收益 − BTC 月收益",
     },
     tables: {
-      rotationCaption: "四币月度收益轮动总览",
+      rotationCaption: "五币月度收益轮动总览",
       cycleCaption: (asset) => `${asset} 年份月份周期收益表`,
       month: "月份",
       leader: "当月领涨",
@@ -942,7 +942,7 @@ const TRANSLATIONS = {
   en: {
     htmlLang: "en",
     docTitle: "Risk Asset Cycle & Rotation Map",
-    docDescription: "Monthly return cycle and rotation visualization for BTC, ETH, SOL, and HYPE",
+    docDescription: "Monthly return cycle and rotation visualization for BTC, ETH, SOL, HYPE, and BNB",
     separator: " · ",
     language: {
       aria: "Switch page language",
@@ -998,11 +998,11 @@ const TRANSLATIONS = {
       eyebrow: "RISK ASSET CYCLE MAP",
       titleAccent: "Risk Assets",
       titleRest: "Cycle & Rotation Map",
-      subtitle: "Track monthly return patterns and rotation across BTC, ETH, SOL, and HYPE",
+      subtitle: "Track monthly return patterns and rotation across BTC, ETH, SOL, HYPE, and BNB",
       cache: "Local cache",
       cacheTooltip: "The page reads a saved static market snapshot. Scheduled backend jobs refresh prices and monthly data; the browser never connects to exchanges with credentials.",
       failure: (count) => `Upstream issues: ${count}`,
-      success: "All four sources updated",
+      success: "All five sources updated",
     },
     latest: {
       aria: "Latest monthly status by asset",
@@ -1033,7 +1033,7 @@ const TRANSLATIONS = {
       relativeMethod: "Relative return = asset monthly return − BTC monthly return",
     },
     tables: {
-      rotationCaption: "Monthly return rotation overview for four assets",
+      rotationCaption: "Monthly return rotation overview for five assets",
       cycleCaption: (asset) => `${asset} yearly monthly cycle return table`,
       month: "Month",
       leader: "Leader",
@@ -5438,7 +5438,7 @@ function CryptoCyclePage({ language, setLanguage, t }) {
         failures={dataset.failures}
         sources={[
           "BTC - Blockchain.info / Binance Spot",
-          "ETH / SOL - Binance Spot",
+          "ETH / SOL / BNB - Binance Spot",
           "HYPE - Hyperliquid",
         ]}
         methodology={language === "zh" ? (metric === "absolute" ? t.visualization.absoluteMethod : t.visualization.relativeMethod) : dataset.methodology}

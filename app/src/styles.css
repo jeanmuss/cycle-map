@@ -402,6 +402,10 @@ html[lang="zh-CN"] .title-block h1 {
   color: #bd3a50;
 }
 
+.asset-bnb {
+  color: #8b6d00;
+}
+
 .control-bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

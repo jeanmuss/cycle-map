@@ -9,6 +9,7 @@ const legacyBtcPath = resolve(appRoot, "../.reference/original/data/monthly-seed
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const HOUR_MS = 60 * 60 * 1000;
+const REQUIRED_ASSETS = ["BTC", "ETH", "SOL", "HYPE", "BNB"];
 const now = new Date();
 const nowMs = now.getTime();
 const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
@@ -515,6 +516,7 @@ const attempts = [
   ["ETH", () => fetchBinanceRows("ETH", cachedRows("ETH")), "Binance Spot", "USDT"],
   ["SOL", () => fetchBinanceRows("SOL", cachedRows("SOL")), "Binance Spot", "USDT"],
   ["HYPE", () => fetchHypeRows(cachedRows("HYPE")), "Hyperliquid", "USD"],
+  ["BNB", () => fetchBinanceRows("BNB", cachedRows("BNB")), "Binance Spot", "USDT"],
 ];
 
 const assets = { ...existing.assets };
@@ -542,7 +544,7 @@ for (const [symbol, fetcher, sourceLabel, quote] of attempts) {
   }
 }
 
-for (const symbol of ["BTC", "ETH", "SOL", "HYPE"]) {
+for (const symbol of REQUIRED_ASSETS) {
   try {
     const spot = await fetchSpotPrice(symbol);
     const asset = assets[symbol];
@@ -564,7 +566,7 @@ for (const symbol of ["BTC", "ETH", "SOL", "HYPE"]) {
   }
 }
 
-for (const symbol of ["BTC", "ETH", "SOL", "HYPE"]) {
+for (const symbol of REQUIRED_ASSETS) {
   if (!assets[symbol]?.rows?.length) {
     throw new Error(`No last-known-good data for ${symbol}. Fetch failures: ${failures.join(" | ")}`);
   }
@@ -583,6 +585,7 @@ const output = {
     ETH: "https://data-api.binance.vision/api/v3/klines",
     SOL: "https://data-api.binance.vision/api/v3/klines",
     HYPE: "https://api.hyperliquid.xyz/info",
+    BNB: "https://data-api.binance.vision/api/v3/klines",
   },
   assets,
 };
