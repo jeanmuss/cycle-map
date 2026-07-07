@@ -127,6 +127,55 @@ function annualReturn(months) {
   return first.open === 0 ? null : ((last.close - first.open) / first.open) * 100;
 }
 
+function timeValue(value) {
+  const timestamp = Date.parse(value || "");
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+function annualAggregateRow(months) {
+  const available = months.filter((month) => month?.row && Number.isFinite(month.row.open) && Number.isFinite(month.row.close));
+  if (!available.length) return null;
+  const first = available[0].row;
+  const last = available[available.length - 1].row;
+  const highEntry = available.reduce((winner, item) => Number(item.row.high) > Number(winner.row.high) ? item : winner, available[0]);
+  const lowEntry = available.reduce((winner, item) => Number(item.row.low) < Number(winner.row.low) ? item : winner, available[0]);
+  const high = Number(highEntry.row.high);
+  const low = Number(lowEntry.row.low);
+  const highTime = highEntry.row.highTime || `${highEntry.row.monthKey}-01T00:00:00.000Z`;
+  const lowTime = lowEntry.row.lowTime || `${lowEntry.row.monthKey}-01T00:00:00.000Z`;
+  const highMs = timeValue(highTime);
+  const lowMs = timeValue(lowTime);
+  let firstExtreme = null;
+  if (Number.isFinite(high) && Number.isFinite(low) && high === low) firstExtreme = "flat";
+  else if (highMs != null && lowMs != null && highMs !== lowMs) firstExtreme = highMs < lowMs ? "high" : "low";
+  else firstExtreme = Number(last.close) >= Number(first.open) ? "low" : "high";
+
+  const extremeMovePct = !Number.isFinite(high) || !Number.isFinite(low) || high === 0 || low === 0
+    ? null
+    : firstExtreme === "flat"
+      ? 0
+      : firstExtreme === "low"
+        ? ((high - low) / low) * 100
+        : ((low - high) / high) * 100;
+
+  return {
+    monthKey: String(first.monthKey || "").slice(0, 4),
+    open: first.open,
+    high,
+    highTime,
+    low,
+    lowTime,
+    close: last.close,
+    closeTime: last.closeTime || null,
+    pct: first.open === 0 ? null : ((last.close - first.open) / first.open) * 100,
+    firstExtreme,
+    extremeMovePct,
+    orderResolution: "annual-monthly-extremes",
+    source: "annual-derived",
+    isClosed: available.every((item) => item.row.isClosed),
+  };
+}
+
 export function buildCycleYears(dataset, assetMaps, asset, metric) {
   const assetRows = dataset.assets?.[asset]?.rows || [];
   const firstYear = assetRows.length ? Math.max(CYCLE_START_YEAR, Number(assetRows[0].monthKey.slice(0, 4))) : new Date().getUTCFullYear();
@@ -142,6 +191,7 @@ export function buildCycleYears(dataset, assetMaps, asset, metric) {
       return { monthKey, row, btcRow, value: metricValue(row, btcRow, metric) };
     });
     const assetAnnual = annualReturn(months);
+    const totalRow = annualAggregateRow(months);
     const btcMonths = months.map((month) => ({ row: month.btcRow }));
     const btcAnnual = annualReturn(btcMonths);
     let totalValue = assetAnnual;
@@ -149,7 +199,7 @@ export function buildCycleYears(dataset, assetMaps, asset, metric) {
       if (!Number.isFinite(assetAnnual) || !Number.isFinite(btcAnnual)) totalValue = null;
       else totalValue = ((1 + assetAnnual / 100) / (1 + btcAnnual / 100) - 1) * 100;
     }
-    years.push({ year, months, totalValue, cycle: cycleForYear(year) });
+    years.push({ year, months, totalValue, totalRow, cycle: cycleForYear(year) });
   }
   return years;
 }

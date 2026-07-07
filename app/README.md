@@ -98,6 +98,8 @@ npm run dev
 
 Use the Supabase service-role key only in ignored local environment setup or GitHub Actions secrets. The Vite frontend must never receive this key through `VITE_*` variables. If Supabase is not configured, the admin API keeps using `data/manual-macro-events.json`.
 
+For manual legislation, policy, or surprise events, use `category: other`, an uppercase stable `seriesId` such as `MANUAL_BILL_STABLECOIN_20260718`, `role: policy_legislation_event` for legislation or `role: manual_attention_event` for one-off surprises, and `unit: event`. Keep the source field specific enough to audit later.
+
 For CI or deployment, install Python dependencies with:
 
 ```bash

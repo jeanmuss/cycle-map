@@ -24,11 +24,13 @@ const execFileAsync = promisify(execFile);
 const allowedOrigins = new Set([
   "http://127.0.0.1:5173",
   "http://localhost:5173",
+  "http://127.0.0.1:5175",
+  "http://localhost:5175",
   "http://127.0.0.1:4173",
   "http://localhost:4173",
 ]);
 
-const allowedCategories = new Set(["inflation", "growth", "rates", "volatility", "liquidity"]);
+const allowedCategories = new Set(["inflation", "growth", "rates", "volatility", "liquidity", "other"]);
 const allowedStatuses = new Set(["published", "draft", "archived"]);
 
 function jsonResponse(res, status, payload, origin = null) {

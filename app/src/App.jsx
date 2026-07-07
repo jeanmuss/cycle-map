@@ -44,7 +44,7 @@ const VALID_CRYPTO_METRICS = new Set(["absolute", "relative"]);
 const VALID_CRYPTO_RANGES = new Set(["12", "24", "48", "all"]);
 const VALID_ASSETS = new Set(ASSETS.map((asset) => asset.symbol));
 const VALID_EQUITY_RANGES = new Set(["26", "52", "all"]);
-const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity"]);
+const VALID_MACRO_CATEGORIES = new Set(["all", "inflation", "growth", "rates", "volatility", "liquidity", "other"]);
 const VALID_CHIP_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 const VALID_ROBOT_CHAIN_RANGES = new Set(["1d", "5d", "1m", "3m"]);
 const ADMIN_PAGE_ENABLED = import.meta.env.DEV;
@@ -202,6 +202,7 @@ const MARKET_CLOCK_TEXT = {
       open: "盘中",
       trading: "交易中",
       premarket: "盘前",
+      night: "\u591c\u76d8",
       openingAuction: "集合竞价",
       closingAuction: "收盘集合竞价",
       afterhours: "盘后",
@@ -264,6 +265,7 @@ const MARKET_CLOCK_TEXT = {
       open: "Open",
       trading: "Trading",
       premarket: "Pre-market",
+      night: "Night session",
       openingAuction: "Call auction",
       closingAuction: "Closing auction",
       afterhours: "After-hours",
@@ -664,7 +666,9 @@ const TRANSLATIONS = {
       empty: "悬停查看月度信息，点击任一有数据的单元格即可固定详情。",
       closePinned: "关闭固定详情",
       selectedMonth: "已选月份",
+      selectedYear: "已选年份",
       monthlyReturn: "月度收益",
+      annualReturn: "当年收益",
       relativeBtc: "相对 BTC",
       open: "月开盘",
       close: "月收盘",
@@ -679,6 +683,7 @@ const TRANSLATIONS = {
     },
     tooltip: {
       return: "收益",
+      annualReturn: "当年收益",
       open: "开",
       close: "收",
       currentPrice: "现价",
@@ -783,6 +788,7 @@ const TRANSLATIONS = {
         growth: "\u5c31\u4e1a\u4e0e\u589e\u957f",
         rates: "\u5229\u7387\u4e0e\u7f8e\u5143",
         volatility: "\u6ce2\u52a8\u4e0e\u4fe1\u7528",
+        other: "\u5176\u4ed6",
       },
       eventLabels: {
         "ADP private payrolls": "ADP\u5c0f\u975e\u519c",
@@ -861,6 +867,7 @@ const TRANSLATIONS = {
         rates: "\u5229\u7387",
         volatility: "\u6ce2\u52a8",
         liquidity: "\u6d41\u52a8",
+        other: "\u5176\u4ed6",
       },
       hiddenMonthItems: (count) => `+${count}`,
       window: "\u6570\u636e\u7a97\u53e3",
@@ -1053,7 +1060,9 @@ const TRANSLATIONS = {
       empty: "Hover for monthly information, or click any populated cell to pin the detail view.",
       closePinned: "Close pinned detail",
       selectedMonth: "Selected month",
+      selectedYear: "Selected year",
       monthlyReturn: "Monthly return",
+      annualReturn: "Annual return",
       relativeBtc: "Relative to BTC",
       open: "Monthly open",
       close: "Monthly close",
@@ -1068,6 +1077,7 @@ const TRANSLATIONS = {
     },
     tooltip: {
       return: "Return",
+      annualReturn: "Annual return",
       open: "Open",
       close: "Close",
       currentPrice: "Spot",
@@ -1172,6 +1182,7 @@ const TRANSLATIONS = {
         growth: "Employment & growth",
         rates: "Rates & dollar",
         volatility: "Volatility & credit",
+        other: "Other",
       },
       eventLabelPrefixes: {
         CN_PUBLIC_HOLIDAY: "China public holiday",
@@ -1194,6 +1205,7 @@ const TRANSLATIONS = {
         rates: "Rates",
         volatility: "Vol",
         liquidity: "Liq",
+        other: "Other",
       },
       hiddenMonthItems: (count) => `+${count}`,
       window: "Data window",
@@ -1531,6 +1543,68 @@ function HeatCell({
   );
 }
 
+function TotalCell({
+  symbol,
+  year,
+  row,
+  value,
+  rowKey,
+  hover,
+  setHover,
+  setTooltip,
+  onSelect,
+  t,
+}) {
+  const classNames = [
+    "total-cell",
+    returnClass(value),
+    hover?.rowKey === rowKey ? "cross-row" : "",
+    hover?.columnKey === "total" ? "cross-column" : "",
+  ].filter(Boolean).join(" ");
+  const yearKey = String(year);
+  const label = `${symbol} ${yearKey} ${Number.isFinite(value) ? formatPct(value) : t.tables.noData}`;
+
+  const revealTooltip = (event) => {
+    if (row) {
+      setTooltip({ x: event.clientX, y: event.clientY, symbol, monthKey: yearKey, year: yearKey, row, value, period: "year" });
+    }
+  };
+
+  const activate = () => {
+    if (row) {
+      setTooltip(null);
+      onSelect({ symbol, monthKey: yearKey, year: yearKey, row, value, period: "year" });
+    }
+  };
+
+  return (
+    <td
+      className={classNames}
+      tabIndex={row ? 0 : -1}
+      role={row ? "button" : undefined}
+      aria-label={label}
+      onMouseEnter={(event) => {
+        setHover({ rowKey, columnKey: "total" });
+        revealTooltip(event);
+      }}
+      onMouseMove={revealTooltip}
+      onMouseLeave={() => {
+        setHover(null);
+        setTooltip(null);
+      }}
+      onClick={activate}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          activate();
+        }
+      }}
+    >
+      {Number.isFinite(value) ? formatPct(value, 0) : ""}
+    </td>
+  );
+}
+
 function LatestStrip({ dataset, onOpenAsset, t }) {
   return (
     <div className="latest-strip" aria-label={t.latest.aria}>
@@ -1635,15 +1709,17 @@ function MobilePinnedDetail({ selected, dataset, metric, onClear, t }) {
   const quote = dataset.assets[selected.symbol]?.quote || "USD";
   const extreme = extremeMoveMeta(selected.row, t);
   const extremeCaption = [extreme.label, extreme.order].filter(Boolean).join(t.separator);
+  const isAnnual = selected.period === "year";
+  const selectedLabel = isAnnual ? selected.year || selected.monthKey : selected.monthKey;
   return (
     <aside className="mobile-detail-dock" aria-live="polite">
       <button type="button" className="dock-close" onClick={onClear} aria-label={t.detail.closePinned}>×</button>
       <div>
-        <small>{t.detail.selectedMonth}</small>
-        <strong>{selected.symbol}{t.separator}{selected.monthKey}</strong>
+        <small>{isAnnual ? t.detail.selectedYear : t.detail.selectedMonth}</small>
+        <strong>{selected.symbol}{t.separator}{selectedLabel}</strong>
       </div>
       <div>
-        <small>{metric === "absolute" ? t.detail.monthlyReturn : t.detail.relativeBtc}</small>
+        <small>{isAnnual ? (metric === "absolute" ? t.detail.annualReturn : t.detail.relativeBtc) : metric === "absolute" ? t.detail.monthlyReturn : t.detail.relativeBtc}</small>
         <strong className={selected.value >= 0 ? "positive" : "negative"}>{formatPct(selected.value, 2)}</strong>
       </div>
       <div>
@@ -1717,7 +1793,7 @@ function CycleTable({ years, stats, asset, currentMonthKey, hover, setHover, set
             <th>{t.tables.year}</th>
             {t.months.map((month, index) => <th key={month} className={hover?.columnKey === index ? "cross-column" : ""}>{month}</th>)}
             <th className="gap-column" aria-hidden="true"></th>
-            <th>{t.tables.total}</th>
+            <th className={hover?.columnKey === "total" ? "cross-column" : ""}>{t.tables.total}</th>
             <th>{t.tables.cycle}</th>
           </tr>
         </thead>
@@ -1750,7 +1826,18 @@ function CycleTable({ years, stats, asset, currentMonthKey, hover, setHover, set
                   />
                 ))}
                 <td className="gap-column"></td>
-                <td className={`total-cell ${returnClass(year.totalValue)}`}>{Number.isFinite(year.totalValue) ? formatPct(year.totalValue, 0) : ""}</td>
+                <TotalCell
+                  symbol={asset}
+                  year={year.year}
+                  row={year.totalRow}
+                  value={year.totalValue}
+                  rowKey={String(year.year)}
+                  hover={hover}
+                  setHover={setHover}
+                  setTooltip={setTooltip}
+                  onSelect={onSelect}
+                  t={t}
+                />
                 <td className={`cycle-cell ${year.cycle.className}`}>{cycleLabel(year.cycle, t)}</td>
               </tr>
               {isCycleGroupStartYear(year.year) && index < years.length - 1 ? (
@@ -1787,14 +1874,16 @@ function DetailBand({ selected, dataset, metric, t }) {
   const meta = dataset.assets[selected.symbol];
   const extreme = extremeMoveMeta(selected.row, t);
   const extremeCaption = [extreme.label, extreme.order].filter(Boolean).join(t.separator);
+  const isAnnual = selected.period === "year";
+  const selectedLabel = isAnnual ? selected.year || selected.monthKey : selected.monthKey;
   return (
     <aside className="detail-band" aria-live="polite">
       <div>
-        <small>{t.detail.selectedMonth}</small>
-        <strong>{selected.monthKey}{t.separator}{selected.symbol}</strong>
+        <small>{isAnnual ? t.detail.selectedYear : t.detail.selectedMonth}</small>
+        <strong>{selectedLabel}{t.separator}{selected.symbol}</strong>
       </div>
       <div>
-        <small>{metric === "absolute" ? t.detail.monthlyReturn : t.detail.relativeBtc}</small>
+        <small>{isAnnual ? (metric === "absolute" ? t.detail.annualReturn : t.detail.relativeBtc) : metric === "absolute" ? t.detail.monthlyReturn : t.detail.relativeBtc}</small>
         <strong className={selected.value >= 0 ? "positive" : "negative"}>{formatPct(selected.value, 2)}</strong>
       </div>
       <div>
@@ -1840,6 +1929,8 @@ function Tooltip({ value, dataset, t }) {
   const quote = dataset.assets[value.symbol]?.quote || "USD";
   const extreme = extremeMoveMeta(value.row, t);
   const extremeCaption = [extreme.label, extreme.order].filter(Boolean).join(t.separator);
+  const isAnnual = value.period === "year";
+  const valueLabel = isAnnual ? value.year || value.monthKey : value.monthKey;
   return (
     <div
       className="cell-tooltip"
@@ -1848,8 +1939,8 @@ function Tooltip({ value, dataset, t }) {
         top: Math.max(8, Math.min(value.y + 14, window.innerHeight - 190)),
       }}
     >
-      <strong>{value.symbol}{t.separator}{value.monthKey}</strong>
-      <span>{t.tooltip.return} {formatPct(value.value, 2)}</span>
+      <strong>{value.symbol}{t.separator}{valueLabel}</strong>
+      <span>{isAnnual ? t.tooltip.annualReturn : t.tooltip.return} {formatPct(value.value, 2)}</span>
       <span>{t.tooltip.open} {formatPrice(value.row.open, quote)} / {value.row.isClosed ? t.tooltip.close : t.tooltip.currentPrice} {formatPrice(value.row.close, quote)}</span>
       <span>{t.tooltip.high} {formatPrice(value.row.high, quote)} / {t.tooltip.low} {formatPrice(value.row.low, quote)}</span>
       <span className={`tooltip-extreme ${extreme.className}`}>{extremeCaption} {formatPct(value.row.extremeMovePct, 2)}</span>
@@ -1963,7 +2054,7 @@ function formatMacroChange(item) {
   return "N/A";
 }
 
-const MACRO_WEEK_ROWS = ["inflation", "growth", "rates", "volatility", "liquidity"];
+const MACRO_WEEK_ROWS = ["inflation", "growth", "rates", "volatility", "liquidity", "other"];
 
 const MACRO_STATUS_DISPLAY = {
   DFEDTARU: { category: "rates", label: "Fed upper", mode: "bp" },
@@ -1985,7 +2076,7 @@ const MACRO_STATUS_DISPLAY = {
   RRPONTSYD: { category: "liquidity", label: "RRP", mode: "level" },
 };
 
-const MACRO_CATEGORY_ORDER = ["inflation", "growth", "rates", "volatility", "liquidity"];
+const MACRO_CATEGORY_ORDER = ["inflation", "growth", "rates", "volatility", "liquidity", "other"];
 const MONTH_CELL_ITEM_LIMIT = 3;
 
 function utcDateFromKey(dateKey) {
@@ -3017,7 +3108,7 @@ function MacroCalendarPage({ language, setLanguage, t }) {
 }
 
 const ADMIN_MACRO_API_BASE = "http://127.0.0.1:5174";
-const ADMIN_MACRO_CATEGORIES = ["inflation", "growth", "rates", "volatility", "liquidity"];
+const ADMIN_MACRO_CATEGORIES = ["inflation", "growth", "rates", "volatility", "liquidity", "other"];
 const ADMIN_MACRO_DATE_MEANINGS = [
   "scheduled_beijing_date",
   "daily_observation",
@@ -4820,6 +4911,11 @@ function EquityMacroPage({ language, setLanguage, t }) {
 }
 
 const MARKET_CLOCK_SOON_MINUTES = 60;
+const MARKET_CLOCK_MINUTES_PER_DAY = 24 * 60;
+const MARKET_CLOCK_DISPLAY_TIME_ZONES = {
+  zh: "Asia/Shanghai",
+  en: "America/New_York",
+};
 
 function getInitialShowCrypto() {
   if (typeof window === "undefined") return true;
@@ -4833,6 +4929,13 @@ function getInitialShowCrypto() {
 function minutesFromTime(value) {
   const [hour, minute] = String(value || "00:00").split(":").map(Number);
   return (Number(hour) || 0) * 60 + (Number(minute) || 0);
+}
+
+function timeFromMinutes(value) {
+  const minutes = ((Math.round(Number(value) || 0) % MARKET_CLOCK_MINUTES_PER_DAY) + MARKET_CLOCK_MINUTES_PER_DAY) % MARKET_CLOCK_MINUTES_PER_DAY;
+  const hour = Math.floor(minutes / 60);
+  const minute = minutes % 60;
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 }
 
 function zonedClockParts(timeZone, now) {
@@ -4868,6 +4971,80 @@ function localClockLabel(timeZone, language, now) {
   }).format(now);
 }
 
+function marketDisplayTimeZone(language) {
+  return language === "en" ? MARKET_CLOCK_DISPLAY_TIME_ZONES.en : MARKET_CLOCK_DISPLAY_TIME_ZONES.zh;
+}
+
+function timeZoneOffsetMinutes(timeZone, date) {
+  const values = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(date).map((part) => [part.type, part.value]),
+  );
+  const localAsUtc = Date.UTC(
+    Number(values.year),
+    Number(values.month) - 1,
+    Number(values.day),
+    Number(values.hour),
+    Number(values.minute),
+    Number(values.second),
+  );
+  return Math.round((localAsUtc - date.getTime()) / 60000);
+}
+
+function displayMarketTime(value, marketTimeZone, language, now) {
+  if (!/^\d{2}:\d{2}$/.test(String(value || ""))) return "N/A";
+  const displayZone = marketDisplayTimeZone(language);
+  const shifted = minutesFromTime(value)
+    + timeZoneOffsetMinutes(displayZone, now)
+    - timeZoneOffsetMinutes(marketTimeZone, now);
+  return timeFromMinutes(shifted);
+}
+
+function displayMarketRange(start, end, marketTimeZone, language, now) {
+  return `${displayMarketTime(start, marketTimeZone, language, now)}-${displayMarketTime(end, marketTimeZone, language, now)}`;
+}
+
+function nextWeekdayOffset(weekday, startOffset = 1) {
+  let offset = startOffset;
+  while (!isWeekday((weekday + offset) % 7)) offset += 1;
+  return offset;
+}
+
+function countdownLabel(totalMinutes, language) {
+  if (!Number.isFinite(totalMinutes)) return "N/A";
+  const minutes = Math.max(0, Math.round(totalMinutes));
+  const days = Math.floor(minutes / MARKET_CLOCK_MINUTES_PER_DAY);
+  const hours = Math.floor((minutes % MARKET_CLOCK_MINUTES_PER_DAY) / 60);
+  const mins = minutes % 60;
+  if (language === "en") {
+    return days ? `${days}d ${hours}h ${mins}m` : `${hours}h ${mins}m`;
+  }
+  return days ? `${days}天 ${hours}小时 ${mins}分` : `${hours}小时 ${mins}分`;
+}
+
+function countdownToMarketTime(clock, targetMinutes, language, options = {}) {
+  if (!Number.isFinite(targetMinutes)) return "N/A";
+  let dayOffset = options.forceNextDay ? 1 : 0;
+  if (options.tradingDayOnly !== false) {
+    if (!isWeekday(clock.weekday)) {
+      dayOffset = nextWeekdayOffset(clock.weekday, 1);
+    } else if (targetMinutes <= clock.minutes || dayOffset > 0) {
+      dayOffset = nextWeekdayOffset(clock.weekday, Math.max(1, dayOffset));
+    }
+  } else if (targetMinutes <= clock.minutes || dayOffset > 0) {
+    dayOffset = Math.max(1, dayOffset);
+  }
+  return countdownLabel(dayOffset * MARKET_CLOCK_MINUTES_PER_DAY + targetMinutes - clock.minutes, language);
+}
+
 function marketStatus(market, now, language, copy) {
   if (market.stateModel === "always_open") {
     return {
@@ -4885,26 +5062,55 @@ function marketStatus(market, now, language, copy) {
   const regularOpen = minutesFromTime(market.regularOpen);
   const regularClose = minutesFromTime(market.regularClose);
   const isTradingDay = isWeekday(clock.weekday);
+  const firstOpenTime = market.auctionOpen || market.premarketOpen || market.regularOpen;
+  const firstOpen = minutesFromTime(firstOpenTime);
   if (!isTradingDay) {
-    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen || "N/A" };
+    if (market.id === "us") {
+      return {
+        key: "night",
+        label: copy.status.night,
+        active: true,
+        sortRank: 3,
+        localTime,
+        nextText: countdownToMarketTime(clock, minutesFromTime(market.premarketOpen), language),
+      };
+    }
+    return {
+      key: "closed",
+      label: copy.status.closed,
+      active: false,
+      sortRank: 4,
+      localTime,
+      nextText: countdownToMarketTime(clock, firstOpen, language),
+    };
   }
 
   if (market.stateModel === "premarket_regular_afterhours") {
     const premarketOpen = minutesFromTime(market.premarketOpen);
     const afterhoursClose = minutesFromTime(market.afterhoursClose);
+    if (market.id === "us" && (clock.minutes < premarketOpen || clock.minutes >= afterhoursClose)) {
+      return {
+        key: "night",
+        label: copy.status.night,
+        active: true,
+        sortRank: 3,
+        localTime,
+        nextText: countdownToMarketTime(clock, premarketOpen, language),
+      };
+    }
     if (clock.minutes >= premarketOpen && clock.minutes < regularOpen) {
-      return { key: "premarket", label: copy.status.premarket, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+      return { key: "premarket", label: copy.status.premarket, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
     }
     if (clock.minutes >= regularOpen && clock.minutes < regularClose) {
-      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularClose, language) };
     }
     if (clock.minutes >= regularClose && clock.minutes < afterhoursClose) {
-      return { key: "afterhours", label: copy.status.afterhours, active: true, sortRank: 2, localTime, nextText: market.afterhoursClose };
+      return { key: "afterhours", label: copy.status.afterhours, active: true, sortRank: 2, localTime, nextText: countdownToMarketTime(clock, afterhoursClose, language) };
     }
     if (clock.minutes < premarketOpen && premarketOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
-      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.premarketOpen };
+      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, premarketOpen, language) };
     }
-    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.premarketOpen };
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: countdownToMarketTime(clock, premarketOpen, language) };
   }
 
   if (market.stateModel === "china_auction_regular_afterhours") {
@@ -4914,81 +5120,86 @@ function marketStatus(market, now, language, copy) {
     const closingAuctionOpen = minutesFromTime(market.closingAuctionOpen);
     const afterhoursClose = minutesFromTime(market.afterhoursClose);
     if (clock.minutes >= auctionOpen && clock.minutes < regularOpen) {
-      return { key: "opening-auction", label: copy.status.openingAuction, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+      return { key: "opening-auction", label: copy.status.openingAuction, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
     }
     if (clock.minutes >= regularOpen && clock.minutes < lunchStart) {
-      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.lunchStart };
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, lunchStart, language) };
     }
     if (clock.minutes >= lunchStart && clock.minutes < lunchEnd) {
-      return { key: "lunch", label: copy.status.lunch, active: true, sortRank: 1, localTime, nextText: market.lunchEnd };
+      return { key: "lunch", label: copy.status.lunch, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, lunchEnd, language) };
     }
     if (clock.minutes >= lunchEnd && clock.minutes < closingAuctionOpen) {
-      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.closingAuctionOpen };
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, closingAuctionOpen, language) };
     }
     if (clock.minutes >= closingAuctionOpen && clock.minutes < regularClose) {
-      return { key: "closing-auction", label: copy.status.closingAuction, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+      return { key: "closing-auction", label: copy.status.closingAuction, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularClose, language) };
     }
     if (clock.minutes >= regularClose && clock.minutes < afterhoursClose) {
-      return { key: "afterhours", label: copy.status.afterhours, active: true, sortRank: 2, localTime, nextText: market.afterhoursClose };
+      return { key: "afterhours", label: copy.status.afterhours, active: true, sortRank: 2, localTime, nextText: countdownToMarketTime(clock, afterhoursClose, language) };
     }
     if (clock.minutes < auctionOpen && auctionOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
-      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.auctionOpen };
+      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, auctionOpen, language) };
     }
-    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.auctionOpen };
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: countdownToMarketTime(clock, auctionOpen, language) };
   }
 
   if (market.stateModel === "regular_with_lunch") {
     const lunchStart = minutesFromTime(market.lunchStart);
     const lunchEnd = minutesFromTime(market.lunchEnd);
     if (clock.minutes >= regularOpen && clock.minutes < lunchStart) {
-      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.lunchStart };
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, lunchStart, language) };
     }
     if (clock.minutes >= lunchStart && clock.minutes < lunchEnd) {
-      return { key: "lunch", label: copy.status.lunch, active: true, sortRank: 1, localTime, nextText: market.lunchEnd };
+      return { key: "lunch", label: copy.status.lunch, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, lunchEnd, language) };
     }
     if (clock.minutes >= lunchEnd && clock.minutes < regularClose) {
-      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+      return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularClose, language) };
     }
     if (clock.minutes < regularOpen && regularOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
-      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+      return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
     }
-    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen };
+    return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
   }
 
   if (clock.minutes >= regularOpen && clock.minutes < regularClose) {
-    return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: market.regularClose };
+    return { key: "open", label: copy.status.open, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularClose, language) };
   }
   if (clock.minutes < regularOpen && regularOpen - clock.minutes <= MARKET_CLOCK_SOON_MINUTES) {
-    return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: market.regularOpen };
+    return { key: "soon", label: copy.status.soon, active: true, sortRank: 1, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
   }
-  return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: market.regularOpen };
+  return { key: "closed", label: copy.status.closed, active: false, sortRank: 4, localTime, nextText: countdownToMarketTime(clock, regularOpen, language) };
 }
 
-function marketSessionWindows(market, copy) {
+function marketSessionWindows(market, copy, language, now) {
+  const range = (start, end) => displayMarketRange(start, end, market.timezone, language, now);
   if (market.stateModel === "always_open") {
     return [{ key: "trading", label: copy.status.trading, time: copy.alwaysOpen }];
   }
   if (market.stateModel === "premarket_regular_afterhours") {
+    const sessions = market.id === "us"
+      ? [{ key: "night", label: copy.status.night, time: range(market.afterhoursClose, market.premarketOpen) }]
+      : [];
     return [
-      { key: "premarket", label: copy.status.premarket, time: `${market.premarketOpen}-${market.regularOpen}` },
-      { key: "open", label: copy.status.open, time: `${market.regularOpen}-${market.regularClose}` },
-      { key: "afterhours", label: copy.status.afterhours, time: `${market.regularClose}-${market.afterhoursClose}` },
+      ...sessions,
+      { key: "premarket", label: copy.status.premarket, time: range(market.premarketOpen, market.regularOpen) },
+      { key: "open", label: copy.status.open, time: range(market.regularOpen, market.regularClose) },
+      { key: "afterhours", label: copy.status.afterhours, time: range(market.regularClose, market.afterhoursClose) },
     ];
   }
   if (market.stateModel === "china_auction_regular_afterhours") {
     return [
-      { key: "opening-auction", label: copy.status.openingAuction, time: `${market.auctionOpen}-${market.regularOpen}` },
-      { key: "open", label: copy.status.open, time: `${market.regularOpen}-${market.lunchStart} / ${market.lunchEnd}-${market.closingAuctionOpen}` },
-      { key: "closing-auction", label: copy.status.closingAuction, time: `${market.closingAuctionOpen}-${market.regularClose}` },
-      { key: "afterhours", label: copy.status.afterhours, time: `${market.regularClose}-${market.afterhoursClose}` },
+      { key: "opening-auction", label: copy.status.openingAuction, time: range(market.auctionOpen, market.regularOpen) },
+      { key: "open", label: copy.status.open, time: `${range(market.regularOpen, market.lunchStart)} / ${range(market.lunchEnd, market.closingAuctionOpen)}` },
+      { key: "closing-auction", label: copy.status.closingAuction, time: range(market.closingAuctionOpen, market.regularClose) },
+      { key: "afterhours", label: copy.status.afterhours, time: range(market.regularClose, market.afterhoursClose) },
     ];
   }
   if (market.stateModel === "regular_with_lunch") {
     return [
-      { key: "open", label: copy.status.open, time: `${market.regularOpen}-${market.lunchStart} / ${market.lunchEnd}-${market.regularClose}` },
+      { key: "open", label: copy.status.open, time: `${range(market.regularOpen, market.lunchStart)} / ${range(market.lunchEnd, market.regularClose)}` },
     ];
   }
-  return [{ key: "open", label: copy.status.open, time: `${market.regularOpen || "N/A"}-${market.regularClose || "N/A"}` }];
+  return [{ key: "open", label: copy.status.open, time: range(market.regularOpen || "N/A", market.regularClose || "N/A") }];
 }
 
 function marketDisplayName(market, language) {
@@ -5076,7 +5287,7 @@ function sourceTimeLabel(iso, language) {
   }).format(date);
 }
 
-function MarketClockSummary({ dataset, statuses, language, copy }) {
+function MarketClockSummary({ dataset, statuses, language, copy, now }) {
   return (
     <section className="market-clock-summary" aria-label={copy.marketState}>
       {(dataset.markets || []).map((market) => {
@@ -5088,7 +5299,7 @@ function MarketClockSummary({ dataset, statuses, language, copy }) {
             <span>{copy.localTime}: {status?.localTime || "N/A"}</span>
             <em>{copy.next}: {status?.nextText || "N/A"}</em>
             <div className="market-session-strip" aria-label={`${marketDisplayName(market, language)} ${copy.sessions}`}>
-              {marketSessionWindows(market, copy).map((session) => (
+              {marketSessionWindows(market, copy, language, now).map((session) => (
                 <span className={`market-session-chip state-${session.key}`} key={`${market.id}-${session.key}`}>
                   <b>{session.label}</b>
                   <i>{session.time}</i>
@@ -5286,7 +5497,7 @@ function MarketClockPage({ language, setLanguage, t }) {
         </div>
       </header>
 
-      <MarketClockSummary dataset={dataset} statuses={statuses} language={language} copy={copy} />
+      <MarketClockSummary dataset={dataset} statuses={statuses} language={language} copy={copy} now={now} />
 
       <section className="control-bar market-clock-controls" aria-label={copy.controls}>
         <div className="control-primary">

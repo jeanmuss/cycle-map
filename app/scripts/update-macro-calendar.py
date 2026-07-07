@@ -116,6 +116,7 @@ CATEGORIES = {
     "rates": "Rates & Dollar",
     "volatility": "Volatility & Credit",
     "liquidity": "Liquidity & Balance Sheet",
+    "other": "Other",
 }
 
 

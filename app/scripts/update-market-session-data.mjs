@@ -32,6 +32,8 @@ const MARKETS = [
     regularOpen: "09:30",
     regularClose: "16:00",
     afterhoursClose: "20:00",
+    nightOpen: "20:00",
+    nightClose: "04:00",
     assets: ["TSLA", "NVDA", "MSFT", "CL"],
   },
   {
@@ -413,7 +415,7 @@ async function buildOutput() {
     page: "market-clock",
     generatedAt: isoNow(),
     refreshCadence: "Target 10-15 minutes when a backend scheduler is available; static hosts may refresh less frequently.",
-    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. Session states are calculated locally from market-hour rules: China uses call auction, continuous trading, closing auction, and after-hours blocks; Korea uses pre-market, regular, and after-hours sessions.",
+    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. Session states are calculated locally from market-hour rules: U.S. risk assets include night, pre-market, regular, and after-hours blocks; China uses call auction, continuous trading, closing auction, and after-hours blocks; Korea uses pre-market, regular, and after-hours sessions.",
     failures,
     markets: MARKETS,
     assets,

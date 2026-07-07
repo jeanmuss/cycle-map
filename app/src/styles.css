@@ -2124,6 +2124,10 @@ html[lang="zh-CN"] .title-block h1 {
   background: #f7c3c8;
 }
 
+.macro-other {
+  background: #e8e0f2;
+}
+
 .macro-overflow {
   background: #fffdf6;
 }
@@ -2282,6 +2286,7 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .market-state-card.state-premarket,
+.market-state-card.state-night,
 .market-state-card.state-opening-auction,
 .market-state-card.state-closing-auction,
 .market-state-card.state-afterhours,
@@ -2447,6 +2452,7 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .market-status-pill.state-premarket,
+.market-status-pill.state-night,
 .market-status-pill.state-opening-auction,
 .market-status-pill.state-closing-auction,
 .market-status-pill.state-afterhours,
@@ -2468,6 +2474,7 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .market-clock-table tr.state-premarket > *,
+.market-clock-table tr.state-night > *,
 .market-clock-table tr.state-opening-auction > *,
 .market-clock-table tr.state-closing-auction > *,
 .market-clock-table tr.state-afterhours > *,
@@ -3299,6 +3306,18 @@ html[lang="zh-CN"] .title-block h1 {
 
 .total-cell {
   font-weight: 850;
+}
+
+.total-cell[role="button"] {
+  cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+
+.total-cell[role="button"]:hover {
+  position: relative;
+  z-index: 3;
+  transform: scale(1.07);
+  outline: 2px solid var(--ink);
 }
 
 .detail-band {
