@@ -1,12 +1,12 @@
 {
   "version": 1,
   "page": "macro-calendar",
-  "generatedAt": "2026-07-06T23:36:20Z",
+  "generatedAt": "2026-07-07T23:28:46Z",
   "window": {
     "months": 6,
-    "startDate": "2026-01-06",
-    "endDate": "2026-07-06",
-    "lookbackStartDate": "2024-12-23"
+    "startDate": "2026-01-07",
+    "endDate": "2026-07-07",
+    "lookbackStartDate": "2024-12-24"
   },
   "cache": {
     "providerCachePath": "tmp/macro-cache/fred",
@@ -38,6 +38,10 @@
     {
       "id": "liquidity",
       "label": "Liquidity & Balance Sheet"
+    },
+    {
+      "id": "other",
+      "label": "Other"
     }
   ],
   "indicators": {
@@ -833,7 +837,7 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-06",
+      "latestDate": "2026-07-07",
       "latestValue": 3.75,
       "previousValue": 3.75,
       "change": 0.0,
@@ -847,7 +851,7 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-06",
+      "latestDate": "2026-07-07",
       "latestValue": 3.5,
       "previousValue": 3.5,
       "change": 0.0,
@@ -861,7 +865,7 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-03",
+      "latestDate": "2026-07-06",
       "latestValue": 3.63,
       "previousValue": 3.63,
       "change": 0.0,
@@ -875,12 +879,12 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-02",
-      "latestValue": 4.14,
-      "previousValue": 4.17,
-      "change": -0.03000000000000025,
-      "changeBp": -3.000000000000025,
-      "pctChange": -0.7194244604316606,
+      "latestDate": "2026-07-06",
+      "latestValue": 4.13,
+      "previousValue": 4.14,
+      "change": -0.009999999999999787,
+      "changeBp": -0.9999999999999787,
+      "pctChange": -0.24154589371980165,
       "source": "FRED / U.S. Treasury"
     },
     {
@@ -889,12 +893,12 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-02",
-      "latestValue": 4.49,
-      "previousValue": 4.48,
-      "change": 0.009999999999999787,
-      "changeBp": 0.9999999999999787,
-      "pctChange": 0.22321428571428092,
+      "latestDate": "2026-07-06",
+      "latestValue": 4.48,
+      "previousValue": 4.49,
+      "change": -0.009999999999999787,
+      "changeBp": -0.9999999999999787,
+      "pctChange": -0.22271714922048524,
       "source": "FRED / U.S. Treasury"
     },
     {
@@ -903,12 +907,12 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-02",
-      "latestValue": 2.26,
-      "previousValue": 2.25,
-      "change": 0.009999999999999787,
-      "changeBp": 0.9999999999999787,
-      "pctChange": 0.444444444444435,
+      "latestDate": "2026-07-06",
+      "latestValue": 2.24,
+      "previousValue": 2.26,
+      "change": -0.019999999999999574,
+      "changeBp": -1.9999999999999574,
+      "pctChange": -0.8849557522123707,
       "source": "FRED / U.S. Treasury"
     },
     {
@@ -917,12 +921,12 @@
       "category": "rates",
       "categoryLabel": "Rates & Dollar",
       "unit": "percent",
-      "latestDate": "2026-07-06",
-      "latestValue": 2.24,
-      "previousValue": 2.23,
-      "change": 0.010000000000000231,
-      "changeBp": 1.000000000000023,
-      "pctChange": 0.448430493273553,
+      "latestDate": "2026-07-07",
+      "latestValue": 2.25,
+      "previousValue": 2.24,
+      "change": 0.009999999999999787,
+      "changeBp": 0.9999999999999787,
+      "pctChange": 0.44642857142856185,
       "source": "FRED / Federal Reserve"
     },
     {
@@ -973,12 +977,12 @@
       "category": "volatility",
       "categoryLabel": "Volatility & Credit",
       "unit": "index",
-      "latestDate": "2026-07-03",
-      "latestValue": 15.81,
-      "previousValue": 16.15,
-      "change": -0.3399999999999981,
+      "latestDate": "2026-07-06",
+      "latestValue": 15.57,
+      "previousValue": 15.81,
+      "change": -0.2400000000000002,
       "changeBp": null,
-      "pctChange": -2.105263157894725,
+      "pctChange": -1.5180265654648968,
       "source": "FRED / CBOE"
     },
     {
@@ -987,7 +991,7 @@
       "category": "volatility",
       "categoryLabel": "Volatility & Credit",
       "unit": "percent_spread",
-      "latestDate": "2026-07-03",
+      "latestDate": "2026-07-06",
       "latestValue": 0.75,
       "previousValue": 0.75,
       "change": 0.0,
@@ -1001,12 +1005,12 @@
       "category": "volatility",
       "categoryLabel": "Volatility & Credit",
       "unit": "percent_spread",
-      "latestDate": "2026-07-03",
-      "latestValue": 2.74,
-      "previousValue": 2.75,
-      "change": -0.009999999999999787,
-      "changeBp": -0.9999999999999787,
-      "pctChange": -0.3636363636363559,
+      "latestDate": "2026-07-06",
+      "latestValue": 2.72,
+      "previousValue": 2.74,
+      "change": -0.020000000000000018,
+      "changeBp": -2.0000000000000018,
+      "pctChange": -0.7299270072992706,
       "source": "FRED / ICE BofA"
     },
     {
@@ -1071,12 +1075,12 @@
       "category": "liquidity",
       "categoryLabel": "Liquidity & Balance Sheet",
       "unit": "usd_billions",
-      "latestDate": "2026-07-06",
-      "latestValue": 2.719,
-      "previousValue": 2.175,
-      "change": 0.544,
+      "latestDate": "2026-07-07",
+      "latestValue": 4.484,
+      "previousValue": 2.719,
+      "change": 1.7650000000000001,
       "changeBp": null,
-      "pctChange": 25.011494252873568,
+      "pctChange": 64.91357116586981,
       "source": "FRED / Federal Reserve Bank of New York"
     }
   ],
@@ -1104,7 +1108,7 @@
       "latestEventDate": "2026-10-29",
       "latestEventLabel": "FOMC rate decision",
       "latestStatus": {
-        "weekKey": "2026-07-06",
+        "weekKey": "2026-07-07",
         "series": [
           "DFEDTARU",
           "DFEDTARL",
@@ -1126,7 +1130,7 @@
       "latestEventDate": null,
       "latestEventLabel": null,
       "latestStatus": {
-        "weekKey": "2026-07-06",
+        "weekKey": "2026-07-07",
         "series": [
           "VIXCLS",
           "BAMLC0A0CM",
@@ -1142,7 +1146,7 @@
       "latestEventDate": "2026-10-12",
       "latestEventLabel": "U.S. Columbus Day holiday",
       "latestStatus": {
-        "weekKey": "2026-07-06",
+        "weekKey": "2026-07-07",
         "series": [
           "WALCL",
           "WRESBAL",
@@ -1150,6 +1154,14 @@
           "RRPONTSYD"
         ]
       }
+    },
+    {
+      "category": "other",
+      "label": "Other",
+      "eventCount": 0,
+      "latestEventDate": null,
+      "latestEventLabel": null,
+      "latestStatus": null
     }
   ],
   "events": [
@@ -3890,7 +3902,7 @@
   "weeklyState": [
     {
       "weekKey": "2026-01-09",
-      "weekStart": "2026-01-06",
+      "weekStart": "2026-01-07",
       "weekEnd": "2026-01-09",
       "values": {
         "DFEDTARU": {
@@ -3904,7 +3916,7 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -3920,7 +3932,7 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -3936,7 +3948,7 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -3952,7 +3964,7 @@
           "change": 0.06999999999999984,
           "changeBp": 6.999999999999984,
           "pctChange": 2.0172910662824157,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -3963,12 +3975,12 @@
           "unit": "percent",
           "source": "FRED / U.S. Treasury",
           "dateMeaning": "daily_observation",
-          "start": 4.18,
+          "start": 4.15,
           "end": 4.18,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "pctChange": 0.0,
-          "observationStart": "2026-01-06",
+          "change": 0.02999999999999936,
+          "changeBp": 2.999999999999936,
+          "pctChange": 0.7228915662650447,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -3979,12 +3991,12 @@
           "unit": "percent",
           "source": "FRED / U.S. Treasury",
           "dateMeaning": "daily_observation",
-          "start": 1.91,
+          "start": 1.88,
           "end": 1.9,
-          "change": -0.010000000000000009,
-          "changeBp": -1.0000000000000009,
-          "pctChange": -0.5235602094240842,
-          "observationStart": "2026-01-06",
+          "change": 0.020000000000000018,
+          "changeBp": 2.0000000000000018,
+          "pctChange": 1.0638297872340436,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4000,7 +4012,7 @@
           "change": 0.009999999999999787,
           "changeBp": 0.9999999999999787,
           "pctChange": 0.4405286343612241,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4011,12 +4023,12 @@
           "unit": "index",
           "source": "FRED / Federal Reserve",
           "dateMeaning": "daily_observation",
-          "start": 119.7807,
+          "start": 119.8719,
           "end": 120.2215,
-          "change": 0.4408000000000101,
+          "change": 0.34960000000000946,
           "changeBp": null,
-          "pctChange": 0.3680058640498929,
-          "observationStart": "2026-01-06",
+          "pctChange": 0.2916446640121742,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4027,12 +4039,12 @@
           "unit": "fx",
           "source": "FRED / Board of Governors",
           "dateMeaning": "daily_observation",
-          "start": 156.7,
+          "start": 156.73,
           "end": 158.07,
-          "change": 1.3700000000000045,
+          "change": 1.3400000000000034,
           "changeBp": null,
-          "pctChange": 0.8742820676451848,
-          "observationStart": "2026-01-06",
+          "pctChange": 0.8549735213424383,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4043,12 +4055,12 @@
           "unit": "fx",
           "source": "FRED / Board of Governors",
           "dateMeaning": "daily_observation",
-          "start": 6.9834,
+          "start": 6.9965,
           "end": 6.9772,
-          "change": -0.006199999999999761,
+          "change": -0.019300000000000317,
           "changeBp": null,
-          "pctChange": -0.08878196866855345,
-          "observationStart": "2026-01-06",
+          "pctChange": -0.27585221182020037,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4059,12 +4071,12 @@
           "unit": "index",
           "source": "FRED / CBOE",
           "dateMeaning": "daily_observation",
-          "start": 14.75,
+          "start": 15.38,
           "end": 14.49,
-          "change": -0.2599999999999998,
+          "change": -0.8900000000000006,
           "changeBp": null,
-          "pctChange": -1.7627118644067783,
-          "observationStart": "2026-01-06",
+          "pctChange": -5.786736020806246,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4080,7 +4092,7 @@
           "change": -0.010000000000000009,
           "changeBp": -1.0000000000000009,
           "pctChange": -1.2658227848101276,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4096,7 +4108,7 @@
           "change": -0.04999999999999982,
           "changeBp": -4.999999999999982,
           "pctChange": -1.7921146953404954,
-          "observationStart": "2026-01-06",
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -4171,12 +4183,12 @@
           "unit": "usd_billions",
           "source": "FRED / Federal Reserve Bank of New York",
           "dateMeaning": "daily_observation",
-          "start": 2.582,
+          "start": 4.582,
           "end": 3.28,
-          "change": 0.698,
+          "change": -1.302,
           "changeBp": null,
-          "pctChange": 27.033307513555382,
-          "observationStart": "2026-01-06",
+          "pctChange": -28.415539065910085,
+          "observationStart": "2026-01-07",
           "observationEnd": "2026-01-09",
           "carriedForward": false,
           "staleDays": 0
@@ -11559,9 +11571,9 @@
       }
     },
     {
-      "weekKey": "2026-07-06",
-      "weekStart": "2026-06-30",
-      "weekEnd": "2026-07-06",
+      "weekKey": "2026-07-07",
+      "weekStart": "2026-07-01",
+      "weekEnd": "2026-07-07",
       "values": {
         "DFEDTARU": {
           "label": "Fed target upper",
@@ -11574,8 +11586,8 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-06",
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-07",
           "carriedForward": false,
           "staleDays": 0
         },
@@ -11590,8 +11602,8 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-06",
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-07",
           "carriedForward": false,
           "staleDays": 0
         },
@@ -11606,10 +11618,10 @@
           "change": 0.0,
           "changeBp": 0.0,
           "pctChange": 0.0,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-03",
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 3
+          "staleDays": 1
         },
         "DGS2": {
           "label": "2Y Treasury",
@@ -11617,15 +11629,15 @@
           "unit": "percent",
           "source": "FRED / U.S. Treasury",
           "dateMeaning": "daily_observation",
-          "start": 4.14,
-          "end": 4.14,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "pctChange": 0.0,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-02",
+          "start": 4.17,
+          "end": 4.13,
+          "change": -0.040000000000000036,
+          "changeBp": -4.0000000000000036,
+          "pctChange": -0.9592326139088737,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 1
         },
         "DGS10": {
           "label": "10Y Treasury",
@@ -11633,15 +11645,15 @@
           "unit": "percent",
           "source": "FRED / U.S. Treasury",
           "dateMeaning": "daily_observation",
-          "start": 4.44,
-          "end": 4.49,
-          "change": 0.04999999999999982,
-          "changeBp": 4.999999999999982,
-          "pctChange": 1.1261261261261222,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-02",
+          "start": 4.48,
+          "end": 4.48,
+          "change": 0.0,
+          "changeBp": 0.0,
+          "pctChange": 0.0,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 1
         },
         "DFII10": {
           "label": "10Y real yield",
@@ -11649,15 +11661,15 @@
           "unit": "percent",
           "source": "FRED / U.S. Treasury",
           "dateMeaning": "daily_observation",
-          "start": 2.2,
-          "end": 2.26,
-          "change": 0.05999999999999961,
-          "changeBp": 5.999999999999961,
-          "pctChange": 2.7272727272727093,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-02",
+          "start": 2.25,
+          "end": 2.24,
+          "change": -0.009999999999999787,
+          "changeBp": -0.9999999999999787,
+          "pctChange": -0.444444444444435,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 1
         },
         "T10YIE": {
           "label": "10Y breakeven",
@@ -11665,13 +11677,13 @@
           "unit": "percent",
           "source": "FRED / Federal Reserve",
           "dateMeaning": "daily_observation",
-          "start": 2.24,
-          "end": 2.24,
-          "change": 0.0,
-          "changeBp": 0.0,
-          "pctChange": 0.0,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-06",
+          "start": 2.23,
+          "end": 2.25,
+          "change": 0.020000000000000018,
+          "changeBp": 2.0000000000000018,
+          "pctChange": 0.896860986547086,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-07",
           "carriedForward": false,
           "staleDays": 0
         },
@@ -11681,15 +11693,15 @@
           "unit": "index",
           "source": "FRED / Federal Reserve",
           "dateMeaning": "daily_observation",
-          "start": 120.9248,
+          "start": 121.1455,
           "end": 120.6902,
-          "change": -0.23460000000000036,
+          "change": -0.45529999999999404,
           "changeBp": null,
-          "pctChange": -0.19400486914181403,
-          "observationStart": "2026-06-30",
+          "pctChange": -0.3758290650498731,
+          "observationStart": "2026-07-01",
           "observationEnd": "2026-07-02",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 5
         },
         "DEXJPUS": {
           "label": "USD/JPY",
@@ -11697,15 +11709,15 @@
           "unit": "fx",
           "source": "FRED / Board of Governors",
           "dateMeaning": "daily_observation",
-          "start": 162.61,
+          "start": 162.41,
           "end": 160.9,
-          "change": -1.710000000000008,
+          "change": -1.509999999999991,
           "changeBp": null,
-          "pctChange": -1.0515958428141,
-          "observationStart": "2026-06-30",
+          "pctChange": -0.9297457053137066,
+          "observationStart": "2026-07-01",
           "observationEnd": "2026-07-02",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 5
         },
         "DEXCHUS": {
           "label": "USD/CNY",
@@ -11713,15 +11725,15 @@
           "unit": "fx",
           "source": "FRED / Board of Governors",
           "dateMeaning": "daily_observation",
-          "start": 6.7851,
+          "start": 6.7942,
           "end": 6.7886,
-          "change": 0.0034999999999998366,
+          "change": -0.005600000000000271,
           "changeBp": null,
-          "pctChange": 0.051583617043224665,
-          "observationStart": "2026-06-30",
+          "pctChange": -0.08242324335463,
+          "observationStart": "2026-07-01",
           "observationEnd": "2026-07-02",
           "carriedForward": false,
-          "staleDays": 4
+          "staleDays": 5
         },
         "VIXCLS": {
           "label": "VIX",
@@ -11729,15 +11741,15 @@
           "unit": "index",
           "source": "FRED / CBOE",
           "dateMeaning": "daily_observation",
-          "start": 16.45,
-          "end": 15.81,
-          "change": -0.6399999999999988,
+          "start": 16.59,
+          "end": 15.57,
+          "change": -1.0199999999999996,
           "changeBp": null,
-          "pctChange": -3.8905775075987767,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-03",
+          "pctChange": -6.148282097649184,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 3
+          "staleDays": 1
         },
         "BAMLC0A0CM": {
           "label": "US corporate OAS",
@@ -11750,10 +11762,10 @@
           "change": -0.010000000000000009,
           "changeBp": -1.0000000000000009,
           "pctChange": -1.3157894736842117,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-03",
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 3
+          "staleDays": 1
         },
         "BAMLH0A0HYM2": {
           "label": "US high yield OAS",
@@ -11761,15 +11773,15 @@
           "unit": "percent_spread",
           "source": "FRED / ICE BofA",
           "dateMeaning": "daily_observation",
-          "start": 2.75,
-          "end": 2.74,
-          "change": -0.009999999999999787,
-          "changeBp": -0.9999999999999787,
-          "pctChange": -0.3636363636363559,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-03",
+          "start": 2.74,
+          "end": 2.72,
+          "change": -0.020000000000000018,
+          "changeBp": -2.0000000000000018,
+          "pctChange": -0.7299270072992706,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-06",
           "carriedForward": false,
-          "staleDays": 3
+          "staleDays": 1
         },
         "STLFSI4": {
           "label": "St. Louis financial stress",
@@ -11785,7 +11797,7 @@
           "observationStart": "2026-06-26",
           "observationEnd": "2026-06-26",
           "carriedForward": true,
-          "staleDays": 10
+          "staleDays": 11
         },
         "WALCL": {
           "label": "Fed total assets",
@@ -11801,7 +11813,7 @@
           "observationStart": "2026-07-01",
           "observationEnd": "2026-07-01",
           "carriedForward": false,
-          "staleDays": 5
+          "staleDays": 6
         },
         "WRESBAL": {
           "label": "Reserve balances",
@@ -11817,7 +11829,7 @@
           "observationStart": "2026-07-01",
           "observationEnd": "2026-07-01",
           "carriedForward": false,
-          "staleDays": 5
+          "staleDays": 6
         },
         "WTREGEN": {
           "label": "Treasury General Account",
@@ -11833,7 +11845,7 @@
           "observationStart": "2026-07-01",
           "observationEnd": "2026-07-01",
           "carriedForward": false,
-          "staleDays": 5
+          "staleDays": 6
         },
         "RRPONTSYD": {
           "label": "Overnight reverse repo",
@@ -11841,13 +11853,13 @@
           "unit": "usd_billions",
           "source": "FRED / Federal Reserve Bank of New York",
           "dateMeaning": "daily_observation",
-          "start": 26.9,
-          "end": 2.719,
-          "change": -24.180999999999997,
+          "start": 1.001,
+          "end": 4.484,
+          "change": 3.483,
           "changeBp": null,
-          "pctChange": -89.89219330855019,
-          "observationStart": "2026-06-30",
-          "observationEnd": "2026-07-06",
+          "pctChange": 347.952047952048,
+          "observationStart": "2026-07-01",
+          "observationEnd": "2026-07-07",
           "carriedForward": false,
           "staleDays": 0
         }
