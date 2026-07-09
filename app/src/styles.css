@@ -2492,6 +2492,118 @@ html[lang="zh-CN"] .title-block h1 {
   line-height: 1.35;
 }
 
+.market-limit-section {
+  margin-top: 14px;
+}
+
+.market-limit-heading {
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.market-limit-heading > div {
+  max-width: 920px;
+}
+
+.market-limit-intro {
+  max-width: 860px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 720;
+  line-height: 1.55;
+}
+
+.market-limit-intro span {
+  display: block;
+}
+
+.market-limit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.market-limit-market {
+  min-width: 0;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.market-limit-market header {
+  min-height: 116px;
+  padding: 12px 13px;
+  border-bottom: 1px solid var(--soft-line);
+  background: #f3f3eb;
+}
+
+.market-limit-market h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.market-limit-market header p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.market-limit-market dl {
+  margin: 0;
+}
+
+.market-limit-market dl div {
+  display: grid;
+  grid-template-columns: minmax(80px, 0.34fr) minmax(0, 1fr);
+  min-height: 66px;
+  border-top: 1px solid var(--soft-line);
+}
+
+.market-limit-market dl div:first-child {
+  border-top: 0;
+}
+
+.market-limit-market dt,
+.market-limit-market dd {
+  min-width: 0;
+  margin: 0;
+  padding: 9px 10px;
+  line-height: 1.35;
+}
+
+.market-limit-market dt {
+  border-right: 1px solid var(--soft-line);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.market-limit-market dd {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.market-limit-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.market-limit-sources strong {
+  color: var(--ink);
+  font-weight: 900;
+}
+
 .chip-chain-page .title-block h1 span {
   color: #007d78;
 }
@@ -3642,6 +3754,14 @@ html[lang="zh-CN"] .data-trust-grid small {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .market-limit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .market-limit-market header {
+    min-height: 0;
+  }
+
   .chip-hotspot-summary,
   .chip-chain-board {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3963,6 +4083,21 @@ html[lang="zh-CN"] .data-trust-grid small {
 
   .market-clock-detail {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .market-limit-market dl div {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .market-limit-market dt {
+    border-right: 0;
+    border-bottom: 1px solid var(--soft-line);
+    padding-bottom: 5px;
+  }
+
+  .market-limit-market dd {
+    padding-top: 7px;
   }
 
   .chip-detail-band {

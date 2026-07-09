@@ -300,8 +300,101 @@ const MARKET_CLOCK_TEXT = {
   },
 };
 
+const MARKET_CLOCK_LIMITS = {
+  zh: {
+    kicker: "\u4ea4\u6613\u9636\u6bb5\u7ea6\u675f",
+    title: "\u975e\u52a0\u5bc6\u5e02\u573a\u5f00\u5e02\u9636\u6bb5\u9650\u5236",
+    note: "\u8fd9\u91cc\u5217\u51fa\u7684\u662f\u73b0\u91d1\u80a1\u7968\u5e02\u573a\u7684\u884c\u4e1a\u6027\u7ea6\u675f\uff0c\u7528\u4e8e\u89e3\u91ca\u201c\u5f00\u5e02\u201d\u4e0d\u7b49\u4e8e\u4efb\u610f\u65f6\u6bb5\u90fd\u6709\u6df1\u5ea6\u3001\u5168\u90e8\u8ba2\u5355\u7c7b\u578b\u548c\u53ef\u6bd4\u4ef7\u683c\u3002",
+    introLines: [
+      "\u8fd9\u91cc\u5217\u51fa\u7684\u662f\u73b0\u91d1\u80a1\u7968\u5e02\u573a\u7684\u884c\u4e1a\u6027\u7ea6\u675f\u3002",
+      "\u7528\u4e8e\u89e3\u91ca\u201c\u5f00\u5e02\u201d\u4e0d\u7b49\u4e8e\u4efb\u610f\u65f6\u6bb5\u90fd\u6709\u6df1\u5ea6\u3001\u5168\u90e8\u8ba2\u5355\u7c7b\u578b\u548c\u53ef\u6bd4\u4ef7\u683c\u3002",
+    ],
+    sourcesLabel: "\u89c4\u5219\u53c2\u8003",
+    sources: "NYSE / KRX / SSE / SZSE \u516c\u5f00\u4ea4\u6613\u65f6\u6bb5\u4e0e\u4ea4\u6613\u89c4\u5219\u3002",
+    markets: [
+      {
+        market: "\u7f8e\u56fd\u80a1\u5e02",
+        summary: "\u6838\u5fc3\u76d8\u4e3a 09:30-16:00 ET\u3002\u76d8\u524d\u76d8\u540e\u662f\u5ef6\u957f\u4ea4\u6613\uff1b\u9875\u9762\u4e2d\u7684\u591c\u76d8\u4e0d\u7b49\u540c\u4e8e\u4e3b\u6d41\u4ea4\u6613\u6240\u73b0\u91d1\u80a1\u7968\u6838\u5fc3\u76d8\u3002",
+        sessions: [
+          ["\u591c\u76d8", "\u4e0d\u662f\u4e3b\u6d41\u4ea4\u6613\u6240\u73b0\u91d1\u80a1\u7968\u7684\u884c\u4e1a\u901a\u7528\u6838\u5fc3\u65f6\u6bb5\uff1b\u82e5\u6709\u9694\u591c\u80a1\u7968\u8bbf\u95ee\uff0c\u901a\u5e38\u4f9d\u8d56\u5238\u5546\u3001ATS \u6216\u4ee3\u7406\u5408\u7ea6\uff0c\u6d41\u52a8\u6027\u3001\u6807\u7684\u548c\u8ba2\u5355\u7c7b\u578b\u5747\u53d7\u9650\u3002"],
+          ["\u76d8\u524d", "\u5c5e\u4e8e\u5ef6\u957f\u4ea4\u6613\uff0c\u53c2\u4e0e\u8005\u66f4\u5c11\u3001\u4ef7\u5dee\u53ef\u80fd\u66f4\u5bbd\uff1b\u53ef\u4ea4\u6613\u6807\u7684\u3001\u8ba2\u5355\u7c7b\u578b\u548c\u662f\u5426\u80fd\u6210\u4ea4\u53d6\u51b3\u4e8e\u573a\u6240\u548c\u5238\u5546\u3002"],
+          ["\u76d8\u4e2d", "\u8fd9\u662f\u4e3b\u8981\u8fde\u7eed\u4ea4\u6613\u65f6\u6bb5\uff0c\u5f00\u76d8\u548c\u6536\u76d8\u5468\u8fb9\u6709\u96c6\u5408\u7ade\u4ef7\u6216\u4e0d\u5e73\u8861\u51bb\u7ed3\u89c4\u5219\uff0c\u5e02\u573a\u6df1\u5ea6\u548c\u4ef7\u683c\u53d1\u73b0\u901a\u5e38\u6700\u5177\u53ef\u6bd4\u6027\u3002"],
+          ["\u76d8\u540e", "\u5c5e\u4e8e\u5ef6\u957f\u4ea4\u6613\uff0c\u5e76\u975e\u6240\u6709\u80a1\u7968\u3001\u8ba2\u5355\u6216\u6295\u8d44\u8005\u90fd\u4ee5\u76f8\u540c\u6761\u4ef6\u53c2\u4e0e\uff1b\u5ef6\u540e\u65f6\u6bb5\u7684\u4ef7\u683c\u4e0d\u4e00\u5b9a\u4ee3\u8868\u6b21\u65e5\u5e38\u89c4\u5f00\u76d8\u4ef7\u3002"],
+        ],
+      },
+      {
+        market: "\u97e9\u56fd\u80a1\u5e02",
+        summary: "\u73b0\u91d1\u80a1\u7968\u6b63\u5e38\u76d8\u4e3a 09:00-15:30 KST\uff0c\u5171 6.5 \u5c0f\u65f6\uff1b\u542b\u76d8\u524d\u548c\u76d8\u540e\u7684\u53ef\u4ea4\u6613\u7a97\u53e3\u7ea6 10 \u5c0f\u65f6 20 \u5206\uff0c\u4f46\u4e0d\u5b58\u5728\u7c7b\u4f3c\u7f8e\u80a1\u5ef6\u957f\u4ea4\u6613\u7684\u73b0\u91d1\u80a1\u7968\u591c\u76d8\u3002",
+        sessions: [
+          ["\u65e0\u591c\u76d8", "\u97e9\u80a1\u73b0\u91d1\u80a1\u7968\u6ca1\u6709\u4e3b\u6d41\u4ea4\u6613\u6240\u901a\u7528\u7684\u9694\u591c\u8fde\u7eed\u4ea4\u6613\u65f6\u6bb5\uff1b\u884d\u751f\u54c1\u6216\u6d77\u5916\u4ee3\u7406\u4ea7\u54c1\u82e5\u6709\u591c\u76d8\uff0c\u4e0d\u7b49\u4e8e KOSPI/KOSDAQ \u73b0\u91d1\u80a1\u7968\u3002"],
+          ["\u76d8\u524d", "\u5c5e\u4e8e\u79bb\u6563\u4ea4\u6613\u7a97\u53e3\uff0c\u4e0d\u662f\u5e38\u89c4\u8fde\u7eed\u7ade\u4ef7\uff1b\u76d8\u524d/\u76d8\u540e\u6536\u76d8\u4ef7\u4ea4\u6613\u9636\u6bb5\u4e0d\u63a5\u53d7\u5e02\u4ef7\u5355\u3001FOK \u6216 IOC \u6761\u4ef6\u5355\u3002"],
+          ["\u76d8\u4e2d", "\u4e3b\u8981\u4e3a\u8fde\u7eed\u7ade\u4ef7\uff0c\u5f00\u76d8/\u6536\u76d8\u6709\u5b9a\u65f6\u96c6\u5408\u7ade\u4ef7\uff1b\u80a1\u7968\u65e5\u6da8\u8dcc\u5e45\u9650\u5236\u901a\u5e38\u4e3a\u57fa\u51c6\u4ef7\u7684 \u00b130%\u3002"],
+          ["\u76d8\u540e", "\u5148\u6709\u6536\u76d8\u4ef7\u4ea4\u6613\uff0c\u540e\u6709\u5b9a\u65f6\u96c6\u5408\u7ade\u4ef7\uff1b\u4e0d\u662f\u81ea\u7531\u8fde\u7eed\u4ea4\u6613\uff0c\u5927\u5b97/\u7bee\u5b50\u4ea4\u6613\u8fd8\u6709\u6700\u4f4e\u6570\u91cf\u6216\u91d1\u989d\u95e8\u69db\u3002"],
+        ],
+      },
+      {
+        market: "\u4e2d\u56fd A \u80a1",
+        summary: "\u4e0a\u6df1\u4e3b\u6d41\u73b0\u91d1\u80a1\u7968\u4e3a\u65e5\u5185\u96c6\u5408\u7ade\u4ef7+\u5206\u6bb5\u8fde\u7eed\u7ade\u4ef7\uff0c\u6709\u5348\u95f4\u4f11\u5e02\uff0c\u666e\u904d\u4e0d\u5b58\u5728\u73b0\u91d1\u80a1\u7968\u591c\u76d8\u3002",
+        sessions: [
+          ["\u5f00\u76d8\u96c6\u5408\u7ade\u4ef7", "09:15-09:25 \u4e3a\u5f00\u76d8\u96c6\u5408\u7ade\u4ef7\uff0c\u6309\u6700\u5927\u6210\u4ea4\u91cf\u7b49\u539f\u5219\u5f62\u6210\u5f00\u76d8\u4ef7\uff1b\u4e0d\u662f\u8fde\u7eed\u6210\u4ea4\u3002"],
+          ["\u76d8\u4e2d", "09:30-11:30 \u548c 13:00-14:57 \u4e3a\u8fde\u7eed\u7ade\u4ef7\uff0c\u4e2d\u95f4\u5348\u4f11\uff1b\u591a\u6570\u80a1\u7968\u4ecd\u6709\u6da8\u8dcc\u5e45\u9650\u5236\uff0c\u4e14\u666e\u901a A \u80a1\u5e76\u4e0d\u5b9e\u884c\u65e5\u5185 T+0 \u56de\u8f6c\u4ea4\u6613\u3002"],
+          ["\u6536\u76d8\u96c6\u5408\u7ade\u4ef7", "14:57-15:00 \u4e3a\u6536\u76d8\u96c6\u5408\u7ade\u4ef7\uff0c\u7528\u4e8e\u5f62\u6210\u6536\u76d8\u4ef7\uff1b\u5f53\u524d\u9636\u6bb5\u7684\u6210\u4ea4\u65b9\u5f0f\u4e0e\u8fde\u7eed\u7ade\u4ef7\u4e0d\u540c\u3002"],
+          ["\u76d8\u540e", "\u4e3b\u677f\u73b0\u91d1\u80a1\u7968\u901a\u5e38\u6ca1\u6709\u9762\u5411\u666e\u901a\u8fde\u7eed\u7ade\u4ef7\u7684\u76d8\u540e\u7a97\u53e3\uff1b\u79d1\u521b\u677f/\u521b\u4e1a\u677f\u7b49\u677f\u5757\u6216\u5927\u5b97\u4ea4\u6613\u53ef\u80fd\u5b58\u5728\u76d8\u540e\u5b9a\u4ef7\u6216\u786e\u8ba4\u7a97\u53e3\uff0c\u8303\u56f4\u548c\u95e8\u69db\u53d7\u9650\u3002"],
+        ],
+      },
+    ],
+  },
+  en: {
+    kicker: "TRADING PHASE LIMITS",
+    title: "Non-Crypto Market Phase Limits",
+    note: "These are market-wide cash-equity constraints for mainstream venues, meant to explain that open status does not always mean deep liquidity, all order types, or regular-session price discovery.",
+    introLines: [
+      "These are market-wide cash-equity constraints for mainstream venues.",
+      "They explain why open status does not always mean deep liquidity, all order types, or regular-session price discovery.",
+    ],
+    sourcesLabel: "Rule references",
+    sources: "NYSE / KRX / SSE / SZSE public trading hours and trading rules.",
+    markets: [
+      {
+        market: "U.S. equities",
+        summary: "Core cash-equity trading is 9:30 a.m.-4:00 p.m. ET. Pre-market and after-hours are extended trading; the page's night phase should not be read as the mainstream exchange core cash-equity session.",
+        sessions: [
+          ["Night", "Not a mainstream-exchange cash-equity core session. Overnight stock access, when available, usually depends on broker, ATS, or proxy products, with limited liquidity, symbols, and order types."],
+          ["Pre-market", "Extended-hours trading has fewer participants and can have wider spreads. Eligible symbols, order types, and execution depend on venue and broker access."],
+          ["Regular", "The primary continuous session, with opening and closing auctions around the boundaries. Market depth and price discovery are usually most comparable here."],
+          ["After-hours", "Extended-hours trading is not available for every security, order type, or investor on equal terms. Late-session prices may not represent the next regular open."],
+        ],
+      },
+      {
+        market: "Korea equities",
+        summary: "KRX cash equities trade 9:00 a.m.-3:30 p.m. KST in the regular session, or 6.5 hours. Including pre- and after-hours windows gives about 10h20m of tradable windows, but Korea cash equities do not have a U.S.-style overnight session.",
+        sessions: [
+          ["No night", "Mainstream KOSPI/KOSDAQ cash equities do not have an overnight continuous session. Derivatives or overseas proxy products are not the same as local cash-equity trading."],
+          ["Pre-hours", "An off-hours window, not the regular continuous auction. Pre/after-hours closing-price trade does not accept market, FOK, or IOC orders."],
+          ["Regular", "Mainly continuous auction, with opening and closing call auctions. Daily price limits for stocks are generally +/-30% of the base price."],
+          ["After-hours", "Closing-price trading is followed by periodic call auction. It is not free continuous trading; block/basket trades also have minimum size or value thresholds."],
+        ],
+      },
+      {
+        market: "China A-shares",
+        summary: "Mainland cash equities use call auction plus split continuous-auction sessions with a lunch break. Mainstream cash equities generally do not have an overnight session.",
+        sessions: [
+          ["Opening call", "9:15-9:25 is call auction. The opening price is formed by call-auction principles rather than continuous matching."],
+          ["Regular", "9:30-11:30 and 13:00-14:57 are continuous auction with a lunch break. Most stocks still have price limits, and ordinary A-shares generally do not allow same-day T+0 turnaround trading."],
+          ["Closing call", "14:57-15:00 is closing call auction, a distinct mechanism for forming the close rather than regular continuous matching."],
+          ["After-hours", "Main Board cash equities generally do not have a broad public continuous after-hours session. STAR/ChiNext-style boards or block trades may have fixed-price or confirmation windows with scope and threshold limits."],
+        ],
+      },
+    ],
+  },
+};
+
 function marketClockCopy(t) {
-  return t.htmlLang === "zh-CN" ? MARKET_CLOCK_TEXT.zh : MARKET_CLOCK_TEXT.en;
+  const language = t.htmlLang === "zh-CN" ? "zh" : "en";
+  return {
+    ...MARKET_CLOCK_TEXT[language],
+    tradingLimits: MARKET_CLOCK_LIMITS[language],
+  };
 }
 
 const CHIP_CHAIN_TEXT = {
@@ -5423,6 +5516,49 @@ function MarketClockDetail({ selected, copy, language }) {
   );
 }
 
+function MarketClockTradingLimits({ copy }) {
+  const tradingLimits = copy.tradingLimits;
+  if (!tradingLimits?.markets?.length) return null;
+
+  return (
+    <section className="visualization market-limit-section" aria-label={tradingLimits.title}>
+      <div className="visualization-heading market-limit-heading">
+        <div>
+          <p>{tradingLimits.kicker}</p>
+          <h2>{tradingLimits.title}</h2>
+          <p className="market-limit-intro">
+            {(tradingLimits.introLines || [tradingLimits.note]).map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </p>
+        </div>
+      </div>
+      <div className="market-limit-grid">
+        {tradingLimits.markets.map((market) => (
+          <article className="market-limit-market" key={market.market}>
+            <header>
+              <h3>{market.market}</h3>
+              <p>{market.summary}</p>
+            </header>
+            <dl>
+              {market.sessions.map(([label, limit]) => (
+                <div key={`${market.market}-${label}`}>
+                  <dt>{label}</dt>
+                  <dd>{limit}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))}
+      </div>
+      <p className="market-limit-sources">
+        <strong>{tradingLimits.sourcesLabel}</strong>
+        <span>{tradingLimits.sources}</span>
+      </p>
+    </section>
+  );
+}
+
 function MarketClockPage({ language, setLanguage, t }) {
   const copy = marketClockCopy(t);
   const [dataset, setDataset] = useState(null);
@@ -5523,6 +5659,8 @@ function MarketClockPage({ language, setLanguage, t }) {
 
       <MarketClockDetail selected={selected} copy={copy} language={language} />
 
+      <MarketClockTradingLimits copy={copy} />
+
       <DataTrustFooter
         t={t}
         language={language}
@@ -5532,9 +5670,10 @@ function MarketClockPage({ language, setLanguage, t }) {
           "OKX public market data",
           "CoinMarketCap market caps",
           "Local session clock rules",
+          copy.tradingLimits.sources,
         ]}
         methodology={copy.methodology || dataset.methodology}
-        limitations={copy.sourceNote}
+        limitations={[copy.sourceNote, copy.tradingLimits.note]}
       />
     </main>
   );
