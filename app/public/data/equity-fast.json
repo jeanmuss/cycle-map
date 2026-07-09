@@ -1,22 +1,22 @@
 {
   "version": 1,
   "page": "equity-fast",
-  "generatedAt": "2026-07-08T23:35:21Z",
+  "generatedAt": "2026-07-09T23:44:38Z",
   "refreshCadence": "Target 15 minutes for fast indicators; provider schedules and static deployment queues can add delay.",
   "baseDataset": {
     "file": "equity-weekly.json",
-    "generatedAt": "2026-07-08T23:35:20Z"
+    "generatedAt": "2026-07-09T23:44:38Z"
   },
   "methodology": "Fast indicators are generated separately from the slower equity calendar cache. CMC supplies crypto market capitalization; FRED supplies a gold price proxy index because the old LBMA gold fix series is not available in the current FRED API. The frontend reads this static derived JSON and never receives provider credentials.",
   "metrics": [
     {
       "id": "BTC_MARKET_CAP",
       "label": "BTC market cap",
-      "value": 1247050329798.4653,
+      "value": 1267970218344.4924,
       "unit": "USD",
       "previous": null,
-      "changePct": -2.11072949,
-      "asOf": "2026-07-08T23:34:05.000Z",
+      "changePct": 1.70093702,
+      "asOf": "2026-07-09T23:43:05.000Z",
       "sourceLabel": "CoinMarketCap cryptocurrency quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest",
       "quality": "fresh"
@@ -24,11 +24,11 @@
     {
       "id": "CRYPTO_MARKET_CAP",
       "label": "Total crypto market cap",
-      "value": 2146347738133.9353,
+      "value": 2169083985193.2131,
       "unit": "USD",
-      "previous": 2187872911798.739,
-      "changePct": -1.8979701,
-      "asOf": "2026-07-08T23:33:59.999Z",
+      "previous": 2146038818764.4897,
+      "changePct": 1.07384667,
+      "asOf": "2026-07-09T23:42:59.999Z",
       "sourceLabel": "CoinMarketCap global-metrics/quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest",
       "quality": "fresh"
@@ -36,11 +36,11 @@
     {
       "id": "GOLD_PRICE_PROXY",
       "label": "Gold price proxy",
-      "value": 2589.84,
+      "value": 2569.93,
       "unit": "index",
-      "previous": 2621.23,
-      "changePct": -1.1975294041346953,
-      "asOf": "2026-07-07",
+      "previous": 2589.84,
+      "changePct": -0.7687733605164917,
+      "asOf": "2026-07-08",
       "sourceLabel": "FRED / Credit Suisse NASDAQ Gold FLOWS103 Price Index",
       "sourceUrl": "https://fred.stlouisfed.org/series/NASDAQQGLDI",
       "quality": "fresh"
