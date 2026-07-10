@@ -2,15 +2,15 @@
   "version": 2,
   "page": "equity-macro",
   "timezone": "America/New_York for trading dates; FRED observations use provider dates",
-  "generatedAt": "2026-07-09T23:44:38Z",
+  "generatedAt": "2026-07-10T23:27:09Z",
   "window": {
     "months": 6,
-    "startDate": "2026-01-09",
-    "endDate": "2026-07-09"
+    "startDate": "2026-01-10",
+    "endDate": "2026-07-10"
   },
   "market": {
     "timezone": "America/New_York",
-    "date": "2026-07-09",
+    "date": "2026-07-10",
     "isMarketDay": true,
     "isOpen": false,
     "session": "closed",
@@ -28,8 +28,8 @@
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
       "cacheStatus": "fresh",
-      "rows": 131,
-      "firstDate": "2025-12-30",
+      "rows": 130,
+      "firstDate": "2025-12-31",
       "lastDate": "2026-07-09"
     },
     "SPY": {
@@ -40,9 +40,9 @@
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
       "cacheStatus": "fresh",
-      "rows": 130,
-      "firstDate": "2025-12-30",
-      "lastDate": "2026-07-08"
+      "rows": 131,
+      "firstDate": "2025-12-31",
+      "lastDate": "2026-07-10"
     },
     "DIA": {
       "symbol": "DIA",
@@ -52,8 +52,8 @@
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
       "cacheStatus": "fresh",
-      "rows": 131,
-      "firstDate": "2025-12-30",
+      "rows": 130,
+      "firstDate": "2025-12-31",
       "lastDate": "2026-07-09"
     }
   },
@@ -76,7 +76,7 @@
     "cache": "tmp/equity-cache"
   },
   "latest": {
-    "date": "2026-07-09",
+    "date": "2026-07-10",
     "assets": {
       "QQQ": {
         "symbol": "QQQ",
@@ -87,19 +87,19 @@
         "close": 723.28,
         "price": 723.28,
         "pct": 0.6890983252822424,
-        "volume": 33605714.0,
+        "volume": 33654712.0,
         "priceType": "close"
       },
       "SPY": {
         "symbol": "SPY",
-        "date": "2026-07-08",
-        "open": 743.16,
-        "high": 746.15,
-        "low": 739.51,
-        "close": 745.4,
-        "price": 745.4,
-        "pct": 0.3014155767264128,
-        "volume": 43767338.0,
+        "date": "2026-07-10",
+        "open": 752.05,
+        "high": 755.42,
+        "low": 748.1,
+        "close": 754.95,
+        "price": 754.95,
+        "pct": 0.38561265873280914,
+        "volume": 42132549.0,
         "priceType": "close"
       },
       "DIA": {
@@ -111,91 +111,30 @@
         "close": 524.19,
         "price": 524.19,
         "pct": 0.10312231452307406,
-        "volume": 3054012.0,
+        "volume": 3056449.0,
         "priceType": "close"
       }
     },
     "macro": {
       "DGS10": {
-        "date": "2026-07-08",
-        "value": 4.56,
-        "previous": 4.55,
-        "change": 0.009999999999999787,
-        "changeBp": 0.9999999999999787,
+        "date": "2026-07-09",
+        "value": 4.54,
+        "previous": 4.56,
+        "change": -0.019999999999999574,
+        "changeBp": -1.9999999999999574,
         "carriedForward": true
       },
       "VIXCLS": {
-        "date": "2026-07-08",
-        "value": 16.9,
-        "previous": 16.13,
-        "change": 0.7699999999999996,
-        "changeBp": 76.99999999999996,
+        "date": "2026-07-09",
+        "value": 15.84,
+        "previous": 16.9,
+        "change": -1.0599999999999987,
+        "changeBp": -105.99999999999987,
         "carriedForward": true
       }
     }
   },
   "days": [
-    {
-      "date": "2026-01-09",
-      "dayOfWeek": 4,
-      "isMarketDay": true,
-      "assets": {
-        "QQQ": {
-          "symbol": "QQQ",
-          "date": "2026-01-09",
-          "open": 621.41,
-          "high": 627.89,
-          "low": 619.06,
-          "close": 626.65,
-          "price": 626.65,
-          "pct": 0.8432435911877841,
-          "volume": 49688591.0,
-          "priceType": "close"
-        },
-        "SPY": {
-          "symbol": "SPY",
-          "date": "2026-01-09",
-          "open": 690.63,
-          "high": 695.31,
-          "low": 689.18,
-          "close": 694.07,
-          "price": 694.07,
-          "pct": 0.4980959413868576,
-          "volume": 80125467.0,
-          "priceType": "close"
-        },
-        "DIA": {
-          "symbol": "DIA",
-          "date": "2026-01-09",
-          "open": 492.86,
-          "high": 495.695,
-          "low": 491.91,
-          "close": 495.02,
-          "price": 495.02,
-          "pct": 0.4382583289372171,
-          "volume": 6004549.0,
-          "priceType": "close"
-        }
-      },
-      "macro": {
-        "DGS10": {
-          "date": "2026-01-09",
-          "value": 4.18,
-          "previous": 4.19,
-          "change": -0.010000000000000675,
-          "changeBp": -1.0000000000000675,
-          "carriedForward": false
-        },
-        "VIXCLS": {
-          "date": "2026-01-09",
-          "value": 14.49,
-          "previous": 15.45,
-          "change": -0.9599999999999991,
-          "changeBp": -95.99999999999991,
-          "carriedForward": false
-        }
-      }
-    },
     {
       "date": "2026-01-10",
       "dayOfWeek": 5,
@@ -8464,10 +8403,21 @@
           "close": 723.28,
           "price": 723.28,
           "pct": 0.6890983252822424,
-          "volume": 33605714.0,
+          "volume": 33654712.0,
           "priceType": "close"
         },
-        "SPY": null,
+        "SPY": {
+          "symbol": "SPY",
+          "date": "2026-07-09",
+          "open": 747.35,
+          "high": 751.97,
+          "low": 745.59,
+          "close": 751.71,
+          "price": 751.71,
+          "pct": 0.5833946611360158,
+          "volume": 41441718.0,
+          "priceType": "close"
+        },
         "DIA": {
           "symbol": "DIA",
           "date": "2026-07-09",
@@ -8477,25 +8427,64 @@
           "close": 524.19,
           "price": 524.19,
           "pct": 0.10312231452307406,
-          "volume": 3054012.0,
+          "volume": 3056449.0,
           "priceType": "close"
         }
       },
       "macro": {
         "DGS10": {
-          "date": "2026-07-08",
-          "value": 4.56,
-          "previous": 4.55,
-          "change": 0.009999999999999787,
-          "changeBp": 0.9999999999999787,
+          "date": "2026-07-09",
+          "value": 4.54,
+          "previous": 4.56,
+          "change": -0.019999999999999574,
+          "changeBp": -1.9999999999999574,
+          "carriedForward": false
+        },
+        "VIXCLS": {
+          "date": "2026-07-09",
+          "value": 15.84,
+          "previous": 16.9,
+          "change": -1.0599999999999987,
+          "changeBp": -105.99999999999987,
+          "carriedForward": false
+        }
+      }
+    },
+    {
+      "date": "2026-07-10",
+      "dayOfWeek": 4,
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": {
+          "symbol": "SPY",
+          "date": "2026-07-10",
+          "open": 752.05,
+          "high": 755.42,
+          "low": 748.1,
+          "close": 754.95,
+          "price": 754.95,
+          "pct": 0.38561265873280914,
+          "volume": 42132549.0,
+          "priceType": "close"
+        },
+        "DIA": null
+      },
+      "macro": {
+        "DGS10": {
+          "date": "2026-07-09",
+          "value": 4.54,
+          "previous": 4.56,
+          "change": -0.019999999999999574,
+          "changeBp": -1.9999999999999574,
           "carriedForward": true
         },
         "VIXCLS": {
-          "date": "2026-07-08",
-          "value": 16.9,
-          "previous": 16.13,
-          "change": 0.7699999999999996,
-          "changeBp": 76.99999999999996,
+          "date": "2026-07-09",
+          "value": 15.84,
+          "previous": 16.9,
+          "change": -1.0599999999999987,
+          "changeBp": -105.99999999999987,
           "carriedForward": true
         }
       }
