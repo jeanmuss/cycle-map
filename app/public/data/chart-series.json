@@ -1,7 +1,7 @@
 {
   "version": 1,
   "page": "chart-series",
-  "generatedAt": "2026-07-10T23:27:24.018Z",
+  "generatedAt": "2026-07-11T05:24:48.865Z",
   "windows": [
     {
       "value": "1d",
@@ -68,8 +68,8 @@
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
       "first": "2026-01-12",
-      "last": "2026-07-09",
-      "points": 123
+      "last": "2026-07-10",
+      "points": 124
     },
     "equity.QQQ.return": {
       "precision": 2,
@@ -85,8 +85,8 @@
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
       "first": "2026-01-12",
-      "last": "2026-07-09",
-      "points": 123
+      "last": "2026-07-10",
+      "points": 124
     },
     "equity.SPY.close": {
       "precision": 2,
@@ -136,8 +136,8 @@
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
       "first": "2026-01-12",
-      "last": "2026-07-09",
-      "points": 123
+      "last": "2026-07-10",
+      "points": 124
     },
     "equity.DIA.return": {
       "precision": 2,
@@ -153,8 +153,8 @@
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
       "first": "2026-01-12",
-      "last": "2026-07-09",
-      "points": 123
+      "last": "2026-07-10",
+      "points": 124
     },
     "macro.DGS10.value": {
       "precision": 2,
@@ -170,9 +170,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 382
+      "points": 381
     },
     "macro.VIXCLS.value": {
       "precision": 2,
@@ -188,9 +188,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 395
+      "points": 394
     },
     "macro.CPIAUCSL.value": {
       "precision": 2,
@@ -530,9 +530,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-28",
       "last": "2026-07-10",
-      "points": 561
+      "points": 560
     },
     "macro.DFEDTARL.value": {
       "precision": 2,
@@ -548,9 +548,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-28",
       "last": "2026-07-10",
-      "points": 561
+      "points": 560
     },
     "macro.DFF.value": {
       "precision": 2,
@@ -566,9 +566,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-28",
       "last": "2026-07-09",
-      "points": 560
+      "points": 559
     },
     "macro.DGS2.value": {
       "precision": 2,
@@ -584,9 +584,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 382
+      "points": 381
     },
     "macro.DFII10.value": {
       "precision": 2,
@@ -602,9 +602,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 382
+      "points": 381
     },
     "macro.T10YIE.value": {
       "precision": 2,
@@ -620,9 +620,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-10",
-      "points": 383
+      "points": 382
     },
     "macro.DTWEXBGS.value": {
       "precision": 2,
@@ -638,9 +638,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-02",
-      "points": 379
+      "points": 378
     },
     "macro.DEXJPUS.value": {
       "precision": 2,
@@ -656,9 +656,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-02",
-      "points": 379
+      "points": 378
     },
     "macro.DEXCHUS.value": {
       "precision": 2,
@@ -674,9 +674,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-02",
-      "points": 379
+      "points": 378
     },
     "macro.BAMLC0A0CM.value": {
       "precision": 2,
@@ -692,9 +692,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 402
+      "points": 401
     },
     "macro.BAMLH0A0HYM2.value": {
       "precision": 2,
@@ -710,9 +710,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-09",
-      "points": 402
+      "points": 401
     },
     "macro.STLFSI4.value": {
       "precision": 2,
@@ -728,9 +728,9 @@
       "dateMeaning": "observation_week",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-27",
+      "first": "2025-01-03",
       "last": "2026-07-03",
-      "points": 80
+      "points": 79
     },
     "macro.WALCL.value": {
       "precision": 2,
@@ -800,9 +800,9 @@
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2024-12-27",
+      "first": "2024-12-30",
       "last": "2026-07-10",
-      "points": 382
+      "points": 381
     },
     "macro.NET_LIQUIDITY.value": {
       "precision": 2,
@@ -902,9 +902,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 255
+      "points": 254
     },
     "chain.chip.AMAT.price": {
       "precision": 2,
@@ -919,9 +919,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 246
+      "points": 245
     },
     "chain.chip.LRCX.price": {
       "precision": 2,
@@ -936,9 +936,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 238
+      "points": 237
     },
     "chain.chip.GLW.price": {
       "precision": 2,
@@ -953,9 +953,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 246
+      "points": 245
     },
     "chain.chip.TSM.price": {
       "precision": 2,
@@ -970,9 +970,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:35:00Z",
-      "points": 261
+      "points": 260
     },
     "chain.chip.INTC.price": {
       "precision": 2,
@@ -987,9 +987,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:20:00Z",
-      "points": 263
+      "points": 262
     },
     "chain.chip.MU.price": {
       "precision": 2,
@@ -1004,9 +1004,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:50:00Z",
-      "points": 287
+      "points": 286
     },
     "chain.chip.WDC.price": {
       "precision": 2,
@@ -1021,9 +1021,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 246
+      "points": 245
     },
     "chain.chip.SNDK.price": {
       "precision": 2,
@@ -1038,9 +1038,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:30:00Z",
-      "points": 267
+      "points": 266
     },
     "chain.chip.DRAM.price": {
       "precision": 2,
@@ -1072,9 +1072,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 255
+      "points": 254
     },
     "chain.chip.AMD.price": {
       "precision": 2,
@@ -1089,9 +1089,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:10:00Z",
-      "points": 247
+      "points": 246
     },
     "chain.chip.ARM.price": {
       "precision": 2,
@@ -1106,9 +1106,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:05:00Z",
-      "points": 232
+      "points": 231
     },
     "chain.chip.AVGO.price": {
       "precision": 2,
@@ -1123,9 +1123,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:15:00Z",
-      "points": 252
+      "points": 251
     },
     "chain.chip.COHR.price": {
       "precision": 2,
@@ -1140,9 +1140,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:05:00Z",
-      "points": 251
+      "points": 250
     },
     "chain.chip.MRVL.price": {
       "precision": 2,
@@ -1157,9 +1157,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:55:00Z",
-      "points": 255
+      "points": 254
     },
     "chain.chip.NOK.price": {
       "precision": 2,
@@ -1174,9 +1174,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:00:00Z",
-      "points": 278
+      "points": 277
     },
     "chain.chip.SMCI.price": {
       "precision": 2,
@@ -1191,9 +1191,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 242
+      "points": 241
     },
     "chain.chip.DELL.price": {
       "precision": 2,
@@ -1208,9 +1208,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 238
+      "points": 237
     },
     "chain.chip.VRT.price": {
       "precision": 2,
@@ -1225,9 +1225,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 244
+      "points": 243
     },
     "chain.chip.IBM.price": {
       "precision": 2,
@@ -1242,9 +1242,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 234
+      "points": 233
     },
     "chain.chip.AAPL.price": {
       "precision": 2,
@@ -1259,9 +1259,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 256
+      "points": 255
     },
     "chain.chip.TSLA.price": {
       "precision": 2,
@@ -1276,9 +1276,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:05:00Z",
-      "points": 256
+      "points": 255
     },
     "chain.chip.POET.price": {
       "precision": 2,
@@ -1293,9 +1293,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 241
+      "points": 240
     },
     "chain.chip.LITE.price": {
       "precision": 2,
@@ -1310,9 +1310,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 241
+      "points": 240
     },
     "chain.chip.AAOI.price": {
       "precision": 2,
@@ -1327,9 +1327,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 242
+      "points": 241
     },
     "chain.chip.AMZN.price": {
       "precision": 2,
@@ -1344,9 +1344,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 243
+      "points": 242
     },
     "chain.chip.NBIS.price": {
       "precision": 2,
@@ -1361,9 +1361,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "芯片链",
       "categoryLabelEn": "Chip chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:00:00Z",
-      "points": 250
+      "points": 249
     },
     "chain.robot.NVDA.price": {
       "precision": 2,
@@ -1378,9 +1378,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 255
+      "points": 254
     },
     "chain.robot.CGNX.price": {
       "precision": 2,
@@ -1395,9 +1395,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 229
+      "points": 228
     },
     "chain.robot.OUST.price": {
       "precision": 2,
@@ -1412,9 +1412,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:40:00Z",
-      "points": 241
+      "points": 240
     },
     "chain.robot.ZBRA.price": {
       "precision": 2,
@@ -1429,9 +1429,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 223
+      "points": 222
     },
     "chain.robot.AMBA.price": {
       "precision": 2,
@@ -1446,9 +1446,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 208
+      "points": 207
     },
     "chain.robot.LSCC.price": {
       "precision": 2,
@@ -1463,9 +1463,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 219
+      "points": 218
     },
     "chain.robot.INDI.price": {
       "precision": 2,
@@ -1480,9 +1480,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 235
+      "points": 234
     },
     "chain.robot.ROK.price": {
       "precision": 2,
@@ -1497,9 +1497,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 237
+      "points": 236
     },
     "chain.robot.TER.price": {
       "precision": 2,
@@ -1514,9 +1514,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 237
+      "points": 236
     },
     "chain.robot.NOVT.price": {
       "precision": 2,
@@ -1531,9 +1531,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 199
+      "points": 198
     },
     "chain.robot.MBLY.price": {
       "precision": 2,
@@ -1548,9 +1548,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 238
+      "points": 237
     },
     "chain.robot.AUR.price": {
       "precision": 2,
@@ -1565,9 +1565,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 238
+      "points": 237
     },
     "chain.robot.TSLA.price": {
       "precision": 2,
@@ -1582,9 +1582,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T20:05:00Z",
-      "points": 256
+      "points": 255
     },
     "chain.robot.SYM.price": {
       "precision": 2,
@@ -1599,9 +1599,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 220
+      "points": 219
     },
     "chain.robot.SERV.price": {
       "precision": 2,
@@ -1616,9 +1616,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 231
+      "points": 230
     },
     "chain.robot.ISRG.price": {
       "precision": 2,
@@ -1633,9 +1633,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 236
+      "points": 235
     },
     "chain.robot.PRCT.price": {
       "precision": 2,
@@ -1650,9 +1650,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 229
+      "points": 228
     },
     "chain.robot.AVAV.price": {
       "precision": 2,
@@ -1667,9 +1667,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 222
+      "points": 221
     },
     "chain.robot.ROBO.price": {
       "precision": 2,
@@ -1684,9 +1684,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 148
+      "points": 147
     },
     "chain.robot.BOTZ.price": {
       "precision": 2,
@@ -1701,9 +1701,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T19:55:00Z",
-      "points": 220
+      "points": 219
     },
     "chain.robot.ARKQ.price": {
       "precision": 2,
@@ -1718,9 +1718,9 @@
       "source": "Alpaca iex stock bars",
       "categoryLabelZh": "机器人链",
       "categoryLabelEn": "Robot chain",
-      "first": "2026-03-13T04:00:00Z",
+      "first": "2026-03-16T04:00:00Z",
       "last": "2026-07-10T14:30:00Z",
-      "points": 125
+      "points": 124
     }
   },
   "series": {
@@ -2216,6 +2216,10 @@
       {
         "t": "2026-07-09",
         "v": 723.28
+      },
+      {
+        "t": "2026-07-10",
+        "v": 725.51
       }
     ],
     "equity.QQQ.return": [
@@ -2710,6 +2714,10 @@
       {
         "t": "2026-07-09",
         "v": 0.6890983252822424
+      },
+      {
+        "t": "2026-07-10",
+        "v": 0.6674066879422708
       }
     ],
     "equity.SPY.close": [
@@ -4200,6 +4208,10 @@
       {
         "t": "2026-07-09",
         "v": 524.19
+      },
+      {
+        "t": "2026-07-10",
+        "v": 525.78
       }
     ],
     "equity.DIA.return": [
@@ -4694,13 +4706,13 @@
       {
         "t": "2026-07-09",
         "v": 0.10312231452307406
+      },
+      {
+        "t": "2026-07-10",
+        "v": 0.026634198310628254
       }
     ],
     "macro.DGS10.value": [
-      {
-        "t": "2024-12-27",
-        "v": 4.62
-      },
       {
         "t": "2024-12-30",
         "v": 4.55
@@ -6227,10 +6239,6 @@
       }
     ],
     "macro.VIXCLS.value": [
-      {
-        "t": "2024-12-27",
-        "v": 15.95
-      },
       {
         "t": "2024-12-30",
         "v": 17.4
@@ -9290,10 +9298,6 @@
     ],
     "macro.DFEDTARU.value": [
       {
-        "t": "2024-12-27",
-        "v": 4.5
-      },
-      {
         "t": "2024-12-28",
         "v": 4.5
       },
@@ -11535,10 +11539,6 @@
       }
     ],
     "macro.DFEDTARL.value": [
-      {
-        "t": "2024-12-27",
-        "v": 4.25
-      },
       {
         "t": "2024-12-28",
         "v": 4.25
@@ -13782,10 +13782,6 @@
     ],
     "macro.DFF.value": [
       {
-        "t": "2024-12-27",
-        "v": 4.33
-      },
-      {
         "t": "2024-12-28",
         "v": 4.33
       },
@@ -16024,10 +16020,6 @@
     ],
     "macro.DGS2.value": [
       {
-        "t": "2024-12-27",
-        "v": 4.31
-      },
-      {
         "t": "2024-12-30",
         "v": 4.24
       },
@@ -17554,10 +17546,6 @@
     ],
     "macro.DFII10.value": [
       {
-        "t": "2024-12-27",
-        "v": 2.28
-      },
-      {
         "t": "2024-12-30",
         "v": 2.24
       },
@@ -19083,10 +19071,6 @@
       }
     ],
     "macro.T10YIE.value": [
-      {
-        "t": "2024-12-27",
-        "v": 2.34
-      },
       {
         "t": "2024-12-30",
         "v": 2.31
@@ -20618,10 +20602,6 @@
     ],
     "macro.DTWEXBGS.value": [
       {
-        "t": "2024-12-27",
-        "v": 128.45
-      },
-      {
         "t": "2024-12-30",
         "v": 128.8205
       },
@@ -22135,10 +22115,6 @@
       }
     ],
     "macro.DEXJPUS.value": [
-      {
-        "t": "2024-12-27",
-        "v": 157.73
-      },
       {
         "t": "2024-12-30",
         "v": 157.26
@@ -23654,10 +23630,6 @@
     ],
     "macro.DEXCHUS.value": [
       {
-        "t": "2024-12-27",
-        "v": 7.298
-      },
-      {
         "t": "2024-12-30",
         "v": 7.2993
       },
@@ -25171,10 +25143,6 @@
       }
     ],
     "macro.BAMLC0A0CM.value": [
-      {
-        "t": "2024-12-27",
-        "v": 0.81
-      },
       {
         "t": "2024-12-30",
         "v": 0.82
@@ -26782,10 +26750,6 @@
     ],
     "macro.BAMLH0A0HYM2.value": [
       {
-        "t": "2024-12-27",
-        "v": 2.84
-      },
-      {
         "t": "2024-12-30",
         "v": 2.94
       },
@@ -28392,10 +28356,6 @@
     ],
     "macro.STLFSI4.value": [
       {
-        "t": "2024-12-27",
-        "v": -0.6188
-      },
-      {
         "t": "2025-01-03",
         "v": -0.6163
       },
@@ -29679,10 +29639,6 @@
       }
     ],
     "macro.RRPONTSYD.value": [
-      {
-        "t": "2024-12-27",
-        "v": 268.739
-      },
       {
         "t": "2024-12-30",
         "v": 260.743
@@ -32820,10 +32776,6 @@
     ],
     "chain.chip.ASML.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 1346.63
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 1376.39
       },
@@ -33842,10 +33794,6 @@
     ],
     "chain.chip.AMAT.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 341.26
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 346.4
       },
@@ -34828,10 +34776,6 @@
     ],
     "chain.chip.LRCX.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 212.09
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 219.525
       },
@@ -35781,10 +35725,6 @@
       }
     ],
     "chain.chip.GLW.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 129.08
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 132.045
@@ -36767,10 +36707,6 @@
       }
     ],
     "chain.chip.TSM.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 338.41
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 340.16
@@ -37813,10 +37749,6 @@
       }
     ],
     "chain.chip.INTC.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 45.8
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 45.745
@@ -38867,10 +38799,6 @@
       }
     ],
     "chain.chip.MU.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 426.115
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 441.87
@@ -40018,10 +39946,6 @@
     ],
     "chain.chip.WDC.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 272.29
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 286.35
       },
@@ -41003,10 +40927,6 @@
       }
     ],
     "chain.chip.SNDK.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 661.48
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 704.36
@@ -43112,10 +43032,6 @@
     ],
     "chain.chip.NVDA.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 180.21
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 183.17
       },
@@ -44134,10 +44050,6 @@
     ],
     "chain.chip.AMD.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 193.41
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 196.66
       },
@@ -45124,10 +45036,6 @@
     ],
     "chain.chip.ARM.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 115.78
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 121.72
       },
@@ -46053,10 +45961,6 @@
       }
     ],
     "chain.chip.AVGO.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 322.15
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 325
@@ -47064,10 +46968,6 @@
     ],
     "chain.chip.COHR.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 242.82
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 247.41
       },
@@ -48069,10 +47969,6 @@
       }
     ],
     "chain.chip.MRVL.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 87.86
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 91.56
@@ -49091,10 +48987,6 @@
       }
     ],
     "chain.chip.NOK.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 8.23
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 8.65
@@ -50206,10 +50098,6 @@
     ],
     "chain.chip.SMCI.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 30.77
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 31.85
       },
@@ -51176,10 +51064,6 @@
     ],
     "chain.chip.DELL.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 151.585
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 156.6
       },
@@ -52129,10 +52013,6 @@
       }
     ],
     "chain.chip.VRT.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 258.995
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 264.76
@@ -53108,10 +52988,6 @@
     ],
     "chain.chip.IBM.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 246.27
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 249.29
       },
@@ -54045,10 +53921,6 @@
       }
     ],
     "chain.chip.AAPL.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 250.035
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 252.82
@@ -55072,10 +54944,6 @@
     ],
     "chain.chip.TSLA.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 391.13
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 395.64
       },
@@ -56098,10 +55966,6 @@
     ],
     "chain.chip.POET.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 6.83
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 6.9
       },
@@ -57064,10 +56928,6 @@
     ],
     "chain.chip.LITE.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 622.14
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 625.38
       },
@@ -58029,10 +57889,6 @@
       }
     ],
     "chain.chip.AAOI.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 96.97
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 93.95
@@ -58999,10 +58855,6 @@
       }
     ],
     "chain.chip.AMZN.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 207.7
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 211.775
@@ -59973,10 +59825,6 @@
       }
     ],
     "chain.chip.NBIS.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 112.855
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 129.795
@@ -60975,10 +60823,6 @@
       }
     ],
     "chain.robot.NVDA.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 180.21
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 183.17
@@ -61998,10 +61842,6 @@
     ],
     "chain.robot.CGNX.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 47.96
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 49.57
       },
@@ -62915,10 +62755,6 @@
       }
     ],
     "chain.robot.OUST.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 21.47
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 21.32
@@ -63882,10 +63718,6 @@
     ],
     "chain.robot.ZBRA.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 202.75
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 203.85
       },
@@ -64776,10 +64608,6 @@
     ],
     "chain.robot.AMBA.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 52.27
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 52.39
       },
@@ -65609,10 +65437,6 @@
       }
     ],
     "chain.robot.LSCC.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 85.77
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 89.98
@@ -66487,10 +66311,6 @@
       }
     ],
     "chain.robot.INDI.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 2.49
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 2.58
@@ -67429,10 +67249,6 @@
       }
     ],
     "chain.robot.ROK.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 361.05
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 364.095
@@ -68380,10 +68196,6 @@
     ],
     "chain.robot.TER.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 286.51
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 298.285
       },
@@ -69330,10 +69142,6 @@
     ],
     "chain.robot.NOVT.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 116.77
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 118.095
       },
@@ -70127,10 +69935,6 @@
       }
     ],
     "chain.robot.MBLY.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 7.585
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 7.94
@@ -71082,10 +70886,6 @@
     ],
     "chain.robot.AUR.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 4.08
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 4.23
       },
@@ -72035,10 +71835,6 @@
       }
     ],
     "chain.robot.TSLA.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 391.13
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 395.64
@@ -73062,10 +72858,6 @@
     ],
     "chain.robot.SYM.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 49.39
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 51
       },
@@ -73943,10 +73735,6 @@
       }
     ],
     "chain.robot.SERV.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 9.11
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 9.85
@@ -74869,10 +74657,6 @@
       }
     ],
     "chain.robot.ISRG.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 472.255
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 483.5
@@ -75816,10 +75600,6 @@
     ],
     "chain.robot.PRCT.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 27.15
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 27.97
       },
@@ -76734,10 +76514,6 @@
     ],
     "chain.robot.AVAV.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 206.92
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 211.87
       },
@@ -77624,10 +77400,6 @@
     ],
     "chain.robot.ROBO.price": [
       {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 69.885
-      },
-      {
         "t": "2026-03-16T04:00:00Z",
         "v": 71.035
       },
@@ -78217,10 +77989,6 @@
       }
     ],
     "chain.robot.BOTZ.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 34.81
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 35.39
@@ -79099,10 +78867,6 @@
       }
     ],
     "chain.robot.ARKQ.price": [
-      {
-        "t": "2026-03-13T04:00:00Z",
-        "v": 117.19
-      },
       {
         "t": "2026-03-16T04:00:00Z",
         "v": 119.62
