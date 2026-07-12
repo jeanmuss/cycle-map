@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { buildOfficialMarketCalendar } from "./market-session-calendar.mjs";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(scriptDir, "..");
@@ -28,12 +29,11 @@ const MARKETS = [
     displayNameZh: "美国风险",
     timezone: "America/New_York",
     stateModel: "premarket_regular_afterhours",
-    premarketOpen: "04:00",
-    regularOpen: "09:30",
-    regularClose: "16:00",
-    afterhoursClose: "20:00",
-    nightOpen: "20:00",
-    nightClose: "04:00",
+    sessionTemplates: [
+      { key: "premarket", start: "04:00", end: "09:30", active: true, sortRank: 1 },
+      { key: "open", start: "09:30", end: "16:00", active: true, sortRank: 1 },
+      { key: "afterhours", start: "16:00", end: "20:00", active: true, sortRank: 2 },
+    ],
     assets: ["TSLA", "NVDA", "MSFT", "CL"],
   },
   {
@@ -42,10 +42,11 @@ const MARKETS = [
     displayNameZh: "韩国市场",
     timezone: "Asia/Seoul",
     stateModel: "premarket_regular_afterhours",
-    premarketOpen: "08:30",
-    regularOpen: "09:00",
-    regularClose: "15:30",
-    afterhoursClose: "18:00",
+    sessionTemplates: [
+      { key: "premarket", start: "08:00", end: "09:00", active: true, sortRank: 1 },
+      { key: "open", start: "09:00", end: "15:30", active: true, sortRank: 1 },
+      { key: "afterhours", start: "15:40", end: "18:00", active: true, sortRank: 2 },
+    ],
     assets: ["KOSPI200", "SAMSUNG", "SKHYNIX"],
   },
   {
@@ -54,13 +55,13 @@ const MARKETS = [
     displayNameZh: "中国市场",
     timezone: "Asia/Shanghai",
     stateModel: "china_auction_regular_afterhours",
-    auctionOpen: "09:15",
-    regularOpen: "09:30",
-    lunchStart: "11:30",
-    lunchEnd: "13:00",
-    closingAuctionOpen: "14:57",
-    regularClose: "15:00",
-    afterhoursClose: "15:30",
+    sessionTemplates: [
+      { key: "opening-auction", start: "09:15", end: "09:25", active: true, sortRank: 1 },
+      { key: "open", start: "09:30", end: "11:30", active: true, sortRank: 1 },
+      { key: "lunch", start: "11:30", end: "13:00", active: false, sortRank: 3 },
+      { key: "open", start: "13:00", end: "14:57", active: true, sortRank: 1 },
+      { key: "closing-auction", start: "14:57", end: "15:00", active: true, sortRank: 1 },
+    ],
     assets: ["CSI500", "SSE50"],
   },
 ];
@@ -222,6 +223,24 @@ function isoNow() {
 function finiteNumber(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function latestIso(values) {
+  const valid = values
+    .filter((value) => typeof value === "string" && Number.isFinite(Date.parse(value)))
+    .sort((a, b) => Date.parse(b) - Date.parse(a));
+  return valid[0] || null;
+}
+
+function attachOfficialCalendars(markets, generatedAt) {
+  return markets.map((market) => {
+    const official = buildOfficialMarketCalendar(market, new Date(generatedAt));
+    return {
+      ...market,
+      ...official,
+      nextTransitionAt: official.generatedStatus.nextTransitionAt,
+    };
+  });
 }
 
 function pctChange(openValue, closeValue) {
@@ -410,24 +429,59 @@ async function buildOutput() {
     });
   }
 
+  const fetchedAt = isoNow();
+  const transformedAt = isoNow();
+  const observedAt = latestIso(assets.flatMap((asset) => [asset.asOf, asset.marketCapAsOf]));
   return {
-    version: 1,
+    version: 2,
     page: "market-clock",
-    generatedAt: isoNow(),
+    generatedAt: transformedAt,
+    timestamps: {
+      observedAt,
+      fetchedAt,
+      transformedAt,
+    },
     refreshCadence: "Target 10-15 minutes when a backend scheduler is available; static hosts may refresh less frequently.",
-    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. Session states are calculated locally from market-hour rules: U.S. risk assets include night, pre-market, regular, and after-hours blocks; China uses call auction, continuous trading, closing auction, and after-hours blocks; Korea uses pre-market, regular, and after-hours sessions.",
+    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. The backend expands reviewed NYSE, KRX, and SSE calendars into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only selects the current interval and renders its countdown.",
     failures,
-    markets: MARKETS,
+    markets: attachOfficialCalendars(MARKETS, transformedAt),
     assets,
     sources: {
       okx: "https://www.okx.com/docs-v5/en/",
       cmc: "https://coinmarketcap.com/api/documentation/v1/",
+      nyseCalendar: "https://www.nyse.com/trade/hours-calendars",
+      krxCalendar: "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
+      sseCalendar: "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
       note: "No provider credentials are emitted to the frontend cache.",
     },
   };
 }
 
-const output = await buildOutput();
+async function buildCalendarOnlyOutput() {
+  const existing = JSON.parse(await readFile(outputPath, "utf8"));
+  const transformedAt = isoNow();
+  const observedAt = latestIso((existing.assets || []).flatMap((asset) => [asset.asOf, asset.marketCapAsOf]));
+  return {
+    ...existing,
+    version: 2,
+    generatedAt: transformedAt,
+    timestamps: {
+      observedAt: existing.timestamps?.observedAt || observedAt,
+      fetchedAt: existing.timestamps?.fetchedAt || existing.generatedAt || null,
+      transformedAt,
+    },
+    methodology: "The frontend reads only this generated JSON. Market sessions are expanded by the backend from reviewed NYSE, KRX, and SSE calendars into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only renders the current interval and countdown.",
+    markets: attachOfficialCalendars(MARKETS, transformedAt),
+    sources: {
+      ...(existing.sources || {}),
+      nyseCalendar: "https://www.nyse.com/trade/hours-calendars",
+      krxCalendar: "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
+      sseCalendar: "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+    },
+  };
+}
+
+const output = process.argv.includes("--calendar-only") ? await buildCalendarOnlyOutput() : await buildOutput();
 await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");
 

@@ -348,10 +348,19 @@ async function buildOutput(existing) {
 
   const liveCount = Object.values(assets).filter((asset) => asset.sourceKind === "live_cache").length;
   if (!liveCount) throw new Error(`No live ${chainConfig.label} assets were refreshed`);
+  const observedAt = Object.values(assets)
+    .map((asset) => asset.asOf)
+    .filter((value) => typeof value === "string" && Number.isFinite(Date.parse(value)))
+    .sort((a, b) => Date.parse(b) - Date.parse(a))[0] || null;
 
   return {
     ...existing,
     generatedAt: asOfNow,
+    timestamps: {
+      observedAt,
+      fetchedAt: asOfNow,
+      transformedAt: asOfNow,
+    },
     kind: liveCount === Object.keys(existing.assets || {}).length ? "market_cache" : "market_cache_partial",
     refreshCadence: chainConfig.refreshCadence,
     methodology: chainConfig.methodology,

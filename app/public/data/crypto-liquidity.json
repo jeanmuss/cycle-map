@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "page": "crypto-liquidity",
+  "generatedAt": "2026-07-12T03:37:25.589Z",
+  "timestamps": {
+    "observedAt": "2026-07-10T23:25:59.999Z",
+    "fetchedAt": "2026-07-10T23:25:59.999Z",
+    "transformedAt": "2026-07-12T03:37:25.589Z"
+  },
+  "status": "partial",
+  "metrics": [
+    {
+      "id": "crypto.totalMarketCap",
+      "label": "Total crypto market cap",
+      "labelZh": "加密市场总市值",
+      "value": 2198899358998.4966,
+      "unit": "USD",
+      "observedAt": "2026-07-10T23:25:59.999Z",
+      "source": "existing-static-cache",
+      "changePct24h": 1.27163429,
+      "semantics": "market_cap_change_not_net_flow",
+      "change1d": null,
+      "change7d": null
+    },
+    {
+      "id": "btc.marketCap",
+      "label": "Bitcoin market cap",
+      "labelZh": "BTC 总市值",
+      "value": 1286300026857.8228,
+      "unit": "USD",
+      "observedAt": "2026-07-10T23:26:05.000Z",
+      "source": "existing-static-cache",
+      "changePct24h": 1.38149103,
+      "semantics": "market_cap_change_not_net_flow",
+      "change1d": null,
+      "change7d": null
+    },
+    {
+      "id": "stablecoin.usdt.marketCap",
+      "label": "USDT circulating market cap",
+      "labelZh": "USDT 流通市值",
+      "value": 184203406587.57532,
+      "unit": "USD",
+      "observedAt": "2026-07-10T23:26:05.000Z",
+      "source": "existing-static-cache",
+      "changePct24h": null,
+      "semantics": "circulating_supply_proxy",
+      "change1d": null,
+      "change7d": null
+    },
+    {
+      "id": "stablecoin.usdc.marketCap",
+      "label": "USDC circulating market cap",
+      "labelZh": "USDC 流通市值",
+      "value": null,
+      "unit": "USD",
+      "observedAt": null,
+      "source": "pending-cmc-refresh",
+      "changePct24h": null,
+      "semantics": "circulating_supply_proxy",
+      "change1d": null,
+      "change7d": null
+    },
+    {
+      "id": "stablecoin.major.marketCap",
+      "label": "USDT + USDC market cap",
+      "labelZh": "主流稳定币市值",
+      "value": null,
+      "unit": "USD",
+      "observedAt": null,
+      "source": "pending-cmc-refresh",
+      "coverage": [
+        "USDT",
+        "USDC"
+      ],
+      "semantics": "tracked_stablecoin_supply_not_total_market",
+      "change1d": null,
+      "change7d": null
+    },
+    {
+      "id": "stablecoin.usdt.depegBps",
+      "label": "USDT peg deviation",
+      "labelZh": "USDT 脱锚幅度",
+      "value": -7.000000000000339,
+      "unit": "bps",
+      "observedAt": "2026-07-10T23:26:54.059Z",
+      "source": "existing-static-cache",
+      "price": 0.9993,
+      "semantics": "price_deviation_not_flow",
+      "change1d": null,
+      "change7d": null
+    }
+  ],
+  "history": {
+    "crypto.totalMarketCap": [
+      {
+        "date": "2026-07-10",
+        "value": 2198899358998.4966
+      }
+    ],
+    "btc.marketCap": [
+      {
+        "date": "2026-07-10",
+        "value": 1286300026857.8228
+      }
+    ],
+    "stablecoin.usdt.marketCap": [
+      {
+        "date": "2026-07-10",
+        "value": 184203406587.57532
+      }
+    ],
+    "stablecoin.usdt.depegBps": [
+      {
+        "date": "2026-07-10",
+        "value": -7.000000000000339
+      }
+    ]
+  },
+  "etf": {
+    "BTC": {
+      "asset": "BTC",
+      "cadence": "daily",
+      "status": "pending_credentials",
+      "source": "sosovalue",
+      "observedAt": null,
+      "daily": [],
+      "weekly": []
+    },
+    "ETH": {
+      "asset": "ETH",
+      "cadence": "daily",
+      "status": "pending_credentials",
+      "source": "sosovalue",
+      "observedAt": null,
+      "daily": [],
+      "weekly": []
+    },
+    "SOL": {
+      "asset": "SOL",
+      "cadence": "weekly_or_daily_pending",
+      "status": "pending_reviewed_source",
+      "source": null,
+      "observedAt": null,
+      "daily": [],
+      "weekly": []
+    }
+  },
+  "auxiliarySources": {
+    "blockbeats": {
+      "enabled": false,
+      "configured": false,
+      "status": "reserved_disabled",
+      "role": "auxiliary_cross_check_only",
+      "endpoint": "/v1/data/btc_etf",
+      "data": null
+    }
+  },
+  "methodology": {
+    "marketCaps": "Market-cap changes are valuation changes, not capital inflows. CoinMarketCap supplies current aggregate and asset market caps.",
+    "stablecoins": "USDT and USDC market caps proxy circulating supply in USD. Their sum is labelled as tracked major stablecoins, not the entire stablecoin market.",
+    "usdtPeg": "USDT peg deviation is (price - 1 USD) × 10,000 basis points and is not a flow metric.",
+    "etf": "SoSoValue daily aggregate net flow is used for reviewed U.S. BTC and ETH spot ETF series. Missing trading days remain missing and are never filled with zero.",
+    "sol": "SOL ETF flow remains pending until a reviewed source with suitable redistribution terms is configured.",
+    "blockbeats": "BlockBeats is reserved as an auxiliary BTC cross-check only and never overwrites the primary ETF series."
+  },
+  "sources": {
+    "cmc": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
+    "sosovalue": "https://sosovalue.gitbook.io/soso-value-api-doc/api-document/get-etf-historical-inflow-chart",
+    "blockbeats": "https://www.theblockbeats.info/apiDoc"
+  },
+  "failures": [
+    "CMC: CMC_PRO_API_KEY is not configured",
+    "SoSoValue BTC: SOSOVALUE_API_KEY is not configured",
+    "SoSoValue ETH: SOSOVALUE_API_KEY is not configured"
+  ]
+}

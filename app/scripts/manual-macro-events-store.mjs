@@ -1,5 +1,5 @@
 const SUPABASE_TABLE = "manual_macro_events";
-const SERVICE_KEY_ENV_NAMES = ["SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEY"];
+const SERVICE_KEY_ENV_NAMES = ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY"];
 
 const NUMERIC_FIELDS = [
   ["actual", "actual"],
@@ -92,7 +92,11 @@ export function hasSupabaseManualEventsConfig() {
 }
 
 export function manualEventsStoreMode() {
-  return hasSupabaseManualEventsConfig() ? "supabase" : "local-json";
+  return hasSupabaseManualEventsConfig() ? "supabase-canonical" : "local-snapshot-readonly";
+}
+
+export function manualEventsCanonicalWriteAvailable() {
+  return hasSupabaseManualEventsConfig();
 }
 
 function redact(text) {
@@ -105,7 +109,7 @@ function redact(text) {
 
 async function supabaseRequest(path, options = {}) {
   const { url, key } = supabaseConfig();
-  if (!url || !key) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
+  if (!url || !key) throw new Error("SUPABASE_URL and SUPABASE_SECRET_KEY (or legacy SUPABASE_SERVICE_ROLE_KEY) are required");
   const headers = {
     apikey: key,
     Authorization: `Bearer ${key}`,

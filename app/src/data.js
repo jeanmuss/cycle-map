@@ -222,10 +222,11 @@ export function monthlyStats(years) {
 }
 
 export function freshnessLabel(iso, language = "zh") {
+  if (!iso) return language === "en" ? "Time unknown" : "\u65f6\u95f4\u672a\u77e5";
   const timestamp = new Date(iso);
   if (Number.isNaN(timestamp.getTime())) {
-    if (language === "en") return "Update time unknown";
-    return "\u66f4\u65b0\u65f6\u95f4\u672a\u77e5";
+    if (language === "en") return "Time unknown";
+    return "\u65f6\u95f4\u672a\u77e5";
   }
   const locale = language === "en" ? "en-US" : "zh-CN";
   const timeZone = language === "en" ? "America/New_York" : "Asia/Shanghai";
@@ -239,6 +240,18 @@ export function freshnessLabel(iso, language = "zh") {
     minute: "2-digit",
     hour12: false,
   }).format(timestamp);
-  if (language === "en") return `Data through ${formatted} ${zoneLabel}`;
-  return `\u6570\u636e\u622a\u81f3 ${formatted} ${zoneLabel}`;
+  return `${formatted} ${zoneLabel}`;
+}
+
+export function delayLabel(iso, language = "zh", now = Date.now()) {
+  if (!iso) return language === "en" ? "unknown" : "\u672a\u77e5";
+  const timestamp = new Date(iso);
+  if (Number.isNaN(timestamp.getTime())) return language === "en" ? "unknown" : "\u672a\u77e5";
+  const minutes = Math.max(0, (Number(now) - timestamp.getTime()) / 60000);
+  if (minutes < 1) return language === "en" ? "<1m" : "<1\u5206\u949f";
+  if (minutes < 60) return language === "en" ? `${Math.floor(minutes)}m` : `${Math.floor(minutes)}\u5206\u949f`;
+  const hours = minutes / 60;
+  if (hours < 48) return language === "en" ? `${hours.toFixed(1)}h` : `${hours.toFixed(1)}\u5c0f\u65f6`;
+  const days = hours / 24;
+  return language === "en" ? `${days.toFixed(1)}d` : `${days.toFixed(1)}\u5929`;
 }

@@ -36,6 +36,23 @@ def iso_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def parse_timestamp(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(UTC)
+    except (TypeError, ValueError):
+        try:
+            return datetime.fromisoformat(f"{value}T00:00:00+00:00")
+        except (TypeError, ValueError):
+            return None
+
+
+def oldest_timestamp(values: list[str | None]) -> str | None:
+    parsed = [timestamp for value in values if (timestamp := parse_timestamp(value)) is not None]
+    return min(parsed).isoformat().replace("+00:00", "Z") if parsed else None
+
+
 def load_env_file(path: Path) -> None:
     try:
         text = path.read_text(encoding="utf-8")
@@ -219,7 +236,12 @@ def fetch_gold_price() -> dict[str, Any]:
 def fallback_metric(existing: dict[str, Any] | None, metric_id: str, failure: str) -> dict[str, Any]:
     cached = cached_metric(existing, metric_id)
     if cached and finite_number(cached.get("value")) is not None:
-        return {**cached, "quality": "last-known-good", "failure": failure}
+        return {
+            **cached,
+            "fetchedAt": cached.get("fetchedAt") or (existing.get("timestamps") or {}).get("fetchedAt") or existing.get("generatedAt"),
+            "quality": "last-known-good",
+            "failure": failure,
+        }
     defaults = {
         "BTC_MARKET_CAP": ("BTC market cap", "USD", "CoinMarketCap cryptocurrency quotes/latest", CMC_QUOTES_URL),
         "CRYPTO_MARKET_CAP": ("Total crypto market cap", "USD", "CoinMarketCap global-metrics/quotes/latest", CMC_GLOBAL_URL),
@@ -248,20 +270,28 @@ def main() -> int:
 
     for metric_id, fetcher in fetchers.items():
         try:
-            metrics.append(fetcher())
+            fresh_metric = fetcher()
+            fresh_metric["fetchedAt"] = iso_now()
+            metrics.append(fresh_metric)
         except Exception as exc:  # noqa: BLE001 - provider failures are reported without secrets.
             message = safe_error_message(exc)
             failures.append(f"{metric_id}: {message}")
             metrics.append(fallback_metric(existing, metric_id, message))
 
+    transformed_at = iso_now()
     output = {
         "version": 1,
         "page": "equity-fast",
-        "generatedAt": iso_now(),
+        "generatedAt": transformed_at,
+        "timestamps": {
+            "observedAt": oldest_timestamp([item.get("asOf") for item in metrics if item.get("value") is not None]),
+            "fetchedAt": oldest_timestamp([item.get("fetchedAt") for item in metrics if item.get("value") is not None]),
+            "transformedAt": transformed_at,
+        },
         "refreshCadence": REFRESH_CADENCE,
         "baseDataset": {
             "file": "equity-weekly.json",
-            "generatedAt": slow_equity.get("generatedAt"),
+            "timestamps": slow_equity.get("timestamps") or {"transformedAt": slow_equity.get("generatedAt")},
         },
         "methodology": (
             "Fast indicators are generated separately from the slower equity calendar cache. "

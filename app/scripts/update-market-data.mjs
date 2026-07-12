@@ -33,6 +33,13 @@ function isoTime(ms) {
   return Number.isFinite(Number(ms)) ? new Date(Number(ms)).toISOString() : null;
 }
 
+function orderedIso(values, direction = "latest") {
+  const valid = values
+    .filter((value) => typeof value === "string" && Number.isFinite(Date.parse(value)))
+    .sort((a, b) => Date.parse(a) - Date.parse(b));
+  return direction === "oldest" ? valid[0] || null : valid.at(-1) || null;
+}
+
 function hasDirectionalExtremes(row) {
   if (row?.orderResolution === "1M-order-unavailable") return true;
   return Number.isFinite(row?.extremeMovePct)
@@ -572,10 +579,17 @@ for (const symbol of REQUIRED_ASSETS) {
   }
 }
 
+const transformedAt = new Date().toISOString();
+const assetTimestamps = Object.values(assets).flatMap((asset) => [asset.updatedAt, asset.spot?.updatedAt]);
 const output = {
   version: 5,
   timezone: "UTC",
-  generatedAt: new Date().toISOString(),
+  generatedAt: transformedAt,
+  timestamps: {
+    observedAt: orderedIso(assetTimestamps),
+    fetchedAt: orderedIso(assetTimestamps, "oldest"),
+    transformedAt,
+  },
   currentMonthKey,
   spotRefreshCadence: "Hourly static cache refresh by CI; provider schedules and GitHub Actions queues can add small delays.",
   methodology: "Monthly return = (close - open) / open × 100%. Directional extreme move = (second extreme - first extreme) / first extreme × 100%, ordered by occurrence time.",

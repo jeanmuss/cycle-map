@@ -76,6 +76,45 @@ def iso_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def parse_timestamp(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(UTC)
+    except (TypeError, ValueError):
+        return None
+
+
+def oldest_provider_fetch_at() -> str | None:
+    timestamps: list[datetime] = []
+    paths = [CACHE_DIR / f"price-{symbol}.json" for symbol in ASSETS]
+    paths.extend(fred_cache_path(series_id) for series_id in FRED_SERIES)
+    for series_id in FRED_SERIES:
+        paths.append(SHARED_FRED_CACHE_DIR / f"{series_id}.json")
+    for path in paths:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+        timestamp = parse_timestamp(payload.get("fetchedAt"))
+        if timestamp is not None:
+            timestamps.append(timestamp)
+    return min(timestamps).isoformat().replace("+00:00", "Z") if timestamps else None
+
+
+def latest_observed_at(latest_assets: dict, latest_date: str) -> str:
+    timestamps = [
+        parse_timestamp(item.get("asOf"))
+        for item in latest_assets.values()
+        if isinstance(item, dict)
+    ]
+    valid = [timestamp for timestamp in timestamps if timestamp is not None]
+    if valid:
+        return max(valid).isoformat().replace("+00:00", "Z")
+    market_close = datetime.combine(date.fromisoformat(latest_date), time(16, 0), NY_TZ)
+    return market_close.astimezone(UTC).isoformat().replace("+00:00", "Z")
+
+
 def read_existing() -> dict | None:
     try:
         return json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
@@ -508,12 +547,18 @@ def build_output() -> dict:
         series_id: macro_observation(fred_daily.get(series_id), latest_macro_date)
         for series_id in FRED_SERIES
     }
+    transformed_at = iso_now()
 
     return {
         "version": 2,
         "page": "equity-macro",
         "timezone": "America/New_York for trading dates; FRED observations use provider dates",
-        "generatedAt": iso_now(),
+        "generatedAt": transformed_at,
+        "timestamps": {
+            "observedAt": latest_observed_at(latest_assets, trading_days[-1]["date"]),
+            "fetchedAt": oldest_provider_fetch_at(),
+            "transformedAt": transformed_at,
+        },
         "window": {
             "months": WINDOW_MONTHS,
             "startDate": WINDOW_START.strftime("%Y-%m-%d"),

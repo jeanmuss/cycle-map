@@ -129,6 +129,24 @@ html[lang="zh-CN"] .title-block h1 {
   color: var(--muted);
 }
 
+.freshness-summary {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.freshness-summary strong {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.freshness-summary strong > span {
+  margin-right: 5px;
+  color: var(--red);
+  font-weight: 900;
+}
+
 .language-toggle {
   display: inline-flex;
   border: 1px solid var(--ink);
@@ -2220,6 +2238,17 @@ html[lang="zh-CN"] .title-block h1 {
   white-space: nowrap;
 }
 
+.market-state-card > .market-state-reason {
+  margin-top: 6px;
+  color: #705200;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: none;
+  white-space: normal;
+}
+
 .market-state-card > small {
   color: var(--muted);
   font-size: 10px;
@@ -3588,6 +3617,77 @@ html[lang="zh-CN"] .title-block h1 {
   margin: 0;
 }
 
+.freshness-audit-shell {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--soft-line);
+  background: var(--paper);
+}
+
+.freshness-audit-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  color: var(--ink);
+  font-size: 10px;
+}
+
+.freshness-audit-table caption {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--soft-line);
+  font-weight: 900;
+  text-align: left;
+}
+
+.freshness-audit-table th,
+.freshness-audit-table td {
+  padding: 7px 9px;
+  border-right: 1px solid var(--soft-line);
+  border-bottom: 1px solid var(--soft-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.freshness-audit-table tr:last-child th,
+.freshness-audit-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.freshness-audit-table th:last-child,
+.freshness-audit-table td:last-child {
+  border-right: 0;
+}
+
+.freshness-audit-table thead th {
+  background: #f3f3eb;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.freshness-audit-table td > span {
+  display: grid;
+  gap: 1px;
+}
+
+.freshness-audit-table td b {
+  font-size: 11px;
+}
+
+.freshness-audit-table td small {
+  color: var(--muted);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.timestamp-fallback-note {
+  margin: 0;
+  padding: 7px 9px;
+  border-top: 1px dashed var(--soft-line);
+  color: #705200;
+  background: #fff7d1;
+  font-size: 10px;
+}
+
 .data-trust-grid {
   display: grid;
   grid-template-columns: minmax(210px, 0.85fr) repeat(2, minmax(0, 1.2fr));
@@ -4235,6 +4335,329 @@ html[lang="zh-CN"] .data-trust-grid small {
 
   .mobile-detail-dock strong {
     font-size: 12px;
+  }
+}
+
+.chip-pending-section {
+  border-color: color-mix(in srgb, var(--line) 72%, #d69e2e 28%);
+  background: color-mix(in srgb, var(--surface) 94%, #f6e6ad 6%);
+}
+
+.chip-pending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.chip-pending-card {
+  padding: 14px;
+  border: 1px dashed color-mix(in srgb, var(--line) 65%, #d69e2e 35%);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.chip-pending-card header,
+.chip-pending-card header div,
+.chip-pending-card dl div {
+  display: flex;
+  gap: 6px;
+}
+
+.chip-pending-card header {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.chip-pending-card header div,
+.chip-pending-card dl div {
+  flex-direction: column;
+}
+
+.chip-pending-card header span,
+.chip-pending-card header small,
+.chip-pending-card dt {
+  color: var(--muted);
+}
+
+.chip-pending-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.chip-pending-card dt,
+.chip-pending-card dd {
+  margin: 0;
+}
+
+.chip-pending-card dd {
+  overflow-wrap: anywhere;
+}
+
+.crypto-liquidity-page {
+  --liquidity-positive: #178447;
+  --liquidity-negative: #c93445;
+}
+
+.liquidity-toolbar {
+  display: grid;
+  grid-template-columns: auto auto minmax(220px, 1fr);
+  align-items: end;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.liquidity-breadth {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.liquidity-breadth small,
+.liquidity-breadth span,
+.liquidity-metric-card small,
+.liquidity-metric-card p,
+.liquidity-etf-card small,
+.liquidity-etf-card p,
+.liquidity-auxiliary small,
+.liquidity-auxiliary p {
+  color: var(--muted);
+}
+
+.liquidity-breadth strong {
+  font-family: var(--title-serif-en);
+  font-size: 28px;
+}
+
+.liquidity-section {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 95%, var(--blue) 5%);
+}
+
+.liquidity-metric-grid,
+.liquidity-etf-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.liquidity-metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.liquidity-etf-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.liquidity-metric-card,
+.liquidity-etf-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.liquidity-metric-card > strong {
+  display: block;
+  margin: 7px 0 13px;
+  font-family: var(--title-serif-en);
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.liquidity-metric-card dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+}
+
+.liquidity-metric-card dl div {
+  padding-top: 8px;
+  border-top: 1px solid var(--soft-line);
+}
+
+.liquidity-metric-card dt,
+.liquidity-metric-card dd {
+  margin: 0;
+}
+
+.liquidity-metric-card dt {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.liquidity-metric-card dd {
+  margin-top: 3px;
+  font-weight: 800;
+}
+
+.liquidity-metric-card p,
+.liquidity-etf-card p {
+  margin: 12px 0 0;
+  font-size: 11px;
+}
+
+.liquidity-etf-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.liquidity-etf-card header strong {
+  font-family: var(--title-serif-en);
+  font-size: 28px;
+}
+
+.liquidity-etf-card header span {
+  align-self: center;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: right;
+  color: var(--muted);
+}
+
+.liquidity-etf-card > div:not(.liquidity-flow-strip) {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 11px;
+}
+
+.liquidity-flow-strip {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: end;
+  gap: 3px;
+  height: 32px;
+  margin-top: 12px;
+}
+
+.liquidity-flow-strip span {
+  min-height: 8px;
+  height: 72%;
+  background: #d4d4ca;
+}
+
+.liquidity-flow-strip span.is-positive {
+  height: 100%;
+  background: var(--liquidity-positive);
+}
+
+.liquidity-flow-strip span.is-negative {
+  height: 100%;
+  background: var(--liquidity-negative);
+}
+
+.crypto-liquidity-page .is-positive {
+  color: var(--liquidity-positive);
+}
+
+.crypto-liquidity-page .is-negative {
+  color: var(--liquidity-negative);
+}
+
+.crypto-liquidity-page .is-flat {
+  color: var(--muted);
+}
+
+.liquidity-heat-shell {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+
+.liquidity-heat-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: var(--paper);
+}
+
+.liquidity-heat-table th,
+.liquidity-heat-table td {
+  min-width: 34px;
+  padding: 7px 5px;
+  border: 1px solid var(--soft-line);
+  text-align: center;
+  font-size: 10px;
+}
+
+.liquidity-heat-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 180px;
+  text-align: left;
+  background: var(--paper);
+}
+
+.liquidity-heat-table td.is-positive {
+  color: #fff;
+  background: var(--liquidity-positive);
+}
+
+.liquidity-heat-table td.is-negative {
+  color: #fff;
+  background: var(--liquidity-negative);
+}
+
+.liquidity-heat-table td.is-flat {
+  background: #efefe7;
+}
+
+.liquidity-empty {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed var(--soft-line);
+  color: var(--muted);
+}
+
+.liquidity-auxiliary {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.4fr) 1fr;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px dashed var(--soft-line);
+  background: var(--paper);
+}
+
+.liquidity-auxiliary div {
+  display: grid;
+  gap: 4px;
+}
+
+.liquidity-auxiliary p {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .liquidity-toolbar,
+  .liquidity-auxiliary {
+    grid-template-columns: 1fr;
+  }
+
+  .liquidity-metric-grid,
+  .liquidity-etf-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .liquidity-metric-grid,
+  .liquidity-etf-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .liquidity-section {
+    padding: 10px;
   }
 }
 

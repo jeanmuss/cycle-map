@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import {
   hasSupabaseManualEventsConfig,
+  manualEventsCanonicalWriteAvailable,
   manualEventsStoreMode,
   readManualEventsPayloadFromSupabase,
   writeManualEventsPayloadToSupabase,
@@ -235,6 +236,7 @@ async function macroCalendarStatus() {
     ...status,
     ok: status.ok && !calendarError,
     manualEventsStore: manualEventsStoreMode(),
+    canonicalWriteAvailable: manualEventsCanonicalWriteAvailable(),
     manualEventsUpdatedAt: manualPayload?.updatedAt || null,
     calendarError,
   };
@@ -278,6 +280,11 @@ function publishOutput(stdout) {
 }
 
 async function publishMacroCalendar() {
+  if (!manualEventsCanonicalWriteAvailable()) {
+    const error = new Error("Supabase canonical store is unavailable; the repository snapshot is read-only");
+    error.statusCode = 503;
+    throw error;
+  }
   const validation = await validateManualEvents();
   const { stdout, stderr } = await execFileAsync(
     pythonCommand,
@@ -320,8 +327,9 @@ async function writeManualEventsFile(payload) {
 
 async function writeManualEvents(payload) {
   if (!hasSupabaseManualEventsConfig()) {
-    await writeManualEventsFile(payload);
-    return payload;
+    const error = new Error("Supabase canonical store is unavailable; the repository snapshot is read-only");
+    error.statusCode = 503;
+    throw error;
   }
   await writeManualEventsPayloadToSupabase(payload);
   const savedPayload = await readManualEventsPayloadFromSupabase();
@@ -364,7 +372,11 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (req.method === "GET") {
-      jsonResponse(res, 200, await readManualEvents(), requestOrigin(req));
+      jsonResponse(res, 200, {
+        ...await readManualEvents(),
+        storeMode: manualEventsStoreMode(),
+        canonicalWriteAvailable: manualEventsCanonicalWriteAvailable(),
+      }, requestOrigin(req));
       return;
     }
     if (req.method === "PUT") {
@@ -377,7 +389,7 @@ const server = createServer(async (req, res) => {
     }
     jsonResponse(res, 405, { error: "method_not_allowed" }, requestOrigin(req));
   } catch (error) {
-    jsonResponse(res, 400, { error: error.message || "bad_request" }, requestOrigin(req));
+    jsonResponse(res, Number(error.statusCode) || 400, { error: error.message || "bad_request" }, requestOrigin(req));
   }
 });
 

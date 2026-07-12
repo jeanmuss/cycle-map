@@ -39,6 +39,12 @@ function isoNow() {
   return new Date().toISOString();
 }
 
+function oldestIso(values) {
+  return values
+    .filter((value) => typeof value === "string" && Number.isFinite(Date.parse(value)))
+    .sort((a, b) => Date.parse(a) - Date.parse(b))[0] || null;
+}
+
 async function readJson(path) {
   try {
     return JSON.parse(await readFile(path, "utf8"));
@@ -319,10 +325,17 @@ async function buildOutput() {
   const macroDataset = await readJson(resolve(dataDir, "macro-calendar.json"));
   const chipDataset = await readJson(resolve(dataDir, "chip-chain-hotspots.json"));
   const robotDataset = await readJson(resolve(dataDir, "robot-chain-watchlist.json"));
+  const transformedAt = isoNow();
+  const inputs = [equityDataset, macroDataset, chipDataset, robotDataset].filter(Boolean);
   const output = {
     version: 1,
     page: "chart-series",
-    generatedAt: isoNow(),
+    generatedAt: transformedAt,
+    timestamps: {
+      observedAt: oldestIso(inputs.map((dataset) => dataset.timestamps?.observedAt || dataset.generatedAt)),
+      fetchedAt: oldestIso(inputs.map((dataset) => dataset.timestamps?.fetchedAt || dataset.generatedAt)),
+      transformedAt,
+    },
     windows: WINDOWS,
     transforms: TRANSFORMS,
     methodology: "Derived static time-series cache built from reviewed page caches and local/CI provider caches. The browser reads this generated JSON only and never calls market-data providers directly.",

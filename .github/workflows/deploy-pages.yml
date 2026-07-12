@@ -5,6 +5,7 @@ on:
     branches: [main]
   schedule:
     - cron: "0 * * * *"
+    - cron: "15,30,45 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -14,7 +15,7 @@ permissions:
 
 concurrency:
   group: github-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -23,6 +24,28 @@ jobs:
       GITHUB_PAGES: "true"
     steps:
       - uses: actions/checkout@v4
+      - name: Restore the last successful data baseline
+        id: restore-data-baseline
+        if: github.event_name == 'schedule'
+        uses: actions/cache/restore@v4
+        with:
+          path: app/public/data
+          key: pages-data-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            pages-data-
+      - name: Restore the durable versioned data baseline
+        if: steps.restore-data-baseline.outputs.cache-hit == ''
+        shell: bash
+        run: |
+          if git fetch --no-tags origin data-cache:refs/remotes/origin/data-cache; then
+            git restore --source=refs/remotes/origin/data-cache -- app/public/data
+            echo "Restored the durable baseline from origin/data-cache"
+          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "15,30,45 * * * *" ]; then
+            echo "A fast refresh requires either an Actions cache or origin/data-cache" >&2
+            exit 1
+          else
+            echo "No durable snapshot exists yet; the full refresh will use the checked-in baseline"
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -35,11 +58,26 @@ jobs:
           cache-dependency-path: app/requirements-equity.txt
       - name: Install frontend dependencies
         run: npm --prefix app ci
+      - name: Run source and calendar checks
+        run: |
+          npm --prefix app run lint
+          npm --prefix app test
+          npm --prefix app run verify-market-calendar
       - name: Install equity data dependencies
         run: python -m pip install -r app/requirements-equity.txt
       - name: Refresh hourly crypto spot cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         run: npm --prefix app run update-data
+      - name: Refresh crypto liquidity cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
+        env:
+          CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
+          SOSOVALUE_API_KEY: ${{ secrets.SOSOVALUE_API_KEY }}
+          BLOCKBEATS_API_KEY: ${{ secrets.BLOCKBEATS_API_KEY }}
+          BLOCKBEATS_AUX_ENABLED: ${{ vars.BLOCKBEATS_AUX_ENABLED }}
+        run: npm --prefix app run update-crypto-liquidity
       - name: Refresh US market cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: npm --prefix app run update-equity-data
@@ -49,34 +87,46 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: npm --prefix app run update-equity-fast-data
       - name: Sync manual macro events
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: npm --prefix app run sync-manual-macro-events
       - name: Refresh macro calendar
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: npm --prefix app run update-macro-calendar
       - name: Refresh market session cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
         run: npm --prefix app run update-market-session
       - name: Refresh chip-chain cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
           APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
           CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
         run: npm --prefix app run update-chip-chain
       - name: Refresh robot-chain cache
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         env:
           APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
           APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
           CHIP_CHAIN_US_FEED: ${{ vars.CHIP_CHAIN_US_FEED }}
         run: npm --prefix app run update-robot-chain
       - name: Refresh interactive chart series
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         run: npm --prefix app run update-chart-series
       - name: Build static site for GitHub Pages
         run: npm --prefix app run build:pages
+      - name: Save the successful build data baseline
+        uses: actions/cache/save@v4
+        with:
+          path: app/public/data
+          key: pages-data-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

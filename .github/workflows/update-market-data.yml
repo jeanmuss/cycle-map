@@ -19,6 +19,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore the latest versioned data snapshot
+        shell: bash
+        run: |
+          if git fetch --no-tags origin data-cache:refs/remotes/origin/data-cache; then
+            git restore --source=refs/remotes/origin/data-cache -- \
+              app/data/manual-macro-events.json \
+              app/public/data/market-monthly.json \
+              app/public/data/crypto-liquidity.json \
+              app/public/data/market-session.json \
+              app/public/data/equity-weekly.json \
+              app/public/data/equity-fast.json \
+              app/public/data/macro-calendar.json \
+              app/public/data/chip-chain-hotspots.json \
+              app/public/data/robot-chain-watchlist.json \
+              app/public/data/chart-series.json
+            echo "Restored the data baseline from origin/data-cache"
+          else
+            echo "origin/data-cache does not exist yet; bootstrapping from the checked-in baseline"
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -33,6 +54,14 @@ jobs:
       - name: Refresh normalized monthly data
         working-directory: app
         run: node scripts/update-market-data.mjs
+      - name: Refresh crypto liquidity data
+        working-directory: app
+        env:
+          CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
+          SOSOVALUE_API_KEY: ${{ secrets.SOSOVALUE_API_KEY }}
+          BLOCKBEATS_API_KEY: ${{ secrets.BLOCKBEATS_API_KEY }}
+          BLOCKBEATS_AUX_ENABLED: ${{ vars.BLOCKBEATS_AUX_ENABLED }}
+        run: node scripts/update-crypto-liquidity-data.mjs
       - name: Refresh market session data
         working-directory: app
         env:
@@ -67,6 +96,7 @@ jobs:
         working-directory: app
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: node scripts/sync-manual-macro-events-from-supabase.mjs
       - name: Refresh macro calendar
@@ -77,14 +107,40 @@ jobs:
       - name: Refresh interactive chart series
         working-directory: app
         run: node scripts/update-chart-series-data.mjs
-      - name: Commit changed cache
+      - name: Publish the versioned data snapshot
+        shell: bash
         run: |
-          if git diff --quiet -- app/data/manual-macro-events.json app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json app/public/data/equity-fast.json app/public/data/macro-calendar.json app/public/data/chip-chain-hotspots.json app/public/data/robot-chain-watchlist.json app/public/data/chart-series.json; then
-            echo "Cache is already current"
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/data/manual-macro-events.json app/public/data/market-monthly.json app/public/data/market-session.json app/public/data/equity-weekly.json app/public/data/equity-fast.json app/public/data/macro-calendar.json app/public/data/chip-chain-hotspots.json app/public/data/robot-chain-watchlist.json app/public/data/chart-series.json
-          git commit -m "data: refresh market caches"
-          git push
+          git add -- \
+            app/data/manual-macro-events.json \
+            app/public/data/market-monthly.json \
+            app/public/data/crypto-liquidity.json \
+            app/public/data/market-session.json \
+            app/public/data/equity-weekly.json \
+            app/public/data/equity-fast.json \
+            app/public/data/macro-calendar.json \
+            app/public/data/chip-chain-hotspots.json \
+            app/public/data/robot-chain-watchlist.json \
+            app/public/data/chart-series.json
+
+          snapshot_tree="$(git write-tree)"
+          if git show-ref --verify --quiet refs/remotes/origin/data-cache; then
+            parent_commit="$(git rev-parse refs/remotes/origin/data-cache)"
+          else
+            parent_commit="$GITHUB_SHA"
+          fi
+          parent_tree="$(git rev-parse "${parent_commit}^{tree}")"
+
+          if [ "$snapshot_tree" = "$parent_tree" ]; then
+            if ! git show-ref --verify --quiet refs/remotes/origin/data-cache; then
+              git push origin "$parent_commit:refs/heads/data-cache"
+              echo "Bootstrapped origin/data-cache from the current checked-in baseline"
+              exit 0
+            fi
+            echo "Versioned data snapshot is already current"
+            exit 0
+          fi
+
+          snapshot_commit="$(printf '%s\n' 'data: refresh versioned market snapshot' | git commit-tree "$snapshot_tree" -p "$parent_commit")"
+          git push origin "$snapshot_commit:refs/heads/data-cache"

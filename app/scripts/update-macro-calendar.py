@@ -235,6 +235,32 @@ def utc_timestamp(value: pd.Timestamp) -> pd.Timestamp:
     return value.tz_localize("UTC") if value.tzinfo is None else value.tz_convert("UTC")
 
 
+def iso_timestamp(value: str | pd.Timestamp | None) -> str | None:
+    parsed = parse_timestamp(value) if isinstance(value, str) or value is None else value
+    if parsed is None:
+        return None
+    return utc_timestamp(parsed).isoformat().replace("+00:00", "Z")
+
+
+def observed_at_from_summary(summary: list[dict]) -> str | None:
+    timestamps = [parse_timestamp(item.get("latestDate")) for item in summary]
+    valid = [timestamp for timestamp in timestamps if timestamp is not None]
+    return iso_timestamp(max(valid)) if valid else None
+
+
+def oldest_fred_cache_fetch_at() -> str | None:
+    timestamps: list[pd.Timestamp] = []
+    for series_id in ALL_SERIES:
+        try:
+            payload = json.loads(cache_path(series_id).read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+        fetched_at = parse_timestamp(payload.get("fetchedAt"))
+        if fetched_at is not None:
+            timestamps.append(utc_timestamp(fetched_at))
+    return iso_timestamp(min(timestamps)) if timestamps else None
+
+
 def pct_change(previous: float | None, value: float | None) -> float | None:
     if previous is None or value is None or previous == 0:
         return None
@@ -1291,6 +1317,7 @@ def build_output() -> dict:
     events = merge_manual_events(merge_scheduled_events(build_observation_events(series_frames), scheduled_events))
     weekly_rows = weekly_window_rows(series_frames)
     summary = build_summary(series_frames)
+    transformed_at = iso_now()
     if not events and not weekly_rows:
         raise RuntimeError("No macro calendar rows produced")
 
@@ -1302,7 +1329,12 @@ def build_output() -> dict:
     return {
         "version": 1,
         "page": "macro-calendar",
-        "generatedAt": iso_now(),
+        "generatedAt": transformed_at,
+        "timestamps": {
+            "observedAt": observed_at_from_summary(summary),
+            "fetchedAt": oldest_fred_cache_fetch_at(),
+            "transformedAt": transformed_at,
+        },
         "window": {
             "months": WINDOW_MONTHS,
             "startDate": as_date(WINDOW_START),
@@ -1352,7 +1384,14 @@ def merge_manual_events_into_existing(existing: dict, error: Exception | None = 
     ]
     events = merge_manual_events(list(output.get("events") or []))
     output["events"] = events
-    output["generatedAt"] = iso_now()
+    transformed_at = iso_now()
+    output["generatedAt"] = transformed_at
+    existing_timestamps = dict(output.get("timestamps") or {})
+    output["timestamps"] = {
+        "observedAt": existing_timestamps.get("observedAt") or observed_at_from_summary(list(output.get("summary") or [])),
+        "fetchedAt": existing_timestamps.get("fetchedAt") or existing.get("generatedAt"),
+        "transformedAt": transformed_at,
+    }
     output["categorySummary"] = category_summary(events, list(output.get("weeklyState") or []))
     output.setdefault("cache", {})["manualEventLookaheadDays"] = MANUAL_EVENT_LOOKAHEAD_DAYS
     output.setdefault("cache", {})["scheduleEventLookaheadDays"] = SCHEDULE_EVENT_LOOKAHEAD_DAYS
