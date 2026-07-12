@@ -9,6 +9,7 @@ const outputPath = resolve(dataDirectory, "data-manifest.json");
 
 const datasets = [
   { id: "marketMonthly", file: "market-monthly.json", pollIntervalMs: 300_000 },
+  { id: "cryptoLiquidity", file: "crypto-liquidity.json", pollIntervalMs: 300_000 },
   { id: "macroCalendar", file: "macro-calendar.json", pollIntervalMs: 300_000 },
   { id: "equityWeekly", file: "equity-weekly.json", pollIntervalMs: 300_000 },
   { id: "equityFast", file: "equity-fast.json", pollIntervalMs: 60_000 },

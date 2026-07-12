@@ -18,7 +18,7 @@ async function writeJsonAtomic(path, payload) {
 }
 
 if (!hasSupabaseManualEventsConfig()) {
-  console.log("Supabase manual event sync skipped: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are not configured.");
+  console.log("Supabase manual event sync skipped: SUPABASE_URL and a Supabase secret key are not configured; keeping the read-only repository snapshot.");
   process.exit(0);
 }
 

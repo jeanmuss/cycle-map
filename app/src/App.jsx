@@ -1,11 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { routePathname } from "./data.js";
+import { ADMIN_PAGE_ENABLED, currentPage } from "./routeState.js";
 
-const ADMIN_PAGE_ENABLED = import.meta.env.DEV;
-
-// Route wrappers use distinct module queries so Vite can tree-shake each page into
-// its own lazy chunk instead of rebuilding the former all-pages entry bundle.
+// Each route owns a physical page module and a separate lazy chunk.
 const CryptoRoute = lazy(() => import("./routes/CryptoRoute.js"));
+const CryptoLiquidityRoute = lazy(() => import("./routes/CryptoLiquidityRoute.js"));
 const MacroRoute = lazy(() => import("./routes/MacroRoute.js"));
 const EquityRoute = lazy(() => import("./routes/EquityRoute.js"));
 const MarketClockRoute = lazy(() => import("./routes/MarketClockRoute.js"));
@@ -15,27 +13,9 @@ const MacroAdminRoute = ADMIN_PAGE_ENABLED
   ? lazy(() => import("./routes/MacroAdminRoute.js"))
   : null;
 
-function currentPage() {
-  if (typeof window === "undefined") return "crypto";
-  const hashPath = window.location.hash.replace(/^#/, "");
-  if (ADMIN_PAGE_ENABLED && hashPath.startsWith("/admin/macro-events")) return "macroAdmin";
-  if (hashPath.startsWith("/robot-chain")) return "robotChain";
-  if (hashPath.startsWith("/chip-chain")) return "chipChain";
-  if (hashPath.startsWith("/market-clock")) return "marketClock";
-  if (hashPath.startsWith("/macro-calendar")) return "macro";
-  if (hashPath.startsWith("/equity-macro")) return "equity";
-  if (hashPath.startsWith("/") || hashPath === "") return "crypto";
-  const pathname = routePathname(window.location.pathname);
-  if (ADMIN_PAGE_ENABLED && pathname.startsWith("/admin/macro-events")) return "macroAdmin";
-  if (pathname.startsWith("/robot-chain")) return "robotChain";
-  if (pathname.startsWith("/chip-chain")) return "chipChain";
-  if (pathname.startsWith("/market-clock")) return "marketClock";
-  if (pathname.startsWith("/macro-calendar")) return "macro";
-  return pathname.startsWith("/equity-macro") ? "equity" : "crypto";
-}
-
 function routeComponent(page) {
   if (page === "macroAdmin" && MacroAdminRoute) return MacroAdminRoute;
+  if (page === "cryptoLiquidity") return CryptoLiquidityRoute;
   if (page === "robotChain") return RobotChainRoute;
   if (page === "chipChain") return ChipChainRoute;
   if (page === "marketClock") return MarketClockRoute;

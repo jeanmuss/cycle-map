@@ -17,6 +17,7 @@ The interface follows the visual and technical idea of the original Bitcoin four
 npm run dev
 npm run build
 npm run update-data
+npm run update-crypto-liquidity
 npm run update-market-session
 npm run update-chip-chain
 npm run update-robot-chain
@@ -87,7 +88,7 @@ The script caches provider observations under `tmp/macro-cache/fred` before gene
 
 FRED observation dates are retained as economic observation/period dates, not publication timestamps. Forecast values stay `null` until a reviewed forecast source or manual backend input is added. This avoids presenting period dates or unreviewed consensus numbers as release-calendar facts.
 
-Curated manual events are stored in `data/manual-macro-events.json` for local fallback and script input. When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are configured for backend/CI only, `npm run sync-manual-macro-events` pulls the canonical manual event rows from Supabase before `update-macro-calendar` runs. These are discretionary liquidity or attention annotations, not economic data releases.
+Supabase is the canonical store for curated manual events. `data/manual-macro-events.json` is a generated, read-only snapshot used for offline inspection, last-known-good fallback, and calendar script input; it is never an alternative writable source. When `SUPABASE_URL` and `SUPABASE_SECRET_KEY` are configured for backend/CI only, `npm run sync-manual-macro-events` refreshes that snapshot before `update-macro-calendar` runs. The legacy `SUPABASE_SERVICE_ROLE_KEY` variable remains supported during Supabase's key migration. These are discretionary liquidity or attention annotations, not economic data releases.
 
 The local admin editor is available only in local development:
 
@@ -96,7 +97,7 @@ npm run admin:macro-events
 npm run dev
 ```
 
-Use the Supabase service-role key only in ignored local environment setup or GitHub Actions secrets. The Vite frontend must never receive this key through `VITE_*` variables. If Supabase is not configured, the admin API keeps using `data/manual-macro-events.json`.
+Use the Supabase secret key only in ignored local environment setup or GitHub Actions secrets. The Vite frontend must never receive this key through `VITE_*` variables. If Supabase is not configured, the admin API exposes `data/manual-macro-events.json` for read-only inspection but rejects save and publish requests with HTTP 503.
 
 For manual legislation, policy, or surprise events, use `category: other`, an uppercase stable `seriesId` such as `MANUAL_BILL_STABLECOIN_20260718`, `role: policy_legislation_event` for legislation or `role: manual_attention_event` for one-off surprises, and `unit: event`. Keep the source field specific enough to audit later.
 
@@ -106,7 +107,7 @@ For CI or deployment, install Python dependencies with:
 python -m pip install -r requirements-equity.txt
 ```
 
-On GitHub Actions, store `FRED_API_KEY`, `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` in repository secrets. Do not put keys in frontend code, checked-in JSON, logs, screenshots, or chat.
+On GitHub Actions, store `FRED_API_KEY`, `SUPABASE_URL`, and preferably `SUPABASE_SECRET_KEY` in repository secrets. `SUPABASE_SERVICE_ROLE_KEY` is accepted only as a temporary legacy fallback. Do not put keys in frontend code, checked-in JSON, logs, screenshots, or chat.
 
 ## Deployment notes
 
@@ -116,8 +117,12 @@ GitHub Pages is the preferred static-share path for this repo. `.github/workflow
 - manual workflow dispatch
 - an hourly schedule for current spot, US market, market-session, and configured chip-chain / robotics-chain refreshes
 
-Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow can still be used for auditable checked-in cache updates on a lower-frequency schedule, including macro-calendar, chip-chain, and robotics-chain cache files.
+Hourly Pages refreshes do not create hourly commits. The separate `update-market-data.yml` workflow publishes auditable cache snapshots to the machine-managed `data-cache` branch on a lower-frequency schedule, including macro-calendar, chip-chain, and robotics-chain cache files. It never commits generated cache updates to `main`; do not merge `data-cache` back into a development branch.
+
+Scheduled deployments restore the most recent Actions cache first and fall back to `data-cache` when that cache has been evicted or is unavailable. A fast refresh fails closed when neither baseline exists, so it cannot rebuild the whole site from stale checked-in JSON. Full refreshes may bootstrap from the checked-in last-known-good files until the first `data-cache` snapshot has been published.
 
 The frontend is intentionally static. It should not call FRED, CoinMarketCap, AKShare, Yahoo, or any other provider from the browser. Scheduled backend/CI jobs refresh checked-in JSON caches, and the deployed site serves those static cache files.
+
+`scripts/update-crypto-liquidity-data.mjs` writes `public/data/crypto-liquidity.json`. CoinMarketCap is the primary source for aggregate and asset market caps, while SoSoValue supplies reviewed daily U.S. BTC and ETH spot ETF flow series when `SOSOVALUE_API_KEY` is configured. SOL ETF flow remains explicitly pending until a reviewed source is available. The optional BlockBeats adapter requires both `BLOCKBEATS_API_KEY` and `BLOCKBEATS_AUX_ENABLED=1`; it is an auxiliary BTC cross-check and cannot replace primary ETF data.
 
 For mainland China users, if real-user testing shows unstable access on the primary static host, the same `app/dist` build can be mirrored to a China-friendly static host such as Alibaba Cloud OSS + CDN or Tencent Cloud COS + CDN. No data relay is required as long as the browser continues to read only static JSON.
