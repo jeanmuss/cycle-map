@@ -67,6 +67,8 @@ Only derived weekly data is cached. API keys, cookies, sessions, raw tick data, 
 
 The browser reads only the generated JSON. `CMC_PRO_API_KEY` must never be exposed through `VITE_*` variables or frontend code.
 
+For persistent local credentials, copy `.env.example` to `.env.local` inside `app/` and fill the values there. The ignored `.env.local` file is loaded by the backend update scripts; variables already present in the shell take precedence. Never paste provider keys into frontend code or commit the local file.
+
 `scripts/update-chip-chain-data.mjs` retrieves the chip-chain and robotics-chain market caches and writes `public/data/chip-chain-hotspots.json` or `public/data/robot-chain-watchlist.json`.
 
 - U.S. equities, ETFs, and ADRs: Alpaca official stock bars via backend/CI, using `APCA_API_KEY_ID` and `APCA_API_SECRET_KEY` from local ignored env files or GitHub Actions secrets.

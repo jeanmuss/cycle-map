@@ -910,6 +910,21 @@ html[lang="zh-CN"] .title-block h1 {
   background: #f3f3eb;
 }
 
+.equity-event-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border-style: dashed;
+}
+
+.equity-event-row b {
+  white-space: normal;
+}
+
+.equity-event-row strong {
+  color: var(--muted);
+  font-size: 9px;
+}
+
 .equity-month-day {
   font: inherit;
   cursor: pointer;
@@ -968,6 +983,16 @@ html[lang="zh-CN"] .title-block h1 {
   font-weight: 850;
 }
 
+.equity-month-tag.equity-event-tag {
+  display: block;
+  border-style: dashed;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 850;
+}
+
 .equity-month-tag.positive {
   color: #15783a;
 }
@@ -988,6 +1013,13 @@ html[lang="zh-CN"] .title-block h1 {
 
 .equity-date-detail {
   margin-top: 12px;
+}
+
+.equity-event-detail p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .metric-compare-section {

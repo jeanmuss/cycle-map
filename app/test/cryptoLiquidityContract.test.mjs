@@ -21,7 +21,7 @@ const updaterPath = resolve(appRoot, "scripts", "update-crypto-liquidity-data.mj
 const outputPath = resolve(appRoot, "public", "data", "crypto-liquidity.json");
 
 function runUpdaterWithoutCredentials() {
-  const env = { ...process.env, BLOCKBEATS_AUX_ENABLED: "0" };
+  const env = { ...process.env, BLOCKBEATS_AUX_ENABLED: "0", CYCLE_MAP_SKIP_LOCAL_ENV: "1" };
   delete env.CMC_PRO_API_KEY;
   delete env.SOSOVALUE_API_KEY;
   delete env.BLOCKBEATS_API_KEY;
@@ -106,4 +106,11 @@ test("updater preserves the last-known-good snapshot when every upstream is unav
   assert.equal(result.code, 0, result.stderr);
   assert.match(result.stdout, /preserving last-known-good JSON/);
   assert.equal(after, before);
+});
+
+test("crypto updater uses the current SoSoValue OpenAPI host and ignored local env files", async () => {
+  const source = await readFile(updaterPath, "utf8");
+  assert.match(source, /https:\/\/openapi\.sosovalue\.com\/openapi\/v2\/etf\/historicalInflowChart/);
+  assert.match(source, /resolve\(appRoot, "\.env\.local"\)/);
+  assert.match(source, /resolve\(workspaceRoot, "\.env\.local"\)/);
 });
