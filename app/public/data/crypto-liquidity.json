@@ -1,11 +1,11 @@
 {
   "version": 1,
   "page": "crypto-liquidity",
-  "generatedAt": "2026-07-12T03:37:25.589Z",
+  "generatedAt": "2026-07-13T23:24:50.375Z",
   "timestamps": {
-    "observedAt": "2026-07-10T23:25:59.999Z",
-    "fetchedAt": "2026-07-10T23:25:59.999Z",
-    "transformedAt": "2026-07-12T03:37:25.589Z"
+    "observedAt": "2026-07-13T23:22:59.999Z",
+    "fetchedAt": "2026-07-13T23:24:50.375Z",
+    "transformedAt": "2026-07-13T23:24:50.375Z"
   },
   "status": "partial",
   "metrics": [
@@ -13,50 +13,50 @@
       "id": "crypto.totalMarketCap",
       "label": "Total crypto market cap",
       "labelZh": "加密市场总市值",
-      "value": 2198899358998.4966,
+      "value": 2141287275183.8284,
       "unit": "USD",
-      "observedAt": "2026-07-10T23:25:59.999Z",
-      "source": "existing-static-cache",
-      "changePct24h": 1.27163429,
+      "observedAt": "2026-07-13T23:22:59.999Z",
+      "source": "cmc",
+      "changePct24h": -2.24144766,
       "semantics": "market_cap_change_not_net_flow",
-      "change1d": null,
+      "change1d": -57612083814.66821,
       "change7d": null
     },
     {
       "id": "btc.marketCap",
       "label": "Bitcoin market cap",
       "labelZh": "BTC 总市值",
-      "value": 1286300026857.8228,
+      "value": 1245472945962.1917,
       "unit": "USD",
-      "observedAt": "2026-07-10T23:26:05.000Z",
-      "source": "existing-static-cache",
-      "changePct24h": 1.38149103,
+      "observedAt": "2026-07-13T23:24:03.000Z",
+      "source": "cmc",
+      "changePct24h": -2.68240864,
       "semantics": "market_cap_change_not_net_flow",
-      "change1d": null,
+      "change1d": -40827080895.6311,
       "change7d": null
     },
     {
       "id": "stablecoin.usdt.marketCap",
       "label": "USDT circulating market cap",
       "labelZh": "USDT 流通市值",
-      "value": 184203406587.57532,
+      "value": 184063768241.15198,
       "unit": "USD",
-      "observedAt": "2026-07-10T23:26:05.000Z",
-      "source": "existing-static-cache",
-      "changePct24h": null,
+      "observedAt": "2026-07-13T23:24:03.000Z",
+      "source": "cmc",
+      "changePct24h": -0.06983387,
       "semantics": "circulating_supply_proxy",
-      "change1d": null,
+      "change1d": -139638346.42333984,
       "change7d": null
     },
     {
       "id": "stablecoin.usdc.marketCap",
       "label": "USDC circulating market cap",
       "labelZh": "USDC 流通市值",
-      "value": null,
+      "value": 73061235708.95628,
       "unit": "USD",
-      "observedAt": null,
-      "source": "pending-cmc-refresh",
-      "changePct24h": null,
+      "observedAt": "2026-07-13T23:24:03.000Z",
+      "source": "cmc",
+      "changePct24h": 0.00631737,
       "semantics": "circulating_supply_proxy",
       "change1d": null,
       "change7d": null
@@ -65,10 +65,10 @@
       "id": "stablecoin.major.marketCap",
       "label": "USDT + USDC market cap",
       "labelZh": "主流稳定币市值",
-      "value": null,
+      "value": 257125003950.10828,
       "unit": "USD",
-      "observedAt": null,
-      "source": "pending-cmc-refresh",
+      "observedAt": "2026-07-13T23:24:03.000Z",
+      "source": "cmc",
       "coverage": [
         "USDT",
         "USDC"
@@ -81,13 +81,13 @@
       "id": "stablecoin.usdt.depegBps",
       "label": "USDT peg deviation",
       "labelZh": "USDT 脱锚幅度",
-      "value": -7.000000000000339,
+      "value": -12.854740587435742,
       "unit": "bps",
-      "observedAt": "2026-07-10T23:26:54.059Z",
-      "source": "existing-static-cache",
-      "price": 0.9993,
+      "observedAt": "2026-07-13T23:24:03.000Z",
+      "source": "cmc",
+      "price": 0.9987145259412564,
       "semantics": "price_deviation_not_flow",
-      "change1d": null,
+      "change1d": -5.854740587435403,
       "change7d": null
     }
   ],
@@ -96,24 +96,52 @@
       {
         "date": "2026-07-10",
         "value": 2198899358998.4966
+      },
+      {
+        "date": "2026-07-13",
+        "value": 2141287275183.8284
       }
     ],
     "btc.marketCap": [
       {
         "date": "2026-07-10",
         "value": 1286300026857.8228
+      },
+      {
+        "date": "2026-07-13",
+        "value": 1245472945962.1917
       }
     ],
     "stablecoin.usdt.marketCap": [
       {
         "date": "2026-07-10",
         "value": 184203406587.57532
+      },
+      {
+        "date": "2026-07-13",
+        "value": 184063768241.15198
       }
     ],
     "stablecoin.usdt.depegBps": [
       {
         "date": "2026-07-10",
         "value": -7.000000000000339
+      },
+      {
+        "date": "2026-07-13",
+        "value": -12.854740587435742
+      }
+    ],
+    "stablecoin.usdc.marketCap": [
+      {
+        "date": "2026-07-13",
+        "value": 73061235708.95628
+      }
+    ],
+    "stablecoin.major.marketCap": [
+      {
+        "date": "2026-07-13",
+        "value": 257125003950.10828
       }
     ]
   },
@@ -170,8 +198,7 @@
     "blockbeats": "https://www.theblockbeats.info/apiDoc"
   },
   "failures": [
-    "CMC: CMC_PRO_API_KEY is not configured",
-    "SoSoValue BTC: SOSOVALUE_API_KEY is not configured",
-    "SoSoValue ETH: SOSOVALUE_API_KEY is not configured"
+    "SoSoValue BTC: SoSoValue BTC returned an empty history",
+    "SoSoValue ETH: SoSoValue ETH returned an empty history"
   ]
 }
