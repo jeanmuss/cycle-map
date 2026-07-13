@@ -23,6 +23,7 @@ import pandas as pd
 APP_ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = APP_ROOT.parent
 OUTPUT_PATH = APP_ROOT / "public" / "data" / "equity-weekly.json"
+RECURRING_EVENTS_PATH = APP_ROOT / "data" / "equity-recurring-events.json"
 CACHE_DIR = WORKSPACE_ROOT / "tmp" / "equity-cache"
 SHARED_FRED_CACHE_DIR = WORKSPACE_ROOT / "tmp" / "macro-cache" / "fred"
 
@@ -31,6 +32,8 @@ WINDOW_MONTHS = int(os.environ.get("EQUITY_CALENDAR_MONTHS", "6"))
 PRICE_SOURCE = os.environ.get("EQUITY_PRICE_SOURCE", "akshare").strip().lower()
 CACHE_MAX_AGE_MINUTES = int(os.environ.get("EQUITY_CACHE_MAX_AGE_MINUTES", "55"))
 END_DATE = pd.Timestamp(os.environ.get("EQUITY_CALENDAR_END_DATE", datetime.now(NY_TZ).date().isoformat())).normalize()
+EVENT_LOOKAHEAD_DAYS = int(os.environ.get("EQUITY_EVENT_LOOKAHEAD_DAYS", "45"))
+EVENT_END_DATE = END_DATE + pd.DateOffset(days=EVENT_LOOKAHEAD_DAYS)
 WINDOW_START = (END_DATE - pd.DateOffset(months=WINDOW_MONTHS)).normalize()
 LOOKBACK_START = (WINDOW_START - pd.DateOffset(days=10)).normalize()
 
@@ -56,7 +59,17 @@ ASSETS = {
         "role": "Dow Jones Industrial Average ETF proxy",
         "quote": "USD",
     },
+    "SOX": {
+        "symbol": "SOX",
+        "providerSymbol": "^SOX",
+        "displaySymbol": "SOX",
+        "name": "PHLX Semiconductor Index",
+        "role": "Philadelphia Semiconductor Index",
+        "quote": "index",
+    },
 }
+
+OPTIONAL_ASSETS = {"SOX"}
 
 FRED_SERIES = {
     "DGS10": {"label": "10Y Treasury", "unit": "percent", "kind": "yield"},
@@ -87,7 +100,7 @@ def parse_timestamp(value: str | None) -> datetime | None:
 
 def oldest_provider_fetch_at() -> str | None:
     timestamps: list[datetime] = []
-    paths = [CACHE_DIR / f"price-{symbol}.json" for symbol in ASSETS]
+    paths = [CACHE_DIR / f"price-{asset_price_symbol(symbol)}.json" for symbol in ASSETS]
     paths.extend(fred_cache_path(series_id) for series_id in FRED_SERIES)
     for series_id in FRED_SERIES:
         paths.append(SHARED_FRED_CACHE_DIR / f"{series_id}.json")
@@ -120,6 +133,58 @@ def read_existing() -> dict | None:
         return json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return None
+
+
+def asset_price_symbol(symbol: str) -> str:
+    return str(ASSETS.get(symbol, {}).get("providerSymbol") or symbol)
+
+
+def read_recurring_event_definitions() -> list[dict]:
+    payload = json.loads(RECURRING_EVENTS_PATH.read_text(encoding="utf-8"))
+    definitions = payload.get("events") if isinstance(payload, dict) else None
+    if not isinstance(definitions, list):
+        raise RuntimeError("equity recurring event config must contain an events array")
+    output: list[dict] = []
+    for item in definitions:
+        recurrence = item.get("recurrence") if isinstance(item, dict) else None
+        recurrence_type = recurrence.get("type") if isinstance(recurrence, dict) else None
+        if recurrence_type not in {"monthly", "annual"}:
+            raise RuntimeError(f"unsupported equity event recurrence: {recurrence_type}")
+        if item.get("category") != "liquidity" or not item.get("labelZh") or not item.get("labelEn"):
+            raise RuntimeError(f"invalid bilingual liquidity event: {item.get('id')}")
+        output.append(item)
+    return output
+
+
+RECURRING_EVENT_DEFINITIONS = read_recurring_event_definitions()
+
+
+def recurring_events_for_date(day: pd.Timestamp) -> list[dict]:
+    events: list[dict] = []
+    for definition in RECURRING_EVENT_DEFINITIONS:
+        recurrence = definition["recurrence"]
+        matches = day.day == int(recurrence["day"])
+        if recurrence["type"] == "annual":
+            matches = matches and day.month == int(recurrence["month"])
+        if not matches:
+            continue
+        events.append({
+            "id": f"{definition['id']}:{day.strftime('%Y-%m-%d')}",
+            "seriesId": definition["id"],
+            "date": day.strftime("%Y-%m-%d"),
+            "category": "liquidity",
+            "categoryLabelZh": "流动性",
+            "categoryLabelEn": "Liquidity",
+            "labelZh": definition["labelZh"],
+            "labelEn": definition["labelEn"],
+            "noteZh": definition.get("noteZh", ""),
+            "noteEn": definition.get("noteEn", ""),
+            "source": definition.get("source", "Reviewed recurring event config"),
+            "sourceUrl": definition.get("sourceUrl"),
+            "dateMeaning": definition.get("dateMeaning", "calendar_anchor"),
+            "cadence": recurrence["type"],
+        })
+    return events
 
 
 def finite_number(value) -> float | None:
@@ -314,7 +379,7 @@ def fetch_daily_prices(symbol: str, failures: list[str], status: dict) -> DailyP
         "akshare": source_akshare_daily,
         "yfinance": source_yfinance_daily,
     }
-    ordered = [PRICE_SOURCE] + [name for name in providers if name != PRICE_SOURCE]
+    ordered = (["yfinance", "akshare"] if symbol.startswith("^") else [PRICE_SOURCE] + [name for name in providers if name != PRICE_SOURCE])
     last_error: Exception | None = None
     for provider_name in ordered:
         provider = providers.get(provider_name)
@@ -461,7 +526,7 @@ def fetch_delayed_spot_quotes(failures: list[str]) -> dict[str, dict]:
         return {}
     if frame.empty:
         return {}
-    symbols = set(ASSETS)
+    symbols = set(ASSETS) - {"SOX"}
     output = {}
     for _, row in frame.iterrows():
         row_text = " ".join(str(value).upper() for value in row.values)
@@ -507,13 +572,21 @@ def build_latest_assets(days: list[dict], spot_quotes: dict[str, dict], status: 
 
 
 def day_range() -> list[pd.Timestamp]:
-    return list(pd.date_range(WINDOW_START, END_DATE, freq="D"))
+    return list(pd.date_range(WINDOW_START, EVENT_END_DATE, freq="D"))
 
 
 def build_output() -> dict:
     failures: list[str] = []
     status = market_status()
-    price_daily = {symbol: fetch_daily_prices(symbol, failures, status) for symbol in ASSETS}
+    price_daily: dict[str, DailyPrices | None] = {}
+    for symbol in ASSETS:
+        try:
+            price_daily[symbol] = fetch_daily_prices(asset_price_symbol(symbol), failures, status)
+        except Exception as exc:  # noqa: BLE001 - optional asset failures stay visible without blocking the calendar.
+            if symbol not in OPTIONAL_ASSETS:
+                raise
+            failures.append(f"{symbol}: optional index unavailable: {exc}")
+            price_daily[symbol] = None
     fred_daily = fetch_fred_series(failures, status)
     spot_quotes = fetch_delayed_spot_quotes(failures) if status["isOpen"] else {}
 
@@ -522,20 +595,24 @@ def build_output() -> dict:
         date_key = day.strftime("%Y-%m-%d")
         market_day = is_market_day(day)
         assets = {
-            symbol: daily_asset_row(prices.frame, date_key, symbol)
+            symbol: daily_asset_row(prices.frame, date_key, symbol) if prices is not None else None
             for symbol, prices in price_daily.items()
         }
         macro = {
             series_id: macro_observation(fred_daily.get(series_id), date_key) if market_day else None
             for series_id in FRED_SERIES
         }
-        days.append({
+        row = {
             "date": date_key,
             "dayOfWeek": int(day.weekday()),
             "isMarketDay": market_day,
             "assets": assets if market_day else {symbol: None for symbol in ASSETS},
             "macro": macro if market_day else {series_id: None for series_id in FRED_SERIES},
-        })
+        }
+        events = recurring_events_for_date(day)
+        if events:
+            row["events"] = events
+        days.append(row)
 
     trading_days = [day for day in days if day["isMarketDay"] and any(day["assets"].values())]
     if not trading_days:
@@ -563,32 +640,35 @@ def build_output() -> dict:
             "months": WINDOW_MONTHS,
             "startDate": WINDOW_START.strftime("%Y-%m-%d"),
             "endDate": END_DATE.strftime("%Y-%m-%d"),
+            "eventEndDate": EVENT_END_DATE.strftime("%Y-%m-%d"),
         },
         "market": status,
         "methodology": (
-            "Daily price rows are derived from cached daily OHLC for QQQ, SPY, and DIA. "
+            "Daily price rows are derived from cached daily OHLC for QQQ, SPY, DIA, and the SOX index when available. "
             "DIA is used as a Dow Jones Industrial Average ETF proxy. "
-            "10Y and VIX use FRED daily observations and display latest observation changes versus the previous observation."
+            "10Y and VIX use FRED daily observations and display latest observation changes versus the previous observation. "
+            "Reviewed recurring crypto-supply and CEX-attention annotations are calendar anchors, not claims of guaranteed price impact."
         ),
         "priceSourcePreference": PRICE_SOURCE,
         "failures": failures,
         "assets": {
             symbol: {
                 **ASSETS[symbol],
-                "sourceLabel": price_daily[symbol].source,
-                "cacheStatus": price_daily[symbol].cache_status,
-                "rows": len(price_daily[symbol].frame),
-                "firstDate": price_daily[symbol].frame.index[0].strftime("%Y-%m-%d"),
-                "lastDate": price_daily[symbol].frame.index[-1].strftime("%Y-%m-%d"),
+                "sourceLabel": price_daily[symbol].source if price_daily[symbol] is not None else "yfinance ^SOX pending",
+                "cacheStatus": price_daily[symbol].cache_status if price_daily[symbol] is not None else "unavailable",
+                "rows": len(price_daily[symbol].frame) if price_daily[symbol] is not None else 0,
+                "firstDate": price_daily[symbol].frame.index[0].strftime("%Y-%m-%d") if price_daily[symbol] is not None else None,
+                "lastDate": price_daily[symbol].frame.index[-1].strftime("%Y-%m-%d") if price_daily[symbol] is not None else None,
             }
             for symbol in ASSETS
         },
         "macroSeries": FRED_SERIES,
         "sources": {
-            "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
+            "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback and is the reviewed source for Yahoo symbol ^SOX. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
             "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
             "calendar": "Built-in NYSE holiday rules for regular full market closures; early closes are not modeled in this version.",
             "cache": "tmp/equity-cache",
+            "recurringEvents": "app/data/equity-recurring-events.json",
         },
         "latest": {
             "date": trading_days[-1]["date"],
@@ -599,8 +679,67 @@ def build_output() -> dict:
     }
 
 
+def merge_recurring_events_into_existing(existing: dict) -> dict:
+    output = json.loads(json.dumps(existing))
+    existing_days = {str(item.get("date")): item for item in output.get("days", []) if item.get("date")}
+    has_sox_rows = any((item.get("assets") or {}).get("SOX") for item in existing_days.values())
+    start_value = output.get("window", {}).get("startDate") or WINDOW_START.strftime("%Y-%m-%d")
+    start_date = pd.Timestamp(start_value).normalize()
+    market_end_date = pd.Timestamp(output.get("window", {}).get("endDate") or END_DATE).normalize()
+    merged_days: list[dict] = []
+    for day in pd.date_range(start_date, EVENT_END_DATE, freq="D"):
+        date_key = day.strftime("%Y-%m-%d")
+        row = dict(existing_days.get(date_key) or {
+            "date": date_key,
+            "dayOfWeek": int(day.weekday()),
+            "isMarketDay": is_market_day(day),
+        })
+        if not has_sox_rows:
+            row.setdefault("assets", {}).pop("SOX", None)
+        if day > market_end_date:
+            row.pop("assets", None)
+            row.pop("macro", None)
+        events = recurring_events_for_date(day)
+        if events:
+            row["events"] = events
+        else:
+            row.pop("events", None)
+        merged_days.append(row)
+
+    output.setdefault("assets", {})["SOX"] = {
+        **ASSETS["SOX"],
+        "sourceLabel": output.get("assets", {}).get("SOX", {}).get("sourceLabel") or "yfinance ^SOX pending next market refresh",
+        "cacheStatus": output.get("assets", {}).get("SOX", {}).get("cacheStatus") or "unavailable",
+        "rows": output.get("assets", {}).get("SOX", {}).get("rows") or 0,
+        "firstDate": output.get("assets", {}).get("SOX", {}).get("firstDate"),
+        "lastDate": output.get("assets", {}).get("SOX", {}).get("lastDate"),
+    }
+    output.setdefault("latest", {}).setdefault("assets", {})["SOX"] = output.get("latest", {}).get("assets", {}).get("SOX")
+    output.setdefault("window", {})["eventEndDate"] = EVENT_END_DATE.strftime("%Y-%m-%d")
+    output["days"] = merged_days
+    output["eventAnnotations"] = {
+        "transformedAt": iso_now(),
+        "source": "app/data/equity-recurring-events.json",
+        "lookaheadDays": EVENT_LOOKAHEAD_DAYS,
+    }
+    output.setdefault("sources", {})["recurringEvents"] = "app/data/equity-recurring-events.json"
+    return output
+
+
 def main() -> int:
     existing = read_existing()
+    if os.environ.get("EQUITY_EVENTS_ONLY") == "1":
+        if not existing:
+            raise RuntimeError("EQUITY_EVENTS_ONLY requires an existing equity-weekly.json")
+        output = merge_recurring_events_into_existing(existing)
+        OUTPUT_PATH.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({
+            "status": "merged-recurring-events",
+            "outputPath": str(OUTPUT_PATH),
+            "days": len(output["days"]),
+            "eventRows": sum(1 for row in output["days"] if row.get("events")),
+        }, ensure_ascii=False))
+        return 0
     try:
         output = build_output()
     except Exception as exc:  # noqa: BLE001

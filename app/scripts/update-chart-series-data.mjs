@@ -214,7 +214,7 @@ function addDerivedLiquiditySeries(output) {
 
 function addEquitySeries(output, equityDataset) {
   if (!equityDataset?.days?.length) return;
-  const assets = ["QQQ", "SPY", "DIA"];
+  const assets = ["QQQ", "SPY", "DIA", "SOX"];
   for (const symbol of assets) {
     const meta = equityDataset.assets?.[symbol] || {};
     const display = meta.displaySymbol || symbol;

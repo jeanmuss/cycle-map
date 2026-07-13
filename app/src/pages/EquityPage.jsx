@@ -172,7 +172,7 @@ import {
   MacroCalendarPage,
 } from "./MacroPage.jsx";
 
-export const EQUITY_ASSET_KEYS = ["QQQ", "SPY", "DIA"];
+export const EQUITY_ASSET_KEYS = ["QQQ", "SPY", "DIA", "SOX"];
 export const NO_RIGHT_METRIC_ID = "__none__";
 export const USD_CNY_METRIC_ID = "macro.DEXCHUS.value";
 export const METRIC_CHART_DEFAULTS = {
@@ -411,7 +411,16 @@ export function MetricSelect({ label, value, onChange, groups, language, emptyOp
 
 export function equityAssetLabel(dataset, symbol, t) {
   if (symbol === "DIA") return equityCopy(t).dow;
+  if (symbol === "SOX") return equityCopy(t).sox;
   return dataset.assets?.[symbol]?.displaySymbol || symbol;
+}
+
+export function equityEventLabel(event, language) {
+  return language === "en" ? event?.labelEn || event?.labelZh : event?.labelZh || event?.labelEn;
+}
+
+export function equityEventNote(event, language) {
+  return language === "en" ? event?.noteEn || event?.noteZh : event?.noteZh || event?.noteEn;
 }
 
 export function equityDaysByDate(dataset) {
@@ -846,6 +855,7 @@ export function MetricComparePanel({ chartDataset, language, t }) {
 
 export function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleWeekDate, t }) {
   const copy = equityCopy(t);
+  const language = t.htmlLang === "zh-CN" ? "zh" : "en";
   const byDate = useMemo(() => equityDaysByDate(dataset), [dataset]);
   const days = useMemo(() => weekDaysFor(visibleWeekDate), [visibleWeekDate]);
   const shiftVisibleWeek = (daysToAdd) => {
@@ -883,11 +893,12 @@ export function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleW
                   const row = byDate.get(day.dateKey);
                   const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
                   const isClosed = (row && !row.isMarketDay) || (!row && (day.dayIndex === 0 || day.dayIndex === 6));
+                  const events = row?.events || [];
                   return (
-                    <td key={day.dateKey} className={[hasData ? "" : "macro-calendar-empty", isClosed ? "is-closed" : "", day.isToday ? "is-today" : ""].filter(Boolean).join(" ")}>
-                      {hasData ? (
+                    <td key={day.dateKey} className={[hasData || events.length ? "" : "macro-calendar-empty", isClosed ? "is-closed" : "", day.isToday ? "is-today" : ""].filter(Boolean).join(" ")}>
+                      {hasData || isClosed || events.length ? (
                         <div className="equity-day-detail">
-                          {EQUITY_ASSET_KEYS.map((symbol) => {
+                          {hasData ? EQUITY_ASSET_KEYS.map((symbol) => {
                             const asset = row.assets?.[symbol];
                             return asset ? (
                               <span className={`equity-day-row equity-direction-row ${equityDirectionClass(asset)}`} key={symbol}>
@@ -895,8 +906,8 @@ export function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleW
                                 <strong>{equityDirectionSymbol(asset)}</strong>
                               </span>
                             ) : null;
-                          })}
-                          {["DGS10", "VIXCLS"].map((seriesId) => {
+                          }) : null}
+                          {hasData ? ["DGS10", "VIXCLS"].map((seriesId) => {
                             const item = row.macro?.[seriesId];
                             const label = seriesId === "DGS10" ? copy.tenYear : copy.vix;
                             return item ? (
@@ -906,11 +917,14 @@ export function EquityMarketWeekCalendar({ dataset, visibleWeekDate, setVisibleW
                                 <strong className={macroClass(seriesId === "DGS10" ? item.changeBp : item.change)}>{formatEquityMacroChange(seriesId, item)}</strong>
                               </span>
                             ) : null;
-                          })}
-                        </div>
-                      ) : isClosed ? (
-                        <div className="equity-day-detail">
-                          <span className="equity-market-closed">{copy.marketClosed}</span>
+                          }) : null}
+                          {!hasData && isClosed ? <span className="equity-market-closed">{copy.marketClosed}</span> : null}
+                          {events.map((event) => (
+                            <span className="equity-day-row equity-event-row macro-liquidity" key={event.id} title={equityEventNote(event, language)}>
+                              <b>{equityEventLabel(event, language)}</b>
+                              <strong>{language === "en" ? "Liquidity" : "流动性"}</strong>
+                            </span>
+                          ))}
                         </div>
                       ) : null}
                     </td>
@@ -937,8 +951,9 @@ export function EquityDateDetails({ dateKey, row, dataset, t }) {
   const macroItems = ["DGS10", "VIXCLS"]
     .map((seriesId) => ({ seriesId, item: row?.macro?.[seriesId] }))
     .filter((entry) => entry.item);
+  const eventItems = row?.events || [];
   const usdCnyItem = metricPointAtOrBeforeDate(dataset.chartSeries, USD_CNY_METRIC_ID, dateKey);
-  const count = assetItems.length + macroItems.length + (usdCnyItem ? 1 : 0);
+  const count = assetItems.length + macroItems.length + eventItems.length + (usdCnyItem ? 1 : 0);
   const isClosed = row && !row.isMarketDay;
   return (
     <aside className="macro-date-detail equity-date-detail" aria-live="polite">
@@ -1000,6 +1015,14 @@ export function EquityDateDetails({ dateKey, row, dataset, t }) {
               <small>{t.macroCalendar.dailyObservation} / {usdCnyItem.metric.source || "FRED"}</small>
             </div>
           ) : null}
+          {eventItems.map((event) => (
+            <div className="macro-date-detail-item equity-date-detail-item equity-event-detail" key={event.id}>
+              <span className="macro-pill macro-liquidity">{language === "en" ? "Liquidity" : "流动性"}</span>
+              <strong>{equityEventLabel(event, language)}</strong>
+              <p>{equityEventNote(event, language)}</p>
+              <small>{event.date} / {event.source || "Reviewed recurring event"}</small>
+            </div>
+          ))}
         </div>
       ) : (
         <p>{isClosed ? copy.marketClosed : t.macroCalendar.noIndicators}</p>
@@ -1035,6 +1058,7 @@ export function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMon
             const row = byDate.get(day.dateKey);
             const hasData = row?.isMarketDay && Object.values(row.assets || {}).some(Boolean);
             const isClosed = day.inMonth && row && !row.isMarketDay;
+            const events = row?.events || [];
             return (
               <button
                 type="button"
@@ -1046,7 +1070,7 @@ export function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMon
                   day.inMonth ? "" : "is-muted",
                   day.isToday ? "is-today" : "",
                   selectedDate === day.dateKey ? "is-selected" : "",
-                  hasData ? "has-items" : "",
+                  hasData || events.length ? "has-items" : "",
                 ].filter(Boolean).join(" ")}
               >
                 <strong>{day.dayOfMonth}</strong>
@@ -1072,6 +1096,11 @@ export function EquityMarketMonthCalendar({ dataset, visibleMonth, setVisibleMon
                   }) : isClosed ? (
                     <small className="macro-month-tag equity-month-tag equity-market-closed-tag">{copy.marketClosed}</small>
                   ) : null}
+                  {events.map((event) => (
+                    <small className="macro-month-tag equity-month-tag equity-event-tag macro-liquidity" key={event.id} title={equityEventNote(event, language)}>
+                      {equityEventLabel(event, language)}
+                    </small>
+                  ))}
                 </span>
               </button>
             );
@@ -1404,8 +1433,10 @@ export function EquityMacroPage({ language, setLanguage, t }) {
         failures={failureCount}
         sources={[
           `QQQ / SPY / DIA - ${slowDataset?.assets?.QQQ?.sourceLabel || copy.waitingForFastData}`,
+          `PHLX SOX (^SOX) - ${slowDataset?.assets?.SOX?.sourceLabel || copy.waitingForFastData}`,
           "FRED - DGS10 / VIXCLS / DEXCHUS / Gold proxy",
           "CoinMarketCap when configured",
+          "Reviewed crypto supply and CEX anniversary calendar anchors",
           "Built-in NYSE holiday rules",
         ]}
         methodology={language === "zh" ? copy.methodology : [copy.methodology, dataset.fast?.methodology]}

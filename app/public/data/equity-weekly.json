@@ -6,7 +6,8 @@
   "window": {
     "months": 6,
     "startDate": "2026-01-11",
-    "endDate": "2026-07-11"
+    "endDate": "2026-07-11",
+    "eventEndDate": "2026-08-26"
   },
   "market": {
     "timezone": "America/New_York",
@@ -55,6 +56,19 @@
       "rows": 130,
       "firstDate": "2026-01-02",
       "lastDate": "2026-07-10"
+    },
+    "SOX": {
+      "symbol": "SOX",
+      "providerSymbol": "^SOX",
+      "displaySymbol": "SOX",
+      "name": "PHLX Semiconductor Index",
+      "role": "Philadelphia Semiconductor Index",
+      "quote": "index",
+      "sourceLabel": "yfinance ^SOX pending next market refresh",
+      "cacheStatus": "unavailable",
+      "rows": 0,
+      "firstDate": null,
+      "lastDate": null
     }
   },
   "macroSeries": {
@@ -73,7 +87,8 @@
     "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
     "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
     "calendar": "Built-in NYSE holiday rules for regular full market closures; early closes are not modeled in this version.",
-    "cache": "tmp/equity-cache"
+    "cache": "tmp/equity-cache",
+    "recurringEvents": "app/data/equity-recurring-events.json"
   },
   "latest": {
     "date": "2026-07-10",
@@ -113,7 +128,8 @@
         "pct": 0.026634198310628254,
         "volume": 3469449.0,
         "priceType": "close"
-      }
+      },
+      "SOX": null
     },
     "macro": {
       "DGS10": {
@@ -1099,7 +1115,41 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-02-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-02-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-02-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-02-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-02-02",
@@ -1418,7 +1468,25 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-02-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-02-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-02-08",
@@ -2384,7 +2452,41 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-03-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-03-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-03-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-03-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-03-02",
@@ -2703,7 +2805,25 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-03-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-03-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-03-08",
@@ -3899,7 +4019,41 @@
           "changeBp": -71.00000000000009,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-04-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-04-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-04-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-04-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-04-02",
@@ -4124,7 +4278,25 @@
           "changeBp": 160.99999999999994,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-04-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-04-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-04-08",
@@ -5306,7 +5478,41 @@
           "changeBp": 9.999999999999787,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-05-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-05-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-05-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-05-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-05-02",
@@ -5578,7 +5784,25 @@
           "changeBp": -31.000000000000227,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-05-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-05-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-05-08",
@@ -6619,7 +6843,25 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "cex.okx.anniversary:2026-05-31",
+          "seriesId": "cex.okx.anniversary",
+          "date": "2026-05-31",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "OKX 周年纪念日",
+          "labelEn": "OKX anniversary",
+          "noteZh": "OKX 官方五周年回顾确认 2017 年 5 月 31 日成立；作为 CEX 注意力与潜在活动流动性观察。",
+          "noteEn": "OKX's official fifth-anniversary retrospective identifies May 31, 2017 as its founding date; tracked as a CEX attention and potential campaign-liquidity event.",
+          "source": "OKX official anniversary retrospective",
+          "sourceUrl": "https://www.okx.com/zh-hans/learn/okxs-fifth-ann",
+          "dateMeaning": "annual_anniversary",
+          "cadence": "annual"
+        }
+      ]
     },
     {
       "date": "2026-06-01",
@@ -6680,7 +6922,41 @@
           "changeBp": 73.00000000000004,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-06-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-06-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-06-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-06-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-06-02",
@@ -6952,7 +7228,25 @@
       "macro": {
         "DGS10": null,
         "VIXCLS": null
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-06-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-06-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-06-08",
@@ -8087,7 +8381,41 @@
           "changeBp": 14.000000000000057,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-07-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-07-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-07-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-07-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-07-02",
@@ -8312,7 +8640,25 @@
           "changeBp": 55.99999999999987,
           "carriedForward": false
         }
-      }
+      },
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-07-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-07-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
     },
     {
       "date": "2026-07-08",
@@ -8510,6 +8856,311 @@
         "DGS10": null,
         "VIXCLS": null
       }
+    },
+    {
+      "date": "2026-07-12",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-07-13",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-14",
+      "dayOfWeek": 1,
+      "isMarketDay": true,
+      "events": [
+        {
+          "id": "cex.binance.anniversary:2026-07-14",
+          "seriesId": "cex.binance.anniversary",
+          "date": "2026-07-14",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "Binance 周年纪念日",
+          "labelEn": "Binance anniversary",
+          "noteZh": "Binance 在历年官方周年活动中以 7 月 14 日作为周年节点；作为 CEX 注意力与潜在活动流动性观察。",
+          "noteEn": "Binance has used July 14 as its anniversary milestone in official anniversary campaigns; tracked here as a CEX attention and potential campaign-liquidity event.",
+          "source": "Binance anniversary campaigns",
+          "sourceUrl": "https://www.binance.com/en/blog/markets/8766128428192890473",
+          "dateMeaning": "annual_anniversary",
+          "cadence": "annual"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-16",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-17",
+      "dayOfWeek": 4,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-18",
+      "dayOfWeek": 5,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-07-19",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-07-20",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-21",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-22",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-23",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-24",
+      "dayOfWeek": 4,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-25",
+      "dayOfWeek": 5,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-07-26",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-07-27",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-28",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-29",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-30",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-07-31",
+      "dayOfWeek": 4,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-01",
+      "dayOfWeek": 5,
+      "isMarketDay": false,
+      "events": [
+        {
+          "id": "crypto.eth.monthly-net-issuance-review:2026-08-01",
+          "seriesId": "crypto.eth.monthly-net-issuance-review",
+          "date": "2026-08-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "ETH 上月净发行复盘（非固定解锁）",
+          "labelEn": "ETH prior-month net issuance review (not an unlock)",
+          "noteZh": "ETH 验证者奖励按 epoch 持续计提，同时 EIP-1559 持续销毁手续费；每月 1 日只是上月净供应复盘锚点，不是一次性增发日。",
+          "noteEn": "Validator issuance accrues by epoch while EIP-1559 continuously burns fees. The 1st is a review anchor for the prior month's net supply, not a one-off issuance date.",
+          "source": "ethereum.org ETH supply and issuance",
+          "sourceUrl": "https://ethereum.org/eth/supply/",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        },
+        {
+          "id": "crypto.sol.monthly-issuance-review:2026-08-01",
+          "seriesId": "crypto.sol.monthly-issuance-review",
+          "date": "2026-08-01",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "SOL 上月 epoch 发行复盘（非固定解锁）",
+          "labelEn": "SOL prior-month epoch issuance review (not an unlock)",
+          "noteZh": "SOL 通胀奖励在每个 epoch 结束时发行，epoch 通常约两天；每月 1 日仅作为上月累计发行复盘锚点。",
+          "noteEn": "SOL inflation rewards are issued at epoch boundaries, typically about every two days. The 1st is only a review anchor for the prior month's cumulative issuance.",
+          "source": "Solana protocol inflation / epoch rewards",
+          "sourceUrl": "https://solana.com/docs/economics/inflation/inflation-schedule",
+          "dateMeaning": "prior_month_supply_review",
+          "cadence": "monthly"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-02",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-03",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-04",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-05",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-06",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-07",
+      "dayOfWeek": 4,
+      "isMarketDay": true,
+      "events": [
+        {
+          "id": "crypto.hype.core-contributor-observation:2026-08-07",
+          "seriesId": "crypto.hype.core-contributor-observation",
+          "date": "2026-08-07",
+          "category": "liquidity",
+          "categoryLabelZh": "流动性",
+          "categoryLabelEn": "Liquidity",
+          "labelZh": "HYPE 核心贡献者解锁/转账观察",
+          "labelEn": "HYPE core-contributor unlock/transfer watch",
+          "noteZh": "按产品观察口径固定在每月 7 日。第三方追踪口径并不完全一致，因此这是潜在供给与转账观察窗，不表示协议保证在该日精确解锁。",
+          "noteEn": "Anchored to the 7th for product monitoring. Third-party trackers disagree, so this is a potential supply/transfer watch window rather than a protocol-guaranteed exact unlock time.",
+          "source": "DeFiLlama unlock tracker / product monitoring convention",
+          "sourceUrl": "https://defillama.com/unlocks/hyperliquid",
+          "dateMeaning": "monthly_supply_watch_anchor",
+          "cadence": "monthly"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-08",
+      "dayOfWeek": 5,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-09",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-10",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-11",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-12",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-13",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-14",
+      "dayOfWeek": 4,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-15",
+      "dayOfWeek": 5,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-16",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-17",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-18",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-19",
+      "dayOfWeek": 2,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-20",
+      "dayOfWeek": 3,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-21",
+      "dayOfWeek": 4,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-22",
+      "dayOfWeek": 5,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-23",
+      "dayOfWeek": 6,
+      "isMarketDay": false
+    },
+    {
+      "date": "2026-08-24",
+      "dayOfWeek": 0,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-25",
+      "dayOfWeek": 1,
+      "isMarketDay": true
+    },
+    {
+      "date": "2026-08-26",
+      "dayOfWeek": 2,
+      "isMarketDay": true
     }
-  ]
+  ],
+  "eventAnnotations": {
+    "transformedAt": "2026-07-13T00:01:39Z",
+    "source": "app/data/equity-recurring-events.json",
+    "lookaheadDays": 45
+  }
 }

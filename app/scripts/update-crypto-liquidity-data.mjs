@@ -15,16 +15,38 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
+const workspaceRoot = resolve(appRoot, "..");
 const outputPath = resolve(appRoot, "public", "data", "crypto-liquidity.json");
 const equityFastPath = resolve(appRoot, "public", "data", "equity-fast.json");
 const marketSessionPath = resolve(appRoot, "public", "data", "market-session.json");
 const CMC_GLOBAL_URL = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest?convert=USD";
 const CMC_QUOTES_URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=1,825,3408&convert=USD";
-const SOSO_URL = "https://api.sosovalue.xyz/openapi/v2/etf/historicalInflowChart";
+const SOSO_URL = "https://openapi.sosovalue.com/openapi/v2/etf/historicalInflowChart";
 const BLOCKBEATS_URL = "https://api-pro.theblockbeats.info/v1/data/btc_etf";
 
 function isoNow() {
   return new Date().toISOString();
+}
+
+async function loadEnvFile(path) {
+  let textValue;
+  try {
+    textValue = await readFile(path, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return;
+    throw error;
+  }
+  for (const line of textValue.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match || process.env[match[1]]) continue;
+    let value = match[2].trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    process.env[match[1]] = value;
+  }
 }
 
 function safeFailure(error) {
@@ -160,6 +182,11 @@ async function writeJsonAtomic(path, payload) {
   const tempPath = `${path}.tmp`;
   await writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
   await rename(tempPath, path);
+}
+
+if (process.env.CYCLE_MAP_SKIP_LOCAL_ENV !== "1") {
+  await loadEnvFile(resolve(appRoot, ".env.local"));
+  await loadEnvFile(resolve(workspaceRoot, ".env.local"));
 }
 
 const existing = await readJson(outputPath, null);
