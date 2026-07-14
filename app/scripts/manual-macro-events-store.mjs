@@ -83,7 +83,8 @@ function serviceKey() {
 function supabaseConfig() {
   const url = cleanText(process.env.SUPABASE_URL).replace(/\/+$/, "");
   const key = serviceKey();
-  return { url, key };
+  const bearer = key && !key.startsWith("sb_") ? `Bearer ${key}` : null;
+  return { url, key, bearer };
 }
 
 export function hasSupabaseManualEventsConfig() {
@@ -104,15 +105,15 @@ function redact(text) {
   let output = String(text || "");
   if (key) output = output.replaceAll(key, "<redacted>");
   if (url) output = output.replaceAll(url, "<supabase-url>");
-  return output;
+  return output.replace(/[\r\n\t]+/g, " ").slice(0, 500);
 }
 
 async function supabaseRequest(path, options = {}) {
-  const { url, key } = supabaseConfig();
+  const { url, key, bearer } = supabaseConfig();
   if (!url || !key) throw new Error("SUPABASE_URL and SUPABASE_SECRET_KEY (or legacy SUPABASE_SERVICE_ROLE_KEY) are required");
   const headers = {
     apikey: key,
-    Authorization: `Bearer ${key}`,
+    ...(bearer ? { Authorization: bearer } : {}),
     "Content-Type": "application/json",
     ...(options.prefer ? { Prefer: options.prefer } : {}),
   };

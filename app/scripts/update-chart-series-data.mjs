@@ -1,6 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
 import { dirname, resolve } from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
+
+import { compactSeriesPoints, mergeLastKnownGoodPoints } from "./chart-series-contract.mjs";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(scriptDir, "..");
@@ -8,6 +12,8 @@ const workspaceRoot = resolve(appRoot, "..");
 const dataDir = resolve(appRoot, "public/data");
 const outputPath = resolve(dataDir, "chart-series.json");
 const macroFredCacheDir = resolve(workspaceRoot, "tmp/macro-cache/fred");
+const mofJgbCachePath = resolve(workspaceRoot, "tmp/equity-cache/mof-JGB10Y.json");
+const execFileAsync = promisify(execFile);
 
 const WINDOWS = [
   { value: "1d", label: "1D", days: 1 },
@@ -58,19 +64,8 @@ function finiteNumber(value) {
   return Number.isFinite(number) ? number : null;
 }
 
-function compactPoints(points) {
-  const byTime = new Map();
-  for (const point of points) {
-    const value = finiteNumber(point?.v);
-    const t = String(point?.t || "");
-    if (!t || value == null || Number.isNaN(Date.parse(t))) continue;
-    byTime.set(t, { t, v: value });
-  }
-  return [...byTime.values()].sort((a, b) => Date.parse(a.t) - Date.parse(b.t));
-}
-
 function addMetric(output, metric, rawPoints) {
-  const points = compactPoints(rawPoints);
+  const points = compactSeriesPoints(rawPoints);
   if (points.length < 2) return;
   output.metrics[metric.id] = {
     precision: 2,
@@ -254,23 +249,28 @@ function addEquitySeries(output, equityDataset) {
   for (const seriesId of Object.keys(macroSeries)) {
     const meta = macroSeries[seriesId] || {};
     const points = equityDataset.days
-      .map((day) => ({ t: day.date, v: day.macro?.[seriesId]?.value }))
+      .map((day) => ({
+        t: day.macro?.[seriesId]?.date || day.date,
+        v: day.macro?.[seriesId]?.value,
+      }))
       .filter((point) => finiteNumber(point.v) != null);
     addMetric(output, {
       id: `macro.${seriesId}.value`,
-      labelZh: meta.label || seriesId,
+      labelZh: meta.labelZh || meta.label || seriesId,
       labelEn: meta.label || seriesId,
       category: meta.kind === "volatility" ? "volatility" : "rates",
       unit: meta.unit || "number",
       kind: meta.kind || "macro",
-      cadence: "daily",
-      source: "FRED / equity daily cache",
+      cadence: meta.cadence || "daily",
+      source: meta.source || "FRED / equity daily cache",
+      sourceUrl: meta.sourceUrl,
+      dateMeaning: meta.dateMeaning || "provider_observation_date",
       defaultTransform: seriesId === "VIXCLS" ? "indexed" : "raw",
     }, points);
   }
 }
 
-async function addMacroFredSeries(output, macroDataset) {
+async function addMacroFredSeries(output, macroDataset, sourceFetchedAt) {
   const indicators = macroDataset?.indicators || {};
   for (const [seriesId, indicator] of Object.entries(indicators)) {
     const cache = await readJson(resolve(macroFredCacheDir, `${seriesId}.json`));
@@ -282,6 +282,7 @@ async function addMacroFredSeries(output, macroDataset) {
     ];
     if (!observations.length) continue;
     const metricId = `macro.${seriesId}.value`;
+    sourceFetchedAt.set(metricId, cache?.fetchedAt || null);
     if ((output.series[metricId]?.length || 0) >= observations.length) continue;
     addMetric(output, {
       id: metricId,
@@ -292,9 +293,74 @@ async function addMacroFredSeries(output, macroDataset) {
       kind: indicator.role || "macro",
       cadence: indicator.cadence || "irregular",
       source: indicator.source || "FRED",
+      sourceFetchedAt: cache?.fetchedAt || null,
       dateMeaning: indicator.date_meaning || indicator.dateMeaning || "observation_date",
       defaultTransform: indicator.unit === "percent" ? "raw" : "indexed",
     }, observations.map((row) => ({ t: row.date || row.t, v: row.value ?? row.v })));
+  }
+}
+
+async function addMofJgbSeries(output, equityDataset, sourceFetchedAt) {
+  const cache = await readJson(mofJgbCachePath);
+  if (!Array.isArray(cache?.observations) || cache.observations.length < 2) return;
+  const meta = equityDataset?.macroSeries?.JGB10Y || {};
+  const startDate = equityDataset?.window?.startDate || "0000-00-00";
+  const endDate = equityDataset?.window?.endDate || "9999-99-99";
+  const observations = cache.observations.filter((row) => row?.date >= startDate && row?.date <= endDate);
+  if (observations.length < 2) return;
+  const metricId = "macro.JGB10Y.value";
+  sourceFetchedAt.set(metricId, cache.fetchedAt || null);
+  addMetric(output, {
+    id: metricId,
+    labelZh: meta.labelZh || "\u65e5\u672c10\u5e74\u56fd\u503a\u6536\u76ca\u7387",
+    labelEn: meta.label || "Japan 10Y JGB",
+    category: "rates",
+    unit: "percent",
+    kind: "yield",
+    cadence: "daily",
+    source: cache.source || meta.source || "Japan Ministry of Finance",
+    sourceUrl: cache.sourceUrl || meta.historyUrl || meta.sourceUrl,
+    sourceFetchedAt: cache.fetchedAt || null,
+    dateMeaning: cache.dateMeaning || meta.dateMeaning || "japan_market_close_1500_jst",
+    defaultTransform: "raw",
+  }, observations.map((row) => ({ t: row.date, v: row.value })));
+}
+
+async function readBaselineOutput() {
+  const ref = String(process.env.CYCLE_MAP_CHART_BASELINE_GIT_REF || "").trim();
+  if (!ref) return readJson(outputPath);
+  if (!/^[A-Za-z0-9._\/-]+$/.test(ref)) throw new Error("Invalid chart baseline git ref");
+  const { stdout } = await execFileAsync("git", ["show", `${ref}:app/public/data/chart-series.json`], {
+    cwd: workspaceRoot,
+    encoding: "utf8",
+    maxBuffer: 20 * 1024 * 1024,
+  });
+  return JSON.parse(stdout);
+}
+
+function mergeBaselineMacroSeries(output, baseline, sourceFetchedAt) {
+  if (!baseline?.metrics || !baseline?.series) return;
+  for (const [metricId, baselineMetric] of Object.entries(baseline.metrics)) {
+    if (!metricId.startsWith("macro.") || baselineMetric?.kind === "derived_liquidity") continue;
+    const currentMetric = output.metrics[metricId] || {};
+    const currentPoints = output.series[metricId] || [];
+    const baselinePoints = baseline.series[metricId] || [];
+    const currentFetchedAt = sourceFetchedAt.get(metricId) || currentMetric.sourceFetchedAt;
+    const baselineFetchedAt = baselineMetric.sourceFetchedAt || baseline.timestamps?.transformedAt || baseline.generatedAt;
+    const currentFetchMs = Date.parse(currentFetchedAt || "");
+    const baselineFetchMs = Date.parse(baselineFetchedAt || "");
+    const currentCanRevise = Number.isFinite(currentFetchMs)
+      && (!Number.isFinite(baselineFetchMs) || currentFetchMs >= baselineFetchMs);
+    const points = mergeLastKnownGoodPoints({
+      current: currentPoints,
+      baseline: baselinePoints,
+      currentFetchedAt,
+      baselineFetchedAt,
+    });
+    const metric = currentCanRevise
+      ? { ...baselineMetric, ...currentMetric, sourceStatus: "source_refreshed" }
+      : { ...currentMetric, ...baselineMetric, sourceStatus: "last_known_good_preserved" };
+    addMetric(output, { ...metric, id: metricId }, points);
   }
 }
 
@@ -321,12 +387,16 @@ function addChainSeries(output, dataset, chainKey, category) {
 }
 
 async function buildOutput() {
-  const equityDataset = await readJson(resolve(dataDir, "equity-weekly.json"));
+  const [equityDataset, baseline] = await Promise.all([
+    readJson(resolve(dataDir, "equity-weekly.json")),
+    readBaselineOutput(),
+  ]);
   const macroDataset = await readJson(resolve(dataDir, "macro-calendar.json"));
   const chipDataset = await readJson(resolve(dataDir, "chip-chain-hotspots.json"));
   const robotDataset = await readJson(resolve(dataDir, "robot-chain-watchlist.json"));
   const transformedAt = isoNow();
   const inputs = [equityDataset, macroDataset, chipDataset, robotDataset].filter(Boolean);
+  const sourceFetchedAt = new Map();
   const output = {
     version: 1,
     page: "chart-series",
@@ -338,7 +408,7 @@ async function buildOutput() {
     },
     windows: WINDOWS,
     transforms: TRANSFORMS,
-    methodology: "Derived static time-series cache built from reviewed page caches and local/CI provider caches. The browser reads this generated JSON only and never calls market-data providers directly.",
+    methodology: "Derived static time-series cache built from reviewed page caches and local/CI provider caches. Macro points merge with the last-known-good output; a same-date value is revised only when the provider cache has a non-older fetchedAt. The browser reads this generated JSON only and never calls market-data providers directly.",
     sources: {
       equity: "app/public/data/equity-weekly.json",
       macro: "tmp/macro-cache/fred plus app/public/data/macro-calendar.json metadata when available",
@@ -350,7 +420,9 @@ async function buildOutput() {
   };
 
   addEquitySeries(output, equityDataset);
-  await addMacroFredSeries(output, macroDataset);
+  await addMofJgbSeries(output, equityDataset, sourceFetchedAt);
+  await addMacroFredSeries(output, macroDataset, sourceFetchedAt);
+  mergeBaselineMacroSeries(output, baseline, sourceFetchedAt);
   addDerivedLiquiditySeries(output);
   addChainSeries(output, chipDataset, "chip", "chip_chain");
   addChainSeries(output, robotDataset, "robot", "robot_chain");

@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-13T00:00:00Z",
+  "methodology": "Reviewed official company and SEC disclosures. Holdings observations and accounting cost observations retain separate dates. Market prices quoted in press releases are not treated as acquisition cost.",
+  "treasuries": {
+    "MSTR": {
+      "company": "Strategy",
+      "ticker": "MSTR",
+      "asset": "BTC",
+      "source": "Strategy official Form 8-K",
+      "holdings": [
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21",
+          "holdings": 847363,
+          "acquired": 520,
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        }
+      ],
+      "costs": [
+        {
+          "costObservedAt": "2026-06-21",
+          "holdingsAtCostDate": 847363,
+          "costBasisUsd": 64100000000,
+          "costBasisApproximate": true,
+          "averageCostUsd": 75651,
+          "averageCostMethod": "company_reported_aggregate_average_including_fees",
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        }
+      ]
+    },
+    "BMNR": {
+      "company": "BitMine Immersion Technologies",
+      "ticker": "BMNR",
+      "asset": "ETH",
+      "source": "SEC EDGAR company disclosures",
+      "holdings": [
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21T19:00:00Z",
+          "holdings": 5672956,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226029507/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-06-29",
+          "holdingsObservedAt": "2026-06-28T19:00:00Z",
+          "holdings": 5700040,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226030428/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-07-06",
+          "holdingsObservedAt": "2026-06-28T22:30:00Z",
+          "holdings": 5742237,
+          "acquired": 42197,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit_corrected_release"
+        }
+      ],
+      "costs": [
+        {
+          "costObservedAt": "2026-02-28",
+          "holdingsAtCostDate": 4473459,
+          "costBasisUsd": 16973446000,
+          "averageCostUsd": 3794.2554072810326,
+          "averageCostMethod": "sec_cost_basis_divided_by_eth_units_fifo_net_transaction_fees",
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226016560/form10-q.htm",
+          "qualityStatus": "official_quarterly_filing_derived"
+        }
+      ]
+    }
+  }
+}

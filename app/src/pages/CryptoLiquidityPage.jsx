@@ -33,6 +33,10 @@ const COPY = {
     levels: "\u5e02\u503c\u4e0e\u7a33\u5b9a\u5e01", change1d: "\u65e5\u53d8\u5316", change7d: "\u5468\u53d8\u5316", observed: "\u4fe1\u6e90\u89c2\u6d4b",
     heatmap: "\u53d8\u5316\u70ed\u529b\u5e26", heatmapNote: "\u5355\u5143\u683c\u663e\u793a\u76f8\u90bb\u89c2\u6d4b\u503c\u53d8\u5316\uff0c\u7a7a\u767d\u4e0d\u8865\u96f6\u3002",
     etf: "ETF \u8d44\u91d1\u6d41", latestFlow: "\u6700\u65b0\u51c0\u6d41\u91cf", cumulative: "\u7d2f\u8ba1\u51c0\u6d41\u91cf",
+    treasury: "\u4f01\u4e1a\u8d22\u5e93\u9700\u6c42", treasuryNote: "\u6301\u4ed3\u4e0e\u6210\u672c\u6309\u5404\u81ea\u5b98\u65b9\u62ab\u9732\u65e5\u671f\u5c55\u793a\uff0c\u4e0d\u5c06\u65b0\u95fb\u7a3f\u5e02\u4ef7\u5f53\u4f5c\u91c7\u8d2d\u5747\u4ef7\u3002",
+    holdings: "\u6700\u65b0\u6301\u4ed3", averageCost: "\u5e73\u5747\u6301\u4ed3\u6210\u672c", costBasisAverage: "SEC \u6210\u672c\u57fa\u7840\u5747\u4ef7",
+    latestAcquisition: "\u6700\u65b0\u589e\u6301", spotVsCost: "\u73b0\u4ef7 / \u6210\u672c", holdingsDate: "\u6301\u4ed3\u622a\u81f3", costDate: "\u6210\u672c\u622a\u81f3",
+    mixedDates: "\u4e0d\u540c\u62ab\u9732\u65e5\u671f", officialDisclosure: "\u5b98\u65b9\u62ab\u9732", disclosedDate: "\u62ab\u9732\u4e8e",
     pending: "\u5f85\u63a5\u5165\u5ba1\u6838\u540e\u6570\u636e\u6e90", noFlow: "\u5c1a\u65e0\u53ef\u7528 ETF \u6570\u636e",
     blockbeats: "BlockBeats \u8f85\u52a9\u6e90", primaryOnly: "\u9ed8\u8ba4\u5173\u95ed\uff0c\u4ec5\u7528\u4e8e BTC \u4ea4\u53c9\u68c0\u67e5\uff0c\u4e0d\u8986\u76d6\u4e3b\u6570\u636e\u3002",
     partial: "\u90e8\u5206\u6570\u636e\u5f85\u63a5\u5165", sourceTime: "\u6570\u636e\u65e5\u671f",
@@ -48,6 +52,10 @@ const COPY = {
     levels: "Market cap & stablecoins", change1d: "1D change", change7d: "7D change", observed: "Source observation",
     heatmap: "Change heat strip", heatmapNote: "Cells show changes between adjacent observations; missing dates are not filled with zero.",
     etf: "ETF fund flows", latestFlow: "Latest net flow", cumulative: "Cumulative net flow",
+    treasury: "Corporate treasury demand", treasuryNote: "Holdings and cost use their own official disclosure dates; press-release spot prices are never treated as acquisition cost.",
+    holdings: "Latest holdings", averageCost: "Average holding cost", costBasisAverage: "SEC cost-basis average",
+    latestAcquisition: "Latest addition", spotVsCost: "Spot vs cost", holdingsDate: "Holdings as of", costDate: "Cost as of",
+    mixedDates: "Different disclosure dates", officialDisclosure: "Official disclosure", disclosedDate: "Disclosed",
     pending: "Pending reviewed source", noFlow: "No ETF flow data available yet",
     blockbeats: "BlockBeats auxiliary", primaryOnly: "Disabled by default; BTC cross-check only and never allowed to overwrite primary data.",
     partial: "Some sources are pending", sourceTime: "Data date",
@@ -119,6 +127,58 @@ function EtfCard({ asset, cadence, copy }) {
   );
 }
 
+function assetAmount(value, asset, signed = false) {
+  if (!Number.isFinite(value)) return "N/A";
+  const prefix = signed && value > 0 ? "+" : "";
+  return `${prefix}${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value)} ${asset || ""}`.trim();
+}
+
+function percent(value) {
+  if (!Number.isFinite(value)) return "N/A";
+  return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
+}
+
+function TreasuryCard({ treasury, copy }) {
+  const history = treasury?.history || [];
+  const costLabel = String(treasury?.averageCostMethod || "").startsWith("sec_")
+    ? copy.costBasisAverage
+    : copy.averageCost;
+  return (
+    <article className="liquidity-treasury-card">
+      <header>
+        <div><strong>{treasury?.company || "N/A"}</strong><span>{treasury?.ticker || ""}</span></div>
+        <small>{copy.officialDisclosure}</small>
+      </header>
+      <div className="liquidity-treasury-hero">
+        <small>{copy.holdings}</small>
+        <strong>{assetAmount(treasury?.holdings, treasury?.asset)}</strong>
+      </div>
+      <dl>
+        <div><dt>{costLabel}</dt><dd>{usd(treasury?.averageCostUsd, true)}</dd></div>
+        <div><dt>{copy.latestAcquisition}</dt><dd className={signClass(treasury?.latestAcquisition)}>{assetAmount(treasury?.latestAcquisition, treasury?.asset, true)}</dd></div>
+        <div><dt>{copy.spotVsCost}</dt><dd className={signClass(treasury?.costGapPct)}>{percent(treasury?.costGapPct)}</dd></div>
+      </dl>
+      <div className="liquidity-treasury-dates">
+        <span><small>{copy.holdingsDate}</small><b>{treasury?.holdingsObservedAt?.slice(0, 10) || "N/A"}</b></span>
+        <span><small>{copy.costDate}</small><b>{treasury?.costObservedAt?.slice(0, 10) || "N/A"}</b></span>
+      </div>
+      {treasury?.qualityStatus === "mixed_disclosure_dates" ? <p>{copy.mixedDates}</p> : null}
+      <div className="liquidity-treasury-strip" aria-label={`${treasury?.ticker || "treasury"} history`}>
+        {history.slice(-12).map((point, index) => {
+          const previous = history.slice(-12)[index - 1];
+          const change = previous && Number.isFinite(point.holdings) && Number.isFinite(previous.holdings)
+            ? point.holdings - previous.holdings
+            : null;
+          const holdingsDate = (point.holdingsObservedAt || point.date || "N/A").slice(0, 10);
+          const disclosedDate = (point.disclosedAt || point.date || "").slice(0, 10);
+          const dateDetail = `${copy.holdingsDate} ${holdingsDate}${disclosedDate ? ` · ${copy.disclosedDate} ${disclosedDate}` : ""}`;
+          return <span key={`${point.disclosedAt || point.date || point.holdingsObservedAt}-${point.sourceUrl || index}`} className={signClass(change)} title={`${dateDetail}: ${assetAmount(point.holdings, treasury?.asset)}`} />;
+        })}
+      </div>
+    </article>
+  );
+}
+
 export function CryptoLiquidityPage({ language, setLanguage, t }) {
   const copy = COPY[language];
   const { data, error, freshness } = useLiveData(CRYPTO_LIQUIDITY_LIVE_DATA);
@@ -153,6 +213,8 @@ export function CryptoLiquidityPage({ language, setLanguage, t }) {
       <section className="liquidity-section"><div className="macro-section-heading"><div><p>LEVELS</p><h2>{copy.levels}</h2></div></div><div className="liquidity-metric-grid">{metrics.map((metric) => <article key={metric.id} className="liquidity-metric-card"><small>{language === "en" ? metric.label : metric.labelZh}</small><strong>{displayMetric(metric)}</strong><dl><div><dt>{copy.change1d}</dt><dd className={signClass(metric.change1d)}>{displayChange(metric, "change1d")}</dd></div><div><dt>{copy.change7d}</dt><dd className={signClass(metric.change7d)}>{displayChange(metric, "change7d")}</dd></div></dl><p>{copy.observed}: {metric.observedAt ? freshnessLabel(metric.observedAt, language) : "N/A"}</p></article>)}</div></section>
 
       <section className="liquidity-section"><div className="macro-section-heading"><div><p>ETF</p><h2>{copy.etf}</h2></div></div><div className="liquidity-etf-grid">{["BTC", "ETH", "SOL"].map((asset) => <EtfCard key={asset} asset={dataset.etf?.[asset]} cadence={cadence} copy={copy} />)}</div></section>
+
+      <section className="liquidity-section"><div className="macro-section-heading"><div><p>TREASURY</p><h2>{copy.treasury}</h2></div><span>{copy.treasuryNote}</span></div><div className="liquidity-treasury-grid">{["MSTR", "BMNR"].map((ticker) => <TreasuryCard key={ticker} treasury={dataset.corporateTreasuries?.[ticker]} copy={copy} />)}</div></section>
 
       <section className="liquidity-section"><div className="macro-section-heading"><div><p>30 / 90 / 365D</p><h2>{copy.heatmap}</h2></div><span>{copy.heatmapNote}</span></div><HeatStrip metrics={metrics.filter((metric) => metric.unit === "USD")} history={dataset.history} days={Number(range)} language={language} copy={copy} /></section>
 

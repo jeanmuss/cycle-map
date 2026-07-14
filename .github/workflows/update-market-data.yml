@@ -59,6 +59,7 @@ jobs:
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
           SOSOVALUE_API_KEY: ${{ secrets.SOSOVALUE_API_KEY }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           BLOCKBEATS_API_KEY: ${{ secrets.BLOCKBEATS_API_KEY }}
           BLOCKBEATS_AUX_ENABLED: ${{ vars.BLOCKBEATS_AUX_ENABLED }}
         run: node scripts/update-crypto-liquidity-data.mjs
@@ -107,6 +108,14 @@ jobs:
       - name: Refresh interactive chart series
         working-directory: app
         run: node scripts/update-chart-series-data.mjs
+      - name: Persist derived market metric history
+        working-directory: app
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CYCLE_MAP_REQUIRE_MARKET_HISTORY: ${{ vars.MARKET_HISTORY_REQUIRED || '0' }}
+        run: node scripts/persist-market-metric-history.mjs
       - name: Publish the versioned data snapshot
         shell: bash
         run: |

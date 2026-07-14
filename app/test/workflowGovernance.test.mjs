@@ -29,3 +29,21 @@ test("scheduled deployments fall back to the durable data branch", async () => {
   assert.match(workflow, /A fast refresh requires either an Actions cache or origin\/data-cache/);
   assert.doesNotMatch(workflow, /fail-on-cache-miss:/);
 });
+
+test("full refreshes persist metric history after generation and before publication", async () => {
+  const updateWorkflow = await readFile(workflowPath, "utf8");
+  const deployWorkflow = await readFile(deployWorkflowPath, "utf8");
+
+  const updateChart = updateWorkflow.indexOf("Refresh interactive chart series");
+  const updatePersist = updateWorkflow.indexOf("Persist derived market metric history");
+  const updatePublish = updateWorkflow.indexOf("Publish the versioned data snapshot");
+  assert.ok(updateChart < updatePersist && updatePersist < updatePublish);
+
+  const deployChart = deployWorkflow.indexOf("Refresh interactive chart series");
+  const deployPersist = deployWorkflow.indexOf("Persist derived market metric history");
+  const deployBuild = deployWorkflow.indexOf("Build static site for GitHub Pages");
+  assert.ok(deployChart < deployPersist && deployPersist < deployBuild);
+  assert.match(deployWorkflow.slice(deployPersist, deployBuild), /github\.event\.schedule == '0 \* \* \* \*'/);
+  assert.match(updateWorkflow.slice(updatePersist, updatePublish), /vars\.MARKET_HISTORY_REQUIRED \|\| '0'/);
+  assert.match(deployWorkflow.slice(deployPersist, deployBuild), /vars\.MARKET_HISTORY_REQUIRED \|\| '0'/);
+});

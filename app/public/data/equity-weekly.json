@@ -1,25 +1,35 @@
 {
   "version": 2,
   "page": "equity-macro",
-  "timezone": "America/New_York for trading dates; FRED observations use provider dates",
-  "generatedAt": "2026-07-11T05:24:35Z",
+  "timezone": "America/New_York for trading dates; macro observations retain their provider dates",
+  "generatedAt": "2026-07-13T14:02:22Z",
+  "timestamps": {
+    "observedAt": "2026-07-10T20:00:00Z",
+    "fetchedAt": "2026-07-13T13:10:54Z",
+    "transformedAt": "2026-07-13T14:02:22Z"
+  },
   "window": {
     "months": 6,
-    "startDate": "2026-01-11",
-    "endDate": "2026-07-11",
-    "eventEndDate": "2026-08-26"
+    "startDate": "2026-01-13",
+    "endDate": "2026-07-13",
+    "eventEndDate": "2026-08-27"
   },
   "market": {
     "timezone": "America/New_York",
-    "date": "2026-07-11",
-    "isMarketDay": false,
-    "isOpen": false,
-    "session": "closed",
+    "date": "2026-07-13",
+    "isMarketDay": true,
+    "isOpen": true,
+    "session": "open",
     "refreshCadence": "hourly while U.S. equity markets are open; otherwise last close"
   },
-  "methodology": "Daily price rows are derived from cached daily OHLC for QQQ, SPY, and DIA. DIA is used as a Dow Jones Industrial Average ETF proxy. 10Y and VIX use FRED daily observations and display latest observation changes versus the previous observation.",
+  "methodology": "Daily price rows are derived from cached daily OHLC for QQQ, SPY, DIA, and the SOX index when available. DIA is used as a Dow Jones Industrial Average ETF proxy. U.S. 10Y and VIX use FRED daily observations. Japan 10Y JGB uses the Japan Ministry of Finance official 15:00 JST constant-maturity close and displays the latest observation change versus the previous observation. Reviewed recurring crypto-supply and CEX-attention annotations are calendar anchors, not claims of guaranteed price impact.",
   "priceSourcePreference": "akshare",
-  "failures": [],
+  "failures": [
+    "SOX yfinance: provider request failed",
+    "SOX akshare: provider request failed",
+    "SOX: optional index unavailable",
+    "AKShare delayed spot: provider request failed"
+  ],
   "assets": {
     "QQQ": {
       "symbol": "QQQ",
@@ -28,9 +38,9 @@
       "role": "Nasdaq 100 proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "fresh",
-      "rows": 130,
-      "firstDate": "2026-01-02",
+      "cacheStatus": "cache",
+      "rows": 129,
+      "firstDate": "2026-01-05",
       "lastDate": "2026-07-10"
     },
     "SPY": {
@@ -40,9 +50,9 @@
       "role": "S&P 500 proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "fresh",
-      "rows": 130,
-      "firstDate": "2026-01-02",
+      "cacheStatus": "cache",
+      "rows": 129,
+      "firstDate": "2026-01-05",
       "lastDate": "2026-07-10"
     },
     "DIA": {
@@ -52,9 +62,9 @@
       "role": "Dow Jones Industrial Average ETF proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "fresh",
-      "rows": 130,
-      "firstDate": "2026-01-02",
+      "cacheStatus": "cache",
+      "rows": 129,
+      "firstDate": "2026-01-05",
       "lastDate": "2026-07-10"
     },
     "SOX": {
@@ -64,7 +74,7 @@
       "name": "PHLX Semiconductor Index",
       "role": "Philadelphia Semiconductor Index",
       "quote": "index",
-      "sourceLabel": "yfinance ^SOX pending next market refresh",
+      "sourceLabel": "yfinance ^SOX pending",
       "cacheStatus": "unavailable",
       "rows": 0,
       "firstDate": null,
@@ -81,11 +91,27 @@
       "label": "VIX",
       "unit": "index",
       "kind": "volatility"
+    },
+    "JGB10Y": {
+      "label": "Japan 10Y JGB",
+      "labelZh": "日本10年国债收益率",
+      "unit": "percent",
+      "kind": "yield",
+      "cadence": "daily",
+      "dateMeaning": "japan_market_close_1500_jst",
+      "source": "Japan Ministry of Finance",
+      "sourceColumn": "10Y",
+      "sourceUrl": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv",
+      "historyUrl": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv",
+      "methodologyUrl": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/qa.htm"
     }
   },
   "sources": {
-    "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
+    "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback and is the reviewed source for Yahoo symbol ^SOX. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
     "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
+    "Japan Ministry of Finance JGB": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv",
+    "Japan Ministry of Finance JGB history": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv",
+    "Japan Ministry of Finance methodology": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/qa.htm",
     "calendar": "Built-in NYSE holiday rules for regular full market closures; early closes are not modeled in this version.",
     "cache": "tmp/equity-cache",
     "recurringEvents": "app/data/equity-recurring-events.json"
@@ -147,85 +173,18 @@
         "change": -1.0599999999999987,
         "changeBp": -105.99999999999987,
         "carriedForward": true
+      },
+      "JGB10Y": {
+        "date": "2026-07-10",
+        "value": 2.761,
+        "previous": 2.866,
+        "change": -0.10499999999999998,
+        "changeBp": -10.499999999999998,
+        "carriedForward": false
       }
     }
   },
   "days": [
-    {
-      "date": "2026-01-11",
-      "dayOfWeek": 6,
-      "isMarketDay": false,
-      "assets": {
-        "QQQ": null,
-        "SPY": null,
-        "DIA": null
-      },
-      "macro": {
-        "DGS10": null,
-        "VIXCLS": null
-      }
-    },
-    {
-      "date": "2026-01-12",
-      "dayOfWeek": 0,
-      "isMarketDay": true,
-      "assets": {
-        "QQQ": {
-          "symbol": "QQQ",
-          "date": "2026-01-12",
-          "open": 622.31,
-          "high": 628.845,
-          "low": 622.26,
-          "close": 627.17,
-          "price": 627.17,
-          "pct": 0.7809612572512115,
-          "volume": 37388644.0,
-          "priceType": "close"
-        },
-        "SPY": {
-          "symbol": "SPY",
-          "date": "2026-01-12",
-          "open": 690.68,
-          "high": 696.09,
-          "low": 690.63,
-          "close": 695.16,
-          "price": 695.16,
-          "pct": 0.6486361267157031,
-          "volume": 63976002.0,
-          "priceType": "close"
-        },
-        "DIA": {
-          "symbol": "DIA",
-          "date": "2026-01-12",
-          "open": 492.33,
-          "high": 496.34,
-          "low": 490.05,
-          "close": 495.9,
-          "price": 495.9,
-          "pct": 0.7251233928462603,
-          "volume": 5722423.0,
-          "priceType": "close"
-        }
-      },
-      "macro": {
-        "DGS10": {
-          "date": "2026-01-12",
-          "value": 4.19,
-          "previous": 4.18,
-          "change": 0.010000000000000675,
-          "changeBp": 1.0000000000000675,
-          "carriedForward": false
-        },
-        "VIXCLS": {
-          "date": "2026-01-12",
-          "value": 15.12,
-          "previous": 14.49,
-          "change": 0.629999999999999,
-          "changeBp": 62.9999999999999,
-          "carriedForward": false
-        }
-      }
-    },
     {
       "date": "2026-01-13",
       "dayOfWeek": 1,
@@ -266,7 +225,8 @@
           "pct": -0.7284835031782895,
           "volume": 5966349.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -283,6 +243,14 @@
           "previous": 15.12,
           "change": 0.8600000000000012,
           "changeBp": 86.00000000000011,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-13",
+          "value": 2.163,
+          "previous": 2.096,
+          "change": 0.06699999999999973,
+          "changeBp": 6.699999999999973,
           "carriedForward": false
         }
       }
@@ -327,7 +295,8 @@
           "pct": 0.18750254758895346,
           "volume": 6767791.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -344,6 +313,14 @@
           "previous": 15.98,
           "change": 0.7699999999999996,
           "changeBp": 76.99999999999996,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-14",
+          "value": 2.182,
+          "previous": 2.163,
+          "change": 0.019000000000000128,
+          "changeBp": 1.9000000000000128,
           "carriedForward": false
         }
       }
@@ -388,7 +365,8 @@
           "pct": 0.4285395129678927,
           "volume": 8519854.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -405,6 +383,14 @@
           "previous": 16.75,
           "change": -0.9100000000000001,
           "changeBp": -91.00000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-15",
+          "value": 2.164,
+          "previous": 2.182,
+          "change": -0.017999999999999794,
+          "changeBp": -1.7999999999999794,
           "carriedForward": false
         }
       }
@@ -449,7 +435,8 @@
           "pct": -0.2184024266936267,
           "volume": 5845458.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -467,6 +454,14 @@
           "change": 0.019999999999999574,
           "changeBp": 1.9999999999999574,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-16",
+          "value": 2.182,
+          "previous": 2.164,
+          "change": 0.017999999999999794,
+          "changeBp": 1.7999999999999794,
+          "carriedForward": false
         }
       }
     },
@@ -477,11 +472,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -491,11 +488,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -505,11 +504,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -552,7 +553,8 @@
           "pct": -0.2653392846123826,
           "volume": 7416258.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -569,6 +571,14 @@
           "previous": 18.84,
           "change": 1.25,
           "changeBp": 125.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-20",
+          "value": 2.33,
+          "previous": 2.266,
+          "change": 0.06400000000000006,
+          "changeBp": 6.400000000000006,
           "carriedForward": false
         }
       }
@@ -613,7 +623,8 @@
           "pct": 1.0562727778120937,
           "volume": 6718595.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -630,6 +641,14 @@
           "previous": 20.09,
           "change": -3.1900000000000013,
           "changeBp": -319.0000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-21",
+          "value": 2.28,
+          "previous": 2.33,
+          "change": -0.050000000000000266,
+          "changeBp": -5.000000000000027,
           "carriedForward": false
         }
       }
@@ -674,7 +693,8 @@
           "pct": 0.044582244108045156,
           "volume": 5087166.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -691,6 +711,14 @@
           "previous": 16.9,
           "change": -1.259999999999998,
           "changeBp": -125.9999999999998,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-22",
+          "value": 2.239,
+          "previous": 2.28,
+          "change": -0.040999999999999925,
+          "changeBp": -4.0999999999999925,
           "carriedForward": false
         }
       }
@@ -735,7 +763,8 @@
           "pct": -0.18096051400918758,
           "volume": 4915669.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -753,6 +782,14 @@
           "change": 0.4499999999999993,
           "changeBp": 44.99999999999993,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-23",
+          "value": 2.253,
+          "previous": 2.239,
+          "change": 0.014000000000000234,
+          "changeBp": 1.4000000000000234,
+          "carriedForward": false
         }
       }
     },
@@ -763,11 +800,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -777,11 +816,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -824,7 +865,8 @@
           "pct": 0.4370718220812704,
           "volume": 3722814.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -841,6 +883,14 @@
           "previous": 16.09,
           "change": 0.05999999999999872,
           "changeBp": 5.999999999999872,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-26",
+          "value": 2.236,
+          "previous": 2.253,
+          "change": -0.016999999999999904,
+          "changeBp": -1.6999999999999904,
           "carriedForward": false
         }
       }
@@ -885,7 +935,8 @@
           "pct": -0.12839063359758615,
           "volume": 5971409.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -902,6 +953,14 @@
           "previous": 16.15,
           "change": 0.20000000000000284,
           "changeBp": 20.000000000000284,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-27",
+          "value": 2.281,
+          "previous": 2.236,
+          "change": 0.04499999999999993,
+          "changeBp": 4.499999999999993,
           "carriedForward": false
         }
       }
@@ -946,7 +1005,8 @@
           "pct": -0.03059476217671071,
           "volume": 4726498.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -963,6 +1023,14 @@
           "previous": 16.35,
           "change": 0.0,
           "changeBp": 0.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-28",
+          "value": 2.237,
+          "previous": 2.281,
+          "change": -0.04400000000000004,
+          "changeBp": -4.400000000000004,
           "carriedForward": false
         }
       }
@@ -1007,7 +1075,8 @@
           "pct": 0.027546804060601112,
           "volume": 9706404.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1024,6 +1093,14 @@
           "previous": 16.35,
           "change": 0.5299999999999976,
           "changeBp": 52.99999999999976,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-29",
+          "value": 2.252,
+          "previous": 2.237,
+          "change": 0.01499999999999968,
+          "changeBp": 1.499999999999968,
           "carriedForward": false
         }
       }
@@ -1068,7 +1145,8 @@
           "pct": -0.016356238882877253,
           "volume": 8112053.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1086,6 +1164,14 @@
           "change": 0.5600000000000023,
           "changeBp": 56.00000000000023,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-01-30",
+          "value": 2.247,
+          "previous": 2.252,
+          "change": -0.004999999999999893,
+          "changeBp": -0.49999999999998934,
+          "carriedForward": false
         }
       }
     },
@@ -1096,11 +1182,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -1110,11 +1198,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -1191,7 +1281,8 @@
           "pct": 1.0554953259557691,
           "volume": 5584437.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1208,6 +1299,14 @@
           "previous": 17.44,
           "change": -1.1000000000000014,
           "changeBp": -110.00000000000014,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-02",
+          "value": 2.235,
+          "previous": 2.247,
+          "change": -0.01200000000000001,
+          "changeBp": -1.200000000000001,
           "carriedForward": false
         }
       }
@@ -1252,7 +1351,8 @@
           "pct": -0.1683092022549345,
           "volume": 8799129.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1269,6 +1369,14 @@
           "previous": 16.34,
           "change": 1.6600000000000001,
           "changeBp": 166.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-03",
+          "value": 2.258,
+          "previous": 2.235,
+          "change": 0.02300000000000013,
+          "changeBp": 2.300000000000013,
           "carriedForward": false
         }
       }
@@ -1313,7 +1421,8 @@
           "pct": 0.16804340783932298,
           "volume": 8797109.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1330,6 +1439,14 @@
           "previous": 18.0,
           "change": 0.6400000000000006,
           "changeBp": 64.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-04",
+          "value": 2.249,
+          "previous": 2.258,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
           "carriedForward": false
         }
       }
@@ -1374,7 +1491,8 @@
           "pct": -0.7309496253883101,
           "volume": 7767469.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1391,6 +1509,14 @@
           "previous": 18.64,
           "change": 3.129999999999999,
           "changeBp": 312.9999999999999,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-05",
+          "value": 2.231,
+          "previous": 2.249,
+          "change": -0.018000000000000238,
+          "changeBp": -1.8000000000000238,
           "carriedForward": false
         }
       }
@@ -1435,7 +1561,8 @@
           "pct": 1.7588398968255516,
           "volume": 10635277.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1453,6 +1580,14 @@
           "change": -4.009999999999998,
           "changeBp": -400.9999999999998,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-06",
+          "value": 2.236,
+          "previous": 2.231,
+          "change": 0.0050000000000003375,
+          "changeBp": 0.5000000000000338,
+          "carriedForward": false
         }
       }
     },
@@ -1463,11 +1598,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -1495,11 +1632,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -1542,7 +1681,8 @@
           "pct": 0.22195117074243936,
           "volume": 6414790.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1559,6 +1699,14 @@
           "previous": 17.76,
           "change": -0.40000000000000213,
           "changeBp": -40.00000000000021,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-09",
+          "value": 2.289,
+          "previous": 2.236,
+          "change": 0.052999999999999936,
+          "changeBp": 5.299999999999994,
           "carriedForward": false
         }
       }
@@ -1603,7 +1751,8 @@
           "pct": -0.08759007843293343,
           "volume": 8163046.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1620,6 +1769,14 @@
           "previous": 17.36,
           "change": 0.4299999999999997,
           "changeBp": 42.99999999999997,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-10",
+          "value": 2.241,
+          "previous": 2.289,
+          "change": -0.04800000000000004,
+          "changeBp": -4.800000000000004,
           "carriedForward": false
         }
       }
@@ -1664,7 +1821,8 @@
           "pct": -0.5711905753555058,
           "volume": 5743793.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1682,6 +1840,14 @@
           "change": -0.14000000000000057,
           "changeBp": -14.000000000000057,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-10",
+          "value": 2.241,
+          "previous": 2.289,
+          "change": -0.04800000000000004,
+          "changeBp": -4.800000000000004,
+          "carriedForward": true
         }
       }
     },
@@ -1725,7 +1891,8 @@
           "pct": -1.6814739729294574,
           "volume": 9160238.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1742,6 +1909,14 @@
           "previous": 17.65,
           "change": 3.1700000000000017,
           "changeBp": 317.00000000000017,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-12",
+          "value": 2.238,
+          "previous": 2.241,
+          "change": -0.0030000000000001137,
+          "changeBp": -0.30000000000001137,
           "carriedForward": false
         }
       }
@@ -1786,7 +1961,8 @@
           "pct": 0.04848093083386236,
           "volume": 8378102.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1804,6 +1980,14 @@
           "change": -0.21999999999999886,
           "changeBp": -21.999999999999886,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-13",
+          "value": 2.218,
+          "previous": 2.238,
+          "change": -0.020000000000000018,
+          "changeBp": -2.0000000000000018,
+          "carriedForward": false
         }
       }
     },
@@ -1814,11 +1998,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -1828,11 +2014,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -1842,11 +2030,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -1889,7 +2079,8 @@
           "pct": 0.1049805180384872,
           "volume": 6779351.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1906,6 +2097,14 @@
           "previous": 21.2,
           "change": -0.9100000000000001,
           "changeBp": -91.00000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-17",
+          "value": 2.143,
+          "previous": 2.22,
+          "change": -0.0770000000000004,
+          "changeBp": -7.70000000000004,
           "carriedForward": false
         }
       }
@@ -1950,7 +2149,8 @@
           "pct": 0.04428519666653796,
           "volume": 4454274.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -1967,6 +2167,14 @@
           "previous": 20.29,
           "change": -0.6699999999999982,
           "changeBp": -66.99999999999982,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-18",
+          "value": 2.152,
+          "previous": 2.143,
+          "change": 0.009000000000000341,
+          "changeBp": 0.9000000000000341,
           "carriedForward": false
         }
       }
@@ -2011,7 +2219,8 @@
           "pct": -0.23710788913440714,
           "volume": 4625329.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2028,6 +2237,14 @@
           "previous": 19.62,
           "change": 0.6099999999999994,
           "changeBp": 60.99999999999994,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-19",
+          "value": 2.157,
+          "previous": 2.152,
+          "change": 0.004999999999999893,
+          "changeBp": 0.49999999999998934,
           "carriedForward": false
         }
       }
@@ -2072,7 +2289,8 @@
           "pct": 0.7187233524180703,
           "volume": 6086802.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2090,6 +2308,14 @@
           "change": -1.1400000000000006,
           "changeBp": -114.00000000000006,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-20",
+          "value": 2.125,
+          "previous": 2.157,
+          "change": -0.03200000000000003,
+          "changeBp": -3.200000000000003,
+          "carriedForward": false
         }
       }
     },
@@ -2100,11 +2326,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -2114,11 +2342,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -2161,7 +2391,8 @@
           "pct": -1.3124368048533892,
           "volume": 8269234.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2179,6 +2410,14 @@
           "change": 1.9200000000000017,
           "changeBp": 192.00000000000017,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-20",
+          "value": 2.125,
+          "previous": 2.157,
+          "change": -0.03200000000000003,
+          "changeBp": -3.200000000000003,
+          "carriedForward": true
         }
       }
     },
@@ -2222,7 +2461,8 @@
           "pct": 0.6961649501423114,
           "volume": 5334965.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2239,6 +2479,14 @@
           "previous": 21.01,
           "change": -1.4600000000000009,
           "changeBp": -146.00000000000009,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-24",
+          "value": 2.119,
+          "previous": 2.125,
+          "change": -0.005999999999999783,
+          "changeBp": -0.5999999999999783,
           "carriedForward": false
         }
       }
@@ -2283,7 +2531,8 @@
           "pct": 0.24107124769564203,
           "volume": 4446134.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2300,6 +2549,14 @@
           "previous": 19.55,
           "change": -1.620000000000001,
           "changeBp": -162.0000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-25",
+          "value": 2.154,
+          "previous": 2.119,
+          "change": 0.0349999999999997,
+          "changeBp": 3.49999999999997,
           "carriedForward": false
         }
       }
@@ -2344,7 +2601,8 @@
           "pct": -0.43058350100603343,
           "volume": 6466942.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2361,6 +2619,14 @@
           "previous": 17.93,
           "change": 0.6999999999999993,
           "changeBp": 69.99999999999993,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-26",
+          "value": 2.168,
+          "previous": 2.154,
+          "change": 0.014000000000000234,
+          "changeBp": 1.4000000000000234,
           "carriedForward": false
         }
       }
@@ -2405,7 +2671,8 @@
           "pct": 0.006127075546847529,
           "volume": 7198388.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2423,6 +2690,14 @@
           "change": 1.2300000000000004,
           "changeBp": 123.00000000000004,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-02-27",
+          "value": 2.132,
+          "previous": 2.168,
+          "change": -0.03600000000000003,
+          "changeBp": -3.600000000000003,
+          "carriedForward": false
         }
       }
     },
@@ -2433,11 +2708,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -2447,11 +2724,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -2528,7 +2807,8 @@
           "pct": 0.9992980137919709,
           "volume": 7218456.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2545,6 +2825,14 @@
           "previous": 19.86,
           "change": 1.5800000000000018,
           "changeBp": 158.00000000000017,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-02",
+          "value": 2.087,
+          "previous": 2.132,
+          "change": -0.04499999999999993,
+          "changeBp": -4.499999999999993,
           "carriedForward": false
         }
       }
@@ -2589,7 +2877,8 @@
           "pct": 1.1162945684771652,
           "volume": 11570716.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2606,6 +2895,14 @@
           "previous": 21.44,
           "change": 2.129999999999999,
           "changeBp": 212.9999999999999,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-03",
+          "value": 2.148,
+          "previous": 2.087,
+          "change": 0.06099999999999994,
+          "changeBp": 6.099999999999994,
           "carriedForward": false
         }
       }
@@ -2650,7 +2947,8 @@
           "pct": 0.24251890825386524,
           "volume": 7590661.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2667,6 +2965,14 @@
           "previous": 23.57,
           "change": -2.4200000000000017,
           "changeBp": -242.00000000000017,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-04",
+          "value": 2.134,
+          "previous": 2.148,
+          "change": -0.014000000000000234,
+          "changeBp": -1.4000000000000234,
           "carriedForward": false
         }
       }
@@ -2711,7 +3017,8 @@
           "pct": -0.8226199826381749,
           "volume": 8768166.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2728,6 +3035,14 @@
           "previous": 21.15,
           "change": 2.6000000000000014,
           "changeBp": 260.0000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-05",
+          "value": 2.175,
+          "previous": 2.134,
+          "change": 0.040999999999999925,
+          "changeBp": 4.0999999999999925,
           "carriedForward": false
         }
       }
@@ -2772,7 +3087,8 @@
           "pct": 0.3187536941653278,
           "volume": 8206036.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2790,6 +3106,14 @@
           "change": 5.739999999999998,
           "changeBp": 573.9999999999999,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-06",
+          "value": 2.18,
+          "previous": 2.175,
+          "change": 0.0050000000000003375,
+          "changeBp": 0.5000000000000338,
+          "carriedForward": false
         }
       }
     },
@@ -2800,11 +3124,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -2832,11 +3158,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -2879,7 +3207,8 @@
           "pct": 1.4865783214407067,
           "volume": 10305538.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2896,6 +3225,14 @@
           "previous": 29.49,
           "change": -3.9899999999999984,
           "changeBp": -398.99999999999983,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-09",
+          "value": 2.205,
+          "previous": 2.18,
+          "change": 0.02499999999999991,
+          "changeBp": 2.499999999999991,
           "carriedForward": false
         }
       }
@@ -2940,7 +3277,8 @@
           "pct": -0.008372755055055147,
           "volume": 6265551.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -2957,6 +3295,14 @@
           "previous": 25.5,
           "change": -0.5700000000000003,
           "changeBp": -57.00000000000003,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-10",
+          "value": 2.199,
+          "previous": 2.205,
+          "change": -0.006000000000000227,
+          "changeBp": -0.6000000000000227,
           "carriedForward": false
         }
       }
@@ -3001,7 +3347,8 @@
           "pct": -0.5425219941348922,
           "volume": 6701727.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3018,6 +3365,14 @@
           "previous": 24.93,
           "change": -0.6999999999999993,
           "changeBp": -69.99999999999993,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-11",
+          "value": 2.178,
+          "previous": 2.199,
+          "change": -0.020999999999999908,
+          "changeBp": -2.0999999999999908,
           "carriedForward": false
         }
       }
@@ -3062,7 +3417,8 @@
           "pct": -0.6080707573244795,
           "volume": 7999851.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3079,6 +3435,14 @@
           "previous": 24.23,
           "change": 3.0599999999999987,
           "changeBp": 305.9999999999999,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-12",
+          "value": 2.201,
+          "previous": 2.178,
+          "change": 0.02300000000000013,
+          "changeBp": 2.300000000000013,
           "carriedForward": false
         }
       }
@@ -3123,7 +3487,8 @@
           "pct": -0.7511597225177624,
           "volume": 7471659.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3141,6 +3506,14 @@
           "change": -0.09999999999999787,
           "changeBp": -9.999999999999787,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-13",
+          "value": 2.255,
+          "previous": 2.201,
+          "change": 0.053999999999999826,
+          "changeBp": 5.399999999999983,
+          "carriedForward": false
         }
       }
     },
@@ -3151,11 +3524,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3165,11 +3540,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3212,7 +3589,8 @@
           "pct": 0.0489288829323331,
           "volume": 7059890.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3229,6 +3607,14 @@
           "previous": 27.19,
           "change": -3.6799999999999997,
           "changeBp": -368.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-16",
+          "value": 2.288,
+          "previous": 2.255,
+          "change": 0.03299999999999992,
+          "changeBp": 3.299999999999992,
           "carriedForward": false
         }
       }
@@ -3273,7 +3659,8 @@
           "pct": -0.5238920106468415,
           "volume": 6189358.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3290,6 +3677,14 @@
           "previous": 23.51,
           "change": -1.1400000000000006,
           "changeBp": -114.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-17",
+          "value": 2.279,
+          "previous": 2.288,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
           "carriedForward": false
         }
       }
@@ -3334,7 +3729,8 @@
           "pct": -1.2308808157518574,
           "volume": 7090539.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3351,6 +3747,14 @@
           "previous": 22.37,
           "change": 2.719999999999999,
           "changeBp": 271.9999999999999,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-18",
+          "value": 2.231,
+          "previous": 2.279,
+          "change": -0.04800000000000004,
+          "changeBp": -4.800000000000004,
           "carriedForward": false
         }
       }
@@ -3395,7 +3799,8 @@
           "pct": 0.23697197643324017,
           "volume": 7882771.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3412,6 +3817,14 @@
           "previous": 25.09,
           "change": -1.0300000000000011,
           "changeBp": -103.00000000000011,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-19",
+          "value": 2.273,
+          "previous": 2.231,
+          "change": 0.04200000000000026,
+          "changeBp": 4.200000000000026,
           "carriedForward": false
         }
       }
@@ -3456,7 +3869,8 @@
           "pct": -0.6191005602424153,
           "volume": 10543276.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3474,6 +3888,14 @@
           "change": 2.7200000000000024,
           "changeBp": 272.0000000000002,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-19",
+          "value": 2.273,
+          "previous": 2.231,
+          "change": 0.04200000000000026,
+          "changeBp": 4.200000000000026,
+          "carriedForward": true
         }
       }
     },
@@ -3484,11 +3906,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3498,11 +3922,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3545,7 +3971,8 @@
           "pct": -0.28707101230303994,
           "volume": 9978109.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3562,6 +3989,14 @@
           "previous": 26.78,
           "change": -0.6300000000000026,
           "changeBp": -63.000000000000256,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-23",
+          "value": 2.322,
+          "previous": 2.273,
+          "change": 0.04899999999999993,
+          "changeBp": 4.899999999999993,
           "carriedForward": false
         }
       }
@@ -3606,7 +4041,8 @@
           "pct": 0.5998865669037128,
           "volume": 8187848.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3623,6 +4059,14 @@
           "previous": 26.15,
           "change": 0.8000000000000007,
           "changeBp": 80.00000000000007,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-24",
+          "value": 2.282,
+          "previous": 2.322,
+          "change": -0.040000000000000036,
+          "changeBp": -4.0000000000000036,
           "carriedForward": false
         }
       }
@@ -3667,7 +4111,8 @@
           "pct": -0.3413995233289743,
           "volume": 7019624.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3684,6 +4129,14 @@
           "previous": 26.95,
           "change": -1.620000000000001,
           "changeBp": -162.0000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-25",
+          "value": 2.267,
+          "previous": 2.282,
+          "change": -0.015000000000000124,
+          "changeBp": -1.5000000000000124,
           "carriedForward": false
         }
       }
@@ -3728,7 +4181,8 @@
           "pct": -0.48316505611648347,
           "volume": 8283960.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3745,6 +4199,14 @@
           "previous": 25.33,
           "change": 2.110000000000003,
           "changeBp": 211.00000000000028,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-26",
+          "value": 2.286,
+          "previous": 2.267,
+          "change": 0.019000000000000128,
+          "changeBp": 1.9000000000000128,
           "carriedForward": false
         }
       }
@@ -3789,7 +4251,8 @@
           "pct": -1.305317474199761,
           "volume": 6938526.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3807,6 +4270,14 @@
           "change": 3.6099999999999994,
           "changeBp": 360.99999999999994,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-27",
+          "value": 2.38,
+          "previous": 2.286,
+          "change": 0.09399999999999986,
+          "changeBp": 9.399999999999986,
+          "carriedForward": false
         }
       }
     },
@@ -3817,11 +4288,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3831,11 +4304,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -3878,7 +4353,8 @@
           "pct": -0.7769973661106278,
           "volume": 9181628.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3895,6 +4371,14 @@
           "previous": 31.05,
           "change": -0.4400000000000013,
           "changeBp": -44.00000000000013,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-30",
+          "value": 2.368,
+          "previous": 2.38,
+          "change": -0.01200000000000001,
+          "changeBp": -1.200000000000001,
           "carriedForward": false
         }
       }
@@ -3939,7 +4423,8 @@
           "pct": 1.3966419299052113,
           "volume": 11656260.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -3956,6 +4441,14 @@
           "previous": 30.61,
           "change": -5.359999999999999,
           "changeBp": -536.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-03-31",
+          "value": 2.366,
+          "previous": 2.368,
+          "change": -0.0019999999999997797,
+          "changeBp": -0.19999999999997797,
           "carriedForward": false
         }
       }
@@ -4000,7 +4493,8 @@
           "pct": -0.11158798283261412,
           "volume": 7790315.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4017,6 +4511,14 @@
           "previous": 25.25,
           "change": -0.7100000000000009,
           "changeBp": -71.00000000000009,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-01",
+          "value": 2.315,
+          "previous": 2.366,
+          "change": -0.051000000000000156,
+          "changeBp": -5.100000000000016,
           "carriedForward": false
         }
       },
@@ -4095,7 +4597,8 @@
           "pct": 1.0648470097357392,
           "volume": 3955885.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4113,6 +4616,14 @@
           "change": -0.6699999999999982,
           "changeBp": -66.99999999999982,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-02",
+          "value": 2.395,
+          "previous": 2.315,
+          "change": 0.08000000000000007,
+          "changeBp": 8.000000000000007,
+          "carriedForward": false
         }
       }
     },
@@ -4123,11 +4634,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4137,11 +4650,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4151,11 +4666,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4198,7 +4715,8 @@
           "pct": 0.5623061013443547,
           "volume": 2905316.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4215,6 +4733,14 @@
           "previous": 23.87,
           "change": 0.3000000000000007,
           "changeBp": 30.00000000000007,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-06",
+          "value": 2.429,
+          "previous": 2.386,
+          "change": 0.042999999999999705,
+          "changeBp": 4.2999999999999705,
           "carriedForward": false
         }
       }
@@ -4259,7 +4785,8 @@
           "pct": 0.02791196994095447,
           "volume": 3943164.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4276,6 +4803,14 @@
           "previous": 24.17,
           "change": 1.6099999999999994,
           "changeBp": 160.99999999999994,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-07",
+          "value": 2.411,
+          "previous": 2.429,
+          "change": -0.017999999999999794,
+          "changeBp": -1.7999999999999794,
           "carriedForward": false
         }
       },
@@ -4338,7 +4873,8 @@
           "pct": 0.058469762779825754,
           "volume": 4697516.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4355,6 +4891,14 @@
           "previous": 25.78,
           "change": -4.740000000000002,
           "changeBp": -474.0000000000002,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-08",
+          "value": 2.374,
+          "previous": 2.411,
+          "change": -0.03699999999999992,
+          "changeBp": -3.699999999999992,
           "carriedForward": false
         }
       }
@@ -4399,7 +4943,8 @@
           "pct": 0.9235795514042112,
           "volume": 4213629.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4416,6 +4961,14 @@
           "previous": 21.04,
           "change": -1.5500000000000007,
           "changeBp": -155.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-09",
+          "value": 2.397,
+          "previous": 2.374,
+          "change": 0.022999999999999687,
+          "changeBp": 2.2999999999999687,
           "carriedForward": false
         }
       }
@@ -4460,7 +5013,8 @@
           "pct": -0.6107487634670606,
           "volume": 2659020.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4478,6 +5032,14 @@
           "change": -0.259999999999998,
           "changeBp": -25.9999999999998,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-10",
+          "value": 2.439,
+          "previous": 2.397,
+          "change": 0.04200000000000026,
+          "changeBp": 4.200000000000026,
+          "carriedForward": false
         }
       }
     },
@@ -4488,11 +5050,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4502,11 +5066,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4549,7 +5115,8 @@
           "pct": 1.2665406427221115,
           "volume": 3768673.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4566,6 +5133,14 @@
           "previous": 19.23,
           "change": -0.10999999999999943,
           "changeBp": -10.999999999999943,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-13",
+          "value": 2.467,
+          "previous": 2.439,
+          "change": 0.028000000000000025,
+          "changeBp": 2.8000000000000025,
           "carriedForward": false
         }
       }
@@ -4610,7 +5185,8 @@
           "pct": 0.6384610600941074,
           "volume": 4217868.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4627,6 +5203,14 @@
           "previous": 19.12,
           "change": -0.7600000000000016,
           "changeBp": -76.00000000000016,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-14",
+          "value": 2.423,
+          "previous": 2.467,
+          "change": -0.04400000000000004,
+          "changeBp": -4.400000000000004,
           "carriedForward": false
         }
       }
@@ -4671,7 +5255,8 @@
           "pct": -0.36792666132247304,
           "volume": 3474538.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4688,6 +5273,14 @@
           "previous": 18.36,
           "change": -0.18999999999999773,
           "changeBp": -18.999999999999773,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-15",
+          "value": 2.414,
+          "previous": 2.423,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
           "carriedForward": false
         }
       }
@@ -4732,7 +5325,8 @@
           "pct": -0.03910913507060181,
           "volume": 4111450.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4749,6 +5343,14 @@
           "previous": 18.17,
           "change": -0.23000000000000043,
           "changeBp": -23.000000000000043,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-16",
+          "value": 2.409,
+          "previous": 2.414,
+          "change": -0.0050000000000003375,
+          "changeBp": -0.5000000000000338,
           "carriedForward": false
         }
       }
@@ -4793,7 +5395,8 @@
           "pct": 0.7235005196975587,
           "volume": 10238538.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4811,6 +5414,14 @@
           "change": -0.46000000000000085,
           "changeBp": -46.000000000000085,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-17",
+          "value": 2.428,
+          "previous": 2.409,
+          "change": 0.019000000000000128,
+          "changeBp": 1.9000000000000128,
+          "carriedForward": false
         }
       }
     },
@@ -4821,11 +5432,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4835,11 +5448,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -4882,7 +5497,8 @@
           "pct": 0.17833620427601488,
           "volume": 3763968.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4899,6 +5515,14 @@
           "previous": 17.48,
           "change": 1.3900000000000006,
           "changeBp": 139.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-20",
+          "value": 2.405,
+          "previous": 2.428,
+          "change": -0.02300000000000013,
+          "changeBp": -2.300000000000013,
           "carriedForward": false
         }
       }
@@ -4943,7 +5567,8 @@
           "pct": -1.182527552087522,
           "volume": 4322228.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -4960,6 +5585,14 @@
           "previous": 18.87,
           "change": 0.629999999999999,
           "changeBp": 62.9999999999999,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-21",
+          "value": 2.392,
+          "previous": 2.405,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
           "carriedForward": false
         }
       }
@@ -5004,7 +5637,8 @@
           "pct": -0.11305822498586819,
           "volume": 4022372.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5021,6 +5655,14 @@
           "previous": 19.5,
           "change": -0.5799999999999983,
           "changeBp": -57.99999999999983,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-22",
+          "value": 2.406,
+          "previous": 2.392,
+          "change": 0.014000000000000234,
+          "changeBp": 1.4000000000000234,
           "carriedForward": false
         }
       }
@@ -5065,7 +5707,8 @@
           "pct": 0.09136128311846282,
           "volume": 4077279.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5082,6 +5725,14 @@
           "previous": 18.92,
           "change": 0.389999999999997,
           "changeBp": 38.9999999999997,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-23",
+          "value": 2.429,
+          "previous": 2.406,
+          "change": 0.022999999999999687,
+          "changeBp": 2.2999999999999687,
           "carriedForward": false
         }
       }
@@ -5126,7 +5777,8 @@
           "pct": -0.170368116823858,
           "volume": 3372229.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5144,6 +5796,14 @@
           "change": -0.5999999999999979,
           "changeBp": -59.99999999999979,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-24",
+          "value": 2.443,
+          "previous": 2.429,
+          "change": 0.014000000000000234,
+          "changeBp": 1.4000000000000234,
+          "carriedForward": false
         }
       }
     },
@@ -5154,11 +5814,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5168,11 +5830,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5215,7 +5879,8 @@
           "pct": 0.04678600488201004,
           "volume": 2132040.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5232,6 +5897,14 @@
           "previous": 18.71,
           "change": -0.6900000000000013,
           "changeBp": -69.00000000000013,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-27",
+          "value": 2.477,
+          "previous": 2.443,
+          "change": 0.03399999999999981,
+          "changeBp": 3.399999999999981,
           "carriedForward": false
         }
       }
@@ -5276,7 +5949,8 @@
           "pct": -0.413407368378382,
           "volume": 3057045.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5293,6 +5967,14 @@
           "previous": 18.02,
           "change": -0.19000000000000128,
           "changeBp": -19.000000000000128,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-28",
+          "value": 2.468,
+          "previous": 2.477,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
           "carriedForward": false
         }
       }
@@ -5337,7 +6019,8 @@
           "pct": -0.4644057439657751,
           "volume": 3322294.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5355,6 +6038,14 @@
           "change": 0.9800000000000004,
           "changeBp": 98.00000000000004,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-28",
+          "value": 2.468,
+          "previous": 2.477,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
+          "carriedForward": true
         }
       }
     },
@@ -5398,7 +6089,8 @@
           "pct": 1.154833190761326,
           "volume": 5352271.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5415,6 +6107,14 @@
           "previous": 18.81,
           "change": -1.9199999999999982,
           "changeBp": -191.99999999999983,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-04-30",
+          "value": 2.52,
+          "previous": 2.468,
+          "change": 0.052000000000000046,
+          "changeBp": 5.200000000000005,
           "carriedForward": false
         }
       }
@@ -5459,7 +6159,8 @@
           "pct": -0.7657766017159797,
           "volume": 4402581.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5476,6 +6177,14 @@
           "previous": 16.89,
           "change": 0.09999999999999787,
           "changeBp": 9.999999999999787,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-01",
+          "value": 2.507,
+          "previous": 2.52,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
           "carriedForward": false
         }
       },
@@ -5521,11 +6230,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5535,11 +6246,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5582,7 +6295,8 @@
           "pct": -0.7983789260385,
           "volume": 3310394.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5600,6 +6314,14 @@
           "change": 1.3000000000000007,
           "changeBp": 130.00000000000006,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-01",
+          "value": 2.507,
+          "previous": 2.52,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
+          "carriedForward": true
         }
       }
     },
@@ -5643,7 +6365,8 @@
           "pct": 0.21752830917481414,
           "volume": 3386211.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5661,6 +6384,14 @@
           "change": -0.9100000000000001,
           "changeBp": -91.00000000000001,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-01",
+          "value": 2.507,
+          "previous": 2.52,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
+          "carriedForward": true
         }
       }
     },
@@ -5704,7 +6435,8 @@
           "pct": 0.41651575516117206,
           "volume": 4317271.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5722,6 +6454,14 @@
           "change": 0.010000000000001563,
           "changeBp": 1.0000000000001563,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-01",
+          "value": 2.507,
+          "previous": 2.52,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
+          "carriedForward": true
         }
       }
     },
@@ -5765,7 +6505,8 @@
           "pct": -0.9190625561926766,
           "volume": 4490464.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5782,6 +6523,14 @@
           "previous": 17.39,
           "change": -0.3100000000000023,
           "changeBp": -31.000000000000227,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-07",
+          "value": 2.485,
+          "previous": 2.507,
+          "change": -0.02200000000000024,
+          "changeBp": -2.200000000000024,
           "carriedForward": false
         }
       },
@@ -5844,7 +6593,8 @@
           "pct": -0.47143315679666636,
           "volume": 3495180.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5862,6 +6612,14 @@
           "change": 0.11000000000000298,
           "changeBp": 11.000000000000298,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-08",
+          "value": 2.485,
+          "previous": 2.485,
+          "change": 0.0,
+          "changeBp": 0.0,
+          "carriedForward": false
         }
       }
     },
@@ -5872,11 +6630,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5886,11 +6646,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -5933,7 +6695,8 @@
           "pct": 0.2642194433239214,
           "volume": 4249013.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -5950,6 +6713,14 @@
           "previous": 17.19,
           "change": 1.1899999999999977,
           "changeBp": 118.99999999999977,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-11",
+          "value": 2.527,
+          "previous": 2.485,
+          "change": 0.04200000000000026,
+          "changeBp": 4.200000000000026,
           "carriedForward": false
         }
       }
@@ -5994,7 +6765,8 @@
           "pct": 0.27794002134901524,
           "volume": 7445590.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6011,6 +6783,14 @@
           "previous": 18.38,
           "change": -0.39000000000000057,
           "changeBp": -39.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-12",
+          "value": 2.546,
+          "previous": 2.527,
+          "change": 0.018999999999999684,
+          "changeBp": 1.8999999999999684,
           "carriedForward": false
         }
       }
@@ -6055,7 +6835,8 @@
           "pct": 0.19751693002256557,
           "volume": 3256845.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6072,6 +6853,14 @@
           "previous": 17.99,
           "change": -0.11999999999999744,
           "changeBp": -11.999999999999744,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-13",
+          "value": 2.587,
+          "previous": 2.546,
+          "change": 0.04100000000000037,
+          "changeBp": 4.100000000000037,
           "carriedForward": false
         }
       }
@@ -6116,7 +6905,8 @@
           "pct": -0.11767286942299907,
           "volume": 4920474.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6133,6 +6923,14 @@
           "previous": 17.87,
           "change": -0.6099999999999994,
           "changeBp": -60.99999999999994,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-14",
+          "value": 2.628,
+          "previous": 2.587,
+          "change": 0.040999999999999925,
+          "changeBp": 4.0999999999999925,
           "carriedForward": false
         }
       }
@@ -6177,7 +6975,8 @@
           "pct": -0.39210166492399035,
           "volume": 5300700.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6195,6 +6994,14 @@
           "change": 1.1699999999999982,
           "changeBp": 116.99999999999982,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-15",
+          "value": 2.691,
+          "previous": 2.628,
+          "change": 0.06299999999999972,
+          "changeBp": 6.299999999999972,
+          "carriedForward": false
         }
       }
     },
@@ -6205,11 +7012,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6219,11 +7028,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6266,7 +7077,8 @@
           "pct": 0.27438716836477633,
           "volume": 5496196.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6283,6 +7095,14 @@
           "previous": 18.43,
           "change": -0.6099999999999994,
           "changeBp": -60.99999999999994,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-18",
+          "value": 2.729,
+          "previous": 2.691,
+          "change": 0.038000000000000256,
+          "changeBp": 3.8000000000000256,
           "carriedForward": false
         }
       }
@@ -6327,7 +7147,8 @@
           "pct": -0.17177616555179878,
           "volume": 5361291.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6344,6 +7165,14 @@
           "previous": 17.82,
           "change": 0.23999999999999844,
           "changeBp": 23.999999999999844,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-19",
+          "value": 2.783,
+          "previous": 2.729,
+          "change": 0.053999999999999826,
+          "changeBp": 5.399999999999983,
           "carriedForward": false
         }
       }
@@ -6388,7 +7217,8 @@
           "pct": 0.8812793675761802,
           "volume": 6516119.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6405,6 +7235,14 @@
           "previous": 18.06,
           "change": -0.6199999999999974,
           "changeBp": -61.999999999999744,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-20",
+          "value": 2.77,
+          "previous": 2.783,
+          "change": -0.0129999999999999,
+          "changeBp": -1.29999999999999,
           "carriedForward": false
         }
       }
@@ -6449,7 +7287,8 @@
           "pct": 0.8681182084285739,
           "volume": 6575900.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6466,6 +7305,14 @@
           "previous": 17.44,
           "change": -0.6799999999999997,
           "changeBp": -67.99999999999997,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-21",
+          "value": 2.748,
+          "previous": 2.77,
+          "change": -0.021999999999999797,
+          "changeBp": -2.1999999999999797,
           "carriedForward": false
         }
       }
@@ -6510,7 +7357,8 @@
           "pct": -0.17553894400504652,
           "volume": 5176149.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6528,6 +7376,14 @@
           "change": -0.060000000000002274,
           "changeBp": -6.000000000000227,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-22",
+          "value": 2.749,
+          "previous": 2.748,
+          "change": 0.0009999999999998899,
+          "changeBp": 0.09999999999998899,
+          "carriedForward": false
         }
       }
     },
@@ -6538,11 +7394,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6552,11 +7410,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6566,11 +7426,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6613,7 +7475,8 @@
           "pct": -0.4570798116515935,
           "volume": 3897739.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6630,6 +7493,14 @@
           "previous": 16.59,
           "change": 0.4200000000000017,
           "changeBp": 42.00000000000017,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-26",
+          "value": 2.713,
+          "previous": 2.686,
+          "change": 0.027000000000000135,
+          "changeBp": 2.7000000000000135,
           "carriedForward": false
         }
       }
@@ -6674,7 +7545,8 @@
           "pct": 0.18777301207676725,
           "volume": 4247825.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6691,6 +7563,14 @@
           "previous": 17.01,
           "change": -0.7200000000000024,
           "changeBp": -72.00000000000024,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-27",
+          "value": 2.687,
+          "previous": 2.713,
+          "change": -0.026000000000000245,
+          "changeBp": -2.6000000000000245,
           "carriedForward": false
         }
       }
@@ -6735,7 +7615,8 @@
           "pct": 0.33937882790624674,
           "volume": 3716012.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6752,6 +7633,14 @@
           "previous": 16.29,
           "change": -0.5499999999999989,
           "changeBp": -54.99999999999989,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-28",
+          "value": 2.692,
+          "previous": 2.687,
+          "change": 0.0050000000000003375,
+          "changeBp": 0.5000000000000338,
           "carriedForward": false
         }
       }
@@ -6796,7 +7685,8 @@
           "pct": 0.5670407560543406,
           "volume": 5346619.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6814,6 +7704,14 @@
           "change": -0.41999999999999993,
           "changeBp": -41.99999999999999,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-05-29",
+          "value": 2.657,
+          "previous": 2.692,
+          "change": -0.03500000000000014,
+          "changeBp": -3.500000000000014,
+          "carriedForward": false
         }
       }
     },
@@ -6824,11 +7722,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -6838,11 +7738,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -6903,7 +7805,8 @@
           "pct": 0.3118564283612778,
           "volume": 4424801.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -6920,6 +7823,14 @@
           "previous": 15.32,
           "change": 0.7300000000000004,
           "changeBp": 73.00000000000004,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-01",
+          "value": 2.682,
+          "previous": 2.657,
+          "change": 0.02499999999999991,
+          "changeBp": 2.499999999999991,
           "carriedForward": false
         }
       },
@@ -6998,7 +7909,8 @@
           "pct": 0.9762709200911389,
           "volume": 5078013.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7015,6 +7927,14 @@
           "previous": 16.05,
           "change": -0.28000000000000114,
           "changeBp": -28.000000000000114,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-02",
+          "value": 2.577,
+          "previous": 2.682,
+          "change": -0.10499999999999998,
+          "changeBp": -10.499999999999998,
           "carriedForward": false
         }
       }
@@ -7059,7 +7979,8 @@
           "pct": -0.5692822348729434,
           "volume": 4098010.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7076,6 +7997,14 @@
           "previous": 15.77,
           "change": 0.28999999999999915,
           "changeBp": 28.999999999999915,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-03",
+          "value": 2.645,
+          "previous": 2.577,
+          "change": 0.06800000000000006,
+          "changeBp": 6.800000000000006,
           "carriedForward": false
         }
       }
@@ -7120,7 +8049,8 @@
           "pct": 0.5859565107360452,
           "volume": 6390701.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7137,6 +8067,14 @@
           "previous": 16.06,
           "change": -0.6599999999999984,
           "changeBp": -65.99999999999983,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-04",
+          "value": 2.671,
+          "previous": 2.645,
+          "change": 0.0259999999999998,
+          "changeBp": 2.59999999999998,
           "carriedForward": false
         }
       }
@@ -7181,7 +8119,8 @@
           "pct": -1.5471982383960223,
           "volume": 6610694.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7199,6 +8138,14 @@
           "change": 6.110000000000001,
           "changeBp": 611.0000000000001,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-05",
+          "value": 2.669,
+          "previous": 2.671,
+          "change": -0.0019999999999997797,
+          "changeBp": -0.19999999999997797,
+          "carriedForward": false
         }
       }
     },
@@ -7209,11 +8156,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7223,11 +8172,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       },
       "events": [
         {
@@ -7288,7 +8239,8 @@
           "pct": -0.36318071911739475,
           "volume": 4825656.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7305,6 +8257,14 @@
           "previous": 21.51,
           "change": -2.59,
           "changeBp": -259.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-08",
+          "value": 2.715,
+          "previous": 2.669,
+          "change": 0.04599999999999982,
+          "changeBp": 4.599999999999982,
           "carriedForward": false
         }
       }
@@ -7349,7 +8309,8 @@
           "pct": -0.4047079064675047,
           "volume": 6249298.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7366,6 +8327,14 @@
           "previous": 18.92,
           "change": 0.9499999999999993,
           "changeBp": 94.99999999999993,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-09",
+          "value": 2.669,
+          "previous": 2.715,
+          "change": -0.04599999999999982,
+          "changeBp": -4.599999999999982,
           "carriedForward": false
         }
       }
@@ -7410,7 +8379,8 @@
           "pct": -1.425657901218758,
           "volume": 5153323.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7427,6 +8397,14 @@
           "previous": 19.87,
           "change": 2.349999999999998,
           "changeBp": 234.99999999999977,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-10",
+          "value": 2.681,
+          "previous": 2.669,
+          "change": 0.01200000000000001,
+          "changeBp": 1.200000000000001,
           "carriedForward": false
         }
       }
@@ -7471,7 +8449,8 @@
           "pct": 1.2261769907987075,
           "volume": 6353884.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7488,6 +8467,14 @@
           "previous": 22.22,
           "change": -2.7799999999999976,
           "changeBp": -277.9999999999998,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-11",
+          "value": 2.682,
+          "previous": 2.681,
+          "change": 0.0009999999999998899,
+          "changeBp": 0.09999999999998899,
           "carriedForward": false
         }
       }
@@ -7532,7 +8519,8 @@
           "pct": 0.03314550878355185,
           "volume": 8384492.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7550,6 +8538,14 @@
           "change": -1.7600000000000016,
           "changeBp": -176.00000000000017,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-12",
+          "value": 2.643,
+          "previous": 2.682,
+          "change": -0.039000000000000146,
+          "changeBp": -3.9000000000000146,
+          "carriedForward": false
         }
       }
     },
@@ -7560,11 +8556,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7574,11 +8572,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7621,7 +8621,8 @@
           "pct": -0.15214837355313898,
           "volume": 5379326.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7638,6 +8639,14 @@
           "previous": 17.68,
           "change": -1.4800000000000004,
           "changeBp": -148.00000000000006,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-15",
+          "value": 2.589,
+          "previous": 2.643,
+          "change": -0.053999999999999826,
+          "changeBp": -5.399999999999983,
           "carriedForward": false
         }
       }
@@ -7682,7 +8691,8 @@
           "pct": 0.21525215252152607,
           "volume": 4812534.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7699,6 +8709,14 @@
           "previous": 16.2,
           "change": 0.21000000000000085,
           "changeBp": 21.000000000000085,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-16",
+          "value": 2.655,
+          "previous": 2.589,
+          "change": 0.06599999999999984,
+          "changeBp": 6.599999999999984,
           "carriedForward": false
         }
       }
@@ -7743,7 +8761,8 @@
           "pct": -0.9515404980240257,
           "volume": 6563401.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7760,6 +8779,14 @@
           "previous": 16.41,
           "change": 2.030000000000001,
           "changeBp": 203.0000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-17",
+          "value": 2.613,
+          "previous": 2.655,
+          "change": -0.041999999999999815,
+          "changeBp": -4.1999999999999815,
           "carriedForward": false
         }
       }
@@ -7804,7 +8831,8 @@
           "pct": -0.5613101093686647,
           "volume": 7134357.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7822,6 +8850,14 @@
           "change": -2.0400000000000027,
           "changeBp": -204.00000000000028,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-18",
+          "value": 2.628,
+          "previous": 2.613,
+          "change": 0.015000000000000124,
+          "changeBp": 1.5000000000000124,
+          "carriedForward": false
         }
       }
     },
@@ -7832,11 +8868,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7846,11 +8884,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7860,11 +8900,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -7907,7 +8949,8 @@
           "pct": 0.04643603436266719,
           "volume": 6552129.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7924,6 +8967,14 @@
           "previous": 16.78,
           "change": 0.5,
           "changeBp": 50.0,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-22",
+          "value": 2.677,
+          "previous": 2.656,
+          "change": 0.020999999999999908,
+          "changeBp": 2.0999999999999908,
           "carriedForward": false
         }
       }
@@ -7968,7 +9019,8 @@
           "pct": 0.37693324007151136,
           "volume": 5039188.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -7985,6 +9037,14 @@
           "previous": 17.28,
           "change": 2.2099999999999973,
           "changeBp": 220.99999999999972,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-23",
+          "value": 2.683,
+          "previous": 2.677,
+          "change": 0.005999999999999783,
+          "changeBp": 0.5999999999999783,
           "carriedForward": false
         }
       }
@@ -8029,7 +9089,8 @@
           "pct": 0.4513841802436946,
           "volume": 4395869.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8046,6 +9107,14 @@
           "previous": 19.49,
           "change": -0.8599999999999994,
           "changeBp": -85.99999999999994,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-24",
+          "value": 2.674,
+          "previous": 2.683,
+          "change": -0.008999999999999897,
+          "changeBp": -0.8999999999999897,
           "carriedForward": false
         }
       }
@@ -8090,7 +9159,8 @@
           "pct": -0.3703064141675902,
           "volume": 5379836.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8107,6 +9177,14 @@
           "previous": 18.63,
           "change": 0.26000000000000156,
           "changeBp": 26.000000000000156,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-25",
+          "value": 2.637,
+          "previous": 2.674,
+          "change": -0.03699999999999992,
+          "changeBp": -3.699999999999992,
           "carriedForward": false
         }
       }
@@ -8151,7 +9229,8 @@
           "pct": 0.14506769825918764,
           "volume": 3823570.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8169,6 +9248,14 @@
           "change": -0.4800000000000004,
           "changeBp": -48.00000000000004,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-26",
+          "value": 2.611,
+          "previous": 2.637,
+          "change": -0.0259999999999998,
+          "changeBp": -2.59999999999998,
+          "carriedForward": false
         }
       }
     },
@@ -8179,11 +9266,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -8193,11 +9282,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -8240,7 +9331,8 @@
           "pct": 0.20167873537828293,
           "volume": 5733414.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8257,6 +9349,14 @@
           "previous": 18.41,
           "change": -0.7600000000000016,
           "changeBp": -76.00000000000016,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-29",
+          "value": 2.644,
+          "previous": 2.611,
+          "change": 0.03299999999999992,
+          "changeBp": 3.299999999999992,
           "carriedForward": false
         }
       }
@@ -8301,7 +9401,8 @@
           "pct": 0.007657700775335239,
           "volume": 3607843.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8318,6 +9419,14 @@
           "previous": 17.65,
           "change": -1.1999999999999993,
           "changeBp": -119.99999999999993,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-06-30",
+          "value": 2.69,
+          "previous": 2.644,
+          "change": 0.04599999999999982,
+          "changeBp": 4.599999999999982,
           "carriedForward": false
         }
       }
@@ -8362,7 +9471,8 @@
           "pct": 0.1860268875975735,
           "volume": 3438379.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8379,6 +9489,14 @@
           "previous": 16.45,
           "change": 0.14000000000000057,
           "changeBp": 14.000000000000057,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-01",
+          "value": 2.711,
+          "previous": 2.69,
+          "change": 0.020999999999999908,
+          "changeBp": 2.0999999999999908,
           "carriedForward": false
         }
       },
@@ -8457,7 +9575,8 @@
           "pct": 0.4548136025423864,
           "volume": 3536644.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8475,6 +9594,14 @@
           "change": -0.4400000000000013,
           "changeBp": -44.00000000000013,
           "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-02",
+          "value": 2.778,
+          "previous": 2.711,
+          "change": 0.06700000000000017,
+          "changeBp": 6.700000000000017,
+          "carriedForward": false
         }
       }
     },
@@ -8485,11 +9612,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -8499,11 +9628,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -8513,11 +9644,13 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
@@ -8560,7 +9693,8 @@
           "pct": 0.25911635648358383,
           "volume": 3236864.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8577,6 +9711,14 @@
           "previous": 15.81,
           "change": -0.2400000000000002,
           "changeBp": -24.00000000000002,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-06",
+          "value": 2.823,
+          "previous": 2.768,
+          "change": 0.05500000000000016,
+          "changeBp": 5.500000000000016,
           "carriedForward": false
         }
       }
@@ -8621,7 +9763,8 @@
           "pct": -0.7614951972281857,
           "volume": 4489163.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8638,6 +9781,14 @@
           "previous": 15.57,
           "change": 0.5599999999999987,
           "changeBp": 55.99999999999987,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-07",
+          "value": 2.834,
+          "previous": 2.823,
+          "change": 0.01100000000000012,
+          "changeBp": 1.100000000000012,
           "carriedForward": false
         }
       },
@@ -8700,7 +9851,8 @@
           "pct": -0.10891580998969122,
           "volume": 3574916.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8717,6 +9869,14 @@
           "previous": 16.13,
           "change": 0.7699999999999996,
           "changeBp": 76.99999999999996,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-08",
+          "value": 2.856,
+          "previous": 2.834,
+          "change": 0.021999999999999797,
+          "changeBp": 2.1999999999999797,
           "carriedForward": false
         }
       }
@@ -8761,7 +9921,8 @@
           "pct": 0.10312231452307406,
           "volume": 3056449.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8778,6 +9939,14 @@
           "previous": 16.9,
           "change": -1.0599999999999987,
           "changeBp": -105.99999999999987,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-09",
+          "value": 2.866,
+          "previous": 2.856,
+          "change": 0.010000000000000231,
+          "changeBp": 1.000000000000023,
           "carriedForward": false
         }
       }
@@ -8822,7 +9991,8 @@
           "pct": 0.026634198310628254,
           "volume": 3469449.0,
           "priceType": "close"
-        }
+        },
+        "SOX": null
       },
       "macro": {
         "DGS10": {
@@ -8840,6 +10010,14 @@
           "change": -1.0599999999999987,
           "changeBp": -105.99999999999987,
           "carriedForward": true
+        },
+        "JGB10Y": {
+          "date": "2026-07-10",
+          "value": 2.761,
+          "previous": 2.866,
+          "change": -0.10499999999999998,
+          "changeBp": -10.499999999999998,
+          "carriedForward": false
         }
       }
     },
@@ -8850,27 +10028,83 @@
       "assets": {
         "QQQ": null,
         "SPY": null,
-        "DIA": null
+        "DIA": null,
+        "SOX": null
       },
       "macro": {
         "DGS10": null,
-        "VIXCLS": null
+        "VIXCLS": null,
+        "JGB10Y": null
       }
     },
     {
       "date": "2026-07-12",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-13",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": {
+          "date": "2026-07-09",
+          "value": 4.54,
+          "previous": 4.56,
+          "change": -0.019999999999999574,
+          "changeBp": -1.9999999999999574,
+          "carriedForward": true
+        },
+        "VIXCLS": {
+          "date": "2026-07-09",
+          "value": 15.84,
+          "previous": 16.9,
+          "change": -1.0599999999999987,
+          "changeBp": -105.99999999999987,
+          "carriedForward": true
+        },
+        "JGB10Y": {
+          "date": "2026-07-10",
+          "value": 2.761,
+          "previous": 2.866,
+          "change": -0.10499999999999998,
+          "changeBp": -10.499999999999998,
+          "carriedForward": true
+        }
+      }
     },
     {
       "date": "2026-07-14",
       "dayOfWeek": 1,
       "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      },
       "events": [
         {
           "id": "cex.binance.anniversary:2026-07-14",
@@ -8893,92 +10127,290 @@
     {
       "date": "2026-07-15",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-16",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-17",
       "dayOfWeek": 4,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-18",
       "dayOfWeek": 5,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-19",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-20",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-21",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-22",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-23",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-24",
       "dayOfWeek": 4,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-25",
       "dayOfWeek": 5,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-26",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-27",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-28",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-29",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-30",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-07-31",
       "dayOfWeek": 4,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-01",
       "dayOfWeek": 5,
       "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      },
       "events": [
         {
           "id": "crypto.eth.monthly-net-issuance-review:2026-08-01",
@@ -9017,32 +10449,98 @@
     {
       "date": "2026-08-02",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-03",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-04",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-05",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-06",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-07",
       "dayOfWeek": 4,
       "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      },
       "events": [
         {
           "id": "crypto.hype.core-contributor-observation:2026-08-07",
@@ -9065,102 +10563,322 @@
     {
       "date": "2026-08-08",
       "dayOfWeek": 5,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-09",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-10",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-11",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-12",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-13",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-14",
       "dayOfWeek": 4,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-15",
       "dayOfWeek": 5,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-16",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-17",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-18",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-19",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-20",
       "dayOfWeek": 3,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-21",
       "dayOfWeek": 4,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-22",
       "dayOfWeek": 5,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-23",
       "dayOfWeek": 6,
-      "isMarketDay": false
+      "isMarketDay": false,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-24",
       "dayOfWeek": 0,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-25",
       "dayOfWeek": 1,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     },
     {
       "date": "2026-08-26",
       "dayOfWeek": 2,
-      "isMarketDay": true
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "dayOfWeek": 3,
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
     }
-  ],
-  "eventAnnotations": {
-    "transformedAt": "2026-07-13T00:01:39Z",
-    "source": "app/data/equity-recurring-events.json",
-    "lookaheadDays": 45
-  }
+  ]
 }

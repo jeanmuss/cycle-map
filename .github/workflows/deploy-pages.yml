@@ -73,6 +73,7 @@ jobs:
         env:
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
           SOSOVALUE_API_KEY: ${{ secrets.SOSOVALUE_API_KEY }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           BLOCKBEATS_API_KEY: ${{ secrets.BLOCKBEATS_API_KEY }}
           BLOCKBEATS_AUX_ENABLED: ${{ vars.BLOCKBEATS_AUX_ENABLED }}
         run: npm --prefix app run update-crypto-liquidity
@@ -120,6 +121,14 @@ jobs:
       - name: Refresh interactive chart series
         if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
         run: npm --prefix app run update-chart-series
+      - name: Persist derived market metric history
+        if: github.event_name != 'schedule' || github.event.schedule == '0 * * * *'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CYCLE_MAP_REQUIRE_MARKET_HISTORY: ${{ vars.MARKET_HISTORY_REQUIRED || '0' }}
+        run: npm --prefix app run persist-market-history
       - name: Build static site for GitHub Pages
         run: npm --prefix app run build:pages
       - name: Save the successful build data baseline

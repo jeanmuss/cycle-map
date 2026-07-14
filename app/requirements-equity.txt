@@ -2,3 +2,4 @@ akshare==1.18.64
 fredapi==0.5.2
 yfinance==1.4.1
 py-mini-racer==0.6.0
+requests==2.33.1

@@ -1,6 +1,6 @@
 const DAY_MS = 86_400_000;
 
-export const CRYPTO_LIQUIDITY_VERSION = 1;
+export const CRYPTO_LIQUIDITY_VERSION = 3;
 export const CRYPTO_LIQUIDITY_HISTORY_DAYS = 400;
 
 export function finiteNumber(value) {
@@ -80,15 +80,53 @@ export function normalizeCmcLiquidity(globalPayload, quotesPayload) {
   ];
 }
 
+export function normalizeCmcSpotPrices(quotesPayload) {
+  return Object.fromEntries([
+    ["BTC", cmcRow(quotesPayload, 1)],
+    ["ETH", cmcRow(quotesPayload, 1027)],
+  ].map(([asset, row]) => {
+    const quote = quoteUsd(row);
+    return [asset, {
+      asset,
+      priceUsd: finiteNumber(quote.price),
+      observedAt: quote.last_updated || row?.last_updated || quotesPayload?.status?.timestamp || null,
+      source: "cmc",
+    }];
+  }));
+}
+
+export function requireCmcLiquiditySnapshot(metrics, spotPrices) {
+  const byId = Object.fromEntries((metrics || []).map((item) => [item.id, item]));
+  const missing = [
+    "crypto.totalMarketCap",
+    "btc.marketCap",
+    "stablecoin.usdt.marketCap",
+    "stablecoin.usdc.marketCap",
+    "stablecoin.major.marketCap",
+    "stablecoin.usdt.depegBps",
+  ].filter((id) => finiteNumber(byId[id]?.value) == null || !byId[id]?.observedAt);
+  for (const asset of ["BTC", "ETH"]) {
+    if (finiteNumber(spotPrices?.[asset]?.priceUsd) == null || !spotPrices?.[asset]?.observedAt) missing.push(`${asset} spot`);
+  }
+  if (missing.length) throw new Error(`CMC response omitted required fields: ${missing.join(", ")}`);
+  return { metrics, spotPrices };
+}
+
 export function normalizeSosoEtfHistory(payload, asset) {
-  const rows = Array.isArray(payload?.data?.list) ? payload.data.list : [];
+  const rows = Array.isArray(payload)
+    ? payload
+    : Array.isArray(payload?.data)
+      ? payload.data
+      : Array.isArray(payload?.data?.list)
+        ? payload.data.list
+        : [];
   const daily = rows
     .map((row) => ({
       date: String(row?.date || ""),
-      netFlowUsd: finiteNumber(row?.totalNetInflow),
-      totalValueTradedUsd: finiteNumber(row?.totalValueTraded),
-      totalNetAssetsUsd: finiteNumber(row?.totalNetAssets),
-      cumulativeNetFlowUsd: finiteNumber(row?.cumNetInflow),
+      netFlowUsd: finiteNumber(row?.total_net_inflow ?? row?.totalNetInflow),
+      totalValueTradedUsd: finiteNumber(row?.total_value_traded ?? row?.totalValueTraded),
+      totalNetAssetsUsd: finiteNumber(row?.total_net_assets ?? row?.totalNetAssets),
+      cumulativeNetFlowUsd: finiteNumber(row?.cum_net_inflow ?? row?.cumNetInflow),
     }))
     .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && row.netFlowUsd != null)
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -101,6 +139,182 @@ export function normalizeSosoEtfHistory(payload, asset) {
     observedAt: daily.at(-1)?.date || null,
     daily,
     weekly: aggregateWeeklyFlows(daily),
+  };
+}
+
+export function mergeSosoEtfHistory(existingAsset, freshAsset) {
+  const byDate = new Map();
+  for (const point of [...(existingAsset?.daily || []), ...(freshAsset?.daily || [])]) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(point?.date || "") && finiteNumber(point?.netFlowUsd) != null) {
+      byDate.set(point.date, point);
+    }
+  }
+  const daily = [...byDate.values()]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-CRYPTO_LIQUIDITY_HISTORY_DAYS);
+  return {
+    ...existingAsset,
+    ...freshAsset,
+    status: daily.length ? "available" : freshAsset?.status || existingAsset?.status || "unavailable",
+    observedAt: daily.at(-1)?.date || freshAsset?.observedAt || existingAsset?.observedAt || null,
+    daily,
+    weekly: aggregateWeeklyFlows(daily),
+  };
+}
+
+function treasuryRows(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.data?.list)) return payload.data.list;
+  return [];
+}
+
+export function normalizeStrategyTreasuryHistory(payload) {
+  const history = treasuryRows(payload)
+    .map((row) => ({
+      date: String(row?.date || ""),
+      disclosedAt: String(row?.date || ""),
+      holdingsObservedAt: String(row?.date || ""),
+      holdings: finiteNumber(row?.btc_holding),
+      acquired: finiteNumber(row?.btc_acq),
+      acquisitionCostUsd: finiteNumber(row?.acq_cost),
+      transactionPriceUsd: finiteNumber(row?.avg_btc_cost),
+      sourceUrl: "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+      qualityStatus: "provider_reported",
+    }))
+    .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && row.holdings != null)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-100);
+  const latest = history.at(-1);
+  return {
+    company: "Strategy",
+    ticker: "MSTR",
+    asset: "BTC",
+    status: latest ? "available" : "unavailable",
+    source: "sosovalue",
+    sourceUrl: latest?.sourceUrl || null,
+    holdings: latest?.holdings ?? null,
+    holdingsObservedAt: latest?.holdingsObservedAt || null,
+    averageCostUsd: null,
+    costObservedAt: null,
+    averageCostMethod: null,
+    latestAcquisition: latest?.acquired ?? null,
+    latestAcquisitionCostUsd: latest?.acquisitionCostUsd ?? null,
+    qualityStatus: latest?.qualityStatus || "unavailable",
+    history,
+  };
+}
+
+export function mergeTreasurySnapshots(primary, reviewed) {
+  const historyBySource = new Map();
+  for (const point of [...(reviewed?.history || []), ...(primary?.history || [])]) {
+    const key = `${point?.sourceUrl || primary?.source || reviewed?.source || "source"}::${point?.holdingsObservedAt || point?.date || "date"}::${point?.holdings}`;
+    historyBySource.set(key, point);
+  }
+  const history = [...historyBySource.values()].sort((a, b) => {
+    const left = a.disclosedAt || a.date || a.holdingsObservedAt || "";
+    const right = b.disclosedAt || b.date || b.holdingsObservedAt || "";
+    return left.localeCompare(right);
+  });
+  const latest = history.at(-1);
+  const primaryLatest = primary?.history?.at(-1);
+  const costHistoryBySource = new Map();
+  for (const point of [...(reviewed?.costHistory || []), ...(primary?.costHistory || [])]) {
+    const key = [
+      point?.sourceUrl || primary?.source || reviewed?.source || "source",
+      point?.costObservedAt || "date",
+      point?.holdingsAtCostDate ?? "holdings",
+      point?.averageCostUsd ?? "cost",
+    ].join("::");
+    costHistoryBySource.set(key, point);
+  }
+  const costHistory = [...costHistoryBySource.values()]
+    .sort((a, b) => String(a.costObservedAt || "").localeCompare(String(b.costObservedAt || "")));
+  const latestCost = costHistory.at(-1);
+  return {
+    ...reviewed,
+    ...primary,
+    status: latest ? "available" : primary?.status || reviewed?.status || "unavailable",
+    source: primary?.source || reviewed?.source || null,
+    sourceUrl: latest?.sourceUrl || primary?.sourceUrl || reviewed?.sourceUrl || null,
+    holdings: latest?.holdings ?? primary?.holdings ?? reviewed?.holdings ?? null,
+    holdingsObservedAt: latest?.holdingsObservedAt || latest?.date || primary?.holdingsObservedAt || reviewed?.holdingsObservedAt || null,
+    holdingsDisclosedAt: latest?.disclosedAt || primary?.holdingsDisclosedAt || reviewed?.holdingsDisclosedAt || null,
+    averageCostUsd: latestCost?.averageCostUsd ?? reviewed?.averageCostUsd ?? primary?.averageCostUsd ?? null,
+    costObservedAt: latestCost?.costObservedAt || reviewed?.costObservedAt || primary?.costObservedAt || null,
+    averageCostMethod: latestCost?.averageCostMethod || reviewed?.averageCostMethod || primary?.averageCostMethod || null,
+    latestAcquisition: primaryLatest?.acquired ?? primary?.latestAcquisition ?? reviewed?.latestAcquisition ?? null,
+    latestAcquisitionCostUsd: primaryLatest?.acquisitionCostUsd ?? primary?.latestAcquisitionCostUsd ?? null,
+    qualityStatus: latestCost && latestCost.costObservedAt !== (latest?.holdingsObservedAt || latest?.date)
+      ? "mixed_disclosure_dates"
+      : primary?.qualityStatus || reviewed?.qualityStatus || "unavailable",
+    history,
+    costHistory,
+  };
+}
+
+export function normalizeReviewedTreasuryDisclosure(payload) {
+  const holdingsHistory = (Array.isArray(payload?.holdings) ? payload.holdings : [])
+    .map((row) => ({
+      disclosedAt: String(row?.disclosedAt || row?.holdingsObservedAt || ""),
+      holdingsObservedAt: String(row?.holdingsObservedAt || ""),
+      holdings: finiteNumber(row?.holdings),
+      acquired: finiteNumber(row?.acquired),
+      sourceUrl: String(row?.sourceUrl || ""),
+      qualityStatus: String(row?.qualityStatus || "official_filing"),
+    }))
+    .filter((row) => /^\d{4}-\d{2}-\d{2}/.test(row.disclosedAt) && row.holdings != null)
+    .sort((a, b) => a.disclosedAt.localeCompare(b.disclosedAt));
+  const costHistory = (Array.isArray(payload?.costs) ? payload.costs : [])
+    .map((row) => ({
+      costObservedAt: String(row?.costObservedAt || ""),
+      holdingsAtCostDate: finiteNumber(row?.holdingsAtCostDate),
+      costBasisUsd: finiteNumber(row?.costBasisUsd),
+      costBasisApproximate: row?.costBasisApproximate === true,
+      averageCostUsd: finiteNumber(row?.averageCostUsd)
+        ?? (finiteNumber(row?.costBasisUsd) != null && finiteNumber(row?.holdingsAtCostDate) > 0
+          ? finiteNumber(row.costBasisUsd) / finiteNumber(row.holdingsAtCostDate)
+          : null),
+      averageCostMethod: String(row?.averageCostMethod || "reported_cost_basis_divided_by_holdings"),
+      sourceUrl: String(row?.sourceUrl || ""),
+      qualityStatus: String(row?.qualityStatus || "official_quarterly_filing"),
+    }))
+    .filter((row) => /^\d{4}-\d{2}-\d{2}/.test(row.costObservedAt) && row.averageCostUsd != null)
+    .sort((a, b) => a.costObservedAt.localeCompare(b.costObservedAt));
+  const latest = holdingsHistory.at(-1);
+  const latestCost = costHistory.at(-1);
+  const previous = holdingsHistory.at(-2);
+  return {
+    company: String(payload?.company || ""),
+    ticker: String(payload?.ticker || ""),
+    asset: String(payload?.asset || ""),
+    status: latest ? "available" : "unavailable",
+    source: String(payload?.source || "official_company_filings"),
+    sourceUrl: latest?.sourceUrl || latestCost?.sourceUrl || null,
+    holdings: latest?.holdings ?? null,
+    holdingsObservedAt: latest?.holdingsObservedAt || null,
+    holdingsDisclosedAt: latest?.disclosedAt || null,
+    averageCostUsd: latestCost?.averageCostUsd ?? null,
+    costObservedAt: latestCost?.costObservedAt || null,
+    averageCostMethod: latestCost?.averageCostMethod || null,
+    latestAcquisition: latest?.acquired
+      ?? (latest?.holdings != null && previous?.holdings != null ? latest.holdings - previous.holdings : null),
+    qualityStatus: latestCost && latestCost.costObservedAt !== latest?.holdingsObservedAt
+      ? "mixed_disclosure_dates"
+      : latest?.qualityStatus || "unavailable",
+    history: holdingsHistory,
+    costHistory,
+  };
+}
+
+export function attachTreasurySpotPrice(treasury, spotPrice) {
+  const price = finiteNumber(spotPrice?.priceUsd);
+  const cost = finiteNumber(treasury?.averageCostUsd);
+  return {
+    ...treasury,
+    spotPriceUsd: price,
+    spotObservedAt: spotPrice?.observedAt || null,
+    costGapPct: price != null && cost != null && cost !== 0 ? ((price - cost) / cost) * 100 : null,
   };
 }
 
@@ -142,6 +356,9 @@ export function aggregateWeeklyFlows(daily) {
     const current = groups.get(week) || { week, netFlowUsd: 0, tradingDays: 0 };
     current.netFlowUsd += point.netFlowUsd;
     current.tradingDays += 1;
+    if (finiteNumber(point.cumulativeNetFlowUsd) != null) {
+      current.cumulativeNetFlowUsd = finiteNumber(point.cumulativeNetFlowUsd);
+    }
     groups.set(week, current);
   }
   return [...groups.values()].sort((a, b) => a.week.localeCompare(b.week));

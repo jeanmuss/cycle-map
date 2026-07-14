@@ -1,7 +1,12 @@
 {
   "version": 1,
   "page": "chart-series",
-  "generatedAt": "2026-07-11T05:24:48.865Z",
+  "generatedAt": "2026-07-13T14:02:54.557Z",
+  "timestamps": {
+    "observedAt": "2026-07-10T20:00:00Z",
+    "fetchedAt": "2026-07-11T05:24:22.131Z",
+    "transformedAt": "2026-07-13T14:02:54.557Z"
+  },
   "windows": [
     {
       "value": "1d",
@@ -46,7 +51,7 @@
       "labelEn": "Z-score"
     }
   ],
-  "methodology": "Derived static time-series cache built from reviewed page caches and local/CI provider caches. The browser reads this generated JSON only and never calls market-data providers directly.",
+  "methodology": "Derived static time-series cache built from reviewed page caches and local/CI provider caches. Macro points merge with the last-known-good output; a same-date value is revised only when the provider cache has a non-older fetchedAt. The browser reads this generated JSON only and never calls market-data providers directly.",
   "sources": {
     "equity": "app/public/data/equity-weekly.json",
     "macro": "tmp/macro-cache/fred plus app/public/data/macro-calendar.json metadata when available",
@@ -67,9 +72,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "equity.QQQ.return": {
       "precision": 2,
@@ -84,9 +89,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "equity.SPY.close": {
       "precision": 2,
@@ -101,9 +106,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "equity.SPY.return": {
       "precision": 2,
@@ -118,9 +123,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "equity.DIA.close": {
       "precision": 2,
@@ -135,9 +140,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "equity.DIA.return": {
       "precision": 2,
@@ -152,9 +157,9 @@
       "source": "AKShare / Sina US stock daily (unadjusted)",
       "categoryLabelZh": "美股大盘",
       "categoryLabelEn": "U.S. market",
-      "first": "2026-01-12",
+      "first": "2026-01-13",
       "last": "2026-07-10",
-      "points": 124
+      "points": 123
     },
     "macro.DGS10.value": {
       "precision": 2,
@@ -167,12 +172,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / U.S. Treasury",
+      "sourceFetchedAt": "2026-07-02T15:32:59Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 381
+      "points": 387,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.VIXCLS.value": {
       "precision": 2,
@@ -185,12 +192,34 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / CBOE",
+      "sourceFetchedAt": "2026-07-02T15:33:04Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 394
+      "points": 400,
+      "sourceStatus": "last_known_good_preserved"
+    },
+    "macro.JGB10Y.value": {
+      "precision": 2,
+      "defaultTransform": "raw",
+      "id": "macro.JGB10Y.value",
+      "labelZh": "日本10年国债收益率",
+      "labelEn": "Japan 10Y JGB",
+      "category": "rates",
+      "unit": "percent",
+      "kind": "yield",
+      "cadence": "daily",
+      "source": "Japan Ministry of Finance",
+      "sourceUrl": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv",
+      "sourceFetchedAt": "2026-07-13T13:13:19Z",
+      "dateMeaning": "japan_market_close_1500_jst",
+      "categoryLabelZh": "利率",
+      "categoryLabelEn": "Rates",
+      "first": "2026-01-13",
+      "last": "2026-07-10",
+      "points": 122
     },
     "macro.CPIAUCSL.value": {
       "precision": 2,
@@ -203,12 +232,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:45Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 17
+      "points": 17,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.CPILFESL.value": {
       "precision": 2,
@@ -221,12 +252,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:46Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 17
+      "points": 17,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.PPIACO.value": {
       "precision": 2,
@@ -239,12 +272,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:46Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.WPSFD4131.value": {
       "precision": 2,
@@ -257,12 +292,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:47Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.PCEPI.value": {
       "precision": 2,
@@ -275,12 +312,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BEA",
+      "sourceFetchedAt": "2026-07-02T15:32:47Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.PCEPILFE.value": {
       "precision": 2,
@@ -293,12 +332,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BEA",
+      "sourceFetchedAt": "2026-07-02T15:32:48Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "通胀",
       "categoryLabelEn": "Inflation",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.PAYEMS.value": {
       "precision": 2,
@@ -311,12 +352,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:48Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-06-01",
-      "points": 19
+      "points": 19,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.UNRATE.value": {
       "precision": 2,
@@ -329,12 +372,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:49Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-06-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.CES0500000003.value": {
       "precision": 2,
@@ -347,12 +392,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / BLS",
+      "sourceFetchedAt": "2026-07-02T15:32:49Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-06-01",
-      "points": 19
+      "points": 19,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.ICSA.value": {
       "precision": 2,
@@ -365,12 +412,14 @@
       "kind": "release_observation",
       "cadence": "weekly",
       "source": "FRED / U.S. Employment and Training Administration",
+      "sourceFetchedAt": "2026-07-02T15:32:50Z",
       "dateMeaning": "observation_week",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
-      "first": "2024-12-28",
+      "first": "2024-12-21",
       "last": "2026-07-04",
-      "points": 80
+      "points": 81,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.RSAFS.value": {
       "precision": 2,
@@ -383,12 +432,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / U.S. Census Bureau",
+      "sourceFetchedAt": "2026-07-02T15:32:51Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.INDPRO.value": {
       "precision": 2,
@@ -401,12 +452,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:32:51Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.GDPC1.value": {
       "precision": 2,
@@ -419,12 +472,14 @@
       "kind": "release_observation",
       "cadence": "quarterly",
       "source": "FRED / BEA",
+      "sourceFetchedAt": "2026-07-02T15:32:52Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-10-01",
       "last": "2026-01-01",
-      "points": 6
+      "points": 6,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.UMCSENT.value": {
       "precision": 2,
@@ -437,12 +492,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / University of Michigan",
+      "sourceFetchedAt": "2026-07-02T15:32:52Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "增长",
       "categoryLabelEn": "Growth",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.IRSTCI01JPM156N.value": {
       "precision": 2,
@@ -455,12 +512,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / OECD",
+      "sourceFetchedAt": "2026-07-02T15:32:53Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.IR3TIB01CNM156N.value": {
       "precision": 2,
@@ -473,12 +532,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / OECD",
+      "sourceFetchedAt": "2026-07-02T15:32:53Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
       "first": "2024-12-01",
       "last": "2026-04-01",
-      "points": 17
+      "points": 17,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.FEDTARMDLR.value": {
       "precision": 2,
@@ -491,12 +552,14 @@
       "kind": "release_observation",
       "cadence": "event",
       "source": "FRED / Federal Reserve SEP",
+      "sourceFetchedAt": "2026-07-02T15:32:54Z",
       "dateMeaning": "sep_release_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
       "first": "2025-03-19",
       "last": "2026-06-17",
-      "points": 6
+      "points": 6,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.M2SL.value": {
       "precision": 2,
@@ -509,12 +572,14 @@
       "kind": "release_observation",
       "cadence": "monthly",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:32:55Z",
       "dateMeaning": "observation_period",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
       "first": "2024-12-01",
       "last": "2026-05-01",
-      "points": 18
+      "points": 18,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DFEDTARU.value": {
       "precision": 2,
@@ -527,12 +592,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:32:56Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-28",
+      "first": "2024-12-19",
       "last": "2026-07-10",
-      "points": 560
+      "points": 569,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DFEDTARL.value": {
       "precision": 2,
@@ -545,12 +612,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:32:57Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-28",
+      "first": "2024-12-19",
       "last": "2026-07-10",
-      "points": 560
+      "points": 569,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DFF.value": {
       "precision": 2,
@@ -563,12 +632,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:32:57Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-28",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 559
+      "points": 568,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DGS2.value": {
       "precision": 2,
@@ -581,12 +652,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / U.S. Treasury",
+      "sourceFetchedAt": "2026-07-02T15:32:58Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 381
+      "points": 387,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DFII10.value": {
       "precision": 2,
@@ -599,12 +672,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / U.S. Treasury",
+      "sourceFetchedAt": "2026-07-02T15:32:59Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 381
+      "points": 387,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.T10YIE.value": {
       "precision": 2,
@@ -617,12 +692,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:33:01Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-10",
-      "points": 382
+      "points": 388,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DTWEXBGS.value": {
       "precision": 2,
@@ -635,12 +712,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve",
+      "sourceFetchedAt": "2026-07-02T15:33:02Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-02",
-      "points": 378
+      "points": 384,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DEXJPUS.value": {
       "precision": 2,
@@ -653,12 +732,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Board of Governors",
+      "sourceFetchedAt": "2026-07-02T15:33:02Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-02",
-      "points": 378
+      "points": 384,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.DEXCHUS.value": {
       "precision": 2,
@@ -671,12 +752,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Board of Governors",
+      "sourceFetchedAt": "2026-07-02T15:33:03Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "利率",
       "categoryLabelEn": "Rates",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-02",
-      "points": 378
+      "points": 384,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.BAMLC0A0CM.value": {
       "precision": 2,
@@ -689,12 +772,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / ICE BofA",
+      "sourceFetchedAt": "2026-07-02T15:33:04Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 401
+      "points": 406,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.BAMLH0A0HYM2.value": {
       "precision": 2,
@@ -707,12 +792,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / ICE BofA",
+      "sourceFetchedAt": "2026-07-02T15:33:05Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-09",
-      "points": 401
+      "points": 407,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.STLFSI4.value": {
       "precision": 2,
@@ -725,12 +812,14 @@
       "kind": "state",
       "cadence": "weekly",
       "source": "FRED / St. Louis Fed",
+      "sourceFetchedAt": "2026-07-02T15:33:05Z",
       "dateMeaning": "observation_week",
       "categoryLabelZh": "波动",
       "categoryLabelEn": "Volatility",
-      "first": "2025-01-03",
+      "first": "2024-12-20",
       "last": "2026-07-03",
-      "points": 79
+      "points": 81,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.WALCL.value": {
       "precision": 2,
@@ -743,12 +832,14 @@
       "kind": "state",
       "cadence": "weekly",
       "source": "FRED / Federal Reserve H.4.1",
+      "sourceFetchedAt": "2026-07-02T15:33:06Z",
       "dateMeaning": "observation_week",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.WRESBAL.value": {
       "precision": 2,
@@ -761,12 +852,14 @@
       "kind": "state",
       "cadence": "weekly",
       "source": "FRED / Federal Reserve H.4.1",
+      "sourceFetchedAt": "2026-07-02T15:33:07Z",
       "dateMeaning": "observation_week",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.WTREGEN.value": {
       "precision": 2,
@@ -779,12 +872,14 @@
       "kind": "state",
       "cadence": "weekly",
       "source": "FRED / U.S. Treasury",
+      "sourceFetchedAt": "2026-07-02T15:33:07Z",
       "dateMeaning": "observation_week",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.RRPONTSYD.value": {
       "precision": 2,
@@ -797,12 +892,14 @@
       "kind": "state",
       "cadence": "daily",
       "source": "FRED / Federal Reserve Bank of New York",
+      "sourceFetchedAt": "2026-07-02T15:33:08Z",
       "dateMeaning": "daily_observation",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2024-12-30",
+      "first": "2024-12-19",
       "last": "2026-07-10",
-      "points": 381
+      "points": 387,
+      "sourceStatus": "last_known_good_preserved"
     },
     "macro.NET_LIQUIDITY.value": {
       "precision": 2,
@@ -817,9 +914,9 @@
       "unit": "usd_billions",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81
     },
     "macro.FED_ASSETS_EX_TGA.value": {
       "precision": 2,
@@ -834,9 +931,9 @@
       "unit": "usd_billions",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81
     },
     "macro.RESERVES_PLUS_RRP.value": {
       "precision": 2,
@@ -851,9 +948,9 @@
       "unit": "usd_billions",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81
     },
     "macro.TGA_PLUS_RRP.value": {
       "precision": 2,
@@ -868,9 +965,9 @@
       "unit": "usd_billions",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81
     },
     "macro.RESERVES_SHARE_WALCL.value": {
       "precision": 2,
@@ -885,9 +982,9 @@
       "unit": "percent",
       "categoryLabelZh": "流动性",
       "categoryLabelEn": "Liquidity",
-      "first": "2025-01-01",
+      "first": "2024-12-25",
       "last": "2026-07-08",
-      "points": 80
+      "points": 81
     },
     "chain.chip.ASML.price": {
       "precision": 2,
@@ -1726,10 +1823,6 @@
   "series": {
     "equity.QQQ.close": [
       {
-        "t": "2026-01-12",
-        "v": 627.17
-      },
-      {
         "t": "2026-01-13",
         "v": 626.24
       },
@@ -2223,10 +2316,6 @@
       }
     ],
     "equity.QQQ.return": [
-      {
-        "t": "2026-01-12",
-        "v": 0.7809612572512115
-      },
       {
         "t": "2026-01-13",
         "v": -0.1642036124794702
@@ -2722,10 +2811,6 @@
     ],
     "equity.SPY.close": [
       {
-        "t": "2026-01-12",
-        "v": 695.16
-      },
-      {
         "t": "2026-01-13",
         "v": 693.77
       },
@@ -3219,10 +3304,6 @@
       }
     ],
     "equity.SPY.return": [
-      {
-        "t": "2026-01-12",
-        "v": 0.6486361267157031
-      },
       {
         "t": "2026-01-13",
         "v": -0.24730765359674867
@@ -3718,10 +3799,6 @@
     ],
     "equity.DIA.close": [
       {
-        "t": "2026-01-12",
-        "v": 495.9
-      },
-      {
         "t": "2026-01-13",
         "v": 491.94
       },
@@ -4216,10 +4293,6 @@
     ],
     "equity.DIA.return": [
       {
-        "t": "2026-01-12",
-        "v": 0.7251233928462603
-      },
-      {
         "t": "2026-01-13",
         "v": -0.7284835031782895
       },
@@ -4713,6 +4786,30 @@
       }
     ],
     "macro.DGS10.value": [
+      {
+        "t": "2024-12-19",
+        "v": 4.57
+      },
+      {
+        "t": "2024-12-20",
+        "v": 4.52
+      },
+      {
+        "t": "2024-12-23",
+        "v": 4.59
+      },
+      {
+        "t": "2024-12-24",
+        "v": 4.59
+      },
+      {
+        "t": "2024-12-26",
+        "v": 4.58
+      },
+      {
+        "t": "2024-12-27",
+        "v": 4.62
+      },
       {
         "t": "2024-12-30",
         "v": 4.55
@@ -6239,6 +6336,30 @@
       }
     ],
     "macro.VIXCLS.value": [
+      {
+        "t": "2024-12-19",
+        "v": 24.09
+      },
+      {
+        "t": "2024-12-20",
+        "v": 18.36
+      },
+      {
+        "t": "2024-12-23",
+        "v": 16.78
+      },
+      {
+        "t": "2024-12-24",
+        "v": 14.27
+      },
+      {
+        "t": "2024-12-26",
+        "v": 14.73
+      },
+      {
+        "t": "2024-12-27",
+        "v": 15.95
+      },
       {
         "t": "2024-12-30",
         "v": 17.4
@@ -7816,6 +7937,496 @@
         "v": 15.84
       }
     ],
+    "macro.JGB10Y.value": [
+      {
+        "t": "2026-01-13",
+        "v": 2.163
+      },
+      {
+        "t": "2026-01-14",
+        "v": 2.182
+      },
+      {
+        "t": "2026-01-15",
+        "v": 2.164
+      },
+      {
+        "t": "2026-01-16",
+        "v": 2.182
+      },
+      {
+        "t": "2026-01-19",
+        "v": 2.266
+      },
+      {
+        "t": "2026-01-20",
+        "v": 2.33
+      },
+      {
+        "t": "2026-01-21",
+        "v": 2.28
+      },
+      {
+        "t": "2026-01-22",
+        "v": 2.239
+      },
+      {
+        "t": "2026-01-23",
+        "v": 2.253
+      },
+      {
+        "t": "2026-01-26",
+        "v": 2.236
+      },
+      {
+        "t": "2026-01-27",
+        "v": 2.281
+      },
+      {
+        "t": "2026-01-28",
+        "v": 2.237
+      },
+      {
+        "t": "2026-01-29",
+        "v": 2.252
+      },
+      {
+        "t": "2026-01-30",
+        "v": 2.247
+      },
+      {
+        "t": "2026-02-02",
+        "v": 2.235
+      },
+      {
+        "t": "2026-02-03",
+        "v": 2.258
+      },
+      {
+        "t": "2026-02-04",
+        "v": 2.249
+      },
+      {
+        "t": "2026-02-05",
+        "v": 2.231
+      },
+      {
+        "t": "2026-02-06",
+        "v": 2.236
+      },
+      {
+        "t": "2026-02-09",
+        "v": 2.289
+      },
+      {
+        "t": "2026-02-10",
+        "v": 2.241
+      },
+      {
+        "t": "2026-02-12",
+        "v": 2.238
+      },
+      {
+        "t": "2026-02-13",
+        "v": 2.218
+      },
+      {
+        "t": "2026-02-16",
+        "v": 2.22
+      },
+      {
+        "t": "2026-02-17",
+        "v": 2.143
+      },
+      {
+        "t": "2026-02-18",
+        "v": 2.152
+      },
+      {
+        "t": "2026-02-19",
+        "v": 2.157
+      },
+      {
+        "t": "2026-02-20",
+        "v": 2.125
+      },
+      {
+        "t": "2026-02-24",
+        "v": 2.119
+      },
+      {
+        "t": "2026-02-25",
+        "v": 2.154
+      },
+      {
+        "t": "2026-02-26",
+        "v": 2.168
+      },
+      {
+        "t": "2026-02-27",
+        "v": 2.132
+      },
+      {
+        "t": "2026-03-02",
+        "v": 2.087
+      },
+      {
+        "t": "2026-03-03",
+        "v": 2.148
+      },
+      {
+        "t": "2026-03-04",
+        "v": 2.134
+      },
+      {
+        "t": "2026-03-05",
+        "v": 2.175
+      },
+      {
+        "t": "2026-03-06",
+        "v": 2.18
+      },
+      {
+        "t": "2026-03-09",
+        "v": 2.205
+      },
+      {
+        "t": "2026-03-10",
+        "v": 2.199
+      },
+      {
+        "t": "2026-03-11",
+        "v": 2.178
+      },
+      {
+        "t": "2026-03-12",
+        "v": 2.201
+      },
+      {
+        "t": "2026-03-13",
+        "v": 2.255
+      },
+      {
+        "t": "2026-03-16",
+        "v": 2.288
+      },
+      {
+        "t": "2026-03-17",
+        "v": 2.279
+      },
+      {
+        "t": "2026-03-18",
+        "v": 2.231
+      },
+      {
+        "t": "2026-03-19",
+        "v": 2.273
+      },
+      {
+        "t": "2026-03-23",
+        "v": 2.322
+      },
+      {
+        "t": "2026-03-24",
+        "v": 2.282
+      },
+      {
+        "t": "2026-03-25",
+        "v": 2.267
+      },
+      {
+        "t": "2026-03-26",
+        "v": 2.286
+      },
+      {
+        "t": "2026-03-27",
+        "v": 2.38
+      },
+      {
+        "t": "2026-03-30",
+        "v": 2.368
+      },
+      {
+        "t": "2026-03-31",
+        "v": 2.366
+      },
+      {
+        "t": "2026-04-01",
+        "v": 2.315
+      },
+      {
+        "t": "2026-04-02",
+        "v": 2.395
+      },
+      {
+        "t": "2026-04-03",
+        "v": 2.386
+      },
+      {
+        "t": "2026-04-06",
+        "v": 2.429
+      },
+      {
+        "t": "2026-04-07",
+        "v": 2.411
+      },
+      {
+        "t": "2026-04-08",
+        "v": 2.374
+      },
+      {
+        "t": "2026-04-09",
+        "v": 2.397
+      },
+      {
+        "t": "2026-04-10",
+        "v": 2.439
+      },
+      {
+        "t": "2026-04-13",
+        "v": 2.467
+      },
+      {
+        "t": "2026-04-14",
+        "v": 2.423
+      },
+      {
+        "t": "2026-04-15",
+        "v": 2.414
+      },
+      {
+        "t": "2026-04-16",
+        "v": 2.409
+      },
+      {
+        "t": "2026-04-17",
+        "v": 2.428
+      },
+      {
+        "t": "2026-04-20",
+        "v": 2.405
+      },
+      {
+        "t": "2026-04-21",
+        "v": 2.392
+      },
+      {
+        "t": "2026-04-22",
+        "v": 2.406
+      },
+      {
+        "t": "2026-04-23",
+        "v": 2.429
+      },
+      {
+        "t": "2026-04-24",
+        "v": 2.443
+      },
+      {
+        "t": "2026-04-27",
+        "v": 2.477
+      },
+      {
+        "t": "2026-04-28",
+        "v": 2.468
+      },
+      {
+        "t": "2026-04-30",
+        "v": 2.52
+      },
+      {
+        "t": "2026-05-01",
+        "v": 2.507
+      },
+      {
+        "t": "2026-05-07",
+        "v": 2.485
+      },
+      {
+        "t": "2026-05-08",
+        "v": 2.485
+      },
+      {
+        "t": "2026-05-11",
+        "v": 2.527
+      },
+      {
+        "t": "2026-05-12",
+        "v": 2.546
+      },
+      {
+        "t": "2026-05-13",
+        "v": 2.587
+      },
+      {
+        "t": "2026-05-14",
+        "v": 2.628
+      },
+      {
+        "t": "2026-05-15",
+        "v": 2.691
+      },
+      {
+        "t": "2026-05-18",
+        "v": 2.729
+      },
+      {
+        "t": "2026-05-19",
+        "v": 2.783
+      },
+      {
+        "t": "2026-05-20",
+        "v": 2.77
+      },
+      {
+        "t": "2026-05-21",
+        "v": 2.748
+      },
+      {
+        "t": "2026-05-22",
+        "v": 2.749
+      },
+      {
+        "t": "2026-05-25",
+        "v": 2.686
+      },
+      {
+        "t": "2026-05-26",
+        "v": 2.713
+      },
+      {
+        "t": "2026-05-27",
+        "v": 2.687
+      },
+      {
+        "t": "2026-05-28",
+        "v": 2.692
+      },
+      {
+        "t": "2026-05-29",
+        "v": 2.657
+      },
+      {
+        "t": "2026-06-01",
+        "v": 2.682
+      },
+      {
+        "t": "2026-06-02",
+        "v": 2.577
+      },
+      {
+        "t": "2026-06-03",
+        "v": 2.645
+      },
+      {
+        "t": "2026-06-04",
+        "v": 2.671
+      },
+      {
+        "t": "2026-06-05",
+        "v": 2.669
+      },
+      {
+        "t": "2026-06-08",
+        "v": 2.715
+      },
+      {
+        "t": "2026-06-09",
+        "v": 2.669
+      },
+      {
+        "t": "2026-06-10",
+        "v": 2.681
+      },
+      {
+        "t": "2026-06-11",
+        "v": 2.682
+      },
+      {
+        "t": "2026-06-12",
+        "v": 2.643
+      },
+      {
+        "t": "2026-06-15",
+        "v": 2.589
+      },
+      {
+        "t": "2026-06-16",
+        "v": 2.655
+      },
+      {
+        "t": "2026-06-17",
+        "v": 2.613
+      },
+      {
+        "t": "2026-06-18",
+        "v": 2.628
+      },
+      {
+        "t": "2026-06-19",
+        "v": 2.656
+      },
+      {
+        "t": "2026-06-22",
+        "v": 2.677
+      },
+      {
+        "t": "2026-06-23",
+        "v": 2.683
+      },
+      {
+        "t": "2026-06-24",
+        "v": 2.674
+      },
+      {
+        "t": "2026-06-25",
+        "v": 2.637
+      },
+      {
+        "t": "2026-06-26",
+        "v": 2.611
+      },
+      {
+        "t": "2026-06-29",
+        "v": 2.644
+      },
+      {
+        "t": "2026-06-30",
+        "v": 2.69
+      },
+      {
+        "t": "2026-07-01",
+        "v": 2.711
+      },
+      {
+        "t": "2026-07-02",
+        "v": 2.778
+      },
+      {
+        "t": "2026-07-03",
+        "v": 2.768
+      },
+      {
+        "t": "2026-07-06",
+        "v": 2.823
+      },
+      {
+        "t": "2026-07-07",
+        "v": 2.834
+      },
+      {
+        "t": "2026-07-08",
+        "v": 2.856
+      },
+      {
+        "t": "2026-07-09",
+        "v": 2.866
+      },
+      {
+        "t": "2026-07-10",
+        "v": 2.761
+      }
+    ],
     "macro.CPIAUCSL.value": [
       {
         "t": "2024-12-01",
@@ -8483,6 +9094,10 @@
       }
     ],
     "macro.ICSA.value": [
+      {
+        "t": "2024-12-21",
+        "v": 219000
+      },
       {
         "t": "2024-12-28",
         "v": 212000
@@ -9297,6 +9912,42 @@
       }
     ],
     "macro.DFEDTARU.value": [
+      {
+        "t": "2024-12-19",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-20",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-21",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-22",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-23",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-24",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-25",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-26",
+        "v": 4.5
+      },
+      {
+        "t": "2024-12-27",
+        "v": 4.5
+      },
       {
         "t": "2024-12-28",
         "v": 4.5
@@ -11540,6 +12191,42 @@
     ],
     "macro.DFEDTARL.value": [
       {
+        "t": "2024-12-19",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-20",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-21",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-22",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-23",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-24",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-25",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-26",
+        "v": 4.25
+      },
+      {
+        "t": "2024-12-27",
+        "v": 4.25
+      },
+      {
         "t": "2024-12-28",
         "v": 4.25
       },
@@ -13782,6 +14469,42 @@
     ],
     "macro.DFF.value": [
       {
+        "t": "2024-12-19",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-20",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-21",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-22",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-23",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-24",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-25",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-26",
+        "v": 4.33
+      },
+      {
+        "t": "2024-12-27",
+        "v": 4.33
+      },
+      {
         "t": "2024-12-28",
         "v": 4.33
       },
@@ -16020,6 +16743,30 @@
     ],
     "macro.DGS2.value": [
       {
+        "t": "2024-12-19",
+        "v": 4.32
+      },
+      {
+        "t": "2024-12-20",
+        "v": 4.3
+      },
+      {
+        "t": "2024-12-23",
+        "v": 4.3
+      },
+      {
+        "t": "2024-12-24",
+        "v": 4.29
+      },
+      {
+        "t": "2024-12-26",
+        "v": 4.3
+      },
+      {
+        "t": "2024-12-27",
+        "v": 4.31
+      },
+      {
         "t": "2024-12-30",
         "v": 4.24
       },
@@ -17546,6 +18293,30 @@
     ],
     "macro.DFII10.value": [
       {
+        "t": "2024-12-19",
+        "v": 2.28
+      },
+      {
+        "t": "2024-12-20",
+        "v": 2.23
+      },
+      {
+        "t": "2024-12-23",
+        "v": 2.27
+      },
+      {
+        "t": "2024-12-24",
+        "v": 2.24
+      },
+      {
+        "t": "2024-12-26",
+        "v": 2.23
+      },
+      {
+        "t": "2024-12-27",
+        "v": 2.28
+      },
+      {
         "t": "2024-12-30",
         "v": 2.24
       },
@@ -19071,6 +19842,30 @@
       }
     ],
     "macro.T10YIE.value": [
+      {
+        "t": "2024-12-19",
+        "v": 2.29
+      },
+      {
+        "t": "2024-12-20",
+        "v": 2.29
+      },
+      {
+        "t": "2024-12-23",
+        "v": 2.32
+      },
+      {
+        "t": "2024-12-24",
+        "v": 2.35
+      },
+      {
+        "t": "2024-12-26",
+        "v": 2.35
+      },
+      {
+        "t": "2024-12-27",
+        "v": 2.34
+      },
       {
         "t": "2024-12-30",
         "v": 2.31
@@ -20602,6 +21397,30 @@
     ],
     "macro.DTWEXBGS.value": [
       {
+        "t": "2024-12-19",
+        "v": 128.6366
+      },
+      {
+        "t": "2024-12-20",
+        "v": 127.893
+      },
+      {
+        "t": "2024-12-23",
+        "v": 128.3021
+      },
+      {
+        "t": "2024-12-24",
+        "v": 128.3377
+      },
+      {
+        "t": "2024-12-26",
+        "v": 128.3329
+      },
+      {
+        "t": "2024-12-27",
+        "v": 128.45
+      },
+      {
         "t": "2024-12-30",
         "v": 128.8205
       },
@@ -22115,6 +22934,30 @@
       }
     ],
     "macro.DEXJPUS.value": [
+      {
+        "t": "2024-12-19",
+        "v": 157.73
+      },
+      {
+        "t": "2024-12-20",
+        "v": 156.11
+      },
+      {
+        "t": "2024-12-23",
+        "v": 157.04
+      },
+      {
+        "t": "2024-12-24",
+        "v": 157.29
+      },
+      {
+        "t": "2024-12-26",
+        "v": 158.01
+      },
+      {
+        "t": "2024-12-27",
+        "v": 157.73
+      },
       {
         "t": "2024-12-30",
         "v": 157.26
@@ -23630,6 +24473,30 @@
     ],
     "macro.DEXCHUS.value": [
       {
+        "t": "2024-12-19",
+        "v": 7.2965
+      },
+      {
+        "t": "2024-12-20",
+        "v": 7.2953
+      },
+      {
+        "t": "2024-12-23",
+        "v": 7.2977
+      },
+      {
+        "t": "2024-12-24",
+        "v": 7.2946
+      },
+      {
+        "t": "2024-12-26",
+        "v": 7.2981
+      },
+      {
+        "t": "2024-12-27",
+        "v": 7.298
+      },
+      {
         "t": "2024-12-30",
         "v": 7.2993
       },
@@ -25143,6 +26010,26 @@
       }
     ],
     "macro.BAMLC0A0CM.value": [
+      {
+        "t": "2024-12-19",
+        "v": 0.82
+      },
+      {
+        "t": "2024-12-20",
+        "v": 0.82
+      },
+      {
+        "t": "2024-12-23",
+        "v": 0.82
+      },
+      {
+        "t": "2024-12-26",
+        "v": 0.81
+      },
+      {
+        "t": "2024-12-27",
+        "v": 0.81
+      },
       {
         "t": "2024-12-30",
         "v": 0.82
@@ -26750,6 +27637,30 @@
     ],
     "macro.BAMLH0A0HYM2.value": [
       {
+        "t": "2024-12-19",
+        "v": 2.91
+      },
+      {
+        "t": "2024-12-20",
+        "v": 2.86
+      },
+      {
+        "t": "2024-12-23",
+        "v": 2.85
+      },
+      {
+        "t": "2024-12-24",
+        "v": 2.86
+      },
+      {
+        "t": "2024-12-26",
+        "v": 2.86
+      },
+      {
+        "t": "2024-12-27",
+        "v": 2.84
+      },
+      {
         "t": "2024-12-30",
         "v": 2.94
       },
@@ -28356,6 +29267,14 @@
     ],
     "macro.STLFSI4.value": [
       {
+        "t": "2024-12-20",
+        "v": -0.4919
+      },
+      {
+        "t": "2024-12-27",
+        "v": -0.6189
+      },
+      {
         "t": "2025-01-03",
         "v": -0.6163
       },
@@ -28673,6 +29592,10 @@
       }
     ],
     "macro.WALCL.value": [
+      {
+        "t": "2024-12-25",
+        "v": 6885963
+      },
       {
         "t": "2025-01-01",
         "v": 6852491
@@ -28996,6 +29919,10 @@
     ],
     "macro.WRESBAL.value": [
       {
+        "t": "2024-12-25",
+        "v": 3247382
+      },
+      {
         "t": "2025-01-01",
         "v": 3095997
       },
@@ -29318,6 +30245,10 @@
     ],
     "macro.WTREGEN.value": [
       {
+        "t": "2024-12-25",
+        "v": 764770
+      },
+      {
         "t": "2025-01-01",
         "v": 719873
       },
@@ -29639,6 +30570,30 @@
       }
     ],
     "macro.RRPONTSYD.value": [
+      {
+        "t": "2024-12-19",
+        "v": 112.417
+      },
+      {
+        "t": "2024-12-20",
+        "v": 98.356
+      },
+      {
+        "t": "2024-12-23",
+        "v": 116.004
+      },
+      {
+        "t": "2024-12-24",
+        "v": 180.989
+      },
+      {
+        "t": "2024-12-26",
+        "v": 196.818
+      },
+      {
+        "t": "2024-12-27",
+        "v": 268.739
+      },
       {
         "t": "2024-12-30",
         "v": 260.743
@@ -31166,6 +32121,10 @@
     ],
     "macro.NET_LIQUIDITY.value": [
       {
+        "t": "2024-12-25",
+        "v": 5940.204
+      },
+      {
         "t": "2025-01-01",
         "v": 5659.158
       },
@@ -31487,6 +32446,10 @@
       }
     ],
     "macro.FED_ASSETS_EX_TGA.value": [
+      {
+        "t": "2024-12-25",
+        "v": 6121.192999999999
+      },
       {
         "t": "2025-01-01",
         "v": 6132.618
@@ -31810,6 +32773,10 @@
     ],
     "macro.RESERVES_PLUS_RRP.value": [
       {
+        "t": "2024-12-25",
+        "v": 3428.371
+      },
+      {
         "t": "2025-01-01",
         "v": 3569.457
       },
@@ -32132,6 +33099,10 @@
     ],
     "macro.TGA_PLUS_RRP.value": [
       {
+        "t": "2024-12-25",
+        "v": 945.759
+      },
+      {
         "t": "2025-01-01",
         "v": 1193.333
       },
@@ -32453,6 +33424,10 @@
       }
     ],
     "macro.RESERVES_SHARE_WALCL.value": [
+      {
+        "t": "2024-12-25",
+        "v": 47.1594459627506
+      },
       {
         "t": "2025-01-01",
         "v": 45.18060658525491
@@ -79434,6 +80409,7 @@
     "macro.DFEDTARL.value",
     "macro.DFEDTARU.value",
     "macro.FEDTARMDLR.value",
+    "macro.JGB10Y.value",
     "macro.IRSTCI01JPM156N.value",
     "macro.DEXCHUS.value",
     "macro.DEXJPUS.value",
@@ -79463,5 +80439,5 @@
     "macro.BAMLH0A0HYM2.value",
     "macro.VIXCLS.value"
   ],
-  "metricCount": 96
+  "metricCount": 97
 }

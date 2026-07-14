@@ -1,11 +1,16 @@
 {
-  "version": 1,
+  "version": 3,
   "page": "crypto-liquidity",
-  "generatedAt": "2026-07-12T03:37:25.589Z",
+  "generatedAt": "2026-07-13T13:22:14.574Z",
   "timestamps": {
     "observedAt": "2026-07-10T23:25:59.999Z",
     "fetchedAt": "2026-07-10T23:25:59.999Z",
-    "transformedAt": "2026-07-12T03:37:25.589Z"
+    "transformedAt": "2026-07-13T13:22:14.574Z"
+  },
+  "sectionObservedAt": {
+    "levels": "2026-07-10T23:25:59.999Z",
+    "etf": null,
+    "corporateTreasuries": "2026-06-21"
   },
   "status": "partial",
   "metrics": [
@@ -146,10 +151,129 @@
       "weekly": []
     }
   },
+  "spotPrices": {
+    "BTC": {
+      "asset": "BTC",
+      "priceUsd": 64193.4,
+      "observedAt": "2026-07-11T05:24:10.369Z",
+      "source": "existing-static-cache"
+    },
+    "ETH": {
+      "asset": "ETH",
+      "priceUsd": null,
+      "observedAt": null,
+      "source": "existing-static-cache"
+    }
+  },
+  "corporateTreasuries": {
+    "MSTR": {
+      "company": "Strategy",
+      "ticker": "MSTR",
+      "asset": "BTC",
+      "status": "available",
+      "source": "Strategy official Form 8-K",
+      "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+      "holdings": 847363,
+      "holdingsObservedAt": "2026-06-21",
+      "holdingsDisclosedAt": "2026-06-22",
+      "averageCostUsd": 75651,
+      "costObservedAt": "2026-06-21",
+      "averageCostMethod": "company_reported_aggregate_average_including_fees",
+      "latestAcquisition": 520,
+      "qualityStatus": "official_form_8k",
+      "history": [
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21",
+          "holdings": 847363,
+          "acquired": 520,
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        }
+      ],
+      "costHistory": [
+        {
+          "costObservedAt": "2026-06-21",
+          "holdingsAtCostDate": 847363,
+          "costBasisUsd": 64100000000,
+          "costBasisApproximate": true,
+          "averageCostUsd": 75651,
+          "averageCostMethod": "company_reported_aggregate_average_including_fees",
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        }
+      ],
+      "latestAcquisitionCostUsd": null,
+      "spotPriceUsd": 64193.4,
+      "spotObservedAt": "2026-07-11T05:24:10.369Z",
+      "costGapPct": -15.14533846214855
+    },
+    "BMNR": {
+      "company": "BitMine Immersion Technologies",
+      "ticker": "BMNR",
+      "asset": "ETH",
+      "status": "available",
+      "source": "SEC EDGAR company disclosures",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+      "holdings": 5742237,
+      "holdingsObservedAt": "2026-06-28T22:30:00Z",
+      "holdingsDisclosedAt": "2026-07-06",
+      "averageCostUsd": 3794.2554072810326,
+      "costObservedAt": "2026-02-28",
+      "averageCostMethod": "sec_cost_basis_divided_by_eth_units_fifo_net_transaction_fees",
+      "latestAcquisition": 42197,
+      "qualityStatus": "mixed_disclosure_dates",
+      "history": [
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21T19:00:00Z",
+          "holdings": 5672956,
+          "acquired": null,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226029507/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-06-29",
+          "holdingsObservedAt": "2026-06-28T19:00:00Z",
+          "holdings": 5700040,
+          "acquired": null,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226030428/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-07-06",
+          "holdingsObservedAt": "2026-06-28T22:30:00Z",
+          "holdings": 5742237,
+          "acquired": 42197,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit_corrected_release"
+        }
+      ],
+      "costHistory": [
+        {
+          "costObservedAt": "2026-02-28",
+          "holdingsAtCostDate": 4473459,
+          "costBasisUsd": 16973446000,
+          "averageCostUsd": 3794.2554072810326,
+          "averageCostMethod": "sec_cost_basis_divided_by_eth_units_fifo_net_transaction_fees",
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226016560/form10-q.htm",
+          "qualityStatus": "official_quarterly_filing_derived"
+        }
+      ],
+      "latestAcquisitionCostUsd": null,
+      "spotPriceUsd": null,
+      "spotObservedAt": null,
+      "costGapPct": null
+    }
+  },
+  "corporateTreasuryAutomation": {
+    "strategy": "sosovalue_plus_official_8k_cost",
+    "bitmine": "reserved_missing_user_agent"
+  },
   "auxiliarySources": {
     "blockbeats": {
       "enabled": false,
-      "configured": false,
+      "configured": true,
       "status": "reserved_disabled",
       "role": "auxiliary_cross_check_only",
       "endpoint": "/v1/data/btc_etf",
@@ -160,18 +284,24 @@
     "marketCaps": "Market-cap changes are valuation changes, not capital inflows. CoinMarketCap supplies current aggregate and asset market caps.",
     "stablecoins": "USDT and USDC market caps proxy circulating supply in USD. Their sum is labelled as tracked major stablecoins, not the entire stablecoin market.",
     "usdtPeg": "USDT peg deviation is (price - 1 USD) × 10,000 basis points and is not a flow metric.",
-    "etf": "SoSoValue daily aggregate net flow is used for reviewed U.S. BTC and ETH spot ETF series. Missing trading days remain missing and are never filled with zero.",
-    "sol": "SOL ETF flow remains pending until a reviewed source with suitable redistribution terms is configured.",
+    "etf": "SoSoValue v1 daily aggregate net flow is used for U.S. BTC, ETH, and SOL spot ETF series. Its one-month response is merged with prior observations; missing trading days are never filled with zero.",
+    "treasury": "Corporate treasury holdings and acquisition-cost observations keep separate source dates. Strategy average cost uses its official Form 8-K; BitMine cost basis per ETH is derived only from same-date SEC units and cost basis. Press-release spot prices are never treated as acquisition cost.",
     "blockbeats": "BlockBeats is reserved as an auxiliary BTC cross-check only and never overwrites the primary ETF series."
   },
   "sources": {
     "cmc": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
-    "sosovalue": "https://sosovalue.gitbook.io/soso-value-api-doc/api-document/get-etf-historical-inflow-chart",
+    "sosovalueEtf": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
+    "sosovalueTreasury": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+    "strategy": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+    "bitmine": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+    "secSubmissions": "https://data.sec.gov/submissions/CIK0001829311.json",
     "blockbeats": "https://www.theblockbeats.info/apiDoc"
   },
   "failures": [
-    "CMC: CMC_PRO_API_KEY is not configured",
-    "SoSoValue BTC: SOSOVALUE_API_KEY is not configured",
-    "SoSoValue ETH: SOSOVALUE_API_KEY is not configured"
+    "CMC: fetch failed",
+    "SoSoValue BTC: HTTP 403 from openapi.sosovalue.com",
+    "SoSoValue ETH: HTTP 403 from openapi.sosovalue.com",
+    "SoSoValue SOL: HTTP 403 from openapi.sosovalue.com",
+    "SoSoValue MSTR treasury: HTTP 403 from openapi.sosovalue.com"
   ]
 }
