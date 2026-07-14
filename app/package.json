@@ -23,6 +23,7 @@
     "sync-manual-macro-events": "node scripts/sync-manual-macro-events-from-supabase.mjs",
     "update-macro-calendar": "python scripts/update-macro-calendar.py",
     "update-chart-series": "node scripts/update-chart-series-data.mjs",
+    "persist-market-history": "node scripts/persist-market-metric-history.mjs",
     "generate-data-manifest": "node scripts/generate-data-manifest.mjs",
     "verify-market-calendar": "node scripts/verify-market-session-calendar.mjs"
   },

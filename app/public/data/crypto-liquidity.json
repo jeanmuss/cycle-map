@@ -1,93 +1,98 @@
 {
-  "version": 1,
+  "version": 3,
   "page": "crypto-liquidity",
-  "generatedAt": "2026-07-13T23:24:50.375Z",
+  "generatedAt": "2026-07-14T23:23:44.111Z",
   "timestamps": {
-    "observedAt": "2026-07-13T23:22:59.999Z",
-    "fetchedAt": "2026-07-13T23:24:50.375Z",
-    "transformedAt": "2026-07-13T23:24:50.375Z"
+    "observedAt": "2026-07-13",
+    "fetchedAt": "2026-07-14T23:23:44.111Z",
+    "transformedAt": "2026-07-14T23:23:44.111Z"
   },
-  "status": "partial",
+  "sectionObservedAt": {
+    "levels": "2026-07-14T23:21:59.999Z",
+    "etf": "2026-07-13",
+    "corporateTreasuries": "2026-06-28T22:30:00Z"
+  },
+  "status": "available",
   "metrics": [
     {
       "id": "crypto.totalMarketCap",
       "label": "Total crypto market cap",
       "labelZh": "加密市场总市值",
-      "value": 2141287275183.8284,
+      "value": 2225590657864.653,
       "unit": "USD",
-      "observedAt": "2026-07-13T23:22:59.999Z",
+      "observedAt": "2026-07-14T23:21:59.999Z",
       "source": "cmc",
-      "changePct24h": -2.24144766,
+      "changePct24h": 3.93704215,
       "semantics": "market_cap_change_not_net_flow",
-      "change1d": -57612083814.66821,
+      "change1d": 84303382680.82446,
       "change7d": null
     },
     {
       "id": "btc.marketCap",
       "label": "Bitcoin market cap",
       "labelZh": "BTC 总市值",
-      "value": 1245472945962.1917,
+      "value": 1301371196150.3145,
       "unit": "USD",
-      "observedAt": "2026-07-13T23:24:03.000Z",
+      "observedAt": "2026-07-14T23:22:03.000Z",
       "source": "cmc",
-      "changePct24h": -2.68240864,
+      "changePct24h": 4.55813459,
       "semantics": "market_cap_change_not_net_flow",
-      "change1d": -40827080895.6311,
+      "change1d": 55898250188.1228,
       "change7d": null
     },
     {
       "id": "stablecoin.usdt.marketCap",
       "label": "USDT circulating market cap",
       "labelZh": "USDT 流通市值",
-      "value": 184063768241.15198,
+      "value": 184242791491.09628,
       "unit": "USD",
-      "observedAt": "2026-07-13T23:24:03.000Z",
+      "observedAt": "2026-07-14T23:22:03.000Z",
       "source": "cmc",
-      "changePct24h": -0.06983387,
+      "changePct24h": 0.04932083,
       "semantics": "circulating_supply_proxy",
-      "change1d": -139638346.42333984,
+      "change1d": 179023249.94430542,
       "change7d": null
     },
     {
       "id": "stablecoin.usdc.marketCap",
       "label": "USDC circulating market cap",
       "labelZh": "USDC 流通市值",
-      "value": 73061235708.95628,
+      "value": 73086626851.0044,
       "unit": "USD",
-      "observedAt": "2026-07-13T23:24:03.000Z",
+      "observedAt": "2026-07-14T23:22:03.000Z",
       "source": "cmc",
-      "changePct24h": 0.00631737,
+      "changePct24h": -0.00443353,
       "semantics": "circulating_supply_proxy",
-      "change1d": null,
+      "change1d": 25391142.048110962,
       "change7d": null
     },
     {
       "id": "stablecoin.major.marketCap",
       "label": "USDT + USDC market cap",
       "labelZh": "主流稳定币市值",
-      "value": 257125003950.10828,
+      "value": 257329418342.10068,
       "unit": "USD",
-      "observedAt": "2026-07-13T23:24:03.000Z",
+      "observedAt": "2026-07-14T23:22:03.000Z",
       "source": "cmc",
       "coverage": [
         "USDT",
         "USDC"
       ],
       "semantics": "tracked_stablecoin_supply_not_total_market",
-      "change1d": null,
+      "change1d": 204414391.99240112,
       "change7d": null
     },
     {
       "id": "stablecoin.usdt.depegBps",
       "label": "USDT peg deviation",
       "labelZh": "USDT 脱锚幅度",
-      "value": -12.854740587435742,
+      "value": -7.437859670337277,
       "unit": "bps",
-      "observedAt": "2026-07-13T23:24:03.000Z",
+      "observedAt": "2026-07-14T23:22:03.000Z",
       "source": "cmc",
-      "price": 0.9987145259412564,
+      "price": 0.9992562140329663,
       "semantics": "price_deviation_not_flow",
-      "change1d": -5.854740587435403,
+      "change1d": 5.4168809170984655,
       "change7d": null
     }
   ],
@@ -100,6 +105,10 @@
       {
         "date": "2026-07-13",
         "value": 2141287275183.8284
+      },
+      {
+        "date": "2026-07-14",
+        "value": 2225590657864.653
       }
     ],
     "btc.marketCap": [
@@ -110,6 +119,10 @@
       {
         "date": "2026-07-13",
         "value": 1245472945962.1917
+      },
+      {
+        "date": "2026-07-14",
+        "value": 1301371196150.3145
       }
     ],
     "stablecoin.usdt.marketCap": [
@@ -120,6 +133,10 @@
       {
         "date": "2026-07-13",
         "value": 184063768241.15198
+      },
+      {
+        "date": "2026-07-14",
+        "value": 184242791491.09628
       }
     ],
     "stablecoin.usdt.depegBps": [
@@ -130,18 +147,30 @@
       {
         "date": "2026-07-13",
         "value": -12.854740587435742
+      },
+      {
+        "date": "2026-07-14",
+        "value": -7.437859670337277
       }
     ],
     "stablecoin.usdc.marketCap": [
       {
         "date": "2026-07-13",
         "value": 73061235708.95628
+      },
+      {
+        "date": "2026-07-14",
+        "value": 73086626851.0044
       }
     ],
     "stablecoin.major.marketCap": [
       {
         "date": "2026-07-13",
         "value": 257125003950.10828
+      },
+      {
+        "date": "2026-07-14",
+        "value": 257329418342.10068
       }
     ]
   },
@@ -149,30 +178,1360 @@
     "BTC": {
       "asset": "BTC",
       "cadence": "daily",
-      "status": "pending_credentials",
+      "status": "available",
       "source": "sosovalue",
-      "observedAt": null,
-      "daily": [],
-      "weekly": []
+      "observedAt": "2026-07-13",
+      "daily": [
+        {
+          "date": "2026-06-15",
+          "netFlowUsd": -64086225.69999999,
+          "totalValueTradedUsd": 2540438308.72,
+          "totalNetAssetsUsd": 83329430145.11284,
+          "cumulativeNetFlowUsd": 53560404872.428
+        },
+        {
+          "date": "2026-06-16",
+          "netFlowUsd": 10064258.775,
+          "totalValueTradedUsd": 1262571615.58,
+          "totalNetAssetsUsd": 82062395461.13255,
+          "cumulativeNetFlowUsd": 53570469131.202995
+        },
+        {
+          "date": "2026-06-17",
+          "netFlowUsd": -82163664.86,
+          "totalValueTradedUsd": 2060672258.5,
+          "totalNetAssetsUsd": 80658373011.87135,
+          "cumulativeNetFlowUsd": 53488305466.342995
+        },
+        {
+          "date": "2026-06-18",
+          "netFlowUsd": -90656608.71999998,
+          "totalValueTradedUsd": 2399913867.21,
+          "totalNetAssetsUsd": 78324842891.71603,
+          "cumulativeNetFlowUsd": 53397648857.623
+        },
+        {
+          "date": "2026-06-22",
+          "netFlowUsd": -68175739.77999997,
+          "totalValueTradedUsd": 1869511910.27,
+          "totalNetAssetsUsd": 80217154607.27615,
+          "cumulativeNetFlowUsd": 53329473117.842995
+        },
+        {
+          "date": "2026-06-23",
+          "netFlowUsd": -113780200.575,
+          "totalValueTradedUsd": 1563286122.97,
+          "totalNetAssetsUsd": 77540403017.47968,
+          "cumulativeNetFlowUsd": 53215692917.268
+        },
+        {
+          "date": "2026-06-24",
+          "netFlowUsd": -469075417.85,
+          "totalValueTradedUsd": 3768035759.75,
+          "totalNetAssetsUsd": 73866992711.05624,
+          "cumulativeNetFlowUsd": 52746617499.418
+        },
+        {
+          "date": "2026-06-25",
+          "netFlowUsd": -696292055.9300001,
+          "totalValueTradedUsd": 3500708929.19,
+          "totalNetAssetsUsd": 72573414830.81184,
+          "cumulativeNetFlowUsd": 52050325443.488
+        },
+        {
+          "date": "2026-06-26",
+          "netFlowUsd": -444505600.00000006,
+          "totalValueTradedUsd": 2538572241.71,
+          "totalNetAssetsUsd": 72818058131.40443,
+          "cumulativeNetFlowUsd": 51605819843.488
+        },
+        {
+          "date": "2026-06-29",
+          "netFlowUsd": -231098221.08,
+          "totalValueTradedUsd": 2132062801,
+          "totalNetAssetsUsd": 73189471574.2958,
+          "cumulativeNetFlowUsd": 51374721622.408
+        },
+        {
+          "date": "2026-06-30",
+          "netFlowUsd": -222644311.4,
+          "totalValueTradedUsd": 2528522711.2,
+          "totalNetAssetsUsd": 70949909201.71736,
+          "cumulativeNetFlowUsd": 51152077311.007996
+        },
+        {
+          "date": "2026-07-01",
+          "netFlowUsd": -294619481.90999997,
+          "totalValueTradedUsd": 2396581905.75,
+          "totalNetAssetsUsd": 72459753555.12148,
+          "cumulativeNetFlowUsd": 50857457829.098
+        },
+        {
+          "date": "2026-07-02",
+          "netFlowUsd": 221719273.5,
+          "totalValueTradedUsd": 2130152174.6,
+          "totalNetAssetsUsd": 74369324122.5644,
+          "cumulativeNetFlowUsd": 51079177102.598
+        },
+        {
+          "date": "2026-07-06",
+          "netFlowUsd": 265686935.35,
+          "totalValueTradedUsd": 2527851425.71,
+          "totalNetAssetsUsd": 77317665366.75008,
+          "cumulativeNetFlowUsd": 51344864037.948
+        },
+        {
+          "date": "2026-07-07",
+          "netFlowUsd": 21435004.250000004,
+          "totalValueTradedUsd": 1507451106.55,
+          "totalNetAssetsUsd": 77259139787.99992,
+          "cumulativeNetFlowUsd": 51366299042.198
+        },
+        {
+          "date": "2026-07-08",
+          "netFlowUsd": -84860056,
+          "totalValueTradedUsd": 1538994942.29,
+          "totalNetAssetsUsd": 75339109500.3942,
+          "cumulativeNetFlowUsd": 51281438986.198
+        },
+        {
+          "date": "2026-07-09",
+          "netFlowUsd": -95301696.51,
+          "totalValueTradedUsd": 1383911681.25,
+          "totalNetAssetsUsd": 76505863364.55904,
+          "cumulativeNetFlowUsd": 51186137289.687996
+        },
+        {
+          "date": "2026-07-10",
+          "netFlowUsd": 90439970,
+          "totalValueTradedUsd": 1448880811.22,
+          "totalNetAssetsUsd": 77421550348.27,
+          "cumulativeNetFlowUsd": 51276577259.687996
+        },
+        {
+          "date": "2026-07-13",
+          "netFlowUsd": -424661225.9,
+          "totalValueTradedUsd": 2059183662.89,
+          "totalNetAssetsUsd": 74790248920.86284,
+          "cumulativeNetFlowUsd": 50851916033.787994
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-06-15",
+          "netFlowUsd": -226842240.505,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 53397648857.623
+        },
+        {
+          "week": "2026-06-22",
+          "netFlowUsd": -1791829014.135,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 51605819843.488
+        },
+        {
+          "week": "2026-06-29",
+          "netFlowUsd": -526642740.89,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 51079177102.598
+        },
+        {
+          "week": "2026-07-06",
+          "netFlowUsd": 197400157.09000003,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 51276577259.687996
+        },
+        {
+          "week": "2026-07-13",
+          "netFlowUsd": -424661225.9,
+          "tradingDays": 1,
+          "cumulativeNetFlowUsd": 50851916033.787994
+        }
+      ]
     },
     "ETH": {
       "asset": "ETH",
       "cadence": "daily",
-      "status": "pending_credentials",
+      "status": "available",
       "source": "sosovalue",
-      "observedAt": null,
-      "daily": [],
-      "weekly": []
+      "observedAt": "2026-07-13",
+      "daily": [
+        {
+          "date": "2026-06-15",
+          "netFlowUsd": 22502914.72,
+          "totalValueTradedUsd": 735978782.2,
+          "totalNetAssetsUsd": 10035758586.038,
+          "cumulativeNetFlowUsd": 11208595275.206
+        },
+        {
+          "date": "2026-06-16",
+          "netFlowUsd": 9587634.18,
+          "totalValueTradedUsd": 404210088.9,
+          "totalNetAssetsUsd": 9888659181.837,
+          "cumulativeNetFlowUsd": 11218182909.386
+        },
+        {
+          "date": "2026-06-17",
+          "netFlowUsd": -29374309.6,
+          "totalValueTradedUsd": 546086082.3,
+          "totalNetAssetsUsd": 9575606398.349,
+          "cumulativeNetFlowUsd": 11188808599.786
+        },
+        {
+          "date": "2026-06-18",
+          "netFlowUsd": -12767423,
+          "totalValueTradedUsd": 436394362.1,
+          "totalNetAssetsUsd": 9303645007.955,
+          "cumulativeNetFlowUsd": 11176041176.786
+        },
+        {
+          "date": "2026-06-22",
+          "netFlowUsd": -66035144.6,
+          "totalValueTradedUsd": 433099715.9,
+          "totalNetAssetsUsd": 9436107376.553,
+          "cumulativeNetFlowUsd": 11110006032.185999
+        },
+        {
+          "date": "2026-06-23",
+          "netFlowUsd": -82351039.33,
+          "totalValueTradedUsd": 354453677.2,
+          "totalNetAssetsUsd": 8954761214.236,
+          "cumulativeNetFlowUsd": 11027654992.855999
+        },
+        {
+          "date": "2026-06-24",
+          "netFlowUsd": -30238212.72,
+          "totalValueTradedUsd": 688790909,
+          "totalNetAssetsUsd": 8480533999.877999,
+          "cumulativeNetFlowUsd": 10997416780.136
+        },
+        {
+          "date": "2026-06-25",
+          "netFlowUsd": -81865107.095,
+          "totalValueTradedUsd": 562690984,
+          "totalNetAssetsUsd": 8295082332.46,
+          "cumulativeNetFlowUsd": 10915551673.041
+        },
+        {
+          "date": "2026-06-26",
+          "netFlowUsd": -12847952.16,
+          "totalValueTradedUsd": 491713611.6,
+          "totalNetAssetsUsd": 8378730749.421,
+          "cumulativeNetFlowUsd": 10902703720.881
+        },
+        {
+          "date": "2026-06-29",
+          "netFlowUsd": -30043040.125000004,
+          "totalValueTradedUsd": 547380224,
+          "totalNetAssetsUsd": 8594413887.211,
+          "cumulativeNetFlowUsd": 10872660680.756
+        },
+        {
+          "date": "2026-06-30",
+          "netFlowUsd": -27599592.32,
+          "totalValueTradedUsd": 379499945.4,
+          "totalNetAssetsUsd": 8332117380.781,
+          "cumulativeNetFlowUsd": 10845061088.435999
+        },
+        {
+          "date": "2026-07-01",
+          "netFlowUsd": 14894842.74,
+          "totalValueTradedUsd": 500312478.8,
+          "totalNetAssetsUsd": 8562830283.679,
+          "cumulativeNetFlowUsd": 10859955931.176
+        },
+        {
+          "date": "2026-07-02",
+          "netFlowUsd": 29082177.16,
+          "totalValueTradedUsd": 669622368.7,
+          "totalNetAssetsUsd": 9019904969.873001,
+          "cumulativeNetFlowUsd": 10889038108.336
+        },
+        {
+          "date": "2026-07-06",
+          "netFlowUsd": 20663080.28,
+          "totalValueTradedUsd": 526717596,
+          "totalNetAssetsUsd": 9541843065.645,
+          "cumulativeNetFlowUsd": 10909701188.616
+        },
+        {
+          "date": "2026-07-07",
+          "netFlowUsd": 26925212,
+          "totalValueTradedUsd": 388452205.3,
+          "totalNetAssetsUsd": 9525922787.969,
+          "cumulativeNetFlowUsd": 10936626400.616
+        },
+        {
+          "date": "2026-07-08",
+          "netFlowUsd": 70477304.5,
+          "totalValueTradedUsd": 483214679.1,
+          "totalNetAssetsUsd": 9339074757.355999,
+          "cumulativeNetFlowUsd": 11007103705.116
+        },
+        {
+          "date": "2026-07-09",
+          "netFlowUsd": -52080427.85,
+          "totalValueTradedUsd": 234924299.5,
+          "totalNetAssetsUsd": 9344769797.014,
+          "cumulativeNetFlowUsd": 10955023277.265999
+        },
+        {
+          "date": "2026-07-10",
+          "netFlowUsd": 18433378.275,
+          "totalValueTradedUsd": 413495929.6,
+          "totalNetAssetsUsd": 9588195173.155,
+          "cumulativeNetFlowUsd": 10973456655.541
+        },
+        {
+          "date": "2026-07-13",
+          "netFlowUsd": -15409173.5,
+          "totalValueTradedUsd": 430913862,
+          "totalNetAssetsUsd": 9458000807.307,
+          "cumulativeNetFlowUsd": 10958047482.041
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-06-15",
+          "netFlowUsd": -10051183.700000003,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 11176041176.786
+        },
+        {
+          "week": "2026-06-22",
+          "netFlowUsd": -273337455.90500003,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 10902703720.881
+        },
+        {
+          "week": "2026-06-29",
+          "netFlowUsd": -13665612.545000006,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 10889038108.336
+        },
+        {
+          "week": "2026-07-06",
+          "netFlowUsd": 84418547.205,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 10973456655.541
+        },
+        {
+          "week": "2026-07-13",
+          "netFlowUsd": -15409173.5,
+          "tradingDays": 1,
+          "cumulativeNetFlowUsd": 10958047482.041
+        }
+      ]
     },
     "SOL": {
       "asset": "SOL",
-      "cadence": "weekly_or_daily_pending",
-      "status": "pending_reviewed_source",
-      "source": null,
-      "observedAt": null,
-      "daily": [],
-      "weekly": []
+      "cadence": "daily",
+      "status": "available",
+      "source": "sosovalue",
+      "observedAt": "2026-07-13",
+      "daily": [
+        {
+          "date": "2026-06-15",
+          "netFlowUsd": 2808610.8000000003,
+          "totalValueTradedUsd": 62539026.6,
+          "totalNetAssetsUsd": 860670089.5339999,
+          "cumulativeNetFlowUsd": 1127098069.637
+        },
+        {
+          "date": "2026-06-16",
+          "netFlowUsd": 245857,
+          "totalValueTradedUsd": 39372112.96,
+          "totalNetAssetsUsd": 845550341.1980001,
+          "cumulativeNetFlowUsd": 1127343926.637
+        },
+        {
+          "date": "2026-06-17",
+          "netFlowUsd": 1061729.875,
+          "totalValueTradedUsd": 54206931.23,
+          "totalNetAssetsUsd": 827880977.646,
+          "cumulativeNetFlowUsd": 1128405656.512
+        },
+        {
+          "date": "2026-06-18",
+          "netFlowUsd": 2989470.4000000004,
+          "totalValueTradedUsd": 38296911,
+          "totalNetAssetsUsd": 794006740.6710001,
+          "cumulativeNetFlowUsd": 1131395126.912
+        },
+        {
+          "date": "2026-06-22",
+          "netFlowUsd": 0,
+          "totalValueTradedUsd": 39923620,
+          "totalNetAssetsUsd": 836086944.735,
+          "cumulativeNetFlowUsd": 1131395126.912
+        },
+        {
+          "date": "2026-06-23",
+          "netFlowUsd": 137294,
+          "totalValueTradedUsd": 42830032.89,
+          "totalNetAssetsUsd": 792438618.917,
+          "cumulativeNetFlowUsd": 1131532420.912
+        },
+        {
+          "date": "2026-06-24",
+          "netFlowUsd": 0,
+          "totalValueTradedUsd": 73848055.88,
+          "totalNetAssetsUsd": 758341179.828,
+          "cumulativeNetFlowUsd": 1131532420.912
+        },
+        {
+          "date": "2026-06-25",
+          "netFlowUsd": -3937392.3600000003,
+          "totalValueTradedUsd": 57970657,
+          "totalNetAssetsUsd": 755506102.1140001,
+          "cumulativeNetFlowUsd": 1127595028.552
+        },
+        {
+          "date": "2026-06-26",
+          "netFlowUsd": 1989251.6,
+          "totalValueTradedUsd": 66906433.55,
+          "totalNetAssetsUsd": 840882798.748,
+          "cumulativeNetFlowUsd": 1129584280.152
+        },
+        {
+          "date": "2026-06-29",
+          "netFlowUsd": 5523313.75,
+          "totalValueTradedUsd": 75020950,
+          "totalNetAssetsUsd": 876366927.8970001,
+          "cumulativeNetFlowUsd": 1135107593.902
+        },
+        {
+          "date": "2026-06-30",
+          "netFlowUsd": -2497486.25,
+          "totalValueTradedUsd": 69303649.34,
+          "totalNetAssetsUsd": 848034584.599,
+          "cumulativeNetFlowUsd": 1132610107.652
+        },
+        {
+          "date": "2026-07-01",
+          "netFlowUsd": 521068.72,
+          "totalValueTradedUsd": 68055422.39,
+          "totalNetAssetsUsd": 891239854.304,
+          "cumulativeNetFlowUsd": 1133131176.372
+        },
+        {
+          "date": "2026-07-02",
+          "netFlowUsd": 2199771,
+          "totalValueTradedUsd": 77706580.12,
+          "totalNetAssetsUsd": 936011173.5870001,
+          "cumulativeNetFlowUsd": 1135330947.372
+        },
+        {
+          "date": "2026-07-06",
+          "netFlowUsd": 8359770,
+          "totalValueTradedUsd": 67507995.12,
+          "totalNetAssetsUsd": 957143978.888,
+          "cumulativeNetFlowUsd": 1143690717.372
+        },
+        {
+          "date": "2026-07-07",
+          "netFlowUsd": 1672030.675,
+          "totalValueTradedUsd": 83886925.13,
+          "totalNetAssetsUsd": 949746751.266,
+          "cumulativeNetFlowUsd": 1145362748.047
+        },
+        {
+          "date": "2026-07-08",
+          "netFlowUsd": -8646787.161,
+          "totalValueTradedUsd": 77920207.55,
+          "totalNetAssetsUsd": 894046070.678,
+          "cumulativeNetFlowUsd": 1136715960.886
+        },
+        {
+          "date": "2026-07-09",
+          "netFlowUsd": -605108.71,
+          "totalValueTradedUsd": 46307546,
+          "totalNetAssetsUsd": 904665341.702,
+          "cumulativeNetFlowUsd": 1136110852.176
+        },
+        {
+          "date": "2026-07-10",
+          "netFlowUsd": 150520.8,
+          "totalValueTradedUsd": 59500414.77,
+          "totalNetAssetsUsd": 901376026.895,
+          "cumulativeNetFlowUsd": 1136261372.976
+        },
+        {
+          "date": "2026-07-13",
+          "netFlowUsd": 0,
+          "totalValueTradedUsd": 46050214.19,
+          "totalNetAssetsUsd": 868152929.823,
+          "cumulativeNetFlowUsd": 1136261372.976
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-06-15",
+          "netFlowUsd": 7105668.075000001,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 1131395126.912
+        },
+        {
+          "week": "2026-06-22",
+          "netFlowUsd": -1810846.7600000002,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 1129584280.152
+        },
+        {
+          "week": "2026-06-29",
+          "netFlowUsd": 5746667.22,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 1135330947.372
+        },
+        {
+          "week": "2026-07-06",
+          "netFlowUsd": 930425.6040000005,
+          "tradingDays": 5,
+          "cumulativeNetFlowUsd": 1136261372.976
+        },
+        {
+          "week": "2026-07-13",
+          "netFlowUsd": 0,
+          "tradingDays": 1,
+          "cumulativeNetFlowUsd": 1136261372.976
+        }
+      ]
     }
+  },
+  "spotPrices": {
+    "BTC": {
+      "asset": "BTC",
+      "priceUsd": 64885.44335355549,
+      "observedAt": "2026-07-14T23:22:03.000Z",
+      "source": "cmc"
+    },
+    "ETH": {
+      "asset": "ETH",
+      "priceUsd": 1884.1682205622778,
+      "observedAt": "2026-07-14T23:22:03.000Z",
+      "source": "cmc"
+    }
+  },
+  "corporateTreasuries": {
+    "MSTR": {
+      "company": "Strategy",
+      "ticker": "MSTR",
+      "asset": "BTC",
+      "status": "available",
+      "source": "sosovalue",
+      "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+      "holdings": 843775,
+      "holdingsObservedAt": "2026-07-05",
+      "holdingsDisclosedAt": "2026-07-05",
+      "averageCostUsd": 75651,
+      "costObservedAt": "2026-06-21",
+      "averageCostMethod": "company_reported_aggregate_average_including_fees",
+      "latestAcquisition": -2225,
+      "qualityStatus": "mixed_disclosure_dates",
+      "history": [
+        {
+          "date": "2025-01-06",
+          "disclosedAt": "2025-01-06",
+          "holdingsObservedAt": "2025-01-06",
+          "holdings": 447470,
+          "acquired": 1070,
+          "acquisitionCostUsd": 101000000,
+          "transactionPriceUsd": 0.15,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-01-13",
+          "disclosedAt": "2025-01-13",
+          "holdingsObservedAt": "2025-01-13",
+          "holdings": 450000,
+          "acquired": 2530,
+          "acquisitionCostUsd": 243000000,
+          "transactionPriceUsd": 0.15,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-01-21",
+          "disclosedAt": "2025-01-21",
+          "holdingsObservedAt": "2025-01-21",
+          "holdings": 461000,
+          "acquired": 11000,
+          "acquisitionCostUsd": 1100000000,
+          "transactionPriceUsd": 0.15,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-01-27",
+          "disclosedAt": "2025-01-27",
+          "holdingsObservedAt": "2025-01-27",
+          "holdings": 471107,
+          "acquired": 10107,
+          "acquisitionCostUsd": 1100000000,
+          "transactionPriceUsd": 0.15,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-02-10",
+          "disclosedAt": "2025-02-10",
+          "holdingsObservedAt": "2025-02-10",
+          "holdings": 478740,
+          "acquired": 7633,
+          "acquisitionCostUsd": 742000000,
+          "transactionPriceUsd": 0.14,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-02-24",
+          "disclosedAt": "2025-02-24",
+          "holdingsObservedAt": "2025-02-24",
+          "holdings": 499096,
+          "acquired": 20356,
+          "acquisitionCostUsd": 1985000000,
+          "transactionPriceUsd": 0.14,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-03-17",
+          "disclosedAt": "2025-03-17",
+          "holdingsObservedAt": "2025-03-17",
+          "holdings": 499226,
+          "acquired": 130,
+          "acquisitionCostUsd": 11000000,
+          "transactionPriceUsd": 0.14,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-03-24",
+          "disclosedAt": "2025-03-24",
+          "holdingsObservedAt": "2025-03-24",
+          "holdings": 506137,
+          "acquired": 6911,
+          "acquisitionCostUsd": 584000000,
+          "transactionPriceUsd": 0.14,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-03-31",
+          "disclosedAt": "2025-03-31",
+          "holdingsObservedAt": "2025-03-31",
+          "holdings": 528185,
+          "acquired": 22048,
+          "acquisitionCostUsd": 1918000000,
+          "transactionPriceUsd": 0.13,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-04-14",
+          "disclosedAt": "2025-04-14",
+          "holdingsObservedAt": "2025-04-14",
+          "holdings": 531644,
+          "acquired": 3459,
+          "acquisitionCostUsd": 286000000,
+          "transactionPriceUsd": 0.13,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-04-21",
+          "disclosedAt": "2025-04-21",
+          "holdingsObservedAt": "2025-04-21",
+          "holdings": 538200,
+          "acquired": 6556,
+          "acquisitionCostUsd": 556000000,
+          "transactionPriceUsd": 0.13,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-04-28",
+          "disclosedAt": "2025-04-28",
+          "holdingsObservedAt": "2025-04-28",
+          "holdings": 553555,
+          "acquired": 15355,
+          "acquisitionCostUsd": 1424000000,
+          "transactionPriceUsd": 0.13,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-05-05",
+          "disclosedAt": "2025-05-05",
+          "holdingsObservedAt": "2025-05-05",
+          "holdings": 555450,
+          "acquired": 1895,
+          "acquisitionCostUsd": 180000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-05-12",
+          "disclosedAt": "2025-05-12",
+          "holdingsObservedAt": "2025-05-12",
+          "holdings": 568840,
+          "acquired": 13390,
+          "acquisitionCostUsd": 1337000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-05-19",
+          "disclosedAt": "2025-05-19",
+          "holdingsObservedAt": "2025-05-19",
+          "holdings": 576230,
+          "acquired": 7390,
+          "acquisitionCostUsd": 765000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-06-02",
+          "disclosedAt": "2025-06-02",
+          "holdingsObservedAt": "2025-06-02",
+          "holdings": 580955,
+          "acquired": 705,
+          "acquisitionCostUsd": 75000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-06-09",
+          "disclosedAt": "2025-06-09",
+          "holdingsObservedAt": "2025-06-09",
+          "holdings": 582000,
+          "acquired": 1045,
+          "acquisitionCostUsd": 110200000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-06-16",
+          "disclosedAt": "2025-06-16",
+          "holdingsObservedAt": "2025-06-16",
+          "holdings": 592100,
+          "acquired": 10100,
+          "acquisitionCostUsd": 1050000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-06-23",
+          "disclosedAt": "2025-06-23",
+          "holdingsObservedAt": "2025-06-23",
+          "holdings": 592345,
+          "acquired": 245,
+          "acquisitionCostUsd": 26000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-06-30",
+          "disclosedAt": "2025-06-30",
+          "holdingsObservedAt": "2025-06-30",
+          "holdings": 597325,
+          "acquired": 4980,
+          "acquisitionCostUsd": 531900000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-07-14",
+          "disclosedAt": "2025-07-14",
+          "holdingsObservedAt": "2025-07-14",
+          "holdings": 601550,
+          "acquired": 4225,
+          "acquisitionCostUsd": 472500000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-07-21",
+          "disclosedAt": "2025-07-21",
+          "holdingsObservedAt": "2025-07-21",
+          "holdings": 607770,
+          "acquired": 6220,
+          "acquisitionCostUsd": 739800000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-07-29",
+          "disclosedAt": "2025-07-29",
+          "holdingsObservedAt": "2025-07-29",
+          "holdings": 628791,
+          "acquired": 21021,
+          "acquisitionCostUsd": 2460000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-08-11",
+          "disclosedAt": "2025-08-11",
+          "holdingsObservedAt": "2025-08-11",
+          "holdings": 628946,
+          "acquired": 155,
+          "acquisitionCostUsd": 18000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-08-18",
+          "disclosedAt": "2025-08-18",
+          "holdingsObservedAt": "2025-08-18",
+          "holdings": 629376,
+          "acquired": 430,
+          "acquisitionCostUsd": 51400000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-08-25",
+          "disclosedAt": "2025-08-25",
+          "holdingsObservedAt": "2025-08-25",
+          "holdings": 632457,
+          "acquired": 3081,
+          "acquisitionCostUsd": 356900000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-09-02",
+          "disclosedAt": "2025-09-02",
+          "holdingsObservedAt": "2025-09-02",
+          "holdings": 636505,
+          "acquired": 4048,
+          "acquisitionCostUsd": 449000000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-09-08",
+          "disclosedAt": "2025-09-08",
+          "holdingsObservedAt": "2025-09-08",
+          "holdings": 638460,
+          "acquired": 1955,
+          "acquisitionCostUsd": 217400000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-09-15",
+          "disclosedAt": "2025-09-15",
+          "holdingsObservedAt": "2025-09-15",
+          "holdings": 638985,
+          "acquired": 525,
+          "acquisitionCostUsd": 60200000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-09-22",
+          "disclosedAt": "2025-09-22",
+          "holdingsObservedAt": "2025-09-22",
+          "holdings": 639835,
+          "acquired": 850,
+          "acquisitionCostUsd": 99700000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-09-29",
+          "disclosedAt": "2025-09-29",
+          "holdingsObservedAt": "2025-09-29",
+          "holdings": 640031,
+          "acquired": 196,
+          "acquisitionCostUsd": 22100000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-10-13",
+          "disclosedAt": "2025-10-13",
+          "holdingsObservedAt": "2025-10-13",
+          "holdings": 640250,
+          "acquired": 220,
+          "acquisitionCostUsd": 27200000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-10-20",
+          "disclosedAt": "2025-10-20",
+          "holdingsObservedAt": "2025-10-20",
+          "holdings": 640418,
+          "acquired": 168,
+          "acquisitionCostUsd": 18800000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-10-27",
+          "disclosedAt": "2025-10-27",
+          "holdingsObservedAt": "2025-10-27",
+          "holdings": 640808,
+          "acquired": 390,
+          "acquisitionCostUsd": 43400000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-11-03",
+          "disclosedAt": "2025-11-03",
+          "holdingsObservedAt": "2025-11-03",
+          "holdings": 641205,
+          "acquired": 397,
+          "acquisitionCostUsd": 45600000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-11-10",
+          "disclosedAt": "2025-11-10",
+          "holdingsObservedAt": "2025-11-10",
+          "holdings": 641692,
+          "acquired": 487,
+          "acquisitionCostUsd": 49900000,
+          "transactionPriceUsd": 0.12,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-11-17",
+          "disclosedAt": "2025-11-17",
+          "holdingsObservedAt": "2025-11-17",
+          "holdings": 649870,
+          "acquired": 8178,
+          "acquisitionCostUsd": 835600000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-12-01",
+          "disclosedAt": "2025-12-01",
+          "holdingsObservedAt": "2025-12-01",
+          "holdings": 650000,
+          "acquired": 130,
+          "acquisitionCostUsd": 12000000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-12-08",
+          "disclosedAt": "2025-12-08",
+          "holdingsObservedAt": "2025-12-08",
+          "holdings": 660624,
+          "acquired": 10624,
+          "acquisitionCostUsd": 962700000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-12-15",
+          "disclosedAt": "2025-12-15",
+          "holdingsObservedAt": "2025-12-15",
+          "holdings": 671268,
+          "acquired": 10645,
+          "acquisitionCostUsd": 980300000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2025-12-29",
+          "disclosedAt": "2025-12-29",
+          "holdingsObservedAt": "2025-12-29",
+          "holdings": 672497,
+          "acquired": 1229,
+          "acquisitionCostUsd": 108800000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-01-05",
+          "disclosedAt": "2026-01-05",
+          "holdingsObservedAt": "2026-01-05",
+          "holdings": 673783,
+          "acquired": 1283,
+          "acquisitionCostUsd": 116000000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-01-12",
+          "disclosedAt": "2026-01-12",
+          "holdingsObservedAt": "2026-01-12",
+          "holdings": 687410,
+          "acquired": 13627,
+          "acquisitionCostUsd": 1250000000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-01-19",
+          "disclosedAt": "2026-01-19",
+          "holdingsObservedAt": "2026-01-19",
+          "holdings": 709715,
+          "acquired": 22305,
+          "acquisitionCostUsd": 2130000000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-01-26",
+          "disclosedAt": "2026-01-26",
+          "holdingsObservedAt": "2026-01-26",
+          "holdings": 712647,
+          "acquired": 2932,
+          "acquisitionCostUsd": 264100000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-02-02",
+          "disclosedAt": "2026-02-02",
+          "holdingsObservedAt": "2026-02-02",
+          "holdings": 713502,
+          "acquired": 855,
+          "acquisitionCostUsd": 75300000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-02-09",
+          "disclosedAt": "2026-02-09",
+          "holdingsObservedAt": "2026-02-09",
+          "holdings": 714644,
+          "acquired": 1142,
+          "acquisitionCostUsd": 90000000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-02-16",
+          "disclosedAt": "2026-02-16",
+          "holdingsObservedAt": "2026-02-16",
+          "holdings": 717131,
+          "acquired": 2486,
+          "acquisitionCostUsd": 168400000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-02-23",
+          "disclosedAt": "2026-02-23",
+          "holdingsObservedAt": "2026-02-23",
+          "holdings": 717722,
+          "acquired": 592,
+          "acquisitionCostUsd": 39800000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-03-02",
+          "disclosedAt": "2026-03-02",
+          "holdingsObservedAt": "2026-03-02",
+          "holdings": 720737,
+          "acquired": 3015,
+          "acquisitionCostUsd": 204100000,
+          "transactionPriceUsd": 0.11,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-03-09",
+          "disclosedAt": "2026-03-09",
+          "holdingsObservedAt": "2026-03-09",
+          "holdings": 738731,
+          "acquired": 17994,
+          "acquisitionCostUsd": 1280000000,
+          "transactionPriceUsd": 0.1,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-03-16",
+          "disclosedAt": "2026-03-16",
+          "holdingsObservedAt": "2026-03-16",
+          "holdings": 761068,
+          "acquired": 22337,
+          "acquisitionCostUsd": 1570000000,
+          "transactionPriceUsd": 0.1,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-03-23",
+          "disclosedAt": "2026-03-23",
+          "holdingsObservedAt": "2026-03-23",
+          "holdings": 762099,
+          "acquired": 1031,
+          "acquisitionCostUsd": 76600000,
+          "transactionPriceUsd": 0.1,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-04-06",
+          "disclosedAt": "2026-04-06",
+          "holdingsObservedAt": "2026-04-06",
+          "holdings": 766970,
+          "acquired": 4871,
+          "acquisitionCostUsd": 329900000,
+          "transactionPriceUsd": 0.1,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-04-13",
+          "disclosedAt": "2026-04-13",
+          "holdingsObservedAt": "2026-04-13",
+          "holdings": 780897,
+          "acquired": 13927,
+          "acquisitionCostUsd": 1000000000,
+          "transactionPriceUsd": 0.1,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-04-20",
+          "disclosedAt": "2026-04-20",
+          "holdingsObservedAt": "2026-04-20",
+          "holdings": 815061,
+          "acquired": 34164,
+          "acquisitionCostUsd": 2540000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-04-27",
+          "disclosedAt": "2026-04-27",
+          "holdingsObservedAt": "2026-04-27",
+          "holdings": 818334,
+          "acquired": 3273,
+          "acquisitionCostUsd": 255000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-05-11",
+          "disclosedAt": "2026-05-11",
+          "holdingsObservedAt": "2026-05-11",
+          "holdings": 818869,
+          "acquired": 535,
+          "acquisitionCostUsd": 43000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-05-18",
+          "disclosedAt": "2026-05-18",
+          "holdingsObservedAt": "2026-05-18",
+          "holdings": 843738,
+          "acquired": 24869,
+          "acquisitionCostUsd": 2010000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-06-01",
+          "disclosedAt": "2026-06-01",
+          "holdingsObservedAt": "2026-06-01",
+          "holdings": 843706,
+          "acquired": -32,
+          "acquisitionCostUsd": -2500000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-06-08",
+          "disclosedAt": "2026-06-08",
+          "holdingsObservedAt": "2026-06-08",
+          "holdings": 845256,
+          "acquired": 1550,
+          "acquisitionCostUsd": 101000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-06-15",
+          "disclosedAt": "2026-06-15",
+          "holdingsObservedAt": "2026-06-15",
+          "holdings": 846842,
+          "acquired": 1587,
+          "acquisitionCostUsd": 100000000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21",
+          "holdings": 847363,
+          "acquired": 520,
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        },
+        {
+          "date": "2026-06-22",
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-22",
+          "holdings": 847363,
+          "acquired": 520,
+          "acquisitionCostUsd": 34900000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-06-30",
+          "disclosedAt": "2026-06-30",
+          "holdingsObservedAt": "2026-06-30",
+          "holdings": 846000,
+          "acquired": -1363,
+          "acquisitionCostUsd": -80800000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        },
+        {
+          "date": "2026-07-05",
+          "disclosedAt": "2026-07-05",
+          "holdingsObservedAt": "2026-07-05",
+          "holdings": 843775,
+          "acquired": -2225,
+          "acquisitionCostUsd": -135200000,
+          "transactionPriceUsd": 0.09,
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+          "qualityStatus": "provider_reported"
+        }
+      ],
+      "costHistory": [
+        {
+          "costObservedAt": "2026-06-21",
+          "holdingsAtCostDate": 847363,
+          "costBasisUsd": 64100000000,
+          "costBasisApproximate": true,
+          "averageCostUsd": 75651,
+          "averageCostMethod": "company_reported_aggregate_average_including_fees",
+          "sourceUrl": "https://www.strategy.com/press/strategy-increases-its-usd-reserve-to-1-4-billion-and-btc-reserve-to-847363_06-22-2026",
+          "qualityStatus": "official_form_8k"
+        }
+      ],
+      "latestAcquisitionCostUsd": -135200000,
+      "spotPriceUsd": 64885.44335355549,
+      "spotObservedAt": "2026-07-14T23:22:03.000Z",
+      "costGapPct": -14.230554317120076
+    },
+    "BMNR": {
+      "company": "BitMine Immersion Technologies",
+      "ticker": "BMNR",
+      "asset": "ETH",
+      "status": "available",
+      "source": "SEC EDGAR company disclosures",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+      "holdings": 5742237,
+      "holdingsObservedAt": "2026-06-28T22:30:00Z",
+      "holdingsDisclosedAt": "2026-07-06",
+      "averageCostUsd": 3794.2554072810326,
+      "costObservedAt": "2026-02-28",
+      "averageCostMethod": "sec_cost_basis_divided_by_eth_units_fifo_net_transaction_fees",
+      "latestAcquisition": 42197,
+      "qualityStatus": "mixed_disclosure_dates",
+      "history": [
+        {
+          "disclosedAt": "2026-06-22",
+          "holdingsObservedAt": "2026-06-21T19:00:00Z",
+          "holdings": 5672956,
+          "acquired": null,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226029507/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-06-29",
+          "holdingsObservedAt": "2026-06-28T19:00:00Z",
+          "holdings": 5700040,
+          "acquired": null,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226030428/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit"
+        },
+        {
+          "disclosedAt": "2026-07-06",
+          "holdingsObservedAt": "2026-06-28T22:30:00Z",
+          "holdings": 5742237,
+          "acquired": 42197,
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+          "qualityStatus": "official_sec_exhibit_corrected_release"
+        }
+      ],
+      "costHistory": [
+        {
+          "costObservedAt": "2026-02-28",
+          "holdingsAtCostDate": 4473459,
+          "costBasisUsd": 16973446000,
+          "costBasisApproximate": false,
+          "averageCostUsd": 3794.2554072810326,
+          "averageCostMethod": "sec_cost_basis_divided_by_eth_units_fifo_net_transaction_fees",
+          "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226016560/form10-q.htm",
+          "qualityStatus": "official_quarterly_filing_derived"
+        }
+      ],
+      "latestAcquisitionCostUsd": null,
+      "spotPriceUsd": 1884.1682205622778,
+      "spotObservedAt": "2026-07-14T23:22:03.000Z",
+      "costGapPct": -50.34155536955603
+    }
+  },
+  "corporateTreasuryAutomation": {
+    "strategy": "sosovalue_plus_official_8k_cost",
+    "bitmine": "reserved_missing_user_agent"
   },
   "auxiliarySources": {
     "blockbeats": {
@@ -188,17 +1547,18 @@
     "marketCaps": "Market-cap changes are valuation changes, not capital inflows. CoinMarketCap supplies current aggregate and asset market caps.",
     "stablecoins": "USDT and USDC market caps proxy circulating supply in USD. Their sum is labelled as tracked major stablecoins, not the entire stablecoin market.",
     "usdtPeg": "USDT peg deviation is (price - 1 USD) × 10,000 basis points and is not a flow metric.",
-    "etf": "SoSoValue daily aggregate net flow is used for reviewed U.S. BTC and ETH spot ETF series. Missing trading days remain missing and are never filled with zero.",
-    "sol": "SOL ETF flow remains pending until a reviewed source with suitable redistribution terms is configured.",
+    "etf": "SoSoValue v1 daily aggregate net flow is used for U.S. BTC, ETH, and SOL spot ETF series. Its one-month response is merged with prior observations; missing trading days are never filled with zero.",
+    "treasury": "Corporate treasury holdings and acquisition-cost observations keep separate source dates. Strategy average cost uses its official Form 8-K; BitMine cost basis per ETH is derived only from same-date SEC units and cost basis. Press-release spot prices are never treated as acquisition cost.",
     "blockbeats": "BlockBeats is reserved as an auxiliary BTC cross-check only and never overwrites the primary ETF series."
   },
   "sources": {
     "cmc": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
-    "sosovalue": "https://sosovalue.gitbook.io/soso-value-api-doc/api-document/get-etf-historical-inflow-chart",
+    "sosovalueEtf": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
+    "sosovalueTreasury": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+    "strategy": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
+    "bitmine": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
+    "secSubmissions": "https://data.sec.gov/submissions/CIK0001829311.json",
     "blockbeats": "https://www.theblockbeats.info/apiDoc"
   },
-  "failures": [
-    "SoSoValue BTC: SoSoValue BTC returned an empty history",
-    "SoSoValue ETH: SoSoValue ETH returned an empty history"
-  ]
+  "failures": []
 }

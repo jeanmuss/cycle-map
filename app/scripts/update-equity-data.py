@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import json
 import os
+import csv
+from io import StringIO
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
@@ -19,6 +21,7 @@ from typing import Callable
 from zoneinfo import ZoneInfo
 
 import pandas as pd
+import requests
 
 APP_ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = APP_ROOT.parent
@@ -26,6 +29,10 @@ OUTPUT_PATH = APP_ROOT / "public" / "data" / "equity-weekly.json"
 RECURRING_EVENTS_PATH = APP_ROOT / "data" / "equity-recurring-events.json"
 CACHE_DIR = WORKSPACE_ROOT / "tmp" / "equity-cache"
 SHARED_FRED_CACHE_DIR = WORKSPACE_ROOT / "tmp" / "macro-cache" / "fred"
+MOF_JGB10Y_CACHE_PATH = CACHE_DIR / "mof-JGB10Y.json"
+MOF_JGB_CURRENT_URL = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv"
+MOF_JGB_HISTORY_URL = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv"
+MOF_JGB_METHODOLOGY_URL = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/qa.htm"
 
 NY_TZ = ZoneInfo("America/New_York")
 WINDOW_MONTHS = int(os.environ.get("EQUITY_CALENDAR_MONTHS", "6"))
@@ -76,6 +83,24 @@ FRED_SERIES = {
     "VIXCLS": {"label": "VIX", "unit": "index", "kind": "volatility"},
 }
 
+OFFICIAL_RATE_SERIES = {
+    "JGB10Y": {
+        "label": "Japan 10Y JGB",
+        "labelZh": "日本10年国债收益率",
+        "unit": "percent",
+        "kind": "yield",
+        "cadence": "daily",
+        "dateMeaning": "japan_market_close_1500_jst",
+        "source": "Japan Ministry of Finance",
+        "sourceColumn": "10Y",
+        "sourceUrl": MOF_JGB_CURRENT_URL,
+        "historyUrl": MOF_JGB_HISTORY_URL,
+        "methodologyUrl": MOF_JGB_METHODOLOGY_URL,
+    },
+}
+
+MACRO_SERIES = {**FRED_SERIES, **OFFICIAL_RATE_SERIES}
+
 
 @dataclass
 class DailyPrices:
@@ -101,9 +126,10 @@ def parse_timestamp(value: str | None) -> datetime | None:
 def oldest_provider_fetch_at() -> str | None:
     timestamps: list[datetime] = []
     paths = [CACHE_DIR / f"price-{asset_price_symbol(symbol)}.json" for symbol in ASSETS]
-    paths.extend(fred_cache_path(series_id) for series_id in FRED_SERIES)
+    paths.append(MOF_JGB10Y_CACHE_PATH)
     for series_id in FRED_SERIES:
-        paths.append(SHARED_FRED_CACHE_DIR / f"{series_id}.json")
+        local_path = fred_cache_path(series_id)
+        paths.append(local_path if local_path.exists() else SHARED_FRED_CACHE_DIR / f"{series_id}.json")
     for path in paths:
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
@@ -394,14 +420,14 @@ def fetch_daily_prices(symbol: str, failures: list[str], status: dict) -> DailyP
             return result
         except Exception as exc:  # noqa: BLE001 - provider failures become cache provenance.
             last_error = exc
-            failures.append(f"{symbol} {provider_name}: {exc}")
+            failures.append(f"{symbol} {provider_name}: provider request failed")
 
     if cached:
         cached.frame = cached.frame[cached.frame.index >= LOOKBACK_START]
         cached.cache_status = "stale-cache"
         failures.append(f"{symbol}: using stale local price cache after provider failure")
         return cached
-    raise RuntimeError(f"No price source produced data for {symbol}: {last_error}")
+    raise RuntimeError(f"No price source produced data for {symbol}") from last_error
 
 
 def fred_cache_path(series_id: str) -> Path:
@@ -453,12 +479,98 @@ def fetch_fred_series(failures: list[str], status: dict) -> dict[str, pd.Series]
             series = pd.to_numeric(series, errors="coerce").dropna()
             write_fred_cache(series_id, series)
             output[series_id] = series
-        except Exception as exc:  # noqa: BLE001
-            failures.append(f"FRED {series_id}: {exc}")
+        except Exception:  # noqa: BLE001
+            failures.append(f"FRED {series_id}: provider request failed")
             if cached is not None:
                 output[series_id] = cached[cached.index >= LOOKBACK_START]
                 failures.append(f"FRED {series_id}: using stale local cache")
     return output
+
+
+def parse_mof_jgb10y_csv(text: str) -> pd.Series:
+    lines = text.lstrip("\ufeff").splitlines()
+    header_index = next((index for index, line in enumerate(lines) if line.strip().startswith("Date,")), None)
+    if header_index is None:
+        raise RuntimeError("MOF JGB CSV is missing the Date header")
+    rows: dict[pd.Timestamp, float] = {}
+    for row in csv.DictReader(StringIO("\n".join(lines[header_index:]))):
+        date_text = str(row.get("Date") or "").strip()
+        value = finite_number(row.get("10Y"))
+        if not date_text or value is None:
+            continue
+        try:
+            observed_date = pd.to_datetime(date_text, format="%Y/%m/%d").normalize()
+        except (TypeError, ValueError):
+            continue
+        rows[observed_date] = value
+    if not rows:
+        raise RuntimeError("MOF JGB CSV returned no valid 10Y observations")
+    series = pd.Series(rows, dtype="float64").sort_index()
+    series.name = "JGB10Y"
+    return series
+
+
+def read_mof_jgb10y_cache() -> pd.Series | None:
+    try:
+        payload = json.loads(MOF_JGB10Y_CACHE_PATH.read_text(encoding="utf-8"))
+        rows = payload.get("observations", [])
+        series = pd.Series({row["date"]: row["value"] for row in rows})
+        series.index = pd.to_datetime(series.index)
+        series = pd.to_numeric(series, errors="coerce").dropna().sort_index()
+        return series if not series.empty else None
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return None
+
+
+def write_mof_jgb10y_cache(series: pd.Series) -> None:
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    rows = [
+        {"date": index.strftime("%Y-%m-%d"), "value": finite_number(value)}
+        for index, value in series.sort_index().items()
+        if finite_number(value) is not None
+    ]
+    payload = {
+        "seriesId": "JGB10Y",
+        "fetchedAt": iso_now(),
+        "source": "Japan Ministry of Finance",
+        "sourceUrl": MOF_JGB_HISTORY_URL,
+        "sourceColumn": "10Y",
+        "unit": "percent",
+        "dateMeaning": "japan_market_close_1500_jst",
+        "observations": rows,
+    }
+    MOF_JGB10Y_CACHE_PATH.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def fetch_mof_jgb10y(failures: list[str], status: dict) -> pd.Series | None:
+    cached = read_mof_jgb10y_cache()
+    recent_enough = cached is not None and cached.index[-1] >= END_DATE - pd.DateOffset(days=7)
+    if recent_enough and cache_is_fresh(MOF_JGB10Y_CACHE_PATH, status):
+        return cached[cached.index >= LOOKBACK_START]
+    try:
+        series_parts: list[pd.Series] = []
+        for source_url in [MOF_JGB_HISTORY_URL, MOF_JGB_CURRENT_URL]:
+            response = requests.get(
+                source_url,
+                timeout=45,
+                headers={"User-Agent": "cycle-map-market-data/1.0"},
+            )
+            response.raise_for_status()
+            response.encoding = response.apparent_encoding or "utf-8"
+            series_parts.append(parse_mof_jgb10y_csv(response.text))
+        series = pd.concat(series_parts)
+        series = series[~series.index.duplicated(keep="last")].sort_index()
+        write_mof_jgb10y_cache(series)
+        return series[series.index >= LOOKBACK_START]
+    except Exception as exc:  # noqa: BLE001 - official-source failures use last-known-good cache.
+        failures.append("Japan MOF JGB10Y: provider request failed")
+        if cached is not None:
+            failures.append("Japan MOF JGB10Y: using stale local cache")
+            return cached[cached.index >= LOOKBACK_START]
+        raise RuntimeError("Japan MOF JGB10Y has no last-known-good cache") from exc
 
 
 def macro_observation(series: pd.Series | None, date_key: str) -> dict | None:
@@ -521,8 +633,8 @@ def fetch_delayed_spot_quotes(failures: list[str]) -> dict[str, dict]:
         import akshare as ak
 
         frame = ak.stock_us_spot_em()
-    except Exception as exc:  # noqa: BLE001
-        failures.append(f"AKShare delayed spot: {exc}")
+    except Exception:  # noqa: BLE001
+        failures.append("AKShare delayed spot: provider request failed")
         return {}
     if frame.empty:
         return {}
@@ -582,54 +694,56 @@ def build_output() -> dict:
     for symbol in ASSETS:
         try:
             price_daily[symbol] = fetch_daily_prices(asset_price_symbol(symbol), failures, status)
-        except Exception as exc:  # noqa: BLE001 - optional asset failures stay visible without blocking the calendar.
+        except Exception:  # noqa: BLE001 - optional asset failures stay visible without blocking the calendar.
             if symbol not in OPTIONAL_ASSETS:
                 raise
-            failures.append(f"{symbol}: optional index unavailable: {exc}")
+            failures.append(f"{symbol}: optional index unavailable")
             price_daily[symbol] = None
-    fred_daily = fetch_fred_series(failures, status)
+    macro_daily = fetch_fred_series(failures, status)
+    macro_daily["JGB10Y"] = fetch_mof_jgb10y(failures, status)
     spot_quotes = fetch_delayed_spot_quotes(failures) if status["isOpen"] else {}
 
     days = []
     for day in day_range():
         date_key = day.strftime("%Y-%m-%d")
         market_day = is_market_day(day)
+        within_observation_window = day <= END_DATE
         assets = {
-            symbol: daily_asset_row(prices.frame, date_key, symbol) if prices is not None else None
+            symbol: daily_asset_row(prices.frame, date_key, symbol) if prices is not None and within_observation_window else None
             for symbol, prices in price_daily.items()
         }
         macro = {
-            series_id: macro_observation(fred_daily.get(series_id), date_key) if market_day else None
-            for series_id in FRED_SERIES
+            series_id: macro_observation(macro_daily.get(series_id), date_key) if market_day and within_observation_window else None
+            for series_id in MACRO_SERIES
         }
         row = {
             "date": date_key,
             "dayOfWeek": int(day.weekday()),
             "isMarketDay": market_day,
             "assets": assets if market_day else {symbol: None for symbol in ASSETS},
-            "macro": macro if market_day else {series_id: None for series_id in FRED_SERIES},
+            "macro": macro if market_day else {series_id: None for series_id in MACRO_SERIES},
         }
         events = recurring_events_for_date(day)
         if events:
             row["events"] = events
         days.append(row)
 
-    trading_days = [day for day in days if day["isMarketDay"] and any(day["assets"].values())]
+    trading_days = [day for day in days if day["isMarketDay"] and any(day.get("assets", {}).values())]
     if not trading_days:
         raise RuntimeError("No daily equity rows produced")
 
     latest_assets = build_latest_assets(trading_days, spot_quotes, status)
     latest_macro_date = trading_days[-1]["date"]
     latest_macro = {
-        series_id: macro_observation(fred_daily.get(series_id), latest_macro_date)
-        for series_id in FRED_SERIES
+        series_id: macro_observation(macro_daily.get(series_id), latest_macro_date)
+        for series_id in MACRO_SERIES
     }
     transformed_at = iso_now()
 
     return {
         "version": 2,
         "page": "equity-macro",
-        "timezone": "America/New_York for trading dates; FRED observations use provider dates",
+        "timezone": "America/New_York for trading dates; macro observations retain their provider dates",
         "generatedAt": transformed_at,
         "timestamps": {
             "observedAt": latest_observed_at(latest_assets, trading_days[-1]["date"]),
@@ -646,7 +760,8 @@ def build_output() -> dict:
         "methodology": (
             "Daily price rows are derived from cached daily OHLC for QQQ, SPY, DIA, and the SOX index when available. "
             "DIA is used as a Dow Jones Industrial Average ETF proxy. "
-            "10Y and VIX use FRED daily observations and display latest observation changes versus the previous observation. "
+            "U.S. 10Y and VIX use FRED daily observations. Japan 10Y JGB uses the Japan Ministry of Finance official "
+            "15:00 JST constant-maturity close and displays the latest observation change versus the previous observation. "
             "Reviewed recurring crypto-supply and CEX-attention annotations are calendar anchors, not claims of guaranteed price impact."
         ),
         "priceSourcePreference": PRICE_SOURCE,
@@ -662,10 +777,13 @@ def build_output() -> dict:
             }
             for symbol in ASSETS
         },
-        "macroSeries": FRED_SERIES,
+        "macroSeries": MACRO_SERIES,
         "sources": {
             "prices": "AKShare/Sina US daily by default; yfinance remains a local fallback and is the reviewed source for Yahoo symbol ^SOX. Delayed AKShare/Eastmoney spot is used only during market hours when reachable.",
             "FRED": "https://fred.stlouisfed.org/docs/api/fred/",
+            "Japan Ministry of Finance JGB": MOF_JGB_CURRENT_URL,
+            "Japan Ministry of Finance JGB history": MOF_JGB_HISTORY_URL,
+            "Japan Ministry of Finance methodology": MOF_JGB_METHODOLOGY_URL,
             "calendar": "Built-in NYSE holiday rules for regular full market closures; early closes are not modeled in this version.",
             "cache": "tmp/equity-cache",
             "recurringEvents": "app/data/equity-recurring-events.json",

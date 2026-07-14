@@ -444,8 +444,18 @@ export function formatEquityMacroValue(value, unit) {
 
 export function formatEquityMacroChange(seriesId, value) {
   if (!value) return "N/A";
-  if (seriesId === "DGS10") return formatBp(value.changeBp, 0);
+  if (["DGS10", "JGB10Y"].includes(seriesId)) return formatBp(value.changeBp, 0);
   return formatSignedNumber(value.change, 2);
+}
+
+function equityMacroLabel(seriesId, copy) {
+  if (seriesId === "DGS10") return copy.tenYear;
+  if (seriesId === "JGB10Y") return copy.japanTenYear;
+  return copy.vix;
+}
+
+function equityMacroMove(seriesId, item) {
+  return ["DGS10", "JGB10Y"].includes(seriesId) ? item?.changeBp : item?.change;
 }
 
 export function metricPointAtOrBeforeDate(chartDataset, metricId, dateKey, maxLagDays = 10) {
@@ -568,6 +578,7 @@ export function EquityMarketSummary({ dataset, t }) {
     };
   });
   const tenYear = latest.macro?.DGS10;
+  const japanTenYear = latest.macro?.JGB10Y;
   const vix = latest.macro?.VIXCLS;
   return (
     <div className="latest-strip equity-strip" aria-label={copy.latest}>
@@ -583,9 +594,14 @@ export function EquityMarketSummary({ dataset, t }) {
         <span className="ticker">{copy.macro}</span>
         <div className="equity-summary-lines">
           <span><b>{copy.tenYear}</b><strong>{formatEquityMacroValue(tenYear?.value, "percent")}</strong><em className={macroClass(tenYear?.changeBp)}>{formatEquityMacroChange("DGS10", tenYear)}</em></span>
+          <span><b>{copy.japanTenYearCompact}</b><strong>{formatEquityMacroValue(japanTenYear?.value, "percent")}</strong><em className={macroClass(japanTenYear?.changeBp)}>{formatEquityMacroChange("JGB10Y", japanTenYear)}</em></span>
           <span><b>{copy.vix}</b><strong>{formatEquityMacroValue(vix?.value, "index")}</strong><em className={macroClass(vix?.change)}>{formatEquityMacroChange("VIXCLS", vix)}</em></span>
         </div>
-        <small>{latest.date || "N/A"}</small>
+        <small className="equity-macro-dates">
+          <span>US10Y {tenYear?.date || "N/A"}</span>
+          <span>JP10Y {japanTenYear?.date || "N/A"}</span>
+          <span>VIX {vix?.date || "N/A"}</span>
+        </small>
       </div>
       {fastCards.map((card) => (
         <div className="equity-summary-card equity-fast-summary" key={card.key}>
@@ -948,7 +964,7 @@ export function EquityDateDetails({ dateKey, row, dataset, t }) {
   const assetItems = EQUITY_ASSET_KEYS
     .map((symbol) => ({ symbol, asset: row?.assets?.[symbol] }))
     .filter((item) => item.asset);
-  const macroItems = ["DGS10", "VIXCLS"]
+  const macroItems = ["DGS10", "JGB10Y", "VIXCLS"]
     .map((seriesId) => ({ seriesId, item: row?.macro?.[seriesId] }))
     .filter((entry) => entry.item);
   const eventItems = row?.events || [];
@@ -985,12 +1001,13 @@ export function EquityDateDetails({ dateKey, row, dataset, t }) {
             );
           })}
           {macroItems.map(({ seriesId, item }) => {
-            const label = seriesId === "DGS10" ? copy.tenYear : copy.vix;
+            const label = equityMacroLabel(seriesId, copy);
             const unit = dataset.macroSeries?.[seriesId]?.unit;
-            const move = seriesId === "DGS10" ? item.changeBp : item.change;
+            const move = equityMacroMove(seriesId, item);
+            const source = dataset.macroSeries?.[seriesId]?.source || "FRED";
             return (
               <div className="macro-date-detail-item equity-date-detail-item" key={`${seriesId}-${item.date || dateKey}`}>
-                <span className={`macro-pill ${seriesId === "DGS10" ? "macro-rates" : "macro-volatility"}`}>{label}</span>
+                <span className={`macro-pill ${seriesId === "VIXCLS" ? "macro-volatility" : "macro-rates"}`}>{label}</span>
                 <strong>{dataset.macroSeries?.[seriesId]?.label || label}</strong>
                 <dl>
                   <div><dt>{t.macroCalendar.previous}</dt><dd>{formatEquityMacroValue(item.previous, unit)}</dd></div>
@@ -998,7 +1015,7 @@ export function EquityDateDetails({ dateKey, row, dataset, t }) {
                   <div><dt>{t.macroCalendar.change}</dt><dd className={macroClass(move)}>{formatEquityMacroChange(seriesId, item)}</dd></div>
                   <div><dt>{t.macroCalendar.dateMeaning}</dt><dd>{dayLabel(item.date || dateKey)}</dd></div>
                 </dl>
-                <small>{t.macroCalendar.dailyObservation} / FRED</small>
+                <small>{t.macroCalendar.dailyObservation} / {source}</small>
               </div>
             );
           })}
