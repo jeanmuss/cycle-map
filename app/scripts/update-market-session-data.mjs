@@ -61,6 +61,8 @@ const MARKETS = [
       { key: "lunch", start: "11:30", end: "13:00", active: false, sortRank: 3 },
       { key: "open", start: "13:00", end: "14:57", active: true, sortRank: 1 },
       { key: "closing-auction", start: "14:57", end: "15:00", active: true, sortRank: 1 },
+      { key: "fixed-price-gap", start: "15:00", end: "15:05", active: false, sortRank: 3, effectiveFrom: "2026-07-06" },
+      { key: "fixed-price", start: "15:05", end: "15:30", active: true, sortRank: 2, effectiveFrom: "2026-07-06" },
     ],
     assets: ["CSI500", "SSE50"],
   },
@@ -185,7 +187,8 @@ const ASSETS = [
     market: "cn",
     quote: "CNY",
     sourceKind: "pending",
-    quality: "China index price source pending; market cap may remain unavailable.",
+    sessionEligibility: "non_tradable_index_proxy",
+    quality: "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
   },
   {
     symbol: "SSE50",
@@ -194,7 +197,8 @@ const ASSETS = [
     market: "cn",
     quote: "CNY",
     sourceKind: "pending",
-    quality: "China index price source pending; market cap may remain unavailable.",
+    sessionEligibility: "non_tradable_index_proxy",
+    quality: "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
   },
 ];
 
@@ -422,6 +426,7 @@ async function buildOutput() {
       marketCapAsOf: cmcRow.marketCapAsOf || null,
       asOf: quote?.asOf || cmcRow.marketCapAsOf || null,
       sourceKind: asset.sourceKind || "official_public",
+      ...(asset.sessionEligibility ? { sessionEligibility: asset.sessionEligibility } : {}),
       sourceLabel: quote?.sourceLabel || asset.quality || "Source pending",
       marketCapSourceLabel: cmcRow.sourceLabel || null,
       quality: asset.quality || asset.note || null,
@@ -442,7 +447,7 @@ async function buildOutput() {
       transformedAt,
     },
     refreshCadence: "Target 10-15 minutes when a backend scheduler is available; static hosts may refresh less frequently.",
-    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. The backend expands reviewed NYSE, KRX, and SSE calendars into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only selects the current interval and renders its countdown.",
+    methodology: "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. The backend expands reviewed NYSE, KRX, SSE, and SZSE calendars and trading rules into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only selects the current interval and renders its countdown.",
     failures,
     markets: attachOfficialCalendars(MARKETS, transformedAt),
     assets,
@@ -452,6 +457,8 @@ async function buildOutput() {
       nyseCalendar: "https://www.nyse.com/trade/hours-calendars",
       krxCalendar: "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
       sseCalendar: "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+      sseTradingRules: "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+      szseTradingRules: "https://www.szse.cn/lawrules/rule/allrules/bussiness/t20260424_620190.html",
       note: "No provider credentials are emitted to the frontend cache.",
     },
   };
@@ -461,6 +468,11 @@ async function buildCalendarOnlyOutput() {
   const existing = JSON.parse(await readFile(outputPath, "utf8"));
   const transformedAt = isoNow();
   const observedAt = latestIso((existing.assets || []).flatMap((asset) => [asset.asOf, asset.marketCapAsOf]));
+  const assetDefinitions = new Map(ASSETS.map((asset) => [asset.symbol, asset]));
+  const assets = (existing.assets || []).map((asset) => {
+    const sessionEligibility = assetDefinitions.get(asset.symbol)?.sessionEligibility;
+    return sessionEligibility ? { ...asset, sessionEligibility } : asset;
+  });
   return {
     ...existing,
     version: 2,
@@ -470,13 +482,16 @@ async function buildCalendarOnlyOutput() {
       fetchedAt: existing.timestamps?.fetchedAt || existing.generatedAt || null,
       transformedAt,
     },
-    methodology: "The frontend reads only this generated JSON. Market sessions are expanded by the backend from reviewed NYSE, KRX, and SSE calendars into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only renders the current interval and countdown.",
+    methodology: "The frontend reads only this generated JSON. Market sessions are expanded by the backend from reviewed NYSE, KRX, SSE, and SZSE calendars and trading rules into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only renders the current interval and countdown.",
     markets: attachOfficialCalendars(MARKETS, transformedAt),
+    assets,
     sources: {
       ...(existing.sources || {}),
       nyseCalendar: "https://www.nyse.com/trade/hours-calendars",
       krxCalendar: "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
       sseCalendar: "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+      sseTradingRules: "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+      szseTradingRules: "https://www.szse.cn/lawrules/rule/allrules/bussiness/t20260424_620190.html",
     },
   };
 }

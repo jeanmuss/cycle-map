@@ -72,10 +72,14 @@ const CALENDARS = {
   cn: {
     coverageStart: "2026-01-01",
     coverageEnd: "2026-12-31",
-    reviewedAt: "2026-07-10",
-    sourceLabel: "SSE 2026 market closure notice and 2026 trading rules",
+    reviewedAt: "2026-07-16",
+    sourceLabel: "SSE/SZSE 2026 market closure notices and trading rules",
     sourceUrl: "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
     secondarySourceUrl: "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+    additionalSourceUrls: [
+      "https://www.szse.cn/lawrules/rule/allrules/bussiness/t20260424_620190.html",
+      "https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020260424690713155663.pdf",
+    ],
     holidays: {
       "2026-01-01": ["New Year holiday", "元旦休市"],
       "2026-01-02": ["New Year holiday", "元旦休市"],
@@ -172,17 +176,20 @@ function dayReason(dateKey, calendar) {
 
 function sessionsForDate(market, dateKey, calendar) {
   const earlyClose = calendar.earlyCloses[dateKey];
-  return market.sessionTemplates.map((template) => {
-    const override = earlyClose?.sessionOverrides?.[template.key] || {};
-    return {
-      ...template,
-      start: override.start || template.start,
-      end: override.end || template.end,
-      tradeDate: dateKey,
-      reason: earlyClose?.name || null,
-      reasonZh: earlyClose?.nameZh || null,
-    };
-  });
+  return market.sessionTemplates
+    .filter((template) => !template.effectiveFrom || dateKey >= template.effectiveFrom)
+    .filter((template) => !template.effectiveUntil || dateKey <= template.effectiveUntil)
+    .map((template) => {
+      const override = earlyClose?.sessionOverrides?.[template.key] || {};
+      return {
+        ...template,
+        start: override.start || template.start,
+        end: override.end || template.end,
+        tradeDate: dateKey,
+        reason: earlyClose?.name || null,
+        reasonZh: earlyClose?.nameZh || null,
+      };
+    });
 }
 
 function localDateKey(date, timeZone) {
@@ -338,6 +345,7 @@ export function buildOfficialMarketCalendar(market, generatedAt = new Date(), op
       sourceLabel: calendar.sourceLabel,
       sourceUrl: calendar.sourceUrl,
       secondarySourceUrl: calendar.secondarySourceUrl || null,
+      additionalSourceUrls: calendar.additionalSourceUrls || [],
       holidays: Object.entries(calendar.holidays).map(([date, [name, nameZh]]) => ({ date, name, nameZh })),
       earlyCloses: Object.entries(calendar.earlyCloses).map(([date, value]) => ({ date, name: value.name, nameZh: value.nameZh })),
       notes: calendar.notes || [],

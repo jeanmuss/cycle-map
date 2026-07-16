@@ -35,6 +35,8 @@ const markets = {
       { key: "lunch", start: "11:30", end: "13:00", active: false, sortRank: 3 },
       { key: "open", start: "13:00", end: "14:57", active: true, sortRank: 1 },
       { key: "closing-auction", start: "14:57", end: "15:00", active: true, sortRank: 1 },
+      { key: "fixed-price-gap", start: "15:00", end: "15:05", active: false, sortRank: 3, effectiveFrom: "2026-07-06" },
+      { key: "fixed-price", start: "15:05", end: "15:30", active: true, sortRank: 2, effectiveFrom: "2026-07-06" },
     ],
   },
 };
@@ -58,6 +60,12 @@ expectState("us", "2026-11-27T18:30:00Z", "afterhours", true);
 expectState("us", "2026-11-27T22:30:00Z", "closed", false);
 expectState("cn", "2026-10-05T02:00:00Z", "closed", false);
 expectState("cn", "2026-07-10T03:45:00Z", "lunch", false);
+expectState("cn", "2026-07-03T07:10:00Z", "closed", false);
+expectState("cn", "2026-07-10T06:59:00Z", "closing-auction", true);
+expectState("cn", "2026-07-10T07:02:00Z", "fixed-price-gap", false);
+expectState("cn", "2026-07-10T07:05:00Z", "fixed-price", true);
+expectState("cn", "2026-07-10T07:29:00Z", "fixed-price", true);
+expectState("cn", "2026-07-10T07:30:00Z", "closed", false);
 expectState("kr", "2026-05-01T01:00:00Z", "closed", false);
 expectState("kr", "2026-07-10T06:35:00Z", "soon", true);
 

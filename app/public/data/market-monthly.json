@@ -1,11 +1,11 @@
 {
   "version": 5,
   "timezone": "UTC",
-  "generatedAt": "2026-07-15T23:26:46.707Z",
+  "generatedAt": "2026-07-16T23:23:32.879Z",
   "timestamps": {
-    "observedAt": "2026-07-15T23:26:46.706Z",
-    "fetchedAt": "2026-07-15T23:26:46.015Z",
-    "transformedAt": "2026-07-15T23:26:46.707Z"
+    "observedAt": "2026-07-16T23:23:32.878Z",
+    "fetchedAt": "2026-07-16T23:23:32.342Z",
+    "transformedAt": "2026-07-16T23:23:32.879Z"
   },
   "currentMonthKey": "2026-07",
   "spotRefreshCadence": "Hourly static cache refresh by CI; provider schedules and GitHub Actions queues can add small delays.",
@@ -23,7 +23,7 @@
       "symbol": "BTC",
       "quote": "USD",
       "sourceLabel": "Blockchain + Binance",
-      "updatedAt": "2026-07-15T23:26:46.015Z",
+      "updatedAt": "2026-07-16T23:23:32.342Z",
       "rows": [
         {
           "monthKey": "2010-08",
@@ -3661,11 +3661,11 @@
           "highTime": "2026-07-15T00:00:00.000Z",
           "low": 57800.19,
           "lowTime": "2026-07-01T00:00:00.000Z",
-          "close": 64845,
-          "closeTime": "2026-07-15T23:26:46.015Z",
+          "close": 63792.01,
+          "closeTime": "2026-07-16T23:23:32.342Z",
           "closeSource": "Binance Spot ticker",
-          "spotAppliedAt": "2026-07-15T23:26:46.015Z",
-          "pct": 10.781237934420652,
+          "spotAppliedAt": "2026-07-16T23:23:32.342Z",
+          "pct": 8.982309169942814,
           "firstExtreme": "low",
           "extremeMovePct": 13.494436609983456,
           "orderResolution": "1d",
@@ -3677,9 +3677,9 @@
       "spot": {
         "symbol": "BTC",
         "pair": "BTCUSDT",
-        "price": 64845,
+        "price": 63792.01,
         "quote": "USDT",
-        "updatedAt": "2026-07-15T23:26:46.015Z",
+        "updatedAt": "2026-07-16T23:23:32.342Z",
         "source": "https://data-api.binance.vision/api/v3/ticker/price?symbol=BTCUSDT",
         "sourceLabel": "Binance Spot ticker"
       }
@@ -3688,7 +3688,7 @@
       "symbol": "ETH",
       "quote": "USDT",
       "sourceLabel": "Binance Spot",
-      "updatedAt": "2026-07-15T23:26:46.192Z",
+      "updatedAt": "2026-07-16T23:23:32.461Z",
       "rows": [
         {
           "monthKey": "2017-08",
@@ -5730,11 +5730,11 @@
           "highTime": "2026-07-15T00:00:00.000Z",
           "low": 1552.92,
           "lowTime": "2026-07-01T00:00:00.000Z",
-          "close": 1921.4,
-          "closeTime": "2026-07-15T23:26:46.192Z",
+          "close": 1859.77,
+          "closeTime": "2026-07-16T23:23:32.461Z",
           "closeSource": "Binance Spot ticker",
-          "spotAppliedAt": "2026-07-15T23:26:46.192Z",
-          "pct": 22.226463104325706,
+          "spotAppliedAt": "2026-07-16T23:23:32.461Z",
+          "pct": 18.3059796437659,
           "firstExtreme": "low",
           "extremeMovePct": 25.345800170002313,
           "orderResolution": "1d",
@@ -5746,9 +5746,9 @@
       "spot": {
         "symbol": "ETH",
         "pair": "ETHUSDT",
-        "price": 1921.4,
+        "price": 1859.77,
         "quote": "USDT",
-        "updatedAt": "2026-07-15T23:26:46.192Z",
+        "updatedAt": "2026-07-16T23:23:32.461Z",
         "source": "https://data-api.binance.vision/api/v3/ticker/price?symbol=ETHUSDT",
         "sourceLabel": "Binance Spot ticker"
       }
@@ -5757,7 +5757,7 @@
       "symbol": "SOL",
       "quote": "USDT",
       "sourceLabel": "Binance Spot",
-      "updatedAt": "2026-07-15T23:26:46.368Z",
+      "updatedAt": "2026-07-16T23:23:32.580Z",
       "rows": [
         {
           "monthKey": "2020-08",
@@ -7115,11 +7115,11 @@
           "highTime": "2026-07-04T00:00:00.000Z",
           "low": 72.25,
           "lowTime": "2026-07-01T00:00:00.000Z",
-          "close": 77.48,
-          "closeTime": "2026-07-15T23:26:46.368Z",
+          "close": 75.1,
+          "closeTime": "2026-07-16T23:23:32.580Z",
           "closeSource": "Binance Spot ticker",
-          "spotAppliedAt": "2026-07-15T23:26:46.368Z",
-          "pct": 5.171711687253974,
+          "spotAppliedAt": "2026-07-16T23:23:32.580Z",
+          "pct": 1.9410886385231336,
           "firstExtreme": "low",
           "extremeMovePct": 16.235294117647065,
           "orderResolution": "1d",
@@ -7131,9 +7131,9 @@
       "spot": {
         "symbol": "SOL",
         "pair": "SOLUSDT",
-        "price": 77.48,
+        "price": 75.1,
         "quote": "USDT",
-        "updatedAt": "2026-07-15T23:26:46.368Z",
+        "updatedAt": "2026-07-16T23:23:32.580Z",
         "source": "https://data-api.binance.vision/api/v3/ticker/price?symbol=SOLUSDT",
         "sourceLabel": "Binance Spot ticker"
       }
@@ -7142,7 +7142,7 @@
       "symbol": "HYPE",
       "quote": "USD",
       "sourceLabel": "Hyperliquid",
-      "updatedAt": "2026-07-15T23:26:46.530Z",
+      "updatedAt": "2026-07-16T23:23:32.760Z",
       "rows": [
         {
           "monthKey": "2024-11",
@@ -7529,15 +7529,15 @@
           "open": 65.025,
           "high": 72.914,
           "highTime": "2026-07-07T00:00:00.000Z",
-          "low": 61.644,
-          "lowTime": "2026-07-02T00:00:00.000Z",
-          "close": 67.0345,
-          "closeTime": "2026-07-15T23:26:46.530Z",
+          "low": 60.603,
+          "lowTime": "2026-07-16T00:00:00.000Z",
+          "close": 60.6555,
+          "closeTime": "2026-07-16T23:23:32.760Z",
           "closeSource": "Hyperliquid mid price",
-          "spotAppliedAt": "2026-07-15T23:26:46.530Z",
-          "pct": 3.0903498654363526,
-          "firstExtreme": "low",
-          "extremeMovePct": 18.282395691389272,
+          "spotAppliedAt": "2026-07-16T23:23:32.760Z",
+          "pct": -6.7197231833910065,
+          "firstExtreme": "high",
+          "extremeMovePct": -16.884274624900566,
           "orderResolution": "1d",
           "source": "hyperliquid",
           "extremesSource": "hyperliquid",
@@ -7547,9 +7547,9 @@
       "spot": {
         "symbol": "HYPE",
         "pair": "HYPE",
-        "price": 67.0345,
+        "price": 60.6555,
         "quote": "USD",
-        "updatedAt": "2026-07-15T23:26:46.530Z",
+        "updatedAt": "2026-07-16T23:23:32.760Z",
         "source": "https://api.hyperliquid.xyz/info allMids",
         "sourceLabel": "Hyperliquid mid price"
       }
@@ -7558,7 +7558,7 @@
       "symbol": "BNB",
       "quote": "USDT",
       "sourceLabel": "Binance Spot",
-      "updatedAt": "2026-07-15T23:26:46.706Z",
+      "updatedAt": "2026-07-16T23:23:32.878Z",
       "rows": [
         {
           "monthKey": "2017-11",
@@ -9543,11 +9543,11 @@
           "highTime": "2026-07-05T00:00:00.000Z",
           "low": 537.25,
           "lowTime": "2026-07-01T00:00:00.000Z",
-          "close": 580.81,
-          "closeTime": "2026-07-15T23:26:46.706Z",
+          "close": 571.84,
+          "closeTime": "2026-07-16T23:23:32.878Z",
           "closeSource": "Binance Spot ticker",
-          "spotAppliedAt": "2026-07-15T23:26:46.706Z",
-          "pct": 6.2742443094488705,
+          "spotAppliedAt": "2026-07-16T23:23:32.878Z",
+          "pct": 4.632950303740037,
           "firstExtreme": "low",
           "extremeMovePct": 10.464402047463942,
           "orderResolution": "1d",
@@ -9559,9 +9559,9 @@
       "spot": {
         "symbol": "BNB",
         "pair": "BNBUSDT",
-        "price": 580.81,
+        "price": 571.84,
         "quote": "USDT",
-        "updatedAt": "2026-07-15T23:26:46.706Z",
+        "updatedAt": "2026-07-16T23:23:32.878Z",
         "source": "https://data-api.binance.vision/api/v3/ticker/price?symbol=BNBUSDT",
         "sourceLabel": "Binance Spot ticker"
       }

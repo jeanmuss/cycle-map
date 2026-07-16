@@ -254,7 +254,7 @@ export const MARKET_CLOCK_TEXT = {
     sessions: "交易时段",
     alwaysOpen: "24小时交易",
     sourceNote: "价格优先使用公开行情快照；美股和 CL 可使用 OKX 合约/指数代理，旁边会标注数据质量。",
-    methodology: "\u540e\u7aef\u4f7f\u7528 NYSE\u3001KRX \u548c\u4e0a\u4ea4\u6240\u5b98\u65b9\u65e5\u5386\u751f\u6210\u7edd\u5bf9\u65f6\u95f4\u72b6\u6001\u6bb5\uff0c\u5305\u62ec\u8282\u5047\u65e5\u3001\u63d0\u524d\u6536\u5e02\u3001\u5468\u672b\u548c\u4e0b\u4e00\u72b6\u6001\u5207\u6362\u65f6\u95f4\uff1b\u524d\u7aef\u53ea\u5339\u914d\u5f53\u524d\u65f6\u95f4\u6bb5\u5e76\u663e\u793a\u5012\u8ba1\u65f6\u3002",
+    methodology: "\u540e\u7aef\u4f7f\u7528 NYSE\u3001KRX\u3001\u4e0a\u4ea4\u6240\u548c\u6df1\u4ea4\u6240\u5b98\u65b9\u65e5\u5386\u4e0e\u4ea4\u6613\u89c4\u5219\u751f\u6210\u7edd\u5bf9\u65f6\u95f4\u72b6\u6001\u6bb5\uff0c\u5305\u62ec\u8282\u5047\u65e5\u3001\u63d0\u524d\u6536\u5e02\u3001\u5468\u672b\u548c\u4e0b\u4e00\u72b6\u6001\u5207\u6362\u65f6\u95f4\uff1b\u524d\u7aef\u53ea\u5339\u914d\u5f53\u524d\u65f6\u95f4\u6bb5\u5e76\u663e\u793a\u5012\u8ba1\u65f6\u3002",
     status: {
       open: "盘中",
       trading: "交易中",
@@ -262,6 +262,9 @@ export const MARKET_CLOCK_TEXT = {
       night: "\u591c\u76d8",
       openingAuction: "集合竞价",
       closingAuction: "收盘集合竞价",
+      fixedPriceGap: "可申报 · 暂不成交",
+      fixedPrice: "A股/ETF 盘后定价",
+      nonTradableIndexProxy: "指数代理 · 不可直接交易",
       afterhours: "盘后",
       lunch: "午间休市",
       closed: "休市",
@@ -317,7 +320,7 @@ export const MARKET_CLOCK_TEXT = {
     sessions: "Sessions",
     alwaysOpen: "24/7 trading",
     sourceNote: "Prices use public market snapshots where available; U.S. equities and CL may use clearly labeled OKX proxy contracts or index prices.",
-    methodology: "The backend expands reviewed NYSE, KRX, and SSE calendars into absolute status intervals covering exchange holidays, early closes, weekends, and next-transition times. The frontend only selects the current interval and renders the countdown.",
+    methodology: "The backend expands reviewed NYSE, KRX, SSE, and SZSE calendars and trading rules into absolute status intervals covering exchange holidays, early closes, weekends, and next-transition times. The frontend only selects the current interval and renders the countdown.",
     status: {
       open: "Open",
       trading: "Trading",
@@ -325,6 +328,9 @@ export const MARKET_CLOCK_TEXT = {
       night: "Night session",
       openingAuction: "Call auction",
       closingAuction: "Closing auction",
+      fixedPriceGap: "Order entry · no matching",
+      fixedPrice: "A-share/ETF fixed price",
+      nonTradableIndexProxy: "Index proxy · not tradable",
       afterhours: "After-hours",
       lunch: "Lunch recess",
       closed: "Closed",
@@ -367,7 +373,7 @@ export const MARKET_CLOCK_LIMITS = {
       "\u7528\u4e8e\u89e3\u91ca\u201c\u5f00\u5e02\u201d\u4e0d\u7b49\u4e8e\u4efb\u610f\u65f6\u6bb5\u90fd\u6709\u6df1\u5ea6\u3001\u5168\u90e8\u8ba2\u5355\u7c7b\u578b\u548c\u53ef\u6bd4\u4ef7\u683c\u3002",
     ],
     sourcesLabel: "\u89c4\u5219\u53c2\u8003",
-    sources: "NYSE / KRX / SSE / SZSE \u516c\u5f00\u4ea4\u6613\u65f6\u6bb5\u4e0e\u4ea4\u6613\u89c4\u5219\u3002",
+    sources: "NYSE / KRX / SSE / SZSE \u516c\u5f00\u4ea4\u6613\u65f6\u6bb5\u4e0e\u4ea4\u6613\u89c4\u5219\uff1b\u4e2d\u56fd\u5e02\u573a\u76d8\u540e\u56fa\u5b9a\u4ef7\u683c\u89c4\u5219\u81ea 2026 \u5e74 7 \u6708 6 \u65e5\u8d77\u65bd\u884c\u3002",
     markets: [
       {
         market: "\u7f8e\u56fd\u80a1\u5e02",
@@ -391,12 +397,12 @@ export const MARKET_CLOCK_LIMITS = {
       },
       {
         market: "\u4e2d\u56fd A \u80a1",
-        summary: "\u4e0a\u6df1\u4e3b\u6d41\u73b0\u91d1\u80a1\u7968\u4e3a\u65e5\u5185\u96c6\u5408\u7ade\u4ef7+\u5206\u6bb5\u8fde\u7eed\u7ade\u4ef7\uff0c\u6709\u5348\u95f4\u4f11\u5e02\uff0c\u666e\u904d\u4e0d\u5b58\u5728\u73b0\u91d1\u80a1\u7968\u591c\u76d8\u3002",
+        summary: "\u4e0a\u6df1 A \u80a1\u5e38\u89c4\u7ade\u4ef7\u81f3 15:00\uff1b\u81ea 2026 \u5e74 7 \u6708 6 \u65e5\u8d77\uff0cA \u80a1\u548c\u4ea4\u6613\u578b\u5f00\u653e\u5f0f\u57fa\u91d1\u5728 15:05-15:30 \u53ef\u53c2\u52a0\u76d8\u540e\u56fa\u5b9a\u4ef7\u683c\u4ea4\u6613\uff1b\u4e0d\u5b58\u5728\u73b0\u91d1\u80a1\u7968\u591c\u76d8\u3002",
         sessions: [
           ["\u5f00\u76d8\u96c6\u5408\u7ade\u4ef7", "09:15-09:25 \u4e3a\u5f00\u76d8\u96c6\u5408\u7ade\u4ef7\uff0c\u6309\u6700\u5927\u6210\u4ea4\u91cf\u7b49\u539f\u5219\u5f62\u6210\u5f00\u76d8\u4ef7\uff1b\u4e0d\u662f\u8fde\u7eed\u6210\u4ea4\u3002"],
           ["\u76d8\u4e2d", "09:30-11:30 \u548c 13:00-14:57 \u4e3a\u8fde\u7eed\u7ade\u4ef7\uff0c\u4e2d\u95f4\u5348\u4f11\uff1b\u591a\u6570\u80a1\u7968\u4ecd\u6709\u6da8\u8dcc\u5e45\u9650\u5236\uff0c\u4e14\u666e\u901a A \u80a1\u5e76\u4e0d\u5b9e\u884c\u65e5\u5185 T+0 \u56de\u8f6c\u4ea4\u6613\u3002"],
           ["\u6536\u76d8\u96c6\u5408\u7ade\u4ef7", "14:57-15:00 \u4e3a\u6536\u76d8\u96c6\u5408\u7ade\u4ef7\uff0c\u7528\u4e8e\u5f62\u6210\u6536\u76d8\u4ef7\uff1b\u5f53\u524d\u9636\u6bb5\u7684\u6210\u4ea4\u65b9\u5f0f\u4e0e\u8fde\u7eed\u7ade\u4ef7\u4e0d\u540c\u3002"],
-          ["\u76d8\u540e", "\u4e3b\u677f\u73b0\u91d1\u80a1\u7968\u901a\u5e38\u6ca1\u6709\u9762\u5411\u666e\u901a\u8fde\u7eed\u7ade\u4ef7\u7684\u76d8\u540e\u7a97\u53e3\uff1b\u79d1\u521b\u677f/\u521b\u4e1a\u677f\u7b49\u677f\u5757\u6216\u5927\u5b97\u4ea4\u6613\u53ef\u80fd\u5b58\u5728\u76d8\u540e\u5b9a\u4ef7\u6216\u786e\u8ba4\u7a97\u53e3\uff0c\u8303\u56f4\u548c\u95e8\u69db\u53d7\u9650\u3002"],
+          ["\u76d8\u540e\u56fa\u5b9a\u4ef7\u683c", "15:00-15:05 \u4e0d\u64ae\u5408\uff1b15:05-15:30 \u5bf9 A \u80a1\u548c\u4ea4\u6613\u578b\u5f00\u653e\u5f0f\u57fa\u91d1\u4ee5\u5f53\u65e5\u6536\u76d8\u4ef7\u3001\u6309\u65f6\u95f4\u4f18\u5148\u9010\u7b14\u64ae\u5408\u3002\u59d4\u6258\u53ef\u5728\u76f8\u5e94\u4ea4\u6613\u6240\u89c4\u5b9a\u7684\u7533\u62a5\u65f6\u6bb5\u63d0\u4ea4\u81f3 15:30\uff1b\u5f53\u65e5 15:00 \u4ecd\u505c\u724c\u7684\u8bc1\u5238\u4e0d\u53c2\u52a0\u3002\u9875\u9762\u4e2d SSE50/CSI500 \u662f\u5e02\u573a\u4ee3\u7406\uff0c\u6307\u6570\u672c\u8eab\u4e0d\u53ef\u76f4\u63a5\u4ea4\u6613\u3002"],
         ],
       },
     ],
@@ -410,7 +416,7 @@ export const MARKET_CLOCK_LIMITS = {
       "They explain why open status does not always mean deep liquidity, all order types, or regular-session price discovery.",
     ],
     sourcesLabel: "Rule references",
-    sources: "NYSE / KRX / SSE / SZSE public trading hours and trading rules.",
+    sources: "NYSE / KRX / SSE / SZSE public trading hours and trading rules; the China after-hours fixed-price rules took effect July 6, 2026.",
     markets: [
       {
         market: "U.S. equities",
@@ -434,12 +440,12 @@ export const MARKET_CLOCK_LIMITS = {
       },
       {
         market: "China A-shares",
-        summary: "Mainland cash equities use call auction plus split continuous-auction sessions with a lunch break. Mainstream cash equities generally do not have an overnight session.",
+        summary: "Regular auction trading ends at 3:00 p.m. Since July 6, 2026, A-shares and exchange-traded open-end funds can use after-hours fixed-price trading from 3:05-3:30 p.m.; cash equities do not have an overnight session.",
         sessions: [
           ["Opening call", "9:15-9:25 is call auction. The opening price is formed by call-auction principles rather than continuous matching."],
           ["Regular", "9:30-11:30 and 13:00-14:57 are continuous auction with a lunch break. Most stocks still have price limits, and ordinary A-shares generally do not allow same-day T+0 turnaround trading."],
           ["Closing call", "14:57-15:00 is closing call auction, a distinct mechanism for forming the close rather than regular continuous matching."],
-          ["After-hours", "Main Board cash equities generally do not have a broad public continuous after-hours session. STAR/ChiNext-style boards or block trades may have fixed-price or confirmation windows with scope and threshold limits."],
+          ["After-hours fixed price", "There is no matching from 3:00-3:05 p.m. From 3:05-3:30 p.m., eligible A-shares and exchange-traded open-end funds are matched at that day's close in time priority. Orders may be entered during each exchange's prescribed submission windows through 3:30 p.m.; securities still suspended at 3:00 p.m. do not participate. SSE50/CSI500 are market proxies here; the indexes themselves are not directly tradable."],
         ],
       },
     ],

@@ -1,14 +1,14 @@
 {
   "version": 2,
   "page": "market-clock",
-  "generatedAt": "2026-07-15T23:26:50.398Z",
+  "generatedAt": "2026-07-16T23:23:36.264Z",
   "timestamps": {
-    "observedAt": "2026-07-15T23:26:49.035Z",
-    "fetchedAt": "2026-07-15T23:26:50.398Z",
-    "transformedAt": "2026-07-15T23:26:50.398Z"
+    "observedAt": "2026-07-16T23:23:35.085Z",
+    "fetchedAt": "2026-07-16T23:23:36.264Z",
+    "transformedAt": "2026-07-16T23:23:36.264Z"
   },
   "refreshCadence": "Target 10-15 minutes when a backend scheduler is available; static hosts may refresh less frequently.",
-  "methodology": "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. The backend expands reviewed NYSE, KRX, and SSE calendars into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only selects the current interval and renders its countdown.",
+  "methodology": "The frontend reads only this generated JSON. OKX public tickers provide crypto, equity-swap proxy, and CL index proxy prices. CoinMarketCap supplies crypto market caps when CMC_PRO_API_KEY is configured in backend or CI. The backend expands reviewed NYSE, KRX, SSE, and SZSE calendars and trading rules into absolute status intervals with holiday, early-close, weekend, and next-transition boundaries; the frontend only selects the current interval and renders its countdown.",
   "failures": [],
   "markets": [
     {
@@ -78,12 +78,13 @@
         "kind": "official_exchange_calendar",
         "coverageStart": "2026-01-01",
         "coverageEnd": "2026-12-31",
-        "timelineStart": "2026-07-08",
-        "timelineEnd": "2026-08-29",
+        "timelineStart": "2026-07-09",
+        "timelineEnd": "2026-08-30",
         "reviewedAt": "2026-07-10",
         "sourceLabel": "NYSE 2026 holidays and trading hours",
         "sourceUrl": "https://www.nyse.com/trade/hours-calendars",
         "secondarySourceUrl": "https://www.nyse.com/publicdocs/nyse/NYSE_Extended_Hours_Trading_FAQ.pdf",
+        "additionalSourceUrls": [],
         "holidays": [
           {
             "date": "2026-01-01",
@@ -153,72 +154,6 @@
         ]
       },
       "statusTimeline": [
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
-          "startAt": "2026-07-08T04:00:00.000Z",
-          "endAt": "2026-07-08T07:00:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-08T07:00:00.000Z"
-        },
-        {
-          "key": "soon",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-08T07:00:00.000Z",
-          "endAt": "2026-07-08T08:00:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-08T08:00:00.000Z"
-        },
-        {
-          "key": "premarket",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-08T08:00:00.000Z",
-          "endAt": "2026-07-08T13:30:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-08T13:30:00.000Z"
-        },
-        {
-          "key": "open",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-08T13:30:00.000Z",
-          "endAt": "2026-07-08T20:00:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-08T20:00:00.000Z"
-        },
-        {
-          "key": "afterhours",
-          "active": true,
-          "sortRank": 2,
-          "startAt": "2026-07-08T20:00:00.000Z",
-          "endAt": "2026-07-09T00:00:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T00:00:00.000Z"
-        },
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
-          "startAt": "2026-07-09T00:00:00.000Z",
-          "endAt": "2026-07-09T04:00:00.000Z",
-          "tradeDate": "2026-07-08",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-09T07:00:00.000Z"
-        },
         {
           "key": "closed",
           "active": false,
@@ -2825,18 +2760,29 @@
           "reason": "Exchange weekend",
           "reasonZh": "交易所周末休市",
           "nextTransitionAt": "2026-08-30T04:00:00.000Z"
+        },
+        {
+          "key": "closed",
+          "active": false,
+          "sortRank": 4,
+          "startAt": "2026-08-30T04:00:00.000Z",
+          "endAt": "2026-08-31T04:00:00.000Z",
+          "tradeDate": "2026-08-30",
+          "reason": "Exchange weekend",
+          "reasonZh": "交易所周末休市",
+          "nextTransitionAt": "2026-08-31T04:00:00.000Z"
         }
       ],
       "generatedStatus": {
         "key": "afterhours",
         "active": true,
         "sortRank": 2,
-        "nextTransitionAt": "2026-07-16T00:00:00.000Z",
+        "nextTransitionAt": "2026-07-17T00:00:00.000Z",
         "reason": null,
         "reasonZh": null,
-        "tradeDate": "2026-07-15"
+        "tradeDate": "2026-07-16"
       },
-      "nextTransitionAt": "2026-07-16T00:00:00.000Z"
+      "nextTransitionAt": "2026-07-17T00:00:00.000Z"
     },
     {
       "id": "kr",
@@ -2876,12 +2822,13 @@
         "kind": "official_exchange_calendar",
         "coverageStart": "2026-01-01",
         "coverageEnd": "2026-12-31",
-        "timelineStart": "2026-07-09",
-        "timelineEnd": "2026-08-30",
+        "timelineStart": "2026-07-10",
+        "timelineEnd": "2026-08-31",
         "reviewedAt": "2026-07-10",
         "sourceLabel": "KRX KOSPI holiday rules and 2026 exchange calendar disclosures",
         "sourceUrl": "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
         "secondarySourceUrl": null,
+        "additionalSourceUrls": [],
         "holidays": [
           {
             "date": "2026-01-01",
@@ -2968,83 +2915,6 @@
         "notes": []
       },
       "statusTimeline": [
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
-          "startAt": "2026-07-08T15:00:00.000Z",
-          "endAt": "2026-07-08T22:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-08T22:00:00.000Z"
-        },
-        {
-          "key": "soon",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-08T22:00:00.000Z",
-          "endAt": "2026-07-08T23:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-08T23:00:00.000Z"
-        },
-        {
-          "key": "premarket",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-08T23:00:00.000Z",
-          "endAt": "2026-07-09T00:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T00:00:00.000Z"
-        },
-        {
-          "key": "open",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T00:00:00.000Z",
-          "endAt": "2026-07-09T06:30:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T06:30:00.000Z"
-        },
-        {
-          "key": "soon",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T06:30:00.000Z",
-          "endAt": "2026-07-09T06:40:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T06:40:00.000Z"
-        },
-        {
-          "key": "afterhours",
-          "active": true,
-          "sortRank": 2,
-          "startAt": "2026-07-09T06:40:00.000Z",
-          "endAt": "2026-07-09T09:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T09:00:00.000Z"
-        },
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
-          "startAt": "2026-07-09T09:00:00.000Z",
-          "endAt": "2026-07-09T15:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-09T22:00:00.000Z"
-        },
         {
           "key": "closed",
           "active": false,
@@ -5903,7 +5773,7 @@
           "tradeDate": "2026-08-28",
           "reason": "Outside official session",
           "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-08-28T15:00:00.000Z"
+          "nextTransitionAt": "2026-08-30T22:00:00.000Z"
         },
         {
           "key": "closed",
@@ -5914,7 +5784,7 @@
           "tradeDate": "2026-08-29",
           "reason": "Exchange weekend",
           "reasonZh": "交易所周末休市",
-          "nextTransitionAt": "2026-08-29T15:00:00.000Z"
+          "nextTransitionAt": "2026-08-30T22:00:00.000Z"
         },
         {
           "key": "closed",
@@ -5925,19 +5795,96 @@
           "tradeDate": "2026-08-30",
           "reason": "Exchange weekend",
           "reasonZh": "交易所周末休市",
-          "nextTransitionAt": "2026-08-30T15:00:00.000Z"
+          "nextTransitionAt": "2026-08-30T22:00:00.000Z"
+        },
+        {
+          "key": "closed",
+          "active": false,
+          "sortRank": 4,
+          "startAt": "2026-08-30T15:00:00.000Z",
+          "endAt": "2026-08-30T22:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": "Outside official session",
+          "reasonZh": "非官方交易时段",
+          "nextTransitionAt": "2026-08-30T22:00:00.000Z"
+        },
+        {
+          "key": "soon",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-30T22:00:00.000Z",
+          "endAt": "2026-08-30T23:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-30T23:00:00.000Z"
+        },
+        {
+          "key": "premarket",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-30T23:00:00.000Z",
+          "endAt": "2026-08-31T00:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T00:00:00.000Z"
+        },
+        {
+          "key": "open",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T00:00:00.000Z",
+          "endAt": "2026-08-31T06:30:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T06:30:00.000Z"
+        },
+        {
+          "key": "soon",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T06:30:00.000Z",
+          "endAt": "2026-08-31T06:40:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T06:40:00.000Z"
+        },
+        {
+          "key": "afterhours",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-31T06:40:00.000Z",
+          "endAt": "2026-08-31T09:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T09:00:00.000Z"
+        },
+        {
+          "key": "closed",
+          "active": false,
+          "sortRank": 4,
+          "startAt": "2026-08-31T09:00:00.000Z",
+          "endAt": "2026-08-31T15:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": "Outside official session",
+          "reasonZh": "非官方交易时段",
+          "nextTransitionAt": "2026-08-31T15:00:00.000Z"
         }
       ],
       "generatedStatus": {
         "key": "premarket",
         "active": true,
         "sortRank": 1,
-        "nextTransitionAt": "2026-07-16T00:00:00.000Z",
+        "nextTransitionAt": "2026-07-17T00:00:00.000Z",
         "reason": null,
         "reasonZh": null,
-        "tradeDate": "2026-07-16"
+        "tradeDate": "2026-07-17"
       },
-      "nextTransitionAt": "2026-07-16T00:00:00.000Z"
+      "nextTransitionAt": "2026-07-17T00:00:00.000Z"
     },
     {
       "id": "cn",
@@ -5980,6 +5927,22 @@
           "end": "15:00",
           "active": true,
           "sortRank": 1
+        },
+        {
+          "key": "fixed-price-gap",
+          "start": "15:00",
+          "end": "15:05",
+          "active": false,
+          "sortRank": 3,
+          "effectiveFrom": "2026-07-06"
+        },
+        {
+          "key": "fixed-price",
+          "start": "15:05",
+          "end": "15:30",
+          "active": true,
+          "sortRank": 2,
+          "effectiveFrom": "2026-07-06"
         }
       ],
       "assets": [
@@ -5990,12 +5953,16 @@
         "kind": "official_exchange_calendar",
         "coverageStart": "2026-01-01",
         "coverageEnd": "2026-12-31",
-        "timelineStart": "2026-07-09",
-        "timelineEnd": "2026-08-30",
-        "reviewedAt": "2026-07-10",
-        "sourceLabel": "SSE 2026 market closure notice and 2026 trading rules",
+        "timelineStart": "2026-07-10",
+        "timelineEnd": "2026-08-31",
+        "reviewedAt": "2026-07-16",
+        "sourceLabel": "SSE/SZSE 2026 market closure notices and trading rules",
         "sourceUrl": "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
         "secondarySourceUrl": "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+        "additionalSourceUrls": [
+          "https://www.szse.cn/lawrules/rule/allrules/bussiness/t20260424_620190.html",
+          "https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020260424690713155663.pdf"
+        ],
         "holidays": [
           {
             "date": "2026-01-01",
@@ -6101,105 +6068,6 @@
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-08T16:00:00.000Z",
-          "endAt": "2026-07-09T00:15:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-09T00:15:00.000Z"
-        },
-        {
-          "key": "soon",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T00:15:00.000Z",
-          "endAt": "2026-07-09T01:15:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T01:15:00.000Z"
-        },
-        {
-          "key": "opening-auction",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T01:15:00.000Z",
-          "endAt": "2026-07-09T01:25:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T01:25:00.000Z"
-        },
-        {
-          "key": "soon",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T01:25:00.000Z",
-          "endAt": "2026-07-09T01:30:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T01:30:00.000Z"
-        },
-        {
-          "key": "open",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T01:30:00.000Z",
-          "endAt": "2026-07-09T03:30:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T03:30:00.000Z"
-        },
-        {
-          "key": "lunch",
-          "active": false,
-          "sortRank": 3,
-          "startAt": "2026-07-09T03:30:00.000Z",
-          "endAt": "2026-07-09T05:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T05:00:00.000Z"
-        },
-        {
-          "key": "open",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T05:00:00.000Z",
-          "endAt": "2026-07-09T06:57:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T06:57:00.000Z"
-        },
-        {
-          "key": "closing-auction",
-          "active": true,
-          "sortRank": 1,
-          "startAt": "2026-07-09T06:57:00.000Z",
-          "endAt": "2026-07-09T07:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": null,
-          "reasonZh": null,
-          "nextTransitionAt": "2026-07-09T07:00:00.000Z"
-        },
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
-          "startAt": "2026-07-09T07:00:00.000Z",
-          "endAt": "2026-07-09T16:00:00.000Z",
-          "tradeDate": "2026-07-09",
-          "reason": "Outside official session",
-          "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-07-10T00:15:00.000Z"
-        },
-        {
-          "key": "closed",
-          "active": false,
-          "sortRank": 4,
           "startAt": "2026-07-09T16:00:00.000Z",
           "endAt": "2026-07-10T00:15:00.000Z",
           "tradeDate": "2026-07-10",
@@ -6285,10 +6153,32 @@
           "nextTransitionAt": "2026-07-10T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-10T07:00:00.000Z",
+          "endAt": "2026-07-10T07:05:00.000Z",
+          "tradeDate": "2026-07-10",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-10T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-10T07:05:00.000Z",
+          "endAt": "2026-07-10T07:30:00.000Z",
+          "tradeDate": "2026-07-10",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-10T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-10T07:00:00.000Z",
+          "startAt": "2026-07-10T07:30:00.000Z",
           "endAt": "2026-07-10T16:00:00.000Z",
           "tradeDate": "2026-07-10",
           "reason": "Outside official session",
@@ -6406,10 +6296,32 @@
           "nextTransitionAt": "2026-07-13T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-13T07:00:00.000Z",
+          "endAt": "2026-07-13T07:05:00.000Z",
+          "tradeDate": "2026-07-13",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-13T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-13T07:05:00.000Z",
+          "endAt": "2026-07-13T07:30:00.000Z",
+          "tradeDate": "2026-07-13",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-13T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-13T07:00:00.000Z",
+          "startAt": "2026-07-13T07:30:00.000Z",
           "endAt": "2026-07-13T16:00:00.000Z",
           "tradeDate": "2026-07-13",
           "reason": "Outside official session",
@@ -6505,10 +6417,32 @@
           "nextTransitionAt": "2026-07-14T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-14T07:00:00.000Z",
+          "endAt": "2026-07-14T07:05:00.000Z",
+          "tradeDate": "2026-07-14",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-14T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-14T07:05:00.000Z",
+          "endAt": "2026-07-14T07:30:00.000Z",
+          "tradeDate": "2026-07-14",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-14T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-14T07:00:00.000Z",
+          "startAt": "2026-07-14T07:30:00.000Z",
           "endAt": "2026-07-14T16:00:00.000Z",
           "tradeDate": "2026-07-14",
           "reason": "Outside official session",
@@ -6604,10 +6538,32 @@
           "nextTransitionAt": "2026-07-15T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-15T07:00:00.000Z",
+          "endAt": "2026-07-15T07:05:00.000Z",
+          "tradeDate": "2026-07-15",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-15T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-15T07:05:00.000Z",
+          "endAt": "2026-07-15T07:30:00.000Z",
+          "tradeDate": "2026-07-15",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-15T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-15T07:00:00.000Z",
+          "startAt": "2026-07-15T07:30:00.000Z",
           "endAt": "2026-07-15T16:00:00.000Z",
           "tradeDate": "2026-07-15",
           "reason": "Outside official session",
@@ -6703,10 +6659,32 @@
           "nextTransitionAt": "2026-07-16T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-16T07:00:00.000Z",
+          "endAt": "2026-07-16T07:05:00.000Z",
+          "tradeDate": "2026-07-16",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-16T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-16T07:05:00.000Z",
+          "endAt": "2026-07-16T07:30:00.000Z",
+          "tradeDate": "2026-07-16",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-16T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-16T07:00:00.000Z",
+          "startAt": "2026-07-16T07:30:00.000Z",
           "endAt": "2026-07-16T16:00:00.000Z",
           "tradeDate": "2026-07-16",
           "reason": "Outside official session",
@@ -6802,10 +6780,32 @@
           "nextTransitionAt": "2026-07-17T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-17T07:00:00.000Z",
+          "endAt": "2026-07-17T07:05:00.000Z",
+          "tradeDate": "2026-07-17",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-17T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-17T07:05:00.000Z",
+          "endAt": "2026-07-17T07:30:00.000Z",
+          "tradeDate": "2026-07-17",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-17T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-17T07:00:00.000Z",
+          "startAt": "2026-07-17T07:30:00.000Z",
           "endAt": "2026-07-17T16:00:00.000Z",
           "tradeDate": "2026-07-17",
           "reason": "Outside official session",
@@ -6923,10 +6923,32 @@
           "nextTransitionAt": "2026-07-20T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-20T07:00:00.000Z",
+          "endAt": "2026-07-20T07:05:00.000Z",
+          "tradeDate": "2026-07-20",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-20T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-20T07:05:00.000Z",
+          "endAt": "2026-07-20T07:30:00.000Z",
+          "tradeDate": "2026-07-20",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-20T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-20T07:00:00.000Z",
+          "startAt": "2026-07-20T07:30:00.000Z",
           "endAt": "2026-07-20T16:00:00.000Z",
           "tradeDate": "2026-07-20",
           "reason": "Outside official session",
@@ -7022,10 +7044,32 @@
           "nextTransitionAt": "2026-07-21T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-21T07:00:00.000Z",
+          "endAt": "2026-07-21T07:05:00.000Z",
+          "tradeDate": "2026-07-21",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-21T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-21T07:05:00.000Z",
+          "endAt": "2026-07-21T07:30:00.000Z",
+          "tradeDate": "2026-07-21",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-21T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-21T07:00:00.000Z",
+          "startAt": "2026-07-21T07:30:00.000Z",
           "endAt": "2026-07-21T16:00:00.000Z",
           "tradeDate": "2026-07-21",
           "reason": "Outside official session",
@@ -7121,10 +7165,32 @@
           "nextTransitionAt": "2026-07-22T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-22T07:00:00.000Z",
+          "endAt": "2026-07-22T07:05:00.000Z",
+          "tradeDate": "2026-07-22",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-22T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-22T07:05:00.000Z",
+          "endAt": "2026-07-22T07:30:00.000Z",
+          "tradeDate": "2026-07-22",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-22T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-22T07:00:00.000Z",
+          "startAt": "2026-07-22T07:30:00.000Z",
           "endAt": "2026-07-22T16:00:00.000Z",
           "tradeDate": "2026-07-22",
           "reason": "Outside official session",
@@ -7220,10 +7286,32 @@
           "nextTransitionAt": "2026-07-23T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-23T07:00:00.000Z",
+          "endAt": "2026-07-23T07:05:00.000Z",
+          "tradeDate": "2026-07-23",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-23T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-23T07:05:00.000Z",
+          "endAt": "2026-07-23T07:30:00.000Z",
+          "tradeDate": "2026-07-23",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-23T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-23T07:00:00.000Z",
+          "startAt": "2026-07-23T07:30:00.000Z",
           "endAt": "2026-07-23T16:00:00.000Z",
           "tradeDate": "2026-07-23",
           "reason": "Outside official session",
@@ -7319,10 +7407,32 @@
           "nextTransitionAt": "2026-07-24T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-24T07:00:00.000Z",
+          "endAt": "2026-07-24T07:05:00.000Z",
+          "tradeDate": "2026-07-24",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-24T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-24T07:05:00.000Z",
+          "endAt": "2026-07-24T07:30:00.000Z",
+          "tradeDate": "2026-07-24",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-24T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-24T07:00:00.000Z",
+          "startAt": "2026-07-24T07:30:00.000Z",
           "endAt": "2026-07-24T16:00:00.000Z",
           "tradeDate": "2026-07-24",
           "reason": "Outside official session",
@@ -7440,10 +7550,32 @@
           "nextTransitionAt": "2026-07-27T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-27T07:00:00.000Z",
+          "endAt": "2026-07-27T07:05:00.000Z",
+          "tradeDate": "2026-07-27",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-27T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-27T07:05:00.000Z",
+          "endAt": "2026-07-27T07:30:00.000Z",
+          "tradeDate": "2026-07-27",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-27T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-27T07:00:00.000Z",
+          "startAt": "2026-07-27T07:30:00.000Z",
           "endAt": "2026-07-27T16:00:00.000Z",
           "tradeDate": "2026-07-27",
           "reason": "Outside official session",
@@ -7539,10 +7671,32 @@
           "nextTransitionAt": "2026-07-28T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-28T07:00:00.000Z",
+          "endAt": "2026-07-28T07:05:00.000Z",
+          "tradeDate": "2026-07-28",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-28T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-28T07:05:00.000Z",
+          "endAt": "2026-07-28T07:30:00.000Z",
+          "tradeDate": "2026-07-28",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-28T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-28T07:00:00.000Z",
+          "startAt": "2026-07-28T07:30:00.000Z",
           "endAt": "2026-07-28T16:00:00.000Z",
           "tradeDate": "2026-07-28",
           "reason": "Outside official session",
@@ -7638,10 +7792,32 @@
           "nextTransitionAt": "2026-07-29T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-29T07:00:00.000Z",
+          "endAt": "2026-07-29T07:05:00.000Z",
+          "tradeDate": "2026-07-29",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-29T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-29T07:05:00.000Z",
+          "endAt": "2026-07-29T07:30:00.000Z",
+          "tradeDate": "2026-07-29",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-29T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-29T07:00:00.000Z",
+          "startAt": "2026-07-29T07:30:00.000Z",
           "endAt": "2026-07-29T16:00:00.000Z",
           "tradeDate": "2026-07-29",
           "reason": "Outside official session",
@@ -7737,10 +7913,32 @@
           "nextTransitionAt": "2026-07-30T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-30T07:00:00.000Z",
+          "endAt": "2026-07-30T07:05:00.000Z",
+          "tradeDate": "2026-07-30",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-30T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-30T07:05:00.000Z",
+          "endAt": "2026-07-30T07:30:00.000Z",
+          "tradeDate": "2026-07-30",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-30T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-30T07:00:00.000Z",
+          "startAt": "2026-07-30T07:30:00.000Z",
           "endAt": "2026-07-30T16:00:00.000Z",
           "tradeDate": "2026-07-30",
           "reason": "Outside official session",
@@ -7836,10 +8034,32 @@
           "nextTransitionAt": "2026-07-31T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-07-31T07:00:00.000Z",
+          "endAt": "2026-07-31T07:05:00.000Z",
+          "tradeDate": "2026-07-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-31T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-07-31T07:05:00.000Z",
+          "endAt": "2026-07-31T07:30:00.000Z",
+          "tradeDate": "2026-07-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-07-31T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-07-31T07:00:00.000Z",
+          "startAt": "2026-07-31T07:30:00.000Z",
           "endAt": "2026-07-31T16:00:00.000Z",
           "tradeDate": "2026-07-31",
           "reason": "Outside official session",
@@ -7957,10 +8177,32 @@
           "nextTransitionAt": "2026-08-03T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-03T07:00:00.000Z",
+          "endAt": "2026-08-03T07:05:00.000Z",
+          "tradeDate": "2026-08-03",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-03T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-03T07:05:00.000Z",
+          "endAt": "2026-08-03T07:30:00.000Z",
+          "tradeDate": "2026-08-03",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-03T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-03T07:00:00.000Z",
+          "startAt": "2026-08-03T07:30:00.000Z",
           "endAt": "2026-08-03T16:00:00.000Z",
           "tradeDate": "2026-08-03",
           "reason": "Outside official session",
@@ -8056,10 +8298,32 @@
           "nextTransitionAt": "2026-08-04T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-04T07:00:00.000Z",
+          "endAt": "2026-08-04T07:05:00.000Z",
+          "tradeDate": "2026-08-04",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-04T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-04T07:05:00.000Z",
+          "endAt": "2026-08-04T07:30:00.000Z",
+          "tradeDate": "2026-08-04",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-04T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-04T07:00:00.000Z",
+          "startAt": "2026-08-04T07:30:00.000Z",
           "endAt": "2026-08-04T16:00:00.000Z",
           "tradeDate": "2026-08-04",
           "reason": "Outside official session",
@@ -8155,10 +8419,32 @@
           "nextTransitionAt": "2026-08-05T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-05T07:00:00.000Z",
+          "endAt": "2026-08-05T07:05:00.000Z",
+          "tradeDate": "2026-08-05",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-05T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-05T07:05:00.000Z",
+          "endAt": "2026-08-05T07:30:00.000Z",
+          "tradeDate": "2026-08-05",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-05T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-05T07:00:00.000Z",
+          "startAt": "2026-08-05T07:30:00.000Z",
           "endAt": "2026-08-05T16:00:00.000Z",
           "tradeDate": "2026-08-05",
           "reason": "Outside official session",
@@ -8254,10 +8540,32 @@
           "nextTransitionAt": "2026-08-06T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-06T07:00:00.000Z",
+          "endAt": "2026-08-06T07:05:00.000Z",
+          "tradeDate": "2026-08-06",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-06T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-06T07:05:00.000Z",
+          "endAt": "2026-08-06T07:30:00.000Z",
+          "tradeDate": "2026-08-06",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-06T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-06T07:00:00.000Z",
+          "startAt": "2026-08-06T07:30:00.000Z",
           "endAt": "2026-08-06T16:00:00.000Z",
           "tradeDate": "2026-08-06",
           "reason": "Outside official session",
@@ -8353,10 +8661,32 @@
           "nextTransitionAt": "2026-08-07T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-07T07:00:00.000Z",
+          "endAt": "2026-08-07T07:05:00.000Z",
+          "tradeDate": "2026-08-07",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-07T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-07T07:05:00.000Z",
+          "endAt": "2026-08-07T07:30:00.000Z",
+          "tradeDate": "2026-08-07",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-07T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-07T07:00:00.000Z",
+          "startAt": "2026-08-07T07:30:00.000Z",
           "endAt": "2026-08-07T16:00:00.000Z",
           "tradeDate": "2026-08-07",
           "reason": "Outside official session",
@@ -8474,10 +8804,32 @@
           "nextTransitionAt": "2026-08-10T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-10T07:00:00.000Z",
+          "endAt": "2026-08-10T07:05:00.000Z",
+          "tradeDate": "2026-08-10",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-10T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-10T07:05:00.000Z",
+          "endAt": "2026-08-10T07:30:00.000Z",
+          "tradeDate": "2026-08-10",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-10T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-10T07:00:00.000Z",
+          "startAt": "2026-08-10T07:30:00.000Z",
           "endAt": "2026-08-10T16:00:00.000Z",
           "tradeDate": "2026-08-10",
           "reason": "Outside official session",
@@ -8573,10 +8925,32 @@
           "nextTransitionAt": "2026-08-11T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-11T07:00:00.000Z",
+          "endAt": "2026-08-11T07:05:00.000Z",
+          "tradeDate": "2026-08-11",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-11T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-11T07:05:00.000Z",
+          "endAt": "2026-08-11T07:30:00.000Z",
+          "tradeDate": "2026-08-11",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-11T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-11T07:00:00.000Z",
+          "startAt": "2026-08-11T07:30:00.000Z",
           "endAt": "2026-08-11T16:00:00.000Z",
           "tradeDate": "2026-08-11",
           "reason": "Outside official session",
@@ -8672,10 +9046,32 @@
           "nextTransitionAt": "2026-08-12T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-12T07:00:00.000Z",
+          "endAt": "2026-08-12T07:05:00.000Z",
+          "tradeDate": "2026-08-12",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-12T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-12T07:05:00.000Z",
+          "endAt": "2026-08-12T07:30:00.000Z",
+          "tradeDate": "2026-08-12",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-12T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-12T07:00:00.000Z",
+          "startAt": "2026-08-12T07:30:00.000Z",
           "endAt": "2026-08-12T16:00:00.000Z",
           "tradeDate": "2026-08-12",
           "reason": "Outside official session",
@@ -8771,10 +9167,32 @@
           "nextTransitionAt": "2026-08-13T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-13T07:00:00.000Z",
+          "endAt": "2026-08-13T07:05:00.000Z",
+          "tradeDate": "2026-08-13",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-13T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-13T07:05:00.000Z",
+          "endAt": "2026-08-13T07:30:00.000Z",
+          "tradeDate": "2026-08-13",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-13T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-13T07:00:00.000Z",
+          "startAt": "2026-08-13T07:30:00.000Z",
           "endAt": "2026-08-13T16:00:00.000Z",
           "tradeDate": "2026-08-13",
           "reason": "Outside official session",
@@ -8870,10 +9288,32 @@
           "nextTransitionAt": "2026-08-14T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-14T07:00:00.000Z",
+          "endAt": "2026-08-14T07:05:00.000Z",
+          "tradeDate": "2026-08-14",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-14T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-14T07:05:00.000Z",
+          "endAt": "2026-08-14T07:30:00.000Z",
+          "tradeDate": "2026-08-14",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-14T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-14T07:00:00.000Z",
+          "startAt": "2026-08-14T07:30:00.000Z",
           "endAt": "2026-08-14T16:00:00.000Z",
           "tradeDate": "2026-08-14",
           "reason": "Outside official session",
@@ -8991,10 +9431,32 @@
           "nextTransitionAt": "2026-08-17T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-17T07:00:00.000Z",
+          "endAt": "2026-08-17T07:05:00.000Z",
+          "tradeDate": "2026-08-17",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-17T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-17T07:05:00.000Z",
+          "endAt": "2026-08-17T07:30:00.000Z",
+          "tradeDate": "2026-08-17",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-17T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-17T07:00:00.000Z",
+          "startAt": "2026-08-17T07:30:00.000Z",
           "endAt": "2026-08-17T16:00:00.000Z",
           "tradeDate": "2026-08-17",
           "reason": "Outside official session",
@@ -9090,10 +9552,32 @@
           "nextTransitionAt": "2026-08-18T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-18T07:00:00.000Z",
+          "endAt": "2026-08-18T07:05:00.000Z",
+          "tradeDate": "2026-08-18",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-18T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-18T07:05:00.000Z",
+          "endAt": "2026-08-18T07:30:00.000Z",
+          "tradeDate": "2026-08-18",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-18T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-18T07:00:00.000Z",
+          "startAt": "2026-08-18T07:30:00.000Z",
           "endAt": "2026-08-18T16:00:00.000Z",
           "tradeDate": "2026-08-18",
           "reason": "Outside official session",
@@ -9189,10 +9673,32 @@
           "nextTransitionAt": "2026-08-19T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-19T07:00:00.000Z",
+          "endAt": "2026-08-19T07:05:00.000Z",
+          "tradeDate": "2026-08-19",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-19T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-19T07:05:00.000Z",
+          "endAt": "2026-08-19T07:30:00.000Z",
+          "tradeDate": "2026-08-19",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-19T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-19T07:00:00.000Z",
+          "startAt": "2026-08-19T07:30:00.000Z",
           "endAt": "2026-08-19T16:00:00.000Z",
           "tradeDate": "2026-08-19",
           "reason": "Outside official session",
@@ -9288,10 +9794,32 @@
           "nextTransitionAt": "2026-08-20T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-20T07:00:00.000Z",
+          "endAt": "2026-08-20T07:05:00.000Z",
+          "tradeDate": "2026-08-20",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-20T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-20T07:05:00.000Z",
+          "endAt": "2026-08-20T07:30:00.000Z",
+          "tradeDate": "2026-08-20",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-20T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-20T07:00:00.000Z",
+          "startAt": "2026-08-20T07:30:00.000Z",
           "endAt": "2026-08-20T16:00:00.000Z",
           "tradeDate": "2026-08-20",
           "reason": "Outside official session",
@@ -9387,10 +9915,32 @@
           "nextTransitionAt": "2026-08-21T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-21T07:00:00.000Z",
+          "endAt": "2026-08-21T07:05:00.000Z",
+          "tradeDate": "2026-08-21",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-21T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-21T07:05:00.000Z",
+          "endAt": "2026-08-21T07:30:00.000Z",
+          "tradeDate": "2026-08-21",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-21T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-21T07:00:00.000Z",
+          "startAt": "2026-08-21T07:30:00.000Z",
           "endAt": "2026-08-21T16:00:00.000Z",
           "tradeDate": "2026-08-21",
           "reason": "Outside official session",
@@ -9508,10 +10058,32 @@
           "nextTransitionAt": "2026-08-24T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-24T07:00:00.000Z",
+          "endAt": "2026-08-24T07:05:00.000Z",
+          "tradeDate": "2026-08-24",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-24T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-24T07:05:00.000Z",
+          "endAt": "2026-08-24T07:30:00.000Z",
+          "tradeDate": "2026-08-24",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-24T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-24T07:00:00.000Z",
+          "startAt": "2026-08-24T07:30:00.000Z",
           "endAt": "2026-08-24T16:00:00.000Z",
           "tradeDate": "2026-08-24",
           "reason": "Outside official session",
@@ -9607,10 +10179,32 @@
           "nextTransitionAt": "2026-08-25T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-25T07:00:00.000Z",
+          "endAt": "2026-08-25T07:05:00.000Z",
+          "tradeDate": "2026-08-25",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-25T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-25T07:05:00.000Z",
+          "endAt": "2026-08-25T07:30:00.000Z",
+          "tradeDate": "2026-08-25",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-25T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-25T07:00:00.000Z",
+          "startAt": "2026-08-25T07:30:00.000Z",
           "endAt": "2026-08-25T16:00:00.000Z",
           "tradeDate": "2026-08-25",
           "reason": "Outside official session",
@@ -9706,10 +10300,32 @@
           "nextTransitionAt": "2026-08-26T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-26T07:00:00.000Z",
+          "endAt": "2026-08-26T07:05:00.000Z",
+          "tradeDate": "2026-08-26",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-26T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-26T07:05:00.000Z",
+          "endAt": "2026-08-26T07:30:00.000Z",
+          "tradeDate": "2026-08-26",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-26T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-26T07:00:00.000Z",
+          "startAt": "2026-08-26T07:30:00.000Z",
           "endAt": "2026-08-26T16:00:00.000Z",
           "tradeDate": "2026-08-26",
           "reason": "Outside official session",
@@ -9805,10 +10421,32 @@
           "nextTransitionAt": "2026-08-27T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-27T07:00:00.000Z",
+          "endAt": "2026-08-27T07:05:00.000Z",
+          "tradeDate": "2026-08-27",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-27T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-27T07:05:00.000Z",
+          "endAt": "2026-08-27T07:30:00.000Z",
+          "tradeDate": "2026-08-27",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-27T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-27T07:00:00.000Z",
+          "startAt": "2026-08-27T07:30:00.000Z",
           "endAt": "2026-08-27T16:00:00.000Z",
           "tradeDate": "2026-08-27",
           "reason": "Outside official session",
@@ -9904,15 +10542,37 @@
           "nextTransitionAt": "2026-08-28T07:00:00.000Z"
         },
         {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-28T07:00:00.000Z",
+          "endAt": "2026-08-28T07:05:00.000Z",
+          "tradeDate": "2026-08-28",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-28T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-28T07:05:00.000Z",
+          "endAt": "2026-08-28T07:30:00.000Z",
+          "tradeDate": "2026-08-28",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-28T07:30:00.000Z"
+        },
+        {
           "key": "closed",
           "active": false,
           "sortRank": 4,
-          "startAt": "2026-08-28T07:00:00.000Z",
+          "startAt": "2026-08-28T07:30:00.000Z",
           "endAt": "2026-08-28T16:00:00.000Z",
           "tradeDate": "2026-08-28",
           "reason": "Outside official session",
           "reasonZh": "非官方交易时段",
-          "nextTransitionAt": "2026-08-28T16:00:00.000Z"
+          "nextTransitionAt": "2026-08-31T00:15:00.000Z"
         },
         {
           "key": "closed",
@@ -9923,7 +10583,7 @@
           "tradeDate": "2026-08-29",
           "reason": "Exchange weekend",
           "reasonZh": "交易所周末休市",
-          "nextTransitionAt": "2026-08-29T16:00:00.000Z"
+          "nextTransitionAt": "2026-08-31T00:15:00.000Z"
         },
         {
           "key": "closed",
@@ -9934,19 +10594,140 @@
           "tradeDate": "2026-08-30",
           "reason": "Exchange weekend",
           "reasonZh": "交易所周末休市",
-          "nextTransitionAt": "2026-08-30T16:00:00.000Z"
+          "nextTransitionAt": "2026-08-31T00:15:00.000Z"
+        },
+        {
+          "key": "closed",
+          "active": false,
+          "sortRank": 4,
+          "startAt": "2026-08-30T16:00:00.000Z",
+          "endAt": "2026-08-31T00:15:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": "Outside official session",
+          "reasonZh": "非官方交易时段",
+          "nextTransitionAt": "2026-08-31T00:15:00.000Z"
+        },
+        {
+          "key": "soon",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T00:15:00.000Z",
+          "endAt": "2026-08-31T01:15:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T01:15:00.000Z"
+        },
+        {
+          "key": "opening-auction",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T01:15:00.000Z",
+          "endAt": "2026-08-31T01:25:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T01:25:00.000Z"
+        },
+        {
+          "key": "soon",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T01:25:00.000Z",
+          "endAt": "2026-08-31T01:30:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T01:30:00.000Z"
+        },
+        {
+          "key": "open",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T01:30:00.000Z",
+          "endAt": "2026-08-31T03:30:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T03:30:00.000Z"
+        },
+        {
+          "key": "lunch",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-31T03:30:00.000Z",
+          "endAt": "2026-08-31T05:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T05:00:00.000Z"
+        },
+        {
+          "key": "open",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T05:00:00.000Z",
+          "endAt": "2026-08-31T06:57:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T06:57:00.000Z"
+        },
+        {
+          "key": "closing-auction",
+          "active": true,
+          "sortRank": 1,
+          "startAt": "2026-08-31T06:57:00.000Z",
+          "endAt": "2026-08-31T07:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T07:00:00.000Z"
+        },
+        {
+          "key": "fixed-price-gap",
+          "active": false,
+          "sortRank": 3,
+          "startAt": "2026-08-31T07:00:00.000Z",
+          "endAt": "2026-08-31T07:05:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T07:05:00.000Z"
+        },
+        {
+          "key": "fixed-price",
+          "active": true,
+          "sortRank": 2,
+          "startAt": "2026-08-31T07:05:00.000Z",
+          "endAt": "2026-08-31T07:30:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": null,
+          "reasonZh": null,
+          "nextTransitionAt": "2026-08-31T07:30:00.000Z"
+        },
+        {
+          "key": "closed",
+          "active": false,
+          "sortRank": 4,
+          "startAt": "2026-08-31T07:30:00.000Z",
+          "endAt": "2026-08-31T16:00:00.000Z",
+          "tradeDate": "2026-08-31",
+          "reason": "Outside official session",
+          "reasonZh": "非官方交易时段",
+          "nextTransitionAt": "2026-08-31T16:00:00.000Z"
         }
       ],
       "generatedStatus": {
         "key": "closed",
         "active": false,
         "sortRank": 4,
-        "nextTransitionAt": "2026-07-16T00:15:00.000Z",
+        "nextTransitionAt": "2026-07-17T00:15:00.000Z",
         "reason": "Outside official session",
         "reasonZh": "非官方交易时段",
-        "tradeDate": "2026-07-16"
+        "tradeDate": "2026-07-17"
       },
-      "nextTransitionAt": "2026-07-16T00:15:00.000Z"
+      "nextTransitionAt": "2026-07-17T00:15:00.000Z"
     }
   ],
   "assets": [
@@ -9957,13 +10738,13 @@
       "market": "crypto",
       "quote": "USDT",
       "localQuote": null,
-      "price": 64867.4,
-      "changePct": -0.26138806286844185,
+      "price": 63798,
+      "changePct": -1.4859412325143688,
       "changeBasis": "UTC day",
-      "marketCapUsd": 1299829483206.141,
+      "marketCapUsd": 1279947512376.7234,
       "marketCapStatus": "available",
-      "marketCapAsOf": "2026-07-15T23:26:05.000Z",
-      "asOf": "2026-07-15T23:26:48.159Z",
+      "marketCapAsOf": "2026-07-16T23:22:05.000Z",
+      "asOf": "2026-07-16T23:23:33.762Z",
       "sourceKind": "official_public",
       "sourceLabel": "OKX spot ticker",
       "marketCapSourceLabel": "CoinMarketCap quotes/latest",
@@ -9978,12 +10759,12 @@
       "quote": "USD",
       "localQuote": null,
       "price": 0.9994,
-      "changePct": -0.010005002501260631,
+      "changePct": 0,
       "changeBasis": "UTC day",
-      "marketCapUsd": 184206020016.39093,
+      "marketCapUsd": 184063619996.03976,
       "marketCapStatus": "available",
-      "marketCapAsOf": "2026-07-15T23:26:05.000Z",
-      "asOf": "2026-07-15T23:26:47.067Z",
+      "marketCapAsOf": "2026-07-16T23:22:05.000Z",
+      "asOf": "2026-07-16T23:23:34.070Z",
       "sourceKind": "official_public",
       "sourceLabel": "OKX spot ticker",
       "marketCapSourceLabel": "CoinMarketCap quotes/latest",
@@ -9997,13 +10778,13 @@
       "market": "crypto",
       "quote": "USDT",
       "localQuote": null,
-      "price": 67.054,
-      "changePct": 2.2398414271556124,
+      "price": 60.73,
+      "changePct": -9.17384541756402,
       "changeBasis": "UTC day",
-      "marketCapUsd": 16957465315.932531,
+      "marketCapUsd": 15451250250.385319,
       "marketCapStatus": "available",
-      "marketCapAsOf": "2026-07-15T23:26:05.000Z",
-      "asOf": "2026-07-15T23:26:47.967Z",
+      "marketCapAsOf": "2026-07-16T23:22:05.000Z",
+      "asOf": "2026-07-16T23:23:34.843Z",
       "sourceKind": "official_public",
       "sourceLabel": "OKX spot ticker",
       "marketCapSourceLabel": "CoinMarketCap quotes/latest",
@@ -10017,13 +10798,13 @@
       "market": "crypto",
       "quote": "USDT",
       "localQuote": null,
-      "price": 580.8,
-      "changePct": -0.2061855670103171,
+      "price": 571.8,
+      "changePct": -1.5326330291028225,
       "changeBasis": "UTC day",
-      "marketCapUsd": 77312052004.31795,
+      "marketCapUsd": 76193210814.83768,
       "marketCapStatus": "available",
-      "marketCapAsOf": "2026-07-15T23:26:05.000Z",
-      "asOf": "2026-07-15T23:26:48.571Z",
+      "marketCapAsOf": "2026-07-16T23:22:05.000Z",
+      "asOf": "2026-07-16T23:23:35.046Z",
       "sourceKind": "official_public",
       "sourceLabel": "OKX spot ticker",
       "marketCapSourceLabel": "CoinMarketCap quotes/latest",
@@ -10037,13 +10818,13 @@
       "market": "us",
       "quote": "USD",
       "localQuote": null,
-      "price": 395.09,
-      "changePct": -0.3128705876416141,
+      "price": 388.88,
+      "changePct": -1.5393963945715983,
       "changeBasis": "UTC day",
       "marketCapUsd": null,
       "marketCapStatus": "unavailable",
       "marketCapAsOf": null,
-      "asOf": "2026-07-15T23:26:48.569Z",
+      "asOf": "2026-07-16T23:23:35.085Z",
       "sourceKind": "proxy",
       "sourceLabel": "OKX swap ticker proxy",
       "marketCapSourceLabel": null,
@@ -10057,13 +10838,13 @@
       "market": "us",
       "quote": "USD",
       "localQuote": null,
-      "price": 211.66,
-      "changePct": -0.18391888705494683,
+      "price": 206.19,
+      "changePct": -2.4368316456894132,
       "changeBasis": "UTC day",
       "marketCapUsd": null,
       "marketCapStatus": "unavailable",
       "marketCapAsOf": null,
-      "asOf": "2026-07-15T23:26:48.764Z",
+      "asOf": "2026-07-16T23:23:35.080Z",
       "sourceKind": "proxy",
       "sourceLabel": "OKX swap ticker proxy",
       "marketCapSourceLabel": null,
@@ -10077,13 +10858,13 @@
       "market": "us",
       "quote": "USD",
       "localQuote": null,
-      "price": 397.43,
-      "changePct": 2.663256871254392,
+      "price": 400.69,
+      "changePct": 0.7492896834376853,
       "changeBasis": "UTC day",
       "marketCapUsd": null,
       "marketCapStatus": "unavailable",
       "marketCapAsOf": null,
-      "asOf": "2026-07-15T23:26:48.670Z",
+      "asOf": "2026-07-16T23:23:35.074Z",
       "sourceKind": "proxy",
       "sourceLabel": "OKX swap ticker proxy",
       "marketCapSourceLabel": null,
@@ -10097,13 +10878,13 @@
       "market": "us",
       "quote": "USD",
       "localQuote": null,
-      "price": 79.675,
-      "changePct": 0.7027389122713854,
+      "price": 79.049,
+      "changePct": -0.7321177416114105,
       "changeBasis": "UTC day",
       "marketCapUsd": null,
       "marketCapStatus": "not_applicable",
       "marketCapAsOf": null,
-      "asOf": "2026-07-15T23:26:49.035Z",
+      "asOf": "2026-07-16T23:23:35.056Z",
       "sourceKind": "proxy",
       "sourceLabel": "OKX index ticker",
       "marketCapSourceLabel": null,
@@ -10196,9 +10977,10 @@
       "marketCapAsOf": null,
       "asOf": null,
       "sourceKind": "pending",
-      "sourceLabel": "China index price source pending; market cap may remain unavailable.",
+      "sessionEligibility": "non_tradable_index_proxy",
+      "sourceLabel": "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
       "marketCapSourceLabel": null,
-      "quality": "China index price source pending; market cap may remain unavailable.",
+      "quality": "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
       "components": null
     },
     {
@@ -10216,9 +10998,10 @@
       "marketCapAsOf": null,
       "asOf": null,
       "sourceKind": "pending",
-      "sourceLabel": "China index price source pending; market cap may remain unavailable.",
+      "sessionEligibility": "non_tradable_index_proxy",
+      "sourceLabel": "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
       "marketCapSourceLabel": null,
-      "quality": "China index price source pending; market cap may remain unavailable.",
+      "quality": "Non-tradable China index proxy; session status describes eligible A-shares and exchange-traded open-end funds, not the index itself. Price source pending; market cap may remain unavailable.",
       "components": null
     }
   ],
@@ -10228,6 +11011,8 @@
     "nyseCalendar": "https://www.nyse.com/trade/hours-calendars",
     "krxCalendar": "https://global.krx.co.kr/contents/GLB/06/0602/0602010201/GLB0602010201T1.jsp",
     "sseCalendar": "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+    "sseTradingRules": "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+    "szseTradingRules": "https://www.szse.cn/lawrules/rule/allrules/bussiness/t20260424_620190.html",
     "note": "No provider credentials are emitted to the frontend cache."
   }
 }

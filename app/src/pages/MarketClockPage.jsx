@@ -17,6 +17,7 @@ import {
   returnClass,
 } from "../data.js";
 import { useLiveData } from "../useLiveData.js";
+import { assetSessionStatus } from "../marketClockStatus.js";
 import {
   chipCategoryRows,
   chipPendingAssets,
@@ -268,6 +269,8 @@ export function marketStatusCopy(key, copy) {
   const aliases = {
     "opening-auction": "openingAuction",
     "closing-auction": "closingAuction",
+    "fixed-price-gap": "fixedPriceGap",
+    "fixed-price": "fixedPrice",
   };
   return copy.status[aliases[key] || key] || copy.status.closed;
 }
@@ -341,7 +344,7 @@ export function marketClockStatuses(dataset, now, language, copy) {
   return Object.fromEntries((dataset?.markets || []).map((market) => [market.id, marketStatus(market, now, language, copy)]));
 }
 
-export function marketClockRows(dataset, statuses, showCrypto) {
+export function marketClockRows(dataset, statuses, showCrypto, copy) {
   const marketOrder = new Map((dataset?.markets || []).map((market, index) => [market.id, index]));
   const markets = new Map((dataset?.markets || []).map((market) => [market.id, market]));
   return (dataset?.assets || [])
@@ -349,7 +352,11 @@ export function marketClockRows(dataset, statuses, showCrypto) {
     .map((asset) => ({
       asset,
       market: markets.get(asset.market),
-      status: statuses[asset.market] || { key: "closed", label: "Closed", sortRank: 4 },
+      status: assetSessionStatus(
+        asset,
+        statuses[asset.market] || { key: "closed", label: "Closed", active: false, sortRank: 4 },
+        copy?.status,
+      ),
     }))
     .sort((a, b) => {
       const aRank = a.asset.market === "crypto" ? 0 : a.status.sortRank;
@@ -626,7 +633,7 @@ export function MarketClockPage({ language, setLanguage, t }) {
   }, [showCrypto, selected]);
 
   const statuses = useMemo(() => dataset ? marketClockStatuses(dataset, now, language, copy) : {}, [dataset, now, language, copy]);
-  const rows = useMemo(() => dataset ? marketClockRows(dataset, statuses, showCrypto) : [], [dataset, statuses, showCrypto]);
+  const rows = useMemo(() => dataset ? marketClockRows(dataset, statuses, showCrypto, copy) : [], [dataset, statuses, showCrypto, copy]);
 
   useEffect(() => {
     setSelected((current) => {
