@@ -2,34 +2,29 @@
   "version": 2,
   "page": "equity-macro",
   "timezone": "America/New_York for trading dates; macro observations retain their provider dates",
-  "generatedAt": "2026-07-13T14:02:22Z",
+  "generatedAt": "2026-07-15T23:27:04Z",
   "timestamps": {
-    "observedAt": "2026-07-10T20:00:00Z",
-    "fetchedAt": "2026-07-13T13:10:54Z",
-    "transformedAt": "2026-07-13T14:02:22Z"
+    "observedAt": "2026-07-15T20:00:00Z",
+    "fetchedAt": "2026-07-15T23:26:57Z",
+    "transformedAt": "2026-07-15T23:27:04Z"
   },
   "window": {
     "months": 6,
-    "startDate": "2026-01-13",
-    "endDate": "2026-07-13",
-    "eventEndDate": "2026-08-27"
+    "startDate": "2026-01-15",
+    "endDate": "2026-07-15",
+    "eventEndDate": "2026-08-29"
   },
   "market": {
     "timezone": "America/New_York",
-    "date": "2026-07-13",
+    "date": "2026-07-15",
     "isMarketDay": true,
-    "isOpen": true,
-    "session": "open",
+    "isOpen": false,
+    "session": "closed",
     "refreshCadence": "hourly while U.S. equity markets are open; otherwise last close"
   },
   "methodology": "Daily price rows are derived from cached daily OHLC for QQQ, SPY, DIA, and the SOX index when available. DIA is used as a Dow Jones Industrial Average ETF proxy. U.S. 10Y and VIX use FRED daily observations. Japan 10Y JGB uses the Japan Ministry of Finance official 15:00 JST constant-maturity close and displays the latest observation change versus the previous observation. Reviewed recurring crypto-supply and CEX-attention annotations are calendar anchors, not claims of guaranteed price impact.",
   "priceSourcePreference": "akshare",
-  "failures": [
-    "SOX yfinance: provider request failed",
-    "SOX akshare: provider request failed",
-    "SOX: optional index unavailable",
-    "AKShare delayed spot: provider request failed"
-  ],
+  "failures": [],
   "assets": {
     "QQQ": {
       "symbol": "QQQ",
@@ -38,10 +33,10 @@
       "role": "Nasdaq 100 proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "cache",
-      "rows": 129,
+      "cacheStatus": "fresh",
+      "rows": 132,
       "firstDate": "2026-01-05",
-      "lastDate": "2026-07-10"
+      "lastDate": "2026-07-15"
     },
     "SPY": {
       "symbol": "SPY",
@@ -50,10 +45,10 @@
       "role": "S&P 500 proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "cache",
-      "rows": 129,
+      "cacheStatus": "fresh",
+      "rows": 132,
       "firstDate": "2026-01-05",
-      "lastDate": "2026-07-10"
+      "lastDate": "2026-07-15"
     },
     "DIA": {
       "symbol": "DIA",
@@ -62,10 +57,10 @@
       "role": "Dow Jones Industrial Average ETF proxy",
       "quote": "USD",
       "sourceLabel": "AKShare / Sina US stock daily (unadjusted)",
-      "cacheStatus": "cache",
-      "rows": 129,
+      "cacheStatus": "fresh",
+      "rows": 132,
       "firstDate": "2026-01-05",
-      "lastDate": "2026-07-10"
+      "lastDate": "2026-07-15"
     },
     "SOX": {
       "symbol": "SOX",
@@ -74,11 +69,11 @@
       "name": "PHLX Semiconductor Index",
       "role": "Philadelphia Semiconductor Index",
       "quote": "index",
-      "sourceLabel": "yfinance ^SOX pending",
-      "cacheStatus": "unavailable",
-      "rows": 0,
-      "firstDate": null,
-      "lastDate": null
+      "sourceLabel": "yfinance daily (unadjusted close)",
+      "cacheStatus": "fresh",
+      "rows": 132,
+      "firstDate": "2026-01-05",
+      "lastDate": "2026-07-15"
     }
   },
   "macroSeries": {
@@ -117,214 +112,85 @@
     "recurringEvents": "app/data/equity-recurring-events.json"
   },
   "latest": {
-    "date": "2026-07-10",
+    "date": "2026-07-15",
     "assets": {
       "QQQ": {
         "symbol": "QQQ",
-        "date": "2026-07-10",
-        "open": 720.7,
-        "high": 726.39,
-        "low": 717.0,
-        "close": 725.51,
-        "price": 725.51,
-        "pct": 0.6674066879422708,
-        "volume": 26415854.0,
+        "date": "2026-07-15",
+        "open": 723.85,
+        "high": 724.36,
+        "low": 710.23,
+        "close": 717.74,
+        "price": 717.74,
+        "pct": -0.844097534019481,
+        "volume": 32526559.0,
         "priceType": "close"
       },
       "SPY": {
         "symbol": "SPY",
-        "date": "2026-07-10",
-        "open": 752.05,
-        "high": 755.42,
-        "low": 748.1,
-        "close": 754.95,
-        "price": 754.95,
-        "pct": 0.38561265873280914,
-        "volume": 42191282.0,
+        "date": "2026-07-15",
+        "open": 754.24,
+        "high": 755.58,
+        "low": 750.2,
+        "close": 754.81,
+        "price": 754.81,
+        "pct": 0.07557276198556644,
+        "volume": 43804779.0,
         "priceType": "close"
       },
       "DIA": {
         "symbol": "DIA",
-        "date": "2026-07-10",
-        "open": 525.64,
-        "high": 526.47,
-        "low": 521.74,
-        "close": 525.78,
-        "price": 525.78,
-        "pct": 0.026634198310628254,
-        "volume": 3469449.0,
+        "date": "2026-07-15",
+        "open": 525.895,
+        "high": 527.73,
+        "low": 523.7,
+        "close": 525.95,
+        "price": 525.95,
+        "pct": 0.010458361459999366,
+        "volume": 3244384.0,
         "priceType": "close"
       },
-      "SOX": null
+      "SOX": {
+        "symbol": "SOX",
+        "date": "2026-07-15",
+        "open": 12774.4296875,
+        "high": 12785.4033203125,
+        "low": 12022.9384765625,
+        "close": 12398.8935546875,
+        "price": 12398.8935546875,
+        "pct": -2.939748716766343,
+        "volume": 0.0,
+        "priceType": "close"
+      }
     },
     "macro": {
       "DGS10": {
-        "date": "2026-07-09",
-        "value": 4.54,
-        "previous": 4.56,
-        "change": -0.019999999999999574,
-        "changeBp": -1.9999999999999574,
+        "date": "2026-07-14",
+        "value": 4.58,
+        "previous": 4.62,
+        "change": -0.040000000000000036,
+        "changeBp": -4.0000000000000036,
         "carriedForward": true
       },
       "VIXCLS": {
-        "date": "2026-07-09",
-        "value": 15.84,
-        "previous": 16.9,
-        "change": -1.0599999999999987,
-        "changeBp": -105.99999999999987,
+        "date": "2026-07-14",
+        "value": 16.5,
+        "previous": 17.16,
+        "change": -0.6600000000000001,
+        "changeBp": -66.00000000000001,
         "carriedForward": true
       },
       "JGB10Y": {
-        "date": "2026-07-10",
-        "value": 2.761,
-        "previous": 2.866,
-        "change": -0.10499999999999998,
-        "changeBp": -10.499999999999998,
-        "carriedForward": false
+        "date": "2026-07-14",
+        "value": 2.713,
+        "previous": 2.786,
+        "change": -0.07299999999999995,
+        "changeBp": -7.299999999999995,
+        "carriedForward": true
       }
     }
   },
   "days": [
-    {
-      "date": "2026-01-13",
-      "dayOfWeek": 1,
-      "isMarketDay": true,
-      "assets": {
-        "QQQ": {
-          "symbol": "QQQ",
-          "date": "2026-01-13",
-          "open": 627.27,
-          "high": 629.47,
-          "low": 623.695,
-          "close": 626.24,
-          "price": 626.24,
-          "pct": -0.1642036124794702,
-          "volume": 44481377.0,
-          "priceType": "close"
-        },
-        "SPY": {
-          "symbol": "SPY",
-          "date": "2026-01-13",
-          "open": 695.49,
-          "high": 696.09,
-          "low": 691.35,
-          "close": 693.77,
-          "price": 693.77,
-          "pct": -0.24730765359674867,
-          "volume": 78309726.0,
-          "priceType": "close"
-        },
-        "DIA": {
-          "symbol": "DIA",
-          "date": "2026-01-13",
-          "open": 495.55,
-          "high": 495.96,
-          "low": 490.63,
-          "close": 491.94,
-          "price": 491.94,
-          "pct": -0.7284835031782895,
-          "volume": 5966349.0,
-          "priceType": "close"
-        },
-        "SOX": null
-      },
-      "macro": {
-        "DGS10": {
-          "date": "2026-01-13",
-          "value": 4.18,
-          "previous": 4.19,
-          "change": -0.010000000000000675,
-          "changeBp": -1.0000000000000675,
-          "carriedForward": false
-        },
-        "VIXCLS": {
-          "date": "2026-01-13",
-          "value": 15.98,
-          "previous": 15.12,
-          "change": 0.8600000000000012,
-          "changeBp": 86.00000000000011,
-          "carriedForward": false
-        },
-        "JGB10Y": {
-          "date": "2026-01-13",
-          "value": 2.163,
-          "previous": 2.096,
-          "change": 0.06699999999999973,
-          "changeBp": 6.699999999999973,
-          "carriedForward": false
-        }
-      }
-    },
-    {
-      "date": "2026-01-14",
-      "dayOfWeek": 2,
-      "isMarketDay": true,
-      "assets": {
-        "QQQ": {
-          "symbol": "QQQ",
-          "date": "2026-01-14",
-          "open": 622.24,
-          "high": 623.45,
-          "low": 614.56,
-          "close": 619.55,
-          "price": 619.55,
-          "pct": -0.4323090768835264,
-          "volume": 72598688.0,
-          "priceType": "close"
-        },
-        "SPY": {
-          "symbol": "SPY",
-          "date": "2026-01-14",
-          "open": 691.0,
-          "high": 691.72,
-          "low": 686.04,
-          "close": 690.36,
-          "price": 690.36,
-          "pct": -0.0926193921852368,
-          "volume": 94676684.0,
-          "priceType": "close"
-        },
-        "DIA": {
-          "symbol": "DIA",
-          "date": "2026-01-14",
-          "open": 490.66,
-          "high": 491.94,
-          "low": 488.5517,
-          "close": 491.58,
-          "price": 491.58,
-          "pct": 0.18750254758895346,
-          "volume": 6767791.0,
-          "priceType": "close"
-        },
-        "SOX": null
-      },
-      "macro": {
-        "DGS10": {
-          "date": "2026-01-14",
-          "value": 4.15,
-          "previous": 4.18,
-          "change": -0.02999999999999936,
-          "changeBp": -2.999999999999936,
-          "carriedForward": false
-        },
-        "VIXCLS": {
-          "date": "2026-01-14",
-          "value": 16.75,
-          "previous": 15.98,
-          "change": 0.7699999999999996,
-          "changeBp": 76.99999999999996,
-          "carriedForward": false
-        },
-        "JGB10Y": {
-          "date": "2026-01-14",
-          "value": 2.182,
-          "previous": 2.163,
-          "change": 0.019000000000000128,
-          "changeBp": 1.9000000000000128,
-          "carriedForward": false
-        }
-      }
-    },
     {
       "date": "2026-01-15",
       "dayOfWeek": 3,
@@ -366,7 +232,18 @@
           "volume": 8519854.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-15",
+          "open": 7960.9599609375,
+          "high": 7998.1201171875,
+          "low": 7833.9501953125,
+          "close": 7837.2998046875,
+          "price": 7837.2998046875,
+          "pct": -1.5533322219527594,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -436,7 +313,18 @@
           "volume": 5845458.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-16",
+          "open": 7972.8701171875,
+          "high": 8008.4599609375,
+          "low": 7885.91015625,
+          "close": 7927.41015625,
+          "price": 7927.41015625,
+          "pct": -0.5701831369295703,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -554,7 +442,18 @@
           "volume": 7416258.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-20",
+          "open": 7807.89013671875,
+          "high": 7931.93017578125,
+          "low": 7767.47998046875,
+          "close": 7794.18994140625,
+          "price": 7794.18994140625,
+          "pct": -0.17546603592782467,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -624,7 +523,18 @@
           "volume": 6718595.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-21",
+          "open": 7909.56982421875,
+          "high": 8113.66015625,
+          "low": 7869.72021484375,
+          "close": 8042.06982421875,
+          "price": 8042.06982421875,
+          "pct": 1.6751859196474996,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -694,7 +604,18 @@
           "volume": 5087166.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-22",
+          "open": 8186.97021484375,
+          "high": 8188.16015625,
+          "low": 8032.39990234375,
+          "close": 8055.169921875,
+          "price": 8055.169921875,
+          "pct": -1.6098787403645811,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -764,7 +685,18 @@
           "volume": 4915669.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-23",
+          "open": 8024.2099609375,
+          "high": 8032.18994140625,
+          "low": 7905.14013671875,
+          "close": 7957.93017578125,
+          "price": 7957.93017578125,
+          "pct": -0.8259976431188284,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -866,7 +798,18 @@
           "volume": 3722814.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-26",
+          "open": 7917.22998046875,
+          "high": 7982.93017578125,
+          "low": 7881.43994140625,
+          "close": 7927.0400390625,
+          "price": 7927.0400390625,
+          "pct": 0.12390771289896498,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -936,7 +879,18 @@
           "volume": 5971409.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-27",
+          "open": 8030.39990234375,
+          "high": 8157.35009765625,
+          "low": 8009.509765625,
+          "close": 8117.18017578125,
+          "price": 8117.18017578125,
+          "pct": 1.0806469726641177,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1006,7 +960,18 @@
           "volume": 4726498.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-28",
+          "open": 8287.4599609375,
+          "high": 8341.83984375,
+          "low": 8227.509765625,
+          "close": 8306.740234375,
+          "price": 8306.740234375,
+          "pct": 0.23264394070531308,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1076,7 +1041,18 @@
           "volume": 9706404.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-29",
+          "open": 8340.0400390625,
+          "high": 8386.98046875,
+          "low": 8020.93994140625,
+          "close": 8320.3896484375,
+          "price": 8320.3896484375,
+          "pct": -0.2356150633925361,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1146,7 +1122,18 @@
           "volume": 8112053.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-01-30",
+          "open": 8206.3203125,
+          "high": 8309.9599609375,
+          "low": 7947.89990234375,
+          "close": 7998.47021484375,
+          "price": 7998.47021484375,
+          "pct": -2.5328050787835976,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1282,7 +1269,18 @@
           "volume": 5584437.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-02",
+          "open": 7955.1201171875,
+          "high": 8215.400390625,
+          "low": 7954.740234375,
+          "close": 8134.490234375,
+          "price": 8134.490234375,
+          "pct": 2.2547757236243413,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1352,7 +1350,18 @@
           "volume": 8799129.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-03",
+          "open": 8203.0302734375,
+          "high": 8239.6396484375,
+          "low": 7796.4599609375,
+          "close": 7966.330078125,
+          "price": 7966.330078125,
+          "pct": -2.8855214161401626,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1422,7 +1431,18 @@
           "volume": 8797109.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-04",
+          "open": 7863.1298828125,
+          "high": 7955.5,
+          "low": 7461.740234375,
+          "close": 7619.16015625,
+          "price": 7619.16015625,
+          "pct": -3.1027050322006944,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1492,7 +1512,18 @@
           "volume": 7767469.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-05",
+          "open": 7531.919921875,
+          "high": 7727.2900390625,
+          "low": 7473.85009765625,
+          "close": 7614.64013671875,
+          "price": 7614.64013671875,
+          "pct": 1.0982620062582609,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1562,7 +1593,18 @@
           "volume": 10635277.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-06",
+          "open": 7762.10986328125,
+          "high": 8071.490234375,
+          "low": 7752.5400390625,
+          "close": 8048.6201171875,
+          "price": 8048.6201171875,
+          "pct": 3.691138864982961,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1682,7 +1724,18 @@
           "volume": 6414790.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-09",
+          "open": 7991.18017578125,
+          "high": 8209.6201171875,
+          "low": 7948.52978515625,
+          "close": 8162.580078125,
+          "price": 8162.580078125,
+          "pct": 2.1448634441156655,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1752,7 +1805,18 @@
           "volume": 8163046.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-10",
+          "open": 8191.60986328125,
+          "high": 8197.919921875,
+          "low": 8051.91015625,
+          "close": 8107.1298828125,
+          "price": 8107.1298828125,
+          "pct": -1.0312988762737598,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1822,7 +1886,18 @@
           "volume": 5743793.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-11",
+          "open": 8263.1796875,
+          "high": 8345.6904296875,
+          "low": 8100.580078125,
+          "close": 8291.8603515625,
+          "price": 8291.8603515625,
+          "pct": 0.3470899235785256,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1892,7 +1967,18 @@
           "volume": 9160238.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-12",
+          "open": 8358.080078125,
+          "high": 8400.01953125,
+          "low": 8079.7900390625,
+          "close": 8084.7001953125,
+          "price": 8084.7001953125,
+          "pct": -3.2708454604066004,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -1962,7 +2048,18 @@
           "volume": 8378102.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-13",
+          "open": 8090.330078125,
+          "high": 8209.3095703125,
+          "low": 8010.259765625,
+          "close": 8137.85986328125,
+          "price": 8137.85986328125,
+          "pct": 0.5874888255148351,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2080,7 +2177,18 @@
           "volume": 6779351.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-17",
+          "open": 8021.990234375,
+          "high": 8210.51953125,
+          "low": 7926.97998046875,
+          "close": 8136.0498046875,
+          "price": 8136.0498046875,
+          "pct": 1.42183631468091,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2150,7 +2258,18 @@
           "volume": 4454274.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-18",
+          "open": 8170.27978515625,
+          "high": 8303.3203125,
+          "low": 8137.5,
+          "close": 8214.349609375,
+          "price": 8214.349609375,
+          "pct": 0.5393918614490532,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2220,7 +2339,18 @@
           "volume": 4625329.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-19",
+          "open": 8133.240234375,
+          "high": 8182.39990234375,
+          "low": 8076.759765625,
+          "close": 8173.2998046875,
+          "price": 8173.2998046875,
+          "pct": 0.49254133848387893,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2290,7 +2420,18 @@
           "volume": 6086802.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-20",
+          "open": 8109.0400390625,
+          "high": 8308.26953125,
+          "low": 8106.0400390625,
+          "close": 8260.419921875,
+          "price": 8260.419921875,
+          "pct": 1.866803987688798,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2392,7 +2533,18 @@
           "volume": 8269234.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-23",
+          "open": 8248.4404296875,
+          "high": 8291.3896484375,
+          "low": 8124.27978515625,
+          "close": 8213.4599609375,
+          "price": 8213.4599609375,
+          "pct": -0.4240858505093825,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2462,7 +2614,18 @@
           "volume": 5334965.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-24",
+          "open": 8314.740234375,
+          "high": 8387.6298828125,
+          "low": 8225.7197265625,
+          "close": 8332.33984375,
+          "price": 8332.33984375,
+          "pct": 0.2116675792496712,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2532,7 +2695,18 @@
           "volume": 4446134.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-25",
+          "open": 8442.849609375,
+          "high": 8498.099609375,
+          "low": 8418.509765625,
+          "close": 8467.4296875,
+          "price": 8467.4296875,
+          "pct": 0.291134856858117,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2602,7 +2776,18 @@
           "volume": 6466942.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-26",
+          "open": 8402.98046875,
+          "high": 8422.150390625,
+          "low": 8062.10986328125,
+          "close": 8197.259765625,
+          "price": 8197.259765625,
+          "pct": -2.448187329365557,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2672,7 +2857,18 @@
           "volume": 7198388.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-02-27",
+          "open": 8036.83984375,
+          "high": 8139.990234375,
+          "low": 8009.25,
+          "close": 8098.3701171875,
+          "price": 8098.3701171875,
+          "pct": 0.7656028318811178,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2808,7 +3004,18 @@
           "volume": 7218456.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-02",
+          "open": 7919.8701171875,
+          "high": 8144.2998046875,
+          "low": 7908.759765625,
+          "close": 8137.35986328125,
+          "price": 8137.35986328125,
+          "pct": 2.746127687394258,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2878,7 +3085,18 @@
           "volume": 11570716.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-03",
+          "open": 7806.2998046875,
+          "high": 7855.919921875,
+          "low": 7673.080078125,
+          "close": 7764.8798828125,
+          "price": 7764.8798828125,
+          "pct": -0.530596094325359,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -2948,7 +3166,18 @@
           "volume": 7590661.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-04",
+          "open": 7891.27978515625,
+          "high": 7959.85009765625,
+          "low": 7807.259765625,
+          "close": 7914.47998046875,
+          "price": 7914.47998046875,
+          "pct": 0.2939978804976642,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3018,7 +3247,18 @@
           "volume": 8768166.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-05",
+          "open": 7875.93994140625,
+          "high": 7965.31005859375,
+          "low": 7660.7001953125,
+          "close": 7821.759765625,
+          "price": 7821.759765625,
+          "pct": -0.6879201236211576,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3088,7 +3328,18 @@
           "volume": 8206036.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-06",
+          "open": 7627.68017578125,
+          "high": 7776.72021484375,
+          "low": 7466.47021484375,
+          "close": 7514.740234375,
+          "price": 7514.740234375,
+          "pct": -1.4806591100246589,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3208,7 +3459,18 @@
           "volume": 10305538.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-09",
+          "open": 7388.330078125,
+          "high": 7826.490234375,
+          "low": 7363.169921875,
+          "close": 7810.39990234375,
+          "price": 7810.39990234375,
+          "pct": 5.712655224600662,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3278,7 +3540,18 @@
           "volume": 6265551.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-10",
+          "open": 7846.52978515625,
+          "high": 8017.06005859375,
+          "low": 7831.10986328125,
+          "close": 7865.1201171875,
+          "price": 7865.1201171875,
+          "pct": 0.23692425237993037,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3348,7 +3621,18 @@
           "volume": 6701727.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-11",
+          "open": 7918.27978515625,
+          "high": 8002.93994140625,
+          "low": 7881.169921875,
+          "close": 7914.56982421875,
+          "price": 7914.56982421875,
+          "pct": -0.046853117573020846,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3418,7 +3702,18 @@
           "volume": 7999851.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-12",
+          "open": 7771.490234375,
+          "high": 7805.25,
+          "low": 7612.8701171875,
+          "close": 7643.169921875,
+          "price": 7643.169921875,
+          "pct": -1.6511673904241841,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3488,7 +3783,18 @@
           "volume": 7471659.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-13",
+          "open": 7744.009765625,
+          "high": 7818.990234375,
+          "low": 7617.97998046875,
+          "close": 7646.64013671875,
+          "price": 7646.64013671875,
+          "pct": -1.2573541595784847,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3590,7 +3896,18 @@
           "volume": 7059890.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-16",
+          "open": 7846.2900390625,
+          "high": 7896.77001953125,
+          "low": 7762.06005859375,
+          "close": 7796.240234375,
+          "price": 7796.240234375,
+          "pct": -0.6378785953403286,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3660,7 +3977,18 @@
           "volume": 6189358.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-17",
+          "open": 7828.77001953125,
+          "high": 7866.58984375,
+          "low": 7763.8701171875,
+          "close": 7836.830078125,
+          "price": 7836.830078125,
+          "pct": 0.10295434114990899,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3730,7 +4058,18 @@
           "volume": 7090539.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-18",
+          "open": 7883.1298828125,
+          "high": 7913.7001953125,
+          "low": 7794.259765625,
+          "close": 7795.1298828125,
+          "price": 7795.1298828125,
+          "pct": -1.1163078790806862,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3800,7 +4139,18 @@
           "volume": 7882771.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-19",
+          "open": 7561.7998046875,
+          "high": 7913.35009765625,
+          "low": 7548.5,
+          "close": 7863.2998046875,
+          "price": 7863.2998046875,
+          "pct": 3.9871460206220024,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3870,7 +4220,18 @@
           "volume": 10543276.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-20",
+          "open": 7862.66015625,
+          "high": 7880.81005859375,
+          "low": 7572.080078125,
+          "close": 7670.60986328125,
+          "price": 7670.60986328125,
+          "pct": -2.4425612852679373,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -3972,7 +4333,18 @@
           "volume": 9978109.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-23",
+          "open": 7825.83984375,
+          "high": 7958.0,
+          "low": 7734.419921875,
+          "close": 7773.1298828125,
+          "price": 7773.1298828125,
+          "pct": -0.6735374348300277,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4042,7 +4414,18 @@
           "volume": 8187848.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-24",
+          "open": 7732.77978515625,
+          "high": 7924.41015625,
+          "low": 7709.47998046875,
+          "close": 7872.7099609375,
+          "price": 7872.7099609375,
+          "pct": 1.8095714564361223,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4112,7 +4495,18 @@
           "volume": 7019624.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-25",
+          "open": 7935.72998046875,
+          "high": 8025.64990234375,
+          "low": 7896.240234375,
+          "close": 7967.75,
+          "price": 7967.75,
+          "pct": 0.40349179735269464,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4182,7 +4576,18 @@
           "volume": 8283960.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-26",
+          "open": 7823.77001953125,
+          "high": 7831.759765625,
+          "low": 7582.85986328125,
+          "close": 7585.8701171875,
+          "price": 7585.8701171875,
+          "pct": -3.040732303606279,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4252,7 +4657,18 @@
           "volume": 6938526.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-27",
+          "open": 7545.419921875,
+          "high": 7611.60009765625,
+          "low": 7427.10009765625,
+          "close": 7457.669921875,
+          "price": 7457.669921875,
+          "pct": -1.1629571436521793,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4354,7 +4770,18 @@
           "volume": 9181628.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-30",
+          "open": 7517.47021484375,
+          "high": 7546.68017578125,
+          "low": 7084.1298828125,
+          "close": 7142.330078125,
+          "price": 7142.330078125,
+          "pct": -4.990244404001902,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4424,7 +4851,18 @@
           "volume": 11656260.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-03-31",
+          "open": 7277.8798828125,
+          "high": 7591.330078125,
+          "low": 7274.14990234375,
+          "close": 7588.2001953125,
+          "price": 7588.2001953125,
+          "pct": 4.263883404188285,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4494,7 +4932,18 @@
           "volume": 7790315.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-01",
+          "open": 7680.60986328125,
+          "high": 7893.75,
+          "low": 7677.5400390625,
+          "close": 7802.31005859375,
+          "price": 7802.31005859375,
+          "pct": 1.5845121348281606,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4598,7 +5047,18 @@
           "volume": 3955885.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-02",
+          "open": 7544.93017578125,
+          "high": 7843.740234375,
+          "low": 7505.97021484375,
+          "close": 7833.39013671875,
+          "price": 7833.39013671875,
+          "pct": 3.8232290321710103,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4716,7 +5176,18 @@
           "volume": 2905316.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-06",
+          "open": 7917.85986328125,
+          "high": 7963.64990234375,
+          "low": 7821.77978515625,
+          "close": 7916.10986328125,
+          "price": 7916.10986328125,
+          "pct": -0.022101931964160583,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4786,7 +5257,18 @@
           "volume": 3943164.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-07",
+          "open": 7915.169921875,
+          "high": 8006.33984375,
+          "low": 7790.06982421875,
+          "close": 8003.8701171875,
+          "price": 8003.8701171875,
+          "pct": 1.1206353898652386,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4874,7 +5356,18 @@
           "volume": 4697516.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-08",
+          "open": 8497.9296875,
+          "high": 8526.3896484375,
+          "low": 8320.919921875,
+          "close": 8510.919921875,
+          "price": 8510.919921875,
+          "pct": 0.1528635191475865,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -4944,7 +5437,18 @@
           "volume": 4213629.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-09",
+          "open": 8561.1796875,
+          "high": 8699.5,
+          "low": 8543.5595703125,
+          "close": 8689.5302734375,
+          "price": 8689.5302734375,
+          "pct": 1.4992161200039056,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5014,7 +5518,18 @@
           "volume": 2659020.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-10",
+          "open": 8812.2197265625,
+          "high": 8962.9501953125,
+          "low": 8795.580078125,
+          "close": 8889.830078125,
+          "price": 8889.830078125,
+          "pct": 0.8807128506857432,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5116,7 +5631,18 @@
           "volume": 3768673.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-13",
+          "open": 8873.3095703125,
+          "high": 9044.7900390625,
+          "low": 8837.9599609375,
+          "close": 9039.51953125,
+          "price": 9039.51953125,
+          "pct": 1.8731450719761875,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5186,7 +5712,18 @@
           "volume": 4217868.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-14",
+          "open": 9133.2900390625,
+          "high": 9225.4599609375,
+          "low": 9042.150390625,
+          "close": 9224.1201171875,
+          "price": 9224.1201171875,
+          "pct": 0.9944946206298665,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5256,7 +5793,18 @@
           "volume": 3474538.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-15",
+          "open": 9189.23046875,
+          "high": 9249.9599609375,
+          "low": 9035.1103515625,
+          "close": 9239.2900390625,
+          "price": 9239.2900390625,
+          "pct": 0.5447634650446366,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5326,7 +5874,18 @@
           "volume": 4111450.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-16",
+          "open": 9215.9296875,
+          "high": 9356.16015625,
+          "low": 9144.98046875,
+          "close": 9329.349609375,
+          "price": 9329.349609375,
+          "pct": 1.2306943056307904,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5396,7 +5955,18 @@
           "volume": 10238538.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-17",
+          "open": 9477.8896484375,
+          "high": 9556.419921875,
+          "low": 9419.1298828125,
+          "close": 9555.8798828125,
+          "price": 9555.8798828125,
+          "pct": 0.8228649759375208,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5498,7 +6068,18 @@
           "volume": 3763968.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-20",
+          "open": 9604.900390625,
+          "high": 9612.08984375,
+          "low": 9462.9404296875,
+          "close": 9599.2099609375,
+          "price": 9599.2099609375,
+          "pct": -0.05924506716440521,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5568,7 +6149,18 @@
           "volume": 4322228.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-21",
+          "open": 9676.7802734375,
+          "high": 9721.400390625,
+          "low": 9569.7001953125,
+          "close": 9647.2099609375,
+          "price": 9647.2099609375,
+          "pct": -0.3055800758561162,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5638,7 +6230,18 @@
           "volume": 4022372.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-22",
+          "open": 9817.099609375,
+          "high": 9914.080078125,
+          "low": 9698.9501953125,
+          "close": 9909.26953125,
+          "price": 9909.26953125,
+          "pct": 0.9388712098528657,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5708,7 +6311,18 @@
           "volume": 4077279.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-23",
+          "open": 9984.73046875,
+          "high": 10206.1796875,
+          "low": 9923.4296875,
+          "close": 10078.5703125,
+          "price": 10078.5703125,
+          "pct": 0.9398335192291668,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5778,7 +6392,18 @@
           "volume": 3372229.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-24",
+          "open": 10463.8095703125,
+          "high": 10564.009765625,
+          "low": 10270.9599609375,
+          "close": 10513.66015625,
+          "price": 10513.66015625,
+          "pct": 0.47640952945984494,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5880,7 +6505,18 @@
           "volume": 2132040.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-27",
+          "open": 10533.3203125,
+          "high": 10536.8603515625,
+          "low": 10251.73046875,
+          "close": 10408.0400390625,
+          "price": 10408.0400390625,
+          "pct": -1.189371154780403,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -5950,7 +6586,18 @@
           "volume": 3057045.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-28",
+          "open": 9979.169921875,
+          "high": 10184.990234375,
+          "low": 9865.3798828125,
+          "close": 10035.580078125,
+          "price": 10035.580078125,
+          "pct": 0.5652790431631514,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6020,7 +6667,18 @@
           "volume": 3322294.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-29",
+          "open": 10192.330078125,
+          "high": 10272.9501953125,
+          "low": 10113.2099609375,
+          "close": 10271.2998046875,
+          "price": 10271.2998046875,
+          "pct": 0.7747956154990167,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6090,7 +6748,18 @@
           "volume": 5352271.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-04-30",
+          "open": 10387.83984375,
+          "high": 10516.3896484375,
+          "low": 10229.8896484375,
+          "close": 10503.7001953125,
+          "price": 10503.7001953125,
+          "pct": 1.1153459555136396,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6160,7 +6829,18 @@
           "volume": 4402581.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-01",
+          "open": 10388.8203125,
+          "high": 10624.2099609375,
+          "low": 10364.400390625,
+          "close": 10595.33984375,
+          "price": 10595.33984375,
+          "pct": 1.9879016581075362,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6296,7 +6976,18 @@
           "volume": 3310394.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-04",
+          "open": 10656.0703125,
+          "high": 10690.4697265625,
+          "low": 10430.2099609375,
+          "close": 10534.66015625,
+          "price": 10534.66015625,
+          "pct": -1.1393520565229471,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6366,7 +7057,18 @@
           "volume": 3386211.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-05",
+          "open": 10759.2099609375,
+          "high": 11058.16015625,
+          "low": 10718.490234375,
+          "close": 10980.580078125,
+          "price": 10980.580078125,
+          "pct": 2.0574941653821113,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6436,7 +7138,18 @@
           "volume": 4317271.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-06",
+          "open": 11243.830078125,
+          "high": 11477.3798828125,
+          "low": 11062.9501953125,
+          "close": 11472.75,
+          "price": 11472.75,
+          "pct": 2.0359603470028094,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6506,7 +7219,18 @@
           "volume": 4490464.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-07",
+          "open": 11332.1904296875,
+          "high": 11404.3701171875,
+          "low": 11075.1298828125,
+          "close": 11160.990234375,
+          "price": 11160.990234375,
+          "pct": -1.5107423086008014,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6594,7 +7318,18 @@
           "volume": 3495180.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-08",
+          "open": 11408.009765625,
+          "high": 11776.740234375,
+          "low": 11388.419921875,
+          "close": 11775.5,
+          "price": 11775.5,
+          "pct": 3.2213352015382557,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6696,7 +7431,18 @@
           "volume": 4249013.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-11",
+          "open": 11875.2900390625,
+          "high": 12108.669921875,
+          "low": 11822.490234375,
+          "close": 12081.0400390625,
+          "price": 12081.0400390625,
+          "pct": 1.7325892615945155,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6766,7 +7512,18 @@
           "volume": 7445590.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-12",
+          "open": 11741.4697265625,
+          "high": 11919.0,
+          "low": 11263.580078125,
+          "close": 11717.259765625,
+          "price": 11717.259765625,
+          "pct": -0.20619191209708845,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6836,7 +7593,18 @@
           "volume": 3256845.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-13",
+          "open": 11988.75,
+          "high": 12106.5498046875,
+          "low": 11739.169921875,
+          "close": 12017.98046875,
+          "price": 12017.98046875,
+          "pct": 0.24381581691168805,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6906,7 +7674,18 @@
           "volume": 4920474.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-14",
+          "open": 11950.1396484375,
+          "high": 12141.5400390625,
+          "low": 11892.41015625,
+          "close": 12073.7802734375,
+          "price": 12073.7802734375,
+          "pct": 1.034637490752388,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -6976,7 +7755,18 @@
           "volume": 5300700.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-15",
+          "open": 11672.5400390625,
+          "high": 11810.669921875,
+          "low": 11522.26953125,
+          "close": 11588.4599609375,
+          "price": 11588.4599609375,
+          "pct": -0.7203237499603645,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7078,7 +7868,18 @@
           "volume": 5496196.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-18",
+          "open": 11825.8798828125,
+          "high": 11825.8798828125,
+          "low": 11097.759765625,
+          "close": 11302.51953125,
+          "price": 11302.51953125,
+          "pct": -4.425551052003679,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7148,7 +7949,18 @@
           "volume": 5361291.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-19",
+          "open": 11053.990234375,
+          "high": 11513.990234375,
+          "low": 10895.75,
+          "close": 11305.5,
+          "price": 11305.5,
+          "pct": 2.2752848545394118,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7218,7 +8030,18 @@
           "volume": 6516119.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-20",
+          "open": 11580.080078125,
+          "high": 11818.3896484375,
+          "low": 11528.1298828125,
+          "close": 11813.2900390625,
+          "price": 11813.2900390625,
+          "pct": 2.0138890177282818,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7288,7 +8111,18 @@
           "volume": 6575900.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-21",
+          "open": 11826.08984375,
+          "high": 12003.009765625,
+          "low": 11739.8095703125,
+          "close": 11964.080078125,
+          "price": 11964.080078125,
+          "pct": 1.1668289028594419,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7358,7 +8192,18 @@
           "volume": 5176149.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-22",
+          "open": 12070.169921875,
+          "high": 12304.51953125,
+          "low": 12069.0400390625,
+          "close": 12202.5400390625,
+          "price": 12202.5400390625,
+          "pct": 1.0966715302624126,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7476,7 +8321,18 @@
           "volume": 3897739.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-26",
+          "open": 12616.6298828125,
+          "high": 12932.8095703125,
+          "low": 12548.240234375,
+          "close": 12876.91015625,
+          "price": 12876.91015625,
+          "pct": 2.062993650880391,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7546,7 +8402,18 @@
           "volume": 4247825.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-27",
+          "open": 13029.7900390625,
+          "high": 13037.91015625,
+          "low": 12452.3603515625,
+          "close": 12702.1904296875,
+          "price": 12702.1904296875,
+          "pct": -2.5142355202415136,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7616,7 +8483,18 @@
           "volume": 3716012.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-28",
+          "open": 12748.58984375,
+          "high": 12961.1904296875,
+          "low": 12528.6904296875,
+          "close": 12829.1396484375,
+          "price": 12829.1396484375,
+          "pct": 0.6318330550652201,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7686,7 +8564,18 @@
           "volume": 5346619.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-05-29",
+          "open": 12973.76953125,
+          "high": 13115.2802734375,
+          "low": 12737.1904296875,
+          "close": 12829.3798828125,
+          "price": 12829.3798828125,
+          "pct": -1.1129352042959277,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7806,7 +8695,18 @@
           "volume": 4424801.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-01",
+          "open": 12706.6201171875,
+          "high": 13088.009765625,
+          "low": 12631.0302734375,
+          "close": 12965.650390625,
+          "price": 12965.650390625,
+          "pct": 2.0385458213795573,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7910,7 +8810,18 @@
           "volume": 5078013.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-02",
+          "open": 13242.7001953125,
+          "high": 13733.7197265625,
+          "low": 13202.1796875,
+          "close": 13726.26953125,
+          "price": 13726.26953125,
+          "pct": 3.6515916603523833,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -7980,7 +8891,18 @@
           "volume": 4098010.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-03",
+          "open": 13971.150390625,
+          "high": 13998.1396484375,
+          "low": 13554.3701171875,
+          "close": 13916.9599609375,
+          "price": 13916.9599609375,
+          "pct": -0.3878737839932148,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8050,7 +8972,18 @@
           "volume": 6390701.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-04",
+          "open": 13243.66015625,
+          "high": 13819.6201171875,
+          "low": 13041.2802734375,
+          "close": 13617.5,
+          "price": 13617.5,
+          "pct": 2.8227834249701433,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8120,7 +9053,18 @@
           "volume": 6610694.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-05",
+          "open": 13062.5498046875,
+          "high": 13111.4404296875,
+          "low": 12217.3203125,
+          "close": 12220.759765625,
+          "price": 12220.759765625,
+          "pct": -6.444301087069719,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8240,7 +9184,18 @@
           "volume": 4825656.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-08",
+          "open": 12838.8798828125,
+          "high": 13129.01953125,
+          "low": 12676.740234375,
+          "close": 12906.6904296875,
+          "price": 12906.6904296875,
+          "pct": 0.5281655992885989,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8310,7 +9265,18 @@
           "volume": 6249298.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-09",
+          "open": 13142.990234375,
+          "high": 13264.1201171875,
+          "low": 11794.150390625,
+          "close": 12657.8095703125,
+          "price": 12657.8095703125,
+          "pct": -3.6915546265379406,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8380,7 +9346,18 @@
           "volume": 5153323.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-10",
+          "open": 12501.83984375,
+          "high": 12870.5302734375,
+          "low": 12157.66015625,
+          "close": 12206.4599609375,
+          "price": 12206.4599609375,
+          "pct": -2.362691303873711,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8450,7 +9427,18 @@
           "volume": 6353884.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-11",
+          "open": 12506.650390625,
+          "high": 13194.2802734375,
+          "low": 12475.23046875,
+          "close": 13171.4404296875,
+          "price": 13171.4404296875,
+          "pct": 5.31549230448488,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8520,7 +9508,18 @@
           "volume": 8384492.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-12",
+          "open": 13053.9296875,
+          "high": 13513.4404296875,
+          "low": 12986.0595703125,
+          "close": 13371.4697265625,
+          "price": 13371.4697265625,
+          "pct": 2.432524509202509,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8622,7 +9621,18 @@
           "volume": 5379326.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-15",
+          "open": 13901.240234375,
+          "high": 14134.599609375,
+          "low": 13860.3203125,
+          "close": 14099.6201171875,
+          "price": 14099.6201171875,
+          "pct": 1.4270660708527723,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8692,7 +9702,18 @@
           "volume": 4812534.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-16",
+          "open": 13968.2802734375,
+          "high": 14133.599609375,
+          "low": 13291.75,
+          "close": 13294.2197265625,
+          "price": 13294.2197265625,
+          "pct": -4.825651645584558,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8762,7 +9783,18 @@
           "volume": 6563401.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-17",
+          "open": 13694.009765625,
+          "high": 13965.599609375,
+          "low": 13471.2197265625,
+          "close": 13477.0703125,
+          "price": 13477.0703125,
+          "pct": -1.5841923354660232,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8832,7 +9864,18 @@
           "volume": 7134357.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-18",
+          "open": 14084.759765625,
+          "high": 14461.7900390625,
+          "low": 14062.2802734375,
+          "close": 14341.7802734375,
+          "price": 14341.7802734375,
+          "pct": 1.8248128621957713,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -8950,7 +9993,18 @@
           "volume": 6552129.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-22",
+          "open": 14607.0498046875,
+          "high": 14655.2900390625,
+          "low": 14393.8896484375,
+          "close": 14634.7197265625,
+          "price": 14634.7197265625,
+          "pct": 0.18942854474365203,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9020,7 +10074,18 @@
           "volume": 5039188.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-23",
+          "open": 13586.2900390625,
+          "high": 13857.16015625,
+          "low": 13374.4404296875,
+          "close": 13482.509765625,
+          "price": 13482.509765625,
+          "pct": -0.763860282233907,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9090,7 +10155,18 @@
           "volume": 4395869.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-24",
+          "open": 13484.169921875,
+          "high": 13597.3798828125,
+          "low": 13115.830078125,
+          "close": 13458.2001953125,
+          "price": 13458.2001953125,
+          "pct": -0.19259418053142466,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9160,7 +10236,18 @@
           "volume": 5379836.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-25",
+          "open": 14156.4296875,
+          "high": 14194.6796875,
+          "low": 13379.9404296875,
+          "close": 13940.8701171875,
+          "price": 13940.8701171875,
+          "pct": -1.5226972836437507,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9230,7 +10317,18 @@
           "volume": 3823570.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-26",
+          "open": 13419.1396484375,
+          "high": 13519.5498046875,
+          "low": 13159.240234375,
+          "close": 13203.5703125,
+          "price": 13203.5703125,
+          "pct": -1.6064318695915836,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9332,7 +10430,18 @@
           "volume": 5733414.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-29",
+          "open": 13241.9697265625,
+          "high": 13733.349609375,
+          "low": 12782.5302734375,
+          "close": 13709.66015625,
+          "price": 13709.66015625,
+          "pct": 3.5318796171942948,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9402,7 +10511,18 @@
           "volume": 3607843.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-06-30",
+          "open": 13787.919921875,
+          "high": 14332.759765625,
+          "low": 13750.669921875,
+          "close": 14246.9599609375,
+          "price": 14246.9599609375,
+          "pct": 3.32929144978727,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9472,7 +10592,18 @@
           "volume": 3438379.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-01",
+          "open": 13718.080078125,
+          "high": 13844.419921875,
+          "low": 13322.6298828125,
+          "close": 13353.2802734375,
+          "price": 13353.2802734375,
+          "pct": -2.659262831314228,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9576,7 +10707,18 @@
           "volume": 3536644.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-02",
+          "open": 13268.2197265625,
+          "high": 13526.7197265625,
+          "low": 12374.41015625,
+          "close": 12626.2197265625,
+          "price": 12626.2197265625,
+          "pct": -4.838629546620629,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9694,7 +10836,18 @@
           "volume": 3236864.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-06",
+          "open": 12914.4697265625,
+          "high": 13252.5400390625,
+          "low": 12890.6201171875,
+          "close": 12900.1396484375,
+          "price": 12900.1396484375,
+          "pct": -0.11096141327061904,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9764,7 +10917,18 @@
           "volume": 4489163.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-07",
+          "open": 12375.8603515625,
+          "high": 12417.509765625,
+          "low": 11960.83984375,
+          "close": 12300.51953125,
+          "price": 12300.51953125,
+          "pct": -0.6087723856950917,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9852,7 +11016,18 @@
           "volume": 3574916.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-08",
+          "open": 12277.2802734375,
+          "high": 12615.3701171875,
+          "low": 12215.2197265625,
+          "close": 12574.9697265625,
+          "price": 12574.9697265625,
+          "pct": 2.424718231521241,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9922,7 +11097,18 @@
           "volume": 3056449.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-09",
+          "open": 13119.41015625,
+          "high": 13249.0703125,
+          "low": 12915.5400390625,
+          "close": 12960.0,
+          "price": 12960.0,
+          "pct": -1.2150710615145917,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
@@ -9992,24 +11178,35 @@
           "volume": 3469449.0,
           "priceType": "close"
         },
-        "SOX": null
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-10",
+          "open": 12779.2197265625,
+          "high": 13065.01953125,
+          "low": 12656.8701171875,
+          "close": 12967.16015625,
+          "price": 12967.16015625,
+          "pct": 1.470672182722179,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
-          "date": "2026-07-09",
-          "value": 4.54,
-          "previous": 4.56,
-          "change": -0.019999999999999574,
-          "changeBp": -1.9999999999999574,
-          "carriedForward": true
+          "date": "2026-07-10",
+          "value": 4.56,
+          "previous": 4.54,
+          "change": 0.019999999999999574,
+          "changeBp": 1.9999999999999574,
+          "carriedForward": false
         },
         "VIXCLS": {
-          "date": "2026-07-09",
-          "value": 15.84,
-          "previous": 16.9,
-          "change": -1.0599999999999987,
-          "changeBp": -105.99999999999987,
-          "carriedForward": true
+          "date": "2026-07-10",
+          "value": 15.03,
+          "previous": 15.84,
+          "change": -0.8100000000000005,
+          "changeBp": -81.00000000000006,
+          "carriedForward": false
         },
         "JGB10Y": {
           "date": "2026-07-10",
@@ -10058,35 +11255,79 @@
       "dayOfWeek": 0,
       "isMarketDay": true,
       "assets": {
-        "QQQ": null,
-        "SPY": null,
-        "DIA": null,
-        "SOX": null
+        "QQQ": {
+          "symbol": "QQQ",
+          "date": "2026-07-13",
+          "open": 717.72,
+          "high": 718.74,
+          "low": 710.08,
+          "close": 711.74,
+          "price": 711.74,
+          "pct": -0.8331940032324607,
+          "volume": 36552360.0,
+          "priceType": "close"
+        },
+        "SPY": {
+          "symbol": "SPY",
+          "date": "2026-07-13",
+          "open": 752.47,
+          "high": 753.9105,
+          "low": 748.0,
+          "close": 749.17,
+          "price": 749.17,
+          "pct": -0.4385556899278467,
+          "volume": 44013628.0,
+          "priceType": "close"
+        },
+        "DIA": {
+          "symbol": "DIA",
+          "date": "2026-07-13",
+          "open": 525.84,
+          "high": 527.86,
+          "low": 522.9,
+          "close": 524.47,
+          "price": 524.47,
+          "pct": -0.2605355241137997,
+          "volume": 2723746.0,
+          "priceType": "close"
+        },
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-13",
+          "open": 12563.6298828125,
+          "high": 12646.7802734375,
+          "low": 12289.0498046875,
+          "close": 12347.7802734375,
+          "price": 12347.7802734375,
+          "pct": -1.7180513226538938,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
         "DGS10": {
-          "date": "2026-07-09",
-          "value": 4.54,
+          "date": "2026-07-13",
+          "value": 4.62,
           "previous": 4.56,
-          "change": -0.019999999999999574,
-          "changeBp": -1.9999999999999574,
-          "carriedForward": true
+          "change": 0.0600000000000005,
+          "changeBp": 6.00000000000005,
+          "carriedForward": false
         },
         "VIXCLS": {
-          "date": "2026-07-09",
-          "value": 15.84,
-          "previous": 16.9,
-          "change": -1.0599999999999987,
-          "changeBp": -105.99999999999987,
-          "carriedForward": true
+          "date": "2026-07-13",
+          "value": 17.16,
+          "previous": 15.03,
+          "change": 2.130000000000001,
+          "changeBp": 213.00000000000009,
+          "carriedForward": false
         },
         "JGB10Y": {
-          "date": "2026-07-10",
-          "value": 2.761,
-          "previous": 2.866,
-          "change": -0.10499999999999998,
-          "changeBp": -10.499999999999998,
-          "carriedForward": true
+          "date": "2026-07-13",
+          "value": 2.786,
+          "previous": 2.761,
+          "change": 0.02499999999999991,
+          "changeBp": 2.499999999999991,
+          "carriedForward": false
         }
       }
     },
@@ -10095,15 +11336,80 @@
       "dayOfWeek": 1,
       "isMarketDay": true,
       "assets": {
-        "QQQ": null,
-        "SPY": null,
-        "DIA": null,
-        "SOX": null
+        "QQQ": {
+          "symbol": "QQQ",
+          "date": "2026-07-14",
+          "open": 720.22,
+          "high": 722.29,
+          "low": 714.34,
+          "close": 719.69,
+          "price": 719.69,
+          "pct": -0.0735886256976997,
+          "volume": 29448117.0,
+          "priceType": "close"
+        },
+        "SPY": {
+          "symbol": "SPY",
+          "date": "2026-07-14",
+          "open": 750.91,
+          "high": 753.34,
+          "low": 748.66,
+          "close": 751.83,
+          "price": 751.83,
+          "pct": 0.12251801147941468,
+          "volume": 35143137.0,
+          "priceType": "close"
+        },
+        "DIA": {
+          "symbol": "DIA",
+          "date": "2026-07-14",
+          "open": 523.32,
+          "high": 526.72,
+          "low": 522.56,
+          "close": 524.69,
+          "price": 524.69,
+          "pct": 0.26179010930214863,
+          "volume": 3664019.0,
+          "priceType": "close"
+        },
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-14",
+          "open": 12837.3798828125,
+          "high": 12846.2900390625,
+          "low": 12489.5400390625,
+          "close": 12661.9296875,
+          "price": 12661.9296875,
+          "pct": -1.366713433069032,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
-        "DGS10": null,
-        "VIXCLS": null,
-        "JGB10Y": null
+        "DGS10": {
+          "date": "2026-07-14",
+          "value": 4.58,
+          "previous": 4.62,
+          "change": -0.040000000000000036,
+          "changeBp": -4.0000000000000036,
+          "carriedForward": false
+        },
+        "VIXCLS": {
+          "date": "2026-07-14",
+          "value": 16.5,
+          "previous": 17.16,
+          "change": -0.6600000000000001,
+          "changeBp": -66.00000000000001,
+          "carriedForward": false
+        },
+        "JGB10Y": {
+          "date": "2026-07-14",
+          "value": 2.713,
+          "previous": 2.786,
+          "change": -0.07299999999999995,
+          "changeBp": -7.299999999999995,
+          "carriedForward": false
+        }
       },
       "events": [
         {
@@ -10129,15 +11435,80 @@
       "dayOfWeek": 2,
       "isMarketDay": true,
       "assets": {
-        "QQQ": null,
-        "SPY": null,
-        "DIA": null,
-        "SOX": null
+        "QQQ": {
+          "symbol": "QQQ",
+          "date": "2026-07-15",
+          "open": 723.85,
+          "high": 724.36,
+          "low": 710.23,
+          "close": 717.74,
+          "price": 717.74,
+          "pct": -0.844097534019481,
+          "volume": 32526559.0,
+          "priceType": "close"
+        },
+        "SPY": {
+          "symbol": "SPY",
+          "date": "2026-07-15",
+          "open": 754.24,
+          "high": 755.58,
+          "low": 750.2,
+          "close": 754.81,
+          "price": 754.81,
+          "pct": 0.07557276198556644,
+          "volume": 43804779.0,
+          "priceType": "close"
+        },
+        "DIA": {
+          "symbol": "DIA",
+          "date": "2026-07-15",
+          "open": 525.895,
+          "high": 527.73,
+          "low": 523.7,
+          "close": 525.95,
+          "price": 525.95,
+          "pct": 0.010458361459999366,
+          "volume": 3244384.0,
+          "priceType": "close"
+        },
+        "SOX": {
+          "symbol": "SOX",
+          "date": "2026-07-15",
+          "open": 12774.4296875,
+          "high": 12785.4033203125,
+          "low": 12022.9384765625,
+          "close": 12398.8935546875,
+          "price": 12398.8935546875,
+          "pct": -2.939748716766343,
+          "volume": 0.0,
+          "priceType": "close"
+        }
       },
       "macro": {
-        "DGS10": null,
-        "VIXCLS": null,
-        "JGB10Y": null
+        "DGS10": {
+          "date": "2026-07-14",
+          "value": 4.58,
+          "previous": 4.62,
+          "change": -0.040000000000000036,
+          "changeBp": -4.0000000000000036,
+          "carriedForward": true
+        },
+        "VIXCLS": {
+          "date": "2026-07-14",
+          "value": 16.5,
+          "previous": 17.16,
+          "change": -0.6600000000000001,
+          "changeBp": -66.00000000000001,
+          "carriedForward": true
+        },
+        "JGB10Y": {
+          "date": "2026-07-14",
+          "value": 2.713,
+          "previous": 2.786,
+          "change": -0.07299999999999995,
+          "changeBp": -7.299999999999995,
+          "carriedForward": true
+        }
       }
     },
     {
@@ -10868,6 +12239,38 @@
       "date": "2026-08-27",
       "dayOfWeek": 3,
       "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "dayOfWeek": 4,
+      "isMarketDay": true,
+      "assets": {
+        "QQQ": null,
+        "SPY": null,
+        "DIA": null,
+        "SOX": null
+      },
+      "macro": {
+        "DGS10": null,
+        "VIXCLS": null,
+        "JGB10Y": null
+      }
+    },
+    {
+      "date": "2026-08-29",
+      "dayOfWeek": 5,
+      "isMarketDay": false,
       "assets": {
         "QQQ": null,
         "SPY": null,

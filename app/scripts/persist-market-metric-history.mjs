@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -6,6 +6,7 @@ import {
   dedupeMarketMetricRows,
   extractCryptoHistoryRows,
   extractJapanRateRows,
+  hydrateCryptoDatasetFromRows,
   selectIncrementalObservationRows,
 } from "./market-metric-history-contract.mjs";
 
@@ -16,6 +17,21 @@ const table = "market_metric_observations";
 const batchSize = 500;
 const requestTimeoutMs = 30_000;
 const maxRequestAttempts = 3;
+const cryptoHistoryPageSize = 1000;
+const cryptoHistoryMaxPages = 10;
+const cryptoHistoryMetricIds = [
+  "crypto.totalMarketCap",
+  "btc.marketCap",
+  "stablecoin.usdt.marketCap",
+  "stablecoin.usdc.marketCap",
+  "stablecoin.major.marketCap",
+  "stablecoin.usdt.depegBps",
+  "crypto.etf.BTC.net_flow_usd",
+  "crypto.etf.ETH.net_flow_usd",
+  "crypto.etf.SOL.net_flow_usd",
+  "treasury.mstr.btc_holdings",
+  "treasury.bmnr.eth_holdings",
+];
 
 async function readJson(path, fallback = null) {
   try {
@@ -24,6 +40,12 @@ async function readJson(path, fallback = null) {
     if (error.code === "ENOENT") return fallback;
     throw error;
   }
+}
+
+async function writeJsonAtomic(path, payload) {
+  const tempPath = `${path}.tmp`;
+  await writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  await rename(tempPath, path);
 }
 
 async function loadEnvFile(path) {
@@ -108,6 +130,26 @@ async function latestJapanObservation() {
   return (await request(`${table}?${query}`) || [])[0]?.observed_at || null;
 }
 
+async function readCryptoHistoryRows() {
+  const start = new Date(Date.now() - 405 * 24 * 60 * 60 * 1000).toISOString();
+  const rows = [];
+  for (let page = 0; page < cryptoHistoryMaxPages; page += 1) {
+    const query = new URLSearchParams({
+      select: "metric_id,observed_at,value,source,source_url,source_key,quality_status,fetched_at,last_checked_at,metadata",
+      metric_id: `in.(${cryptoHistoryMetricIds.join(",")})`,
+      observed_at: `gte.${start}`,
+      order: "metric_id.asc,observed_at.asc,source_key.asc",
+      limit: String(cryptoHistoryPageSize),
+      offset: String(page * cryptoHistoryPageSize),
+    });
+    const batch = await request(`${table}?${query}`) || [];
+    if (!Array.isArray(batch)) throw new Error("Supabase crypto history query returned an invalid response");
+    rows.push(...batch);
+    if (batch.length < cryptoHistoryPageSize) return rows;
+  }
+  throw new Error(`Supabase crypto history exceeded the ${cryptoHistoryMaxPages * cryptoHistoryPageSize} row hydration safety limit`);
+}
+
 async function upsertRows(rows) {
   for (let index = 0; index < rows.length; index += batchSize) {
     await request(`${table}?on_conflict=metric_id,observed_at,source_key`, {
@@ -149,7 +191,18 @@ try {
   const rows = dedupeMarketMetricRows([...cryptoRows, ...japanRows]);
   if (!rows.length) throw new Error("No market metric observations were available to persist");
   await upsertRows(rows);
-  console.log(JSON.stringify({ status: "persisted", rows: rows.length, cryptoRows: cryptoRows.length, japanRows: japanRows.length }));
+  const databaseCryptoRows = await readCryptoHistoryRows();
+  if (!databaseCryptoRows.length) throw new Error("Supabase returned no crypto history rows after persistence");
+  const hydratedCrypto = hydrateCryptoDatasetFromRows(crypto, databaseCryptoRows, new Date().toISOString());
+  await writeJsonAtomic(resolve(appRoot, "public/data/crypto-liquidity.json"), hydratedCrypto);
+  console.log(JSON.stringify({
+    status: "persisted",
+    rows: rows.length,
+    cryptoRows: cryptoRows.length,
+    japanRows: japanRows.length,
+    databaseCryptoRows: databaseCryptoRows.length,
+    hydratedHistoryMetrics: Object.keys(hydratedCrypto.history || {}).length,
+  }));
 } catch (error) {
   const detail = redact(error?.message || error);
   if (historyRequired) throw new Error(detail);

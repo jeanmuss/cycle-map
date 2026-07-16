@@ -1,49 +1,61 @@
 {
   "version": 1,
   "page": "equity-fast",
-  "generatedAt": "2026-07-11T05:24:36Z",
+  "generatedAt": "2026-07-15T23:27:05Z",
+  "timestamps": {
+    "observedAt": "2026-07-14T00:00:00Z",
+    "fetchedAt": "2026-07-15T23:27:05Z",
+    "transformedAt": "2026-07-15T23:27:05Z"
+  },
   "refreshCadence": "Target 15 minutes for fast indicators; provider schedules and static deployment queues can add delay.",
   "baseDataset": {
     "file": "equity-weekly.json",
-    "generatedAt": "2026-07-11T05:24:35Z"
+    "timestamps": {
+      "observedAt": "2026-07-15T20:00:00Z",
+      "fetchedAt": "2026-07-15T23:26:57Z",
+      "transformedAt": "2026-07-15T23:27:04Z"
+    }
   },
   "methodology": "Fast indicators are generated separately from the slower equity calendar cache. CMC supplies crypto market capitalization; FRED supplies a gold price proxy index because the old LBMA gold fix series is not available in the current FRED API. The frontend reads this static derived JSON and never receives provider credentials.",
   "metrics": [
     {
       "id": "BTC_MARKET_CAP",
       "label": "BTC market cap",
-      "value": 1286242718986.5332,
+      "value": 1299829483206.141,
       "unit": "USD",
       "previous": null,
-      "changePct": 0.29937914,
-      "asOf": "2026-07-11T05:23:05.000Z",
+      "changePct": -0.09758127,
+      "asOf": "2026-07-15T23:26:05.000Z",
       "sourceLabel": "CoinMarketCap cryptocurrency quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest",
-      "quality": "fresh"
+      "quality": "fresh",
+      "fetchedAt": "2026-07-15T23:27:05Z"
     },
     {
       "id": "CRYPTO_MARKET_CAP",
       "label": "Total crypto market cap",
-      "value": 2198762263393.1987,
+      "value": 2227380568332.37,
       "unit": "USD",
-      "previous": 2191451803720.2805,
-      "changePct": 0.3335898,
-      "asOf": "2026-07-11T05:22:59.999Z",
+      "previous": 2225013879796.342,
+      "changePct": 0.10636736,
+      "asOf": "2026-07-15T23:25:59.999Z",
       "sourceLabel": "CoinMarketCap global-metrics/quotes/latest",
       "sourceUrl": "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest",
-      "quality": "fresh"
+      "quality": "fresh",
+      "fetchedAt": "2026-07-15T23:27:05Z"
     },
     {
       "id": "GOLD_PRICE_PROXY",
       "label": "Gold price proxy",
-      "value": 2588.79,
+      "value": 2534.74,
       "unit": "index",
-      "previous": 2593.55,
-      "changePct": -0.1835322241715108,
-      "asOf": "2026-07-10",
+      "previous": 2503.69,
+      "changePct": 1.240169509803519,
+      "asOf": "2026-07-14",
       "sourceLabel": "FRED / Credit Suisse NASDAQ Gold FLOWS103 Price Index",
       "sourceUrl": "https://fred.stlouisfed.org/series/NASDAQQGLDI",
-      "quality": "fresh"
+      "quality": "fresh",
+      "fetchedAt": "2026-07-15T23:27:05Z"
     }
   ],
   "sources": {

@@ -1,12 +1,125 @@
 const DAY_MS = 86_400_000;
 
-export const CRYPTO_LIQUIDITY_VERSION = 3;
+export const CRYPTO_LIQUIDITY_VERSION = 4;
 export const CRYPTO_LIQUIDITY_HISTORY_DAYS = 400;
+export const CRYPTO_LIQUIDITY_INITIAL_BACKFILL_DAYS = 365;
+export const CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS = 183;
+export const CRYPTO_LIQUIDITY_HISTORY_OVERLAP_DAYS = 14;
+export const CRYPTO_LIQUIDITY_HISTORY_REFRESH_MS = 20 * 60 * 60 * 1000;
+
+const CMC_GLOBAL_HISTORY_SOURCE_URL = "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics";
+const CMC_ASSET_HISTORY_SOURCE_URL = "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency";
+const DEFILLAMA_STABLECOIN_SOURCE_URL = "https://api-docs.defillama.com/";
 
 export function finiteNumber(value) {
   if (value === "" || value == null) return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function utcDateKey(value) {
+  if (value == null || value === "") return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString().slice(0, 10);
+}
+
+function startOfUtcDate(value) {
+  const key = utcDateKey(value);
+  return key ? new Date(`${key}T00:00:00Z`) : null;
+}
+
+function addUtcDays(value, days) {
+  const date = startOfUtcDate(value);
+  return date ? new Date(date.getTime() + days * DAY_MS) : null;
+}
+
+function historyPoint({
+  observedAt,
+  value,
+  source,
+  sourceUrl,
+  fetchedAt,
+  qualityStatus = "available",
+  metadata,
+}) {
+  const date = utcDateKey(observedAt);
+  const numericValue = finiteNumber(value);
+  if (!date || numericValue == null) return null;
+  return {
+    date,
+    value: numericValue,
+    observedAt: new Date(observedAt).toISOString(),
+    source,
+    sourceUrl,
+    fetchedAt: fetchedAt || null,
+    qualityStatus,
+    ...(metadata && Object.keys(metadata).length ? { metadata } : {}),
+  };
+}
+
+function cleanHistoryPoints(points) {
+  const byDate = new Map();
+  for (const point of points || []) {
+    const date = utcDateKey(point?.date || point?.observedAt);
+    const value = finiteNumber(point?.value);
+    if (!date || value == null) continue;
+    byDate.set(date, { ...point, date, value });
+  }
+  return [...byDate.values()]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-CRYPTO_LIQUIDITY_HISTORY_DAYS);
+}
+
+export function planCmcHistoryFetch(points, now = new Date(), options = {}) {
+  const initialBackfillDays = Number.isFinite(options.initialBackfillDays)
+    ? Math.max(CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS, Math.floor(options.initialBackfillDays))
+    : CRYPTO_LIQUIDITY_INITIAL_BACKFILL_DAYS;
+  const minimumBackfillDays = Number.isFinite(options.minimumBackfillDays)
+    ? Math.max(CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS, Math.floor(options.minimumBackfillDays))
+    : CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS;
+  const overlapDays = Number.isFinite(options.overlapDays)
+    ? Math.max(1, Math.floor(options.overlapDays))
+    : CRYPTO_LIQUIDITY_HISTORY_OVERLAP_DAYS;
+  const completedUtcDay = addUtcDays(now, -1);
+  if (!completedUtcDay) throw new Error("A valid history refresh time is required");
+  const timeEnd = completedUtcDay.toISOString();
+  const targetStart = addUtcDays(completedUtcDay, -(initialBackfillDays - 1));
+  const retained = cleanHistoryPoints(points).filter((point) => point.date <= timeEnd.slice(0, 10));
+  const oldest = retained.at(0)?.date || null;
+  const latest = retained.at(-1)?.date || null;
+  const hasMinimumBackfill = retained.length >= minimumBackfillDays
+    && oldest != null
+    && oldest <= targetStart.toISOString().slice(0, 10);
+  const incrementalStart = latest ? addUtcDays(latest, -overlapDays) : null;
+  const timeStart = (hasMinimumBackfill && incrementalStart && incrementalStart > targetStart
+    ? incrementalStart
+    : targetStart).toISOString();
+  return {
+    mode: hasMinimumBackfill ? "overlap" : "initial_backfill",
+    timeStart,
+    timeEnd,
+    initialBackfillDays,
+    minimumBackfillDays,
+    overlapDays,
+  };
+}
+
+export function shouldRefreshCmcHistory(historyRefresh, now = new Date()) {
+  const attemptedAt = Date.parse(historyRefresh?.lastAttemptedAt);
+  const nowTime = new Date(now).getTime();
+  if (!Number.isFinite(nowTime)) return true;
+  return !Number.isFinite(attemptedAt) || nowTime - attemptedAt >= CRYPTO_LIQUIDITY_HISTORY_REFRESH_MS;
+}
+
+export function hasFreshCmcStablecoinBackfill(history, now = new Date(), maxStaleDays = 2) {
+  const completedUtcDay = addUtcDays(now, -1);
+  if (!completedUtcDay) return false;
+  const freshnessCutoff = addUtcDays(completedUtcDay, -Math.max(0, Math.floor(maxStaleDays)));
+  return ["stablecoin.usdt.marketCap", "stablecoin.usdc.marketCap"].every((metricId) => {
+    const cmcPoints = cleanHistoryPoints((history?.[metricId] || []).filter((point) => point?.source === "cmc"));
+    return cmcPoints.length >= CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS
+      && cmcPoints.at(-1)?.date >= freshnessCutoff?.toISOString().slice(0, 10);
+  });
 }
 
 function quoteUsd(row) {
@@ -110,6 +223,132 @@ export function requireCmcLiquiditySnapshot(metrics, spotPrices) {
   }
   if (missing.length) throw new Error(`CMC response omitted required fields: ${missing.join(", ")}`);
   return { metrics, spotPrices };
+}
+
+function cmcHistoricalAsset(payload, id) {
+  const data = payload?.data;
+  if (Array.isArray(data)) return data.find((item) => String(item?.id) === String(id)) || null;
+  return data?.[id] ?? data?.[String(id)] ?? null;
+}
+
+function cmcHistoricalPoint(row, value, fetchedAt, sourceUrl, qualityStatus = "provider_reported") {
+  const usd = quoteUsd(row);
+  return historyPoint({
+    observedAt: row?.timestamp || usd?.timestamp || usd?.last_updated,
+    value,
+    source: "cmc",
+    sourceUrl,
+    fetchedAt,
+    qualityStatus,
+  });
+}
+
+function derivedStablecoinHistory(usdtPoints, usdcPoints, options = {}) {
+  const usdcByDate = new Map((usdcPoints || []).map((point) => [point.date, point]));
+  return cleanHistoryPoints((usdtPoints || []).map((usdt) => {
+    const usdc = usdcByDate.get(usdt.date);
+    if (!usdc) return null;
+    const observedAt = [usdt.observedAt, usdc.observedAt].filter(Boolean).sort().at(0) || `${usdt.date}T00:00:00Z`;
+    return historyPoint({
+      observedAt,
+      value: usdt.value + usdc.value,
+      source: options.source || usdt.source || usdc.source,
+      sourceUrl: options.sourceUrl || usdt.sourceUrl || usdc.sourceUrl,
+      fetchedAt: options.fetchedAt || usdt.fetchedAt || usdc.fetchedAt,
+      qualityStatus: "derived_same_date_sum",
+      metadata: { coverage: ["USDT", "USDC"], derivation: "USDT + USDC same-date circulating USD" },
+    });
+  }).filter(Boolean));
+}
+
+export function normalizeCmcHistoricalLiquidity(globalPayload, quotesPayload, fetchedAt = null) {
+  const history = {};
+  const globalFetchedAt = globalPayload?.status?.timestamp || fetchedAt;
+  const globalPoints = (globalPayload?.data?.quotes || [])
+    .map((item) => {
+      const usd = quoteUsd(item);
+      return cmcHistoricalPoint(item, usd.total_market_cap, globalFetchedAt, CMC_GLOBAL_HISTORY_SOURCE_URL);
+    })
+    .filter(Boolean);
+  if (globalPoints.length) history["crypto.totalMarketCap"] = cleanHistoryPoints(globalPoints);
+
+  const assetFetchedAt = quotesPayload?.status?.timestamp || fetchedAt;
+  const assetDefinitions = [
+    [1, "btc.marketCap"],
+    [825, "stablecoin.usdt.marketCap"],
+    [3408, "stablecoin.usdc.marketCap"],
+  ];
+  for (const [id, metricId] of assetDefinitions) {
+    const asset = cmcHistoricalAsset(quotesPayload, id);
+    const points = (asset?.quotes || [])
+      .map((item) => {
+        const usd = quoteUsd(item);
+        return cmcHistoricalPoint(item, usd.market_cap, assetFetchedAt, CMC_ASSET_HISTORY_SOURCE_URL);
+      })
+      .filter(Boolean);
+    if (points.length) history[metricId] = cleanHistoryPoints(points);
+  }
+
+  const usdtAsset = cmcHistoricalAsset(quotesPayload, 825);
+  const usdtPeg = (usdtAsset?.quotes || [])
+    .map((item) => {
+      const usd = quoteUsd(item);
+      const price = finiteNumber(usd.price);
+      return cmcHistoricalPoint(
+        item,
+        price == null ? null : (price - 1) * 10_000,
+        assetFetchedAt,
+        CMC_ASSET_HISTORY_SOURCE_URL,
+        "derived_from_provider_price",
+      );
+    })
+    .filter(Boolean);
+  if (usdtPeg.length) history["stablecoin.usdt.depegBps"] = cleanHistoryPoints(usdtPeg);
+
+  const major = derivedStablecoinHistory(
+    history["stablecoin.usdt.marketCap"],
+    history["stablecoin.usdc.marketCap"],
+    { source: "cmc", sourceUrl: CMC_ASSET_HISTORY_SOURCE_URL, fetchedAt: assetFetchedAt },
+  );
+  if (major.length) history["stablecoin.major.marketCap"] = major;
+  return history;
+}
+
+export function normalizeDefiLlamaStablecoinHistory(payload, expectedSymbol, fetchedAt = null) {
+  const symbol = String(payload?.symbol || "").toUpperCase();
+  if (!symbol || symbol !== String(expectedSymbol || "").toUpperCase()) {
+    throw new Error(`DefiLlama stablecoin response did not match ${expectedSymbol || "the requested asset"}`);
+  }
+  const metricId = symbol === "USDT"
+    ? "stablecoin.usdt.marketCap"
+    : symbol === "USDC"
+      ? "stablecoin.usdc.marketCap"
+      : null;
+  if (!metricId) throw new Error(`Unsupported DefiLlama stablecoin symbol: ${symbol}`);
+  const points = (payload?.tokens || [])
+    .map((item) => historyPoint({
+      observedAt: finiteNumber(item?.date) == null ? null : new Date(finiteNumber(item.date) * 1000),
+      value: item?.circulating?.peggedUSD,
+      source: "defillama",
+      sourceUrl: DEFILLAMA_STABLECOIN_SOURCE_URL,
+      fetchedAt,
+      qualityStatus: "provider_reported_circulating_usd",
+      metadata: { providerAssetId: String(payload?.id || ""), symbol, pegType: payload?.pegType },
+    }))
+    .filter(Boolean);
+  if (!points.length) throw new Error(`DefiLlama ${symbol} returned no historical circulating USD observations`);
+  return { metricId, points: cleanHistoryPoints(points) };
+}
+
+export function combineDefiLlamaStablecoinHistory(series, fetchedAt = null) {
+  const history = Object.fromEntries((series || []).map((item) => [item.metricId, item.points]));
+  const major = derivedStablecoinHistory(
+    history["stablecoin.usdt.marketCap"],
+    history["stablecoin.usdc.marketCap"],
+    { source: "defillama", sourceUrl: DEFILLAMA_STABLECOIN_SOURCE_URL, fetchedAt },
+  );
+  if (major.length) history["stablecoin.major.marketCap"] = major;
+  return history;
 }
 
 export function normalizeSosoEtfHistory(payload, asset) {
@@ -365,6 +604,7 @@ export function aggregateWeeklyFlows(daily) {
 }
 
 function pointDate(value) {
+  if (value == null || value === "") return null;
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date.toISOString().slice(0, 10);
 }
@@ -376,26 +616,133 @@ export function mergeMetricHistory(existingHistory, metrics) {
     if (!date || item.value == null) continue;
     const points = Array.isArray(next[item.id]) ? [...next[item.id]] : [];
     const filtered = points.filter((point) => point.date !== date);
-    filtered.push({ date, value: item.value });
-    next[item.id] = filtered
-      .filter((point) => /^\d{4}-\d{2}-\d{2}$/.test(point.date) && finiteNumber(point.value) != null)
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-CRYPTO_LIQUIDITY_HISTORY_DAYS);
+    filtered.push({
+      date,
+      value: item.value,
+      observedAt: new Date(item.observedAt).toISOString(),
+      source: item.source || "crypto-liquidity-cache",
+      sourceUrl: item.sourceUrl || null,
+      sourceKey: item.sourceKey || item.source || "crypto-liquidity-cache",
+      fetchedAt: item.fetchedAt || null,
+      lastCheckedAt: item.lastCheckedAt || item.fetchedAt || null,
+      qualityStatus: item.qualityStatus || "available",
+    });
+    next[item.id] = cleanHistoryPoints(filtered);
   }
   return next;
+}
+
+export function mergeHistoricalMetricSeries(existingHistory, freshHistory) {
+  const next = { ...(existingHistory || {}) };
+  for (const [metricId, points] of Object.entries(freshHistory || {})) {
+    next[metricId] = cleanHistoryPoints([...(next[metricId] || []), ...(points || [])]);
+  }
+  return next;
+}
+
+export function attachHistoricalMetricFallbacks(metrics, history) {
+  return (metrics || []).map((item) => {
+    const latest = cleanHistoryPoints(history?.[item.id]).at(-1);
+    const valueMissing = finiteNumber(item?.value) == null;
+    const isStablecoinLevel = [
+      "stablecoin.usdt.marketCap",
+      "stablecoin.usdc.marketCap",
+      "stablecoin.major.marketCap",
+    ].includes(item?.id);
+    const isTrustedCmcValuationLevel = [
+      "crypto.totalMarketCap",
+      "btc.marketCap",
+    ].includes(item?.id) && latest?.source === "cmc";
+    const currentDate = utcDateKey(item?.observedAt);
+    const primarySnapshotStale = (isStablecoinLevel || isTrustedCmcValuationLevel)
+      && latest
+      && (!currentDate || latest.date > currentDate);
+    if (!latest || (!valueMissing && item?.levelFallback !== true && !primarySnapshotStale)) return item;
+    return {
+      ...item,
+      value: latest.value,
+      observedAt: latest.observedAt || `${latest.date}T00:00:00Z`,
+      source: latest.source || item.source || "crypto-liquidity-cache",
+      sourceUrl: latest.sourceUrl || item.sourceUrl || null,
+      fetchedAt: latest.fetchedAt || item.fetchedAt || null,
+      lastCheckedAt: latest.lastCheckedAt || latest.fetchedAt || item.lastCheckedAt || item.fetchedAt || null,
+      qualityStatus: latest.qualityStatus || "database_last_known_good",
+      levelFallback: true,
+      levelFallbackReason: item.levelFallback === true && item.levelFallbackReason
+        ? item.levelFallbackReason
+        : valueMissing
+          ? "primary_current_snapshot_unavailable"
+          : primarySnapshotStale
+            ? "primary_current_snapshot_stale"
+            : "primary_current_snapshot_unavailable",
+    };
+  });
+}
+
+function changeCandidate(points, metricDate, days) {
+  const eligible = cleanHistoryPoints(points).filter((point) => !metricDate || point.date <= metricDate);
+  const current = eligible.at(-1);
+  if (!current) return null;
+  if (metricDate) {
+    const freshnessDays = Math.floor((Date.parse(`${metricDate}T00:00:00Z`) - Date.parse(`${current.date}T00:00:00Z`)) / DAY_MS);
+    if (freshnessDays > 2) return null;
+  }
+  const target = addUtcDays(current.date, -days)?.toISOString().slice(0, 10);
+  const previous = eligible.find((point) => point.date === target);
+  return previous ? {
+    value: current.value - previous.value,
+    source: current.source || "crypto-liquidity-cache",
+    observedAt: current.observedAt || `${current.date}T00:00:00Z`,
+  } : null;
+}
+
+function metricChange(points, metric, days) {
+  const bySource = new Map();
+  for (const point of points || []) {
+    const source = point?.source || "crypto-liquidity-cache";
+    const current = bySource.get(source) || [];
+    current.push(point);
+    bySource.set(source, current);
+  }
+  const metricDate = pointDate(metric?.observedAt);
+  const candidates = [...bySource.entries()]
+    .map(([source, sourcePoints]) => ({ source, result: changeCandidate(sourcePoints, metricDate, days) }))
+    .filter((item) => item.result)
+    .sort((a, b) => {
+      const aPreferred = a.source === metric?.source ? 1 : 0;
+      const bPreferred = b.source === metric?.source ? 1 : 0;
+      if (aPreferred !== bPreferred) return bPreferred - aPreferred;
+      return String(b.result.observedAt).localeCompare(String(a.result.observedAt));
+    });
+  return candidates.at(0)?.result || null;
 }
 
 export function attachMetricChanges(metrics, history) {
   return metrics.map((item) => {
     const points = history?.[item.id] || [];
-    const current = points.at(-1);
-    const previous = points.at(-2);
-    const target = current ? new Date(`${current.date}T00:00:00Z`).getTime() - 7 * DAY_MS : null;
-    const weekAgo = target == null ? null : [...points].reverse().find((point) => new Date(`${point.date}T00:00:00Z`).getTime() <= target);
+    const daily = metricChange(points, item, 1);
+    const weekly = metricChange(points, item, 7);
     return {
       ...item,
-      change1d: current && previous ? current.value - previous.value : null,
-      change7d: current && weekAgo ? current.value - weekAgo.value : null,
+      change1d: daily?.value ?? null,
+      change7d: weekly?.value ?? null,
+      change1dSource: daily?.source || null,
+      change7dSource: weekly?.source || null,
+      change1dObservedAt: daily?.observedAt || null,
+      change7dObservedAt: weekly?.observedAt || null,
     };
   });
+}
+
+export function summarizeMetricHistory(history) {
+  return Object.fromEntries(Object.entries(history || {}).map(([metricId, points]) => {
+    const retained = cleanHistoryPoints(points);
+    const sources = [...new Set(retained.map((point) => point.source).filter(Boolean))].sort();
+    return [metricId, {
+      points: retained.length,
+      startDate: retained.at(0)?.date || null,
+      endDate: retained.at(-1)?.date || null,
+      sources,
+    }];
+  }));
 }

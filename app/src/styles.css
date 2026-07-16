@@ -2356,6 +2356,8 @@ html[lang="zh-CN"] .title-block h1 {
 .market-state-card.state-night,
 .market-state-card.state-opening-auction,
 .market-state-card.state-closing-auction,
+.market-state-card.state-fixed-price-gap,
+.market-state-card.state-fixed-price,
 .market-state-card.state-afterhours,
 .market-state-card.state-lunch,
 .market-state-card.state-soon {
@@ -2522,6 +2524,8 @@ html[lang="zh-CN"] .title-block h1 {
 .market-status-pill.state-night,
 .market-status-pill.state-opening-auction,
 .market-status-pill.state-closing-auction,
+.market-status-pill.state-fixed-price-gap,
+.market-status-pill.state-fixed-price,
 .market-status-pill.state-afterhours,
 .market-status-pill.state-lunch,
 .market-status-pill.state-soon,
@@ -2530,6 +2534,7 @@ html[lang="zh-CN"] .title-block h1 {
 }
 
 .market-status-pill.state-closed,
+.market-status-pill.state-non-tradable-index-proxy,
 .quality-badge.source-pending {
   background: #eeeeea;
   color: var(--muted);
@@ -2544,10 +2549,16 @@ html[lang="zh-CN"] .title-block h1 {
 .market-clock-table tr.state-night > *,
 .market-clock-table tr.state-opening-auction > *,
 .market-clock-table tr.state-closing-auction > *,
+.market-clock-table tr.state-fixed-price-gap > *,
+.market-clock-table tr.state-fixed-price > *,
 .market-clock-table tr.state-afterhours > *,
 .market-clock-table tr.state-lunch > *,
 .market-clock-table tr.state-soon > * {
   background-image: linear-gradient(rgba(255, 240, 0, 0.12), rgba(255, 240, 0, 0.12));
+}
+
+.market-clock-table tr.state-non-tradable-index-proxy > * {
+  background-image: linear-gradient(rgba(112, 112, 104, 0.08), rgba(112, 112, 104, 0.08));
 }
 
 .market-clock-detail {
@@ -4457,6 +4468,9 @@ html[lang="zh-CN"] .data-trust-grid small {
 .crypto-liquidity-page {
   --liquidity-positive: #178447;
   --liquidity-negative: #c93445;
+  --liquidity-flow-positive: #2e669c;
+  --liquidity-flow-negative: #7188a2;
+  --liquidity-flow-missing: #76756e;
 }
 
 .liquidity-toolbar {
@@ -4592,36 +4606,174 @@ html[lang="zh-CN"] .data-trust-grid small {
   color: var(--muted);
 }
 
-.liquidity-etf-card > div:not(.liquidity-flow-strip) {
+.liquidity-etf-card > div {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   margin-top: 11px;
 }
 
-.liquidity-flow-strip {
+.liquidity-flow-chart {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--soft-line);
+}
+
+.liquidity-flow-chart figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.liquidity-flow-chart figcaption strong {
+  font-size: 11px;
+}
+
+.liquidity-flow-chart figcaption span {
+  font-size: 10px;
+  text-align: right;
+  color: var(--muted);
+}
+
+.liquidity-flow-chart.is-empty > p {
+  margin: 10px 0 0;
+  padding: 14px 10px;
+  border: 1px dashed var(--soft-line);
+  text-align: center;
+  color: var(--muted);
+}
+
+.liquidity-flow-warning {
+  margin: 7px 0 0 !important;
+  color: var(--muted);
+}
+
+.liquidity-flow-plot-shell {
+  position: relative;
+  height: 112px;
+  margin-top: 8px;
+  padding-left: 56px;
+}
+
+.liquidity-flow-axis {
+  position: absolute;
+  left: 0;
+  width: 50px;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.liquidity-flow-axis.is-high {
+  top: 1px;
+}
+
+.liquidity-flow-axis.is-zero {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.liquidity-flow-axis.is-low {
+  bottom: 1px;
+}
+
+.liquidity-flow-plot {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.liquidity-heat-shell:focus-visible,
+.liquidity-flow-plot:focus-visible,
+.liquidity-flow-plot li:focus-visible {
+  outline: 2px solid var(--focus-ring, #2e669c);
+  outline-offset: -2px;
+}
+
+.liquidity-flow-plot ol {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: max(100%, calc(var(--flow-count) * 6px));
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.liquidity-flow-plot ol::before {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  content: "";
+}
+
+.liquidity-flow-plot li {
+  position: relative;
+  flex: 1 1 0;
+  max-width: 30px;
+  height: 100%;
+}
+
+.liquidity-flow-bar {
+  position: absolute;
+  z-index: 1;
+  right: 18%;
+  left: 18%;
+  min-height: 2px;
+}
+
+.liquidity-flow-plot li.is-above-zero .liquidity-flow-bar {
+  bottom: 50%;
+  height: max(2px, calc(var(--flow-magnitude) * 48%));
+  background: var(--liquidity-flow-positive);
+}
+
+.liquidity-flow-plot li.is-below-zero .liquidity-flow-bar {
+  top: 50%;
+  height: max(2px, calc(var(--flow-magnitude) * 48%));
+  background: var(--liquidity-flow-negative);
+}
+
+.liquidity-flow-plot li.is-on-zero .liquidity-flow-bar {
+  top: calc(50% - 1px);
+  height: 2px;
+  background: var(--liquidity-flow-positive);
+}
+
+.liquidity-flow-plot li.is-missing .liquidity-flow-bar {
+  top: calc(50% - 2px);
+  min-height: 0;
+  border-top: 4px dashed var(--liquidity-flow-missing);
+}
+
+.liquidity-flow-plot li.is-gap .liquidity-flow-bar {
+  display: none;
+}
+
+.liquidity-flow-chart footer {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  align-items: end;
-  gap: 3px;
-  height: 32px;
-  margin-top: 12px;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--muted);
 }
 
-.liquidity-flow-strip span {
-  min-height: 8px;
-  height: 72%;
-  background: #d4d4ca;
+.liquidity-flow-chart footer span:nth-child(2) {
+  text-align: center;
 }
 
-.liquidity-flow-strip span.is-positive {
-  height: 100%;
-  background: var(--liquidity-positive);
-}
-
-.liquidity-flow-strip span.is-negative {
-  height: 100%;
-  background: var(--liquidity-negative);
+.liquidity-flow-chart footer span:last-child {
+  text-align: right;
 }
 
 .liquidity-treasury-card header {
@@ -4709,31 +4861,6 @@ html[lang="zh-CN"] .data-trust-grid small {
 .liquidity-treasury-card p {
   margin: 10px 0 0;
   font-size: 10px;
-}
-
-.liquidity-treasury-strip {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 28px;
-  margin-top: 12px;
-}
-
-.liquidity-treasury-strip span {
-  flex: 1;
-  min-width: 5px;
-  height: 55%;
-  background: #d4d4ca;
-}
-
-.liquidity-treasury-strip span.is-positive {
-  height: 100%;
-  background: var(--liquidity-positive);
-}
-
-.liquidity-treasury-strip span.is-negative {
-  height: 100%;
-  background: var(--liquidity-negative);
 }
 
 .crypto-liquidity-page .is-positive {

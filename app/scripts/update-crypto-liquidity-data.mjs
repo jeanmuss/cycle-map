@@ -3,21 +3,31 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  attachHistoricalMetricFallbacks,
   attachMetricChanges,
   attachTreasurySpotPrice,
+  combineDefiLlamaStablecoinHistory,
+  CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS,
   CRYPTO_LIQUIDITY_VERSION,
   finiteNumber,
+  hasFreshCmcStablecoinBackfill,
   mergeSosoEtfHistory,
+  mergeHistoricalMetricSeries,
   mergeMetricHistory,
   mergeTreasurySnapshots,
   normalizeBlockbeatsBtcHistory,
+  normalizeCmcHistoricalLiquidity,
   normalizeCmcLiquidity,
   normalizeCmcSpotPrices,
+  normalizeDefiLlamaStablecoinHistory,
   normalizeReviewedTreasuryDisclosure,
   normalizeSosoEtfHistory,
   normalizeStrategyTreasuryHistory,
+  planCmcHistoryFetch,
   requireCmcLiquiditySnapshot,
   requireSosoEtfHistory,
+  shouldRefreshCmcHistory,
+  summarizeMetricHistory,
 } from "./crypto-liquidity-contract.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -28,7 +38,10 @@ const treasuryDisclosuresPath = resolve(appRoot, "data", "corporate-treasury-dis
 const equityFastPath = resolve(appRoot, "public", "data", "equity-fast.json");
 const marketSessionPath = resolve(appRoot, "public", "data", "market-session.json");
 const CMC_GLOBAL_URL = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest?convert=USD";
-const CMC_QUOTES_URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=1,1027,825,3408&convert=USD";
+const CMC_QUOTES_URL = "https://pro-api.coinmarketcap.com/v3/cryptocurrency/quotes/latest?id=1,1027,825,3408&convert=USD";
+const CMC_GLOBAL_HISTORY_URL = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/historical";
+const CMC_ASSET_HISTORY_URL = "https://pro-api.coinmarketcap.com/v3/cryptocurrency/quotes/historical";
+const DEFILLAMA_STABLECOIN_BASE_URL = "https://stablecoins.llama.fi";
 const SOSO_BASE_URL = "https://openapi.sosovalue.com/openapi/v1";
 const SOSO_ETF_URL = `${SOSO_BASE_URL}/etfs/summary-history`;
 const SOSO_STRATEGY_URL = `${SOSO_BASE_URL}/btc-treasuries/MSTR/purchase-history?limit=100`;
@@ -86,6 +99,7 @@ async function fetchJson(url, options = {}) {
       ...options,
       signal: controller.signal,
       headers: {
+        Accept: "application/json",
         "User-Agent": "cycle-map-crypto-liquidity/1.0",
         ...options.headers,
       },
@@ -126,10 +140,88 @@ async function fetchCmcMetrics() {
     fetchJson(CMC_GLOBAL_URL, { headers }),
     fetchJson(CMC_QUOTES_URL, { headers }),
   ]);
-  return requireCmcLiquiditySnapshot(
+  const result = requireCmcLiquiditySnapshot(
     normalizeCmcLiquidity(globalPayload, quotesPayload),
     normalizeCmcSpotPrices(quotesPayload),
   );
+  const fetchedAt = isoNow();
+  return {
+    metrics: result.metrics.map((item) => ({ ...item, fetchedAt })),
+    spotPrices: Object.fromEntries(Object.entries(result.spotPrices).map(([asset, item]) => [asset, { ...item, fetchedAt }])),
+  };
+}
+
+function cmcHistoryQuery(plan, parameters = {}) {
+  return new URLSearchParams({
+    time_start: plan.timeStart,
+    time_end: plan.timeEnd,
+    interval: "daily",
+    convert: "USD",
+    ...parameters,
+  });
+}
+
+async function fetchCmcGlobalHistory(existingHistory, now) {
+  const key = process.env.CMC_PRO_API_KEY;
+  if (!key) throw new Error("CMC_PRO_API_KEY is not configured");
+  const plan = planCmcHistoryFetch(existingHistory?.["crypto.totalMarketCap"], now);
+  const payload = await fetchJson(`${CMC_GLOBAL_HISTORY_URL}?${cmcHistoryQuery(plan, { aux: "search_interval" })}`, {
+    headers: { "X-CMC_PRO_API_KEY": key },
+  });
+  const history = normalizeCmcHistoricalLiquidity(payload, null, isoNow());
+  const points = history["crypto.totalMarketCap"] || [];
+  if (!points.length) throw new Error("CMC global historical response contained no total-market-cap observations");
+  return { history, plan, points: points.length, fetchedAt: payload?.status?.timestamp || isoNow() };
+}
+
+async function fetchCmcAssetHistory(existingHistory, now) {
+  const key = process.env.CMC_PRO_API_KEY;
+  if (!key) throw new Error("CMC_PRO_API_KEY is not configured");
+  const plan = planCmcHistoryFetch(existingHistory?.["btc.marketCap"], now);
+  const query = cmcHistoryQuery(plan, {
+    id: "1,825,3408",
+    aux: "price,market_cap,quote_timestamp,search_interval",
+    skip_invalid: "false",
+  });
+  const payload = await fetchJson(`${CMC_ASSET_HISTORY_URL}?${query}`, {
+    headers: { "X-CMC_PRO_API_KEY": key },
+  });
+  const history = normalizeCmcHistoricalLiquidity(null, payload, isoNow());
+  const required = ["btc.marketCap", "stablecoin.usdt.marketCap", "stablecoin.usdc.marketCap"];
+  const missing = required.filter((metricId) => !(history[metricId] || []).length);
+  if (missing.length === required.length) throw new Error("CMC asset historical response contained no requested market-cap observations");
+  return {
+    history,
+    plan,
+    points: Object.fromEntries(required.map((metricId) => [metricId, history[metricId]?.length || 0])),
+    missing,
+    fetchedAt: payload?.status?.timestamp || isoNow(),
+  };
+}
+
+async function fetchDefiLlamaStablecoinHistory() {
+  const catalog = await fetchJson(`${DEFILLAMA_STABLECOIN_BASE_URL}/stablecoins?includePrices=false`);
+  const assets = Array.isArray(catalog?.peggedAssets) ? catalog.peggedAssets : [];
+  const selected = Object.fromEntries(["USDT", "USDC"].map((symbol) => {
+    const matches = assets.filter((item) => String(item?.symbol || "").toUpperCase() === symbol && item?.pegType === "peggedUSD");
+    if (matches.length !== 1 || !matches[0]?.id) {
+      throw new Error(`DefiLlama stablecoin catalog did not resolve exactly one peggedUSD ${symbol} asset`);
+    }
+    return [symbol, matches[0]];
+  }));
+  const payloads = await Promise.all(["USDT", "USDC"].map(async (symbol) => {
+    const payload = await fetchJson(`${DEFILLAMA_STABLECOIN_BASE_URL}/stablecoin/${encodeURIComponent(String(selected[symbol].id))}`);
+    return [symbol, payload];
+  }));
+  const fetchedAt = isoNow();
+  const normalized = payloads.map(([symbol, payload]) => normalizeDefiLlamaStablecoinHistory(payload, symbol, fetchedAt));
+  const history = combineDefiLlamaStablecoinHistory(normalized, fetchedAt);
+  return {
+    history,
+    fetchedAt,
+    points: Object.fromEntries(Object.entries(history).map(([metricId, points]) => [metricId, points.length])),
+    providerAssetIds: Object.fromEntries(Object.entries(selected).map(([symbol, item]) => [symbol, String(item.id)])),
+  };
 }
 
 function unwrapSosoPayload(payload, label) {
@@ -146,7 +238,14 @@ async function fetchSosoAsset(asset) {
   const payload = await fetchJson(`${SOSO_ETF_URL}?${query}`, {
     headers: { "x-soso-api-key": key },
   });
-  return requireSosoEtfHistory(normalizeSosoEtfHistory(unwrapSosoPayload(payload, `${asset} ETF`), asset), asset);
+  const fetchedAt = isoNow();
+  const result = requireSosoEtfHistory(normalizeSosoEtfHistory(unwrapSosoPayload(payload, `${asset} ETF`), asset), asset);
+  return {
+    ...result,
+    fetchedAt,
+    lastCheckedAt: fetchedAt,
+    daily: result.daily.map((point) => ({ ...point, fetchedAt, lastCheckedAt: fetchedAt })),
+  };
 }
 
 async function fetchStrategyTreasury() {
@@ -343,6 +442,84 @@ if (!metrics) {
   else metrics = localFallbackMetrics(await readJson(equityFastPath, {}), await readJson(marketSessionPath, {}));
 }
 
+let freshMetricHistory = {};
+let historyRefresh = existing?.historyRefresh || null;
+const historyNow = new Date();
+const publicHistoryDisabled = process.env.CYCLE_MAP_DISABLE_PUBLIC_HISTORY === "1";
+const historyRefreshForced = process.env.CYCLE_MAP_FORCE_HISTORY_REFRESH === "1" || process.argv.includes("--force-history");
+if (!publicHistoryDisabled && (historyRefreshForced || shouldRefreshCmcHistory(historyRefresh, historyNow))) {
+  const attemptedAt = isoNow();
+  const providerStatus = {};
+  let historyProviderSuccess = false;
+  const [globalResult, assetResult] = await Promise.allSettled([
+    fetchCmcGlobalHistory(existing?.history || {}, historyNow),
+    fetchCmcAssetHistory(existing?.history || {}, historyNow),
+  ]);
+  if (globalResult.status === "fulfilled") {
+    freshMetricHistory = mergeHistoricalMetricSeries(freshMetricHistory, globalResult.value.history);
+    providerStatus.cmcGlobal = {
+      status: "available",
+      fetchedAt: globalResult.value.fetchedAt,
+      points: globalResult.value.points,
+      window: globalResult.value.plan,
+    };
+    freshSourceCount += 1;
+    historyProviderSuccess = true;
+  } else {
+    failures.push(`CMC global history: ${safeFailure(globalResult.reason)}`);
+    providerStatus.cmcGlobal = { status: "failed_preserved_last_known_good", attemptedAt };
+  }
+  if (assetResult.status === "fulfilled") {
+    freshMetricHistory = mergeHistoricalMetricSeries(freshMetricHistory, assetResult.value.history);
+    providerStatus.cmcAssets = {
+      status: assetResult.value.missing.length ? "partial" : "available",
+      fetchedAt: assetResult.value.fetchedAt,
+      points: assetResult.value.points,
+      missing: assetResult.value.missing,
+      window: assetResult.value.plan,
+    };
+    if (assetResult.value.missing.length) {
+      failures.push(`CMC asset history omitted: ${assetResult.value.missing.join(", ")}`);
+    }
+    freshSourceCount += 1;
+    historyProviderSuccess = true;
+  } else {
+    failures.push(`CMC asset history: ${safeFailure(assetResult.reason)}`);
+    providerStatus.cmcAssets = { status: "failed_preserved_last_known_good", attemptedAt };
+  }
+
+  const candidateHistory = mergeHistoricalMetricSeries(existing?.history, freshMetricHistory);
+  const stablecoinHasCmcBackfill = hasFreshCmcStablecoinBackfill(candidateHistory, historyNow);
+  if (!stablecoinHasCmcBackfill) {
+    try {
+      const defillama = await fetchDefiLlamaStablecoinHistory();
+      freshMetricHistory = mergeHistoricalMetricSeries(freshMetricHistory, defillama.history);
+      providerStatus.defillamaStablecoins = {
+        status: "available",
+        fetchedAt: defillama.fetchedAt,
+        points: defillama.points,
+        providerAssetIds: defillama.providerAssetIds,
+      };
+      freshSourceCount += 1;
+      historyProviderSuccess = true;
+    } catch (error) {
+      failures.push(`DefiLlama stablecoin history: ${safeFailure(error)}`);
+      providerStatus.defillamaStablecoins = { status: "failed_preserved_last_known_good", attemptedAt };
+    }
+  } else {
+    providerStatus.defillamaStablecoins = { status: "not_needed_cmc_history_available", attemptedAt };
+  }
+  historyRefresh = {
+    lastAttemptedAt: attemptedAt,
+    lastSuccessfulAt: historyProviderSuccess ? attemptedAt : historyRefresh?.lastSuccessfulAt || null,
+    initialBackfillDays: 365,
+    minimumBackfillDays: CRYPTO_LIQUIDITY_MINIMUM_BACKFILL_DAYS,
+    overlapDays: 14,
+    refreshCadenceHours: 20,
+    providers: providerStatus,
+  };
+}
+
 if (!spotPrices) {
   const marketSession = await readJson(marketSessionPath, {});
   const assets = Object.fromEntries((marketSession?.assets || []).map((item) => [item.symbol, item]));
@@ -416,14 +593,17 @@ try {
   };
 }
 
-if (existing?.version >= CRYPTO_LIQUIDITY_VERSION && freshSourceCount === 0) {
+if (existing && freshSourceCount === 0) {
   console.log("Crypto liquidity update skipped: no primary or auxiliary source refreshed; preserving last-known-good JSON.");
   process.exit(0);
 }
 
 const transformedAt = isoNow();
-const history = mergeMetricHistory(existing?.history, metrics);
+let history = mergeMetricHistory(existing?.history, metrics);
+history = mergeHistoricalMetricSeries(history, freshMetricHistory);
+metrics = attachHistoricalMetricFallbacks(metrics, history);
 metrics = attachMetricChanges(metrics, history);
+const historyCoverage = summarizeMetricHistory(history);
 const levelsObservedAt = oldest(metrics.filter((item) => item.value != null).map((item) => item.observedAt));
 const etfObservedAt = oldest(Object.values(etf).filter((item) => item.status === "available").map((item) => item.observedAt));
 const treasuryObservedAt = oldest(Object.values(corporateTreasuries).filter((item) => item.status === "available").map((item) => item.holdingsObservedAt));
@@ -446,6 +626,8 @@ const output = {
   status: failures.length ? "partial" : "available",
   metrics,
   history,
+  historyCoverage,
+  historyRefresh,
   etf,
   spotPrices,
   corporateTreasuries,
@@ -455,8 +637,8 @@ const output = {
   },
   auxiliarySources: { blockbeats },
   methodology: {
-    marketCaps: "Market-cap changes are valuation changes, not capital inflows. CoinMarketCap supplies current aggregate and asset market caps.",
-    stablecoins: "USDT and USDC market caps proxy circulating supply in USD. Their sum is labelled as tracked major stablecoins, not the entire stablecoin market.",
+    marketCaps: "Market-cap changes are valuation changes, not capital inflows. CoinMarketCap supplies current aggregate and asset market caps. Its documented historical endpoints are backfilled once and then refreshed with a short overlap; plan-denied asset history remains explicitly unavailable.",
+    stablecoins: "USDT and USDC market caps proxy circulating supply in USD. Their sum is labelled as tracked major stablecoins, not the entire stablecoin market. When CoinMarketCap asset history is unavailable, DefiLlama's documented free Stablecoins API supplies same-source circulating-USD history. A fresh CoinMarketCap current level is retained; a missing or stale stablecoin current level may advance to the newest documented same-series history point.",
     usdtPeg: "USDT peg deviation is (price - 1 USD) × 10,000 basis points and is not a flow metric.",
     etf: "SoSoValue v1 daily aggregate net flow is used for U.S. BTC, ETH, and SOL spot ETF series. Its one-month response is merged with prior observations; missing trading days are never filled with zero.",
     treasury: "Corporate treasury holdings and acquisition-cost observations keep separate source dates. Strategy average cost uses its official Form 8-K; BitMine cost basis per ETH is derived only from same-date SEC units and cost basis. Press-release spot prices are never treated as acquisition cost.",
@@ -464,6 +646,9 @@ const output = {
   },
   sources: {
     cmc: "https://coinmarketcap.com/api/documentation/pro-api-reference/",
+    cmcGlobalHistory: "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
+    cmcAssetHistory: "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+    defillamaStablecoins: "https://api-docs.defillama.com/",
     sosovalueEtf: "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
     sosovalueTreasury: "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
     strategy: corporateTreasuries.MSTR.sourceUrl,
