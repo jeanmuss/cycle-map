@@ -1,16 +1,16 @@
 {
   "version": 4,
   "page": "crypto-liquidity",
-  "generatedAt": "2026-07-16T23:24:29.589Z",
+  "generatedAt": "2026-07-17T23:15:41.379Z",
   "timestamps": {
-    "observedAt": "2026-07-15",
-    "fetchedAt": "2026-07-16T23:23:34.432Z",
-    "transformedAt": "2026-07-16T23:24:29.589Z"
+    "observedAt": "2026-07-16",
+    "fetchedAt": "2026-07-17T23:14:51.336Z",
+    "transformedAt": "2026-07-17T23:15:41.379Z"
   },
   "sectionObservedAt": {
-    "levels": "2026-07-16T23:21:59.999Z",
-    "etf": "2026-07-15",
-    "corporateTreasuries": "2026-06-28T22:30:00Z"
+    "levels": "2026-07-17T23:12:59.999Z",
+    "etf": "2026-07-16",
+    "corporateTreasuries": "2026-06-28T22:30:00.000Z"
   },
   "status": "available",
   "metrics": [
@@ -18,112 +18,112 @@
       "id": "crypto.totalMarketCap",
       "label": "Total crypto market cap",
       "labelZh": "加密市场总市值",
-      "value": 2189969316796.5583,
+      "value": 2186202221562.72,
       "unit": "USD",
-      "observedAt": "2026-07-16T23:21:59.999Z",
+      "observedAt": "2026-07-17T23:12:59.999Z",
       "source": "cmc",
-      "changePct24h": -1.74883208,
+      "changePct24h": -0.29555367,
       "semantics": "market_cap_change_not_net_flow",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": -37252089628.81177,
-      "change7d": 41641188179.22827,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": -38029750149.11987,
+      "change7d": 17659925050.099854,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:21:59.999Z",
-      "change7dObservedAt": "2026-07-16T23:21:59.999Z"
+      "change1dObservedAt": "2026-07-17T23:12:59.999Z",
+      "change7dObservedAt": "2026-07-17T23:12:59.999Z"
     },
     {
       "id": "btc.marketCap",
       "label": "Bitcoin market cap",
       "labelZh": "BTC 总市值",
-      "value": 1279947512376.7234,
+      "value": 1280561847053.0825,
       "unit": "USD",
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "changePct24h": -1.63577238,
+      "changePct24h": -0.04999528,
       "semantics": "market_cap_change_not_net_flow",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": -23217052145.327393,
-      "change7d": 31929281653.89917,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": -17527164660.30371,
+      "change7d": 13439480925.043701,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:22:05.000Z",
-      "change7dObservedAt": "2026-07-16T23:22:05.000Z"
+      "change1dObservedAt": "2026-07-17T23:13:05.000Z",
+      "change7dObservedAt": "2026-07-17T23:13:05.000Z"
     },
     {
       "id": "stablecoin.usdt.marketCap",
       "label": "USDT circulating market cap",
       "labelZh": "USDT 流通市值",
-      "value": 184063619996.03976,
+      "value": 184068195843.06595,
       "unit": "USD",
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "changePct24h": -0.00964632,
+      "changePct24h": 0.00573037,
       "semantics": "circulating_supply_proxy",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": -163836865.40829468,
-      "change7d": -144369039.70373535,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": -177085112.0666504,
+      "change7d": -78948119.45785522,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:22:05.000Z",
-      "change7dObservedAt": "2026-07-16T23:22:05.000Z"
+      "change1dObservedAt": "2026-07-17T23:13:05.000Z",
+      "change7dObservedAt": "2026-07-17T23:13:05.000Z"
     },
     {
       "id": "stablecoin.usdc.marketCap",
       "label": "USDC circulating market cap",
       "labelZh": "USDC 流通市值",
-      "value": 73223754274.14955,
+      "value": 73284539764.04164,
       "unit": "USD",
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "changePct24h": 0.0081981,
+      "changePct24h": -0.00639613,
       "semantics": "circulating_supply_proxy",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": 132728661.56774902,
-      "change7d": 32240879.522399902,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": 170974710.46469116,
+      "change7d": -38320158.8527832,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:22:05.000Z",
-      "change7dObservedAt": "2026-07-16T23:22:05.000Z"
+      "change1dObservedAt": "2026-07-17T23:13:05.000Z",
+      "change7dObservedAt": "2026-07-17T23:13:05.000Z"
     },
     {
       "id": "stablecoin.major.marketCap",
       "label": "USDT + USDC market cap",
       "labelZh": "主流稳定币市值",
-      "value": 257287374270.18933,
+      "value": 257352735607.1076,
       "unit": "USD",
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
       "coverage": [
         "USDT",
         "USDC"
       ],
       "semantics": "tracked_stablecoin_supply_not_total_market",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": -31108203.840515137,
-      "change7d": -112128160.18133545,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": -6110401.601928711,
+      "change7d": -117268278.31060791,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:22:05.000Z",
-      "change7dObservedAt": "2026-07-16T23:22:05.000Z"
+      "change1dObservedAt": "2026-07-17T23:13:05.000Z",
+      "change7dObservedAt": "2026-07-17T23:13:05.000Z"
     },
     {
       "id": "stablecoin.usdt.depegBps",
       "label": "USDT peg deviation",
       "labelZh": "USDT 脱锚幅度",
-      "value": -7.663822010790522,
+      "value": -7.4154111130442235,
       "unit": "bps",
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "price": 0.999233617798921,
+      "price": 0.9992584588886956,
       "semantics": "price_deviation_not_flow",
-      "fetchedAt": "2026-07-16T23:23:33.129Z",
-      "change1d": -0.9172748523411656,
-      "change7d": 0.8471863801373658,
+      "fetchedAt": "2026-07-17T23:14:50.201Z",
+      "change1d": -1.6357159580449032,
+      "change7d": 0.610253173680686,
       "change1dSource": "cmc",
       "change7dSource": "cmc",
-      "change1dObservedAt": "2026-07-16T23:22:05.000Z",
-      "change7dObservedAt": "2026-07-16T23:22:05.000Z"
+      "change1dObservedAt": "2026-07-17T23:13:05.000Z",
+      "change7dObservedAt": "2026-07-17T23:13:05.000Z"
     }
   ],
   "history": {
@@ -5401,7 +5401,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5416,7 +5416,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5431,7 +5431,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5446,7 +5446,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5461,7 +5461,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5476,7 +5476,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5491,7 +5491,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5506,7 +5506,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5521,7 +5521,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5536,7 +5536,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.817Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5551,7 +5551,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5566,7 +5566,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5581,7 +5581,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.350Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -5590,17 +5590,32 @@
       },
       {
         "date": "2026-07-16",
-        "value": 2189969316796.5583,
-        "observedAt": "2026-07-16T23:21:59.999Z",
+        "value": 2224231971711.84,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/global-metrics",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T03:58:13.477Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.261Z",
+        "qualityStatus": "provider_reported",
+        "metadata": {
+          "semantics": "market_cap_change_not_net_flow",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": 2186202221562.72,
+        "observedAt": "2026-07-17T23:12:59.999Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T03:58:13.477Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
-          "sourceObservedAt": "2026-07-16T23:21:59.999Z"
+          "sourceObservedAt": "2026-07-17T23:12:59.999Z"
         }
       }
     ],
@@ -10878,7 +10893,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10893,7 +10908,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10908,7 +10923,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10923,7 +10938,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10938,7 +10953,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10953,7 +10968,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10968,7 +10983,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10983,7 +10998,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -10998,7 +11013,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -11013,7 +11028,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -11028,7 +11043,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -11043,7 +11058,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -11058,7 +11073,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
@@ -11067,17 +11082,32 @@
       },
       {
         "date": "2026-07-16",
-        "value": 1279947512376.7234,
-        "observedAt": "2026-07-16T23:22:05.000Z",
+        "value": 1298089011713.3862,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T00:01:28.790Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
+        "qualityStatus": "provider_reported",
+        "metadata": {
+          "semantics": "market_cap_change_not_net_flow",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": 1280561847053.0825,
+        "observedAt": "2026-07-17T23:13:05.000Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T00:01:28.790Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "market_cap_change_not_net_flow",
-          "sourceObservedAt": "2026-07-16T23:22:05.000Z"
+          "sourceObservedAt": "2026-07-17T23:13:05.000Z"
         }
       }
     ],
@@ -16355,7 +16385,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16370,7 +16400,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16385,7 +16415,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16400,7 +16430,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16415,7 +16445,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16430,7 +16460,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16445,7 +16475,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16460,7 +16490,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16475,7 +16505,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16490,7 +16520,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16505,7 +16535,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16520,7 +16550,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16535,7 +16565,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -16544,17 +16574,32 @@
       },
       {
         "date": "2026-07-16",
-        "value": 184063619996.03976,
-        "observedAt": "2026-07-16T23:22:05.000Z",
+        "value": 184245280955.1326,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T00:01:28.790Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
+        "qualityStatus": "provider_reported",
+        "metadata": {
+          "semantics": "circulating_supply_proxy",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": 184068195843.06595,
+        "observedAt": "2026-07-17T23:13:05.000Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T00:01:28.790Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "circulating_supply_proxy",
-          "sourceObservedAt": "2026-07-16T23:22:05.000Z"
+          "sourceObservedAt": "2026-07-17T23:13:05.000Z"
         }
       }
     ],
@@ -21832,7 +21877,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21847,7 +21892,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21862,7 +21907,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21877,7 +21922,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21892,7 +21937,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21907,7 +21952,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21922,7 +21967,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21937,7 +21982,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21952,7 +21997,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21967,7 +22012,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21982,7 +22027,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -21997,7 +22042,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -22012,7 +22057,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_from_provider_price",
         "metadata": {
           "semantics": "price_deviation_not_flow",
@@ -22021,17 +22066,32 @@
       },
       {
         "date": "2026-07-16",
-        "value": -7.663822010790522,
-        "observedAt": "2026-07-16T23:22:05.000Z",
+        "value": -5.77969515499932,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T00:01:28.790Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
+        "qualityStatus": "derived_from_provider_price",
+        "metadata": {
+          "semantics": "price_deviation_not_flow",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": -7.4154111130442235,
+        "observedAt": "2026-07-17T23:13:05.000Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T00:01:28.790Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "price_deviation_not_flow",
-          "sourceObservedAt": "2026-07-16T23:22:05.000Z"
+          "sourceObservedAt": "2026-07-17T23:13:05.000Z"
         }
       }
     ],
@@ -27309,7 +27369,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27324,7 +27384,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27339,7 +27399,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27354,7 +27414,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27369,7 +27429,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27384,7 +27444,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27399,7 +27459,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27414,7 +27474,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27429,7 +27489,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27444,7 +27504,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27459,7 +27519,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27474,7 +27534,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27489,7 +27549,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "provider_reported",
         "metadata": {
           "semantics": "circulating_supply_proxy",
@@ -27498,17 +27558,32 @@
       },
       {
         "date": "2026-07-16",
-        "value": 73223754274.14955,
-        "observedAt": "2026-07-16T23:22:05.000Z",
+        "value": 73113565053.57695,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T00:01:28.790Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
+        "qualityStatus": "provider_reported",
+        "metadata": {
+          "semantics": "circulating_supply_proxy",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": 73284539764.04164,
+        "observedAt": "2026-07-17T23:13:05.000Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T00:01:28.790Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "circulating_supply_proxy",
-          "sourceObservedAt": "2026-07-16T23:22:05.000Z"
+          "sourceObservedAt": "2026-07-17T23:13:05.000Z"
         }
       }
     ],
@@ -34541,7 +34616,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34561,7 +34636,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34581,7 +34656,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34601,7 +34676,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34621,7 +34696,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34641,7 +34716,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34661,7 +34736,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34681,7 +34756,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34701,7 +34776,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34721,7 +34796,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-16T09:34:43.911Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34741,7 +34816,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34761,7 +34836,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-14T23:23:44.111Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34781,7 +34856,7 @@
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
         "sourceKey": "cmc",
         "fetchedAt": "2026-07-15T13:23:44.715Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.546Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
         "qualityStatus": "derived_same_date_sum",
         "metadata": {
           "coverage": [
@@ -34795,74 +34870,94 @@
       },
       {
         "date": "2026-07-16",
-        "value": 257287374270.18933,
-        "observedAt": "2026-07-16T23:22:05.000Z",
+        "value": 257358846008.70953,
+        "observedAt": "2026-07-16T00:00:00.000Z",
+        "source": "cmc",
+        "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/cryptocurrency",
+        "sourceKey": "cmc",
+        "fetchedAt": "2026-07-16T00:01:28.790Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.279Z",
+        "qualityStatus": "derived_same_date_sum",
+        "metadata": {
+          "coverage": [
+            "USDT",
+            "USDC"
+          ],
+          "semantics": "tracked_stablecoin_supply_not_total_market",
+          "derivation": "USDT + USDC same-date circulating USD",
+          "sourceObservedAt": "2026-07-16T00:00:00.000Z"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "value": 257352735607.1076,
+        "observedAt": "2026-07-17T23:13:05.000Z",
         "source": "cmc",
         "sourceUrl": "https://coinmarketcap.com/api/documentation/pro-api-reference/",
         "sourceKey": "cmc",
-        "fetchedAt": "2026-07-16T00:01:28.790Z",
-        "lastCheckedAt": "2026-07-16T23:23:33.129Z",
+        "fetchedAt": "2026-07-17T02:12:14.526Z",
+        "lastCheckedAt": "2026-07-17T23:14:50.201Z",
         "qualityStatus": "available",
         "metadata": {
           "semantics": "tracked_stablecoin_supply_not_total_market",
-          "sourceObservedAt": "2026-07-16T23:22:05.000Z"
+          "sourceObservedAt": "2026-07-17T23:13:05.000Z"
         }
       }
     ]
   },
   "historyCoverage": {
     "crypto.totalMarketCap": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     },
     "btc.marketCap": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     },
     "stablecoin.usdt.marketCap": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     },
     "stablecoin.usdt.depegBps": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     },
     "stablecoin.usdc.marketCap": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     },
     "stablecoin.major.marketCap": {
-      "points": 365,
+      "points": 366,
       "startDate": "2025-07-17",
-      "endDate": "2026-07-16",
+      "endDate": "2026-07-17",
       "sources": [
         "cmc"
       ]
     }
   },
   "historyRefresh": {
-    "lastAttemptedAt": "2026-07-16T23:23:33.130Z",
-    "lastSuccessfulAt": "2026-07-16T23:23:33.130Z",
+    "lastAttemptedAt": "2026-07-17T23:14:50.202Z",
+    "lastSuccessfulAt": "2026-07-17T23:14:50.202Z",
     "initialBackfillDays": 365,
     "minimumBackfillDays": 183,
     "overlapDays": 14,
@@ -34870,12 +34965,12 @@
     "providers": {
       "cmcGlobal": {
         "status": "available",
-        "fetchedAt": "2026-07-16T23:23:33.350Z",
-        "points": 364,
+        "fetchedAt": "2026-07-17T23:14:50.261Z",
+        "points": 14,
         "window": {
-          "mode": "initial_backfill",
-          "timeStart": "2025-07-16T00:00:00.000Z",
-          "timeEnd": "2026-07-15T00:00:00.000Z",
+          "mode": "overlap",
+          "timeStart": "2026-07-02T00:00:00.000Z",
+          "timeEnd": "2026-07-16T00:00:00.000Z",
           "initialBackfillDays": 365,
           "minimumBackfillDays": 183,
           "overlapDays": 14
@@ -34883,17 +34978,17 @@
       },
       "cmcAssets": {
         "status": "available",
-        "fetchedAt": "2026-07-16T23:23:33.546Z",
+        "fetchedAt": "2026-07-17T23:14:50.279Z",
         "points": {
-          "btc.marketCap": 364,
-          "stablecoin.usdt.marketCap": 364,
-          "stablecoin.usdc.marketCap": 364
+          "btc.marketCap": 14,
+          "stablecoin.usdt.marketCap": 14,
+          "stablecoin.usdc.marketCap": 14
         },
         "missing": [],
         "window": {
-          "mode": "initial_backfill",
-          "timeStart": "2025-07-16T00:00:00.000Z",
-          "timeEnd": "2026-07-15T00:00:00.000Z",
+          "mode": "overlap",
+          "timeStart": "2026-07-02T00:00:00.000Z",
+          "timeEnd": "2026-07-16T00:00:00.000Z",
           "initialBackfillDays": 365,
           "minimumBackfillDays": 183,
           "overlapDays": 14
@@ -34901,7 +34996,7 @@
       },
       "defillamaStablecoins": {
         "status": "not_needed_cmc_history_available",
-        "attemptedAt": "2026-07-16T23:23:33.130Z"
+        "attemptedAt": "2026-07-17T23:14:50.202Z"
       }
     }
   },
@@ -34911,7 +35006,7 @@
       "cadence": "daily",
       "status": "available",
       "source": "sosovalue",
-      "observedAt": "2026-07-15",
+      "observedAt": "2026-07-16",
       "daily": [
         {
           "date": "2026-06-15",
@@ -34952,8 +35047,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-18",
@@ -34966,8 +35061,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-22",
@@ -34980,8 +35075,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-23",
@@ -34994,8 +35089,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-24",
@@ -35008,8 +35103,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-25",
@@ -35022,8 +35117,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-26",
@@ -35036,8 +35131,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-29",
@@ -35050,8 +35145,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-30",
@@ -35064,8 +35159,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-01",
@@ -35078,8 +35173,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-02",
@@ -35092,8 +35187,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-06",
@@ -35106,8 +35201,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-07",
@@ -35120,8 +35215,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-08",
@@ -35134,8 +35229,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-09",
@@ -35148,8 +35243,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-10",
@@ -35162,8 +35257,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-13",
@@ -35176,8 +35271,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-14",
@@ -35190,8 +35285,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-15T13:23:44.715Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-15",
@@ -35204,8 +35299,22 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-16T03:58:13.477Z",
-          "lastCheckedAt": "2026-07-16T23:23:33.975Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
+        },
+        {
+          "date": "2026-07-16",
+          "netFlowUsd": 79150022.97999999,
+          "cumulativeNetFlowUsd": 51219954148.458,
+          "totalNetAssetsUsd": 77720254048.59807,
+          "totalValueTradedUsd": 997895799.39,
+          "observedAt": "2026-07-16T00:00:00.000Z",
+          "source": "sosovalue",
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
+          "sourceKey": "sosovalue",
+          "fetchedAt": "2026-07-17T05:37:50.251Z",
+          "lastCheckedAt": "2026-07-17T23:14:50.734Z",
+          "qualityStatus": "database_last_known_good"
         }
       ],
       "weekly": [
@@ -35235,13 +35344,13 @@
         },
         {
           "week": "2026-07-13",
-          "netFlowUsd": -135773134.2100004,
-          "tradingDays": 3,
-          "cumulativeNetFlowUsd": 51140804125.478
+          "netFlowUsd": -56623111.23000041,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 51219954148.458
         }
       ],
-      "fetchedAt": "2026-07-16T03:58:13.477Z",
-      "lastCheckedAt": "2026-07-16T23:23:33.975Z",
+      "fetchedAt": "2026-07-17T05:37:50.251Z",
+      "lastCheckedAt": "2026-07-17T23:14:50.734Z",
       "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
       "qualityStatus": "database_last_known_good"
     },
@@ -35250,7 +35359,7 @@
       "cadence": "daily",
       "status": "available",
       "source": "sosovalue",
-      "observedAt": "2026-07-15",
+      "observedAt": "2026-07-16",
       "daily": [
         {
           "date": "2026-06-15",
@@ -35291,8 +35400,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-18",
@@ -35305,8 +35414,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-22",
@@ -35319,8 +35428,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-23",
@@ -35333,8 +35442,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-24",
@@ -35347,8 +35456,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-25",
@@ -35361,8 +35470,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-26",
@@ -35375,8 +35484,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-29",
@@ -35389,8 +35498,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-30",
@@ -35403,8 +35512,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-01",
@@ -35417,8 +35526,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-02",
@@ -35431,8 +35540,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-06",
@@ -35445,8 +35554,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-07",
@@ -35459,8 +35568,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-08",
@@ -35473,8 +35582,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-09",
@@ -35487,8 +35596,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-10",
@@ -35501,8 +35610,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-13",
@@ -35515,8 +35624,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-14",
@@ -35529,8 +35638,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-15T13:23:44.715Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-15",
@@ -35543,8 +35652,22 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-16T03:58:13.477Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.119Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
+        },
+        {
+          "date": "2026-07-16",
+          "netFlowUsd": -28041314.14,
+          "cumulativeNetFlowUsd": 11042174705.741,
+          "totalNetAssetsUsd": 10099324887.217001,
+          "totalValueTradedUsd": 431212836.3,
+          "observedAt": "2026-07-16T00:00:00.000Z",
+          "source": "sosovalue",
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
+          "sourceKey": "sosovalue",
+          "fetchedAt": "2026-07-17T05:37:50.441Z",
+          "lastCheckedAt": "2026-07-17T23:14:50.944Z",
+          "qualityStatus": "database_last_known_good"
         }
       ],
       "weekly": [
@@ -35574,13 +35697,13 @@
         },
         {
           "week": "2026-07-13",
-          "netFlowUsd": 96759364.34,
-          "tradingDays": 3,
-          "cumulativeNetFlowUsd": 11070216019.881
+          "netFlowUsd": 68718050.2,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 11042174705.741
         }
       ],
-      "fetchedAt": "2026-07-16T03:58:13.477Z",
-      "lastCheckedAt": "2026-07-16T23:23:34.119Z",
+      "fetchedAt": "2026-07-17T05:37:50.441Z",
+      "lastCheckedAt": "2026-07-17T23:14:50.944Z",
       "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
       "qualityStatus": "database_last_known_good"
     },
@@ -35589,7 +35712,7 @@
       "cadence": "daily",
       "status": "available",
       "source": "sosovalue",
-      "observedAt": "2026-07-15",
+      "observedAt": "2026-07-16",
       "daily": [
         {
           "date": "2026-06-15",
@@ -35630,8 +35753,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-18",
@@ -35644,8 +35767,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-22",
@@ -35658,8 +35781,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-23",
@@ -35672,8 +35795,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-24",
@@ -35686,8 +35809,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-25",
@@ -35700,8 +35823,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-26",
@@ -35714,8 +35837,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-29",
@@ -35728,8 +35851,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-06-30",
@@ -35742,8 +35865,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-01",
@@ -35756,8 +35879,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-02",
@@ -35770,8 +35893,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-06",
@@ -35784,8 +35907,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-07",
@@ -35798,8 +35921,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-08",
@@ -35812,8 +35935,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-09",
@@ -35826,8 +35949,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-10",
@@ -35840,8 +35963,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-13",
@@ -35854,8 +35977,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-14",
@@ -35868,8 +35991,8 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-15T13:23:44.715Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         },
         {
           "date": "2026-07-15",
@@ -35882,8 +36005,22 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-16T03:58:13.477Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.285Z",
-          "qualityStatus": "available"
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
+        },
+        {
+          "date": "2026-07-16",
+          "netFlowUsd": 1655291.0000000002,
+          "cumulativeNetFlowUsd": 1137209586.987,
+          "totalNetAssetsUsd": 879194118.1709999,
+          "totalValueTradedUsd": 54737986.89,
+          "observedAt": "2026-07-16T00:00:00.000Z",
+          "source": "sosovalue",
+          "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
+          "sourceKey": "sosovalue",
+          "fetchedAt": "2026-07-17T02:12:15.464Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.137Z",
+          "qualityStatus": "database_last_known_good"
         }
       ],
       "weekly": [
@@ -35913,13 +36050,13 @@
         },
         {
           "week": "2026-07-13",
-          "netFlowUsd": -707076.989,
-          "tradingDays": 3,
-          "cumulativeNetFlowUsd": 1135554295.987
+          "netFlowUsd": 948214.0110000003,
+          "tradingDays": 4,
+          "cumulativeNetFlowUsd": 1137209586.987
         }
       ],
-      "fetchedAt": "2026-07-16T03:58:13.477Z",
-      "lastCheckedAt": "2026-07-16T23:23:34.285Z",
+      "fetchedAt": "2026-07-17T02:12:15.464Z",
+      "lastCheckedAt": "2026-07-17T23:14:51.137Z",
       "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/2.-etf/summary-history",
       "qualityStatus": "database_last_known_good"
     }
@@ -35927,17 +36064,17 @@
   "spotPrices": {
     "BTC": {
       "asset": "BTC",
-      "priceUsd": 63814.58830283096,
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "priceUsd": 63844.01409900318,
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "fetchedAt": "2026-07-16T23:23:33.129Z"
+      "fetchedAt": "2026-07-17T23:14:50.201Z"
     },
     "ETH": {
       "asset": "ETH",
-      "priceUsd": 1860.5902809004483,
-      "observedAt": "2026-07-16T23:22:05.000Z",
+      "priceUsd": 1834.7711342746318,
+      "observedAt": "2026-07-17T23:13:05.000Z",
       "source": "cmc",
-      "fetchedAt": "2026-07-16T23:23:33.129Z"
+      "fetchedAt": "2026-07-17T23:14:50.201Z"
     }
   },
   "corporateTreasuries": {
@@ -35968,7 +36105,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -35982,7 +36119,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -35996,7 +36133,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36010,7 +36147,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36024,7 +36161,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36038,7 +36175,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36052,7 +36189,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36066,7 +36203,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36080,7 +36217,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36094,7 +36231,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36108,7 +36245,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36122,7 +36259,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36136,7 +36273,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36150,7 +36287,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36164,7 +36301,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36178,7 +36315,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36192,7 +36329,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36206,7 +36343,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36220,7 +36357,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36234,7 +36371,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36248,7 +36385,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36262,7 +36399,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36276,7 +36413,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36290,7 +36427,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36304,7 +36441,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36318,7 +36455,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36332,7 +36469,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36346,7 +36483,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36360,7 +36497,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36374,7 +36511,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36388,7 +36525,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36402,7 +36539,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36416,7 +36553,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36430,7 +36567,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36444,7 +36581,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36458,7 +36595,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36472,7 +36609,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36486,7 +36623,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36500,7 +36637,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36514,7 +36651,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36528,7 +36665,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36542,7 +36679,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36556,7 +36693,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36570,7 +36707,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36584,7 +36721,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36598,7 +36735,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36612,7 +36749,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36626,7 +36763,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         },
         {
@@ -36640,7 +36777,7 @@
           "sourceUrl": "https://sosovalue-1.gitbook.io/sosovalue-api-doc/5.-btc-treasuries/purchase-history",
           "sourceKey": "sosovalue",
           "fetchedAt": "2026-07-14T23:23:44.111Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "provider_reported"
         }
       ],
@@ -36657,9 +36794,9 @@
         }
       ],
       "latestAcquisitionCostUsd": -135200000,
-      "spotPriceUsd": 63814.58830283096,
-      "spotObservedAt": "2026-07-16T23:22:05.000Z",
-      "costGapPct": -15.646074337641325,
+      "spotPriceUsd": 63844.01409900318,
+      "spotObservedAt": "2026-07-17T23:13:05.000Z",
+      "costGapPct": -15.60717756671666,
       "historySource": "sosovalue",
       "historyQualityStatus": "database_last_known_good"
     },
@@ -36671,7 +36808,7 @@
       "source": "SEC EDGAR company disclosures",
       "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
       "holdings": 5742237,
-      "holdingsObservedAt": "2026-06-28T22:30:00Z",
+      "holdingsObservedAt": "2026-06-28T22:30:00.000Z",
       "holdingsDisclosedAt": "2026-07-06",
       "averageCostUsd": 3794.2554072810326,
       "costObservedAt": "2026-02-28",
@@ -36690,7 +36827,7 @@
           "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226029507/ex99-1.htm",
           "sourceKey": "SEC EDGAR",
           "fetchedAt": "2026-07-13T13:19:17.698Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "official_sec_exhibit"
         },
         {
@@ -36704,7 +36841,7 @@
           "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226030428/ex99-1.htm",
           "sourceKey": "SEC EDGAR",
           "fetchedAt": "2026-07-13T13:19:17.698Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "official_sec_exhibit"
         },
         {
@@ -36718,7 +36855,7 @@
           "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226032090/ex99-1.htm",
           "sourceKey": "SEC EDGAR",
           "fetchedAt": "2026-07-13T13:19:17.698Z",
-          "lastCheckedAt": "2026-07-16T23:23:34.432Z",
+          "lastCheckedAt": "2026-07-17T23:14:51.336Z",
           "qualityStatus": "official_sec_exhibit_corrected_release"
         }
       ],
@@ -36735,9 +36872,9 @@
         }
       ],
       "latestAcquisitionCostUsd": null,
-      "spotPriceUsd": 1860.5902809004483,
-      "spotObservedAt": "2026-07-16T23:22:05.000Z",
-      "costGapPct": -50.96296687539679,
+      "spotPriceUsd": 1834.7711342746318,
+      "spotObservedAt": "2026-07-17T23:13:05.000Z",
+      "costGapPct": -51.643446807672056,
       "historySource": "SEC EDGAR",
       "historyQualityStatus": "database_last_known_good"
     }
@@ -36778,8 +36915,8 @@
   },
   "failures": [],
   "databaseSync": {
-    "syncedAt": "2026-07-16T23:24:29.589Z",
-    "observationsRead": 3506,
+    "syncedAt": "2026-07-17T23:15:41.379Z",
+    "observationsRead": 3515,
     "role": "service_side_last_known_good_hydration"
   }
 }
