@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Cycle Map - Asset rotation pinwheel</title>
+  <desc id="desc">Four broad market blades rotate around a paper-colored capital center.</desc>
+  <rect x="3" y="3" width="58" height="58" rx="14" fill="#171717"/>
+  <path d="M29 29 16 24 18 10 34 25Z" fill="#FFF000"/>
+  <path d="m35 29 5-13 14 2-15 16Z" fill="#315DC1"/>
+  <path d="m35 35 13 5-2 14-16-15Z" fill="#E43E50"/>
+  <path d="m29 35-5 13-14-2 15-16Z" fill="#2F9B56"/>
+  <path d="m32 25 7 7-7 7-7-7Z" fill="#FCFCF7" stroke="#171717" stroke-width="2"/>
+</svg>
